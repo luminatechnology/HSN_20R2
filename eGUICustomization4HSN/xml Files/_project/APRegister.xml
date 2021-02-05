@@ -1,0 +1,8 @@
+﻿<Table TableName="APRegister">
+    <Column TableName="APRegister" ColumnName="UsrTaxID" ColumnType="string" AllowNull="True" MaxLength="8" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APRegister" ColumnName="UsrOurTaxID" ColumnType="string" AllowNull="True" MaxLength="8" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APRegister" ColumnName="UsrDEDUCTION" ColumnType="string" AllowNull="True" MaxLength="1" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APRegister" ColumnName="UsrGUIDATE" ColumnType="date" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APRegister" ColumnName="UsrGUINO" ColumnType="string" AllowNull="True" MaxLength="14" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APRegister" ColumnName="UsrVATINCODE" ColumnType="string" AllowNull="True" MaxLength="2" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+</Table>

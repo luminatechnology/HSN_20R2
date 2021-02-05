@@ -1,0 +1,245 @@
+﻿<Page path="~/pages/ar/ar301000.aspx" ControlId="88" pageSource="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">
+    <PXTab ID="tab" ParentId="phG_tab" TypeFullName="PX.Web.UI.PXTab">
+        <Children Key="Items">
+            <AddItem>
+                <PXTabItem TypeFullName="PX.Web.UI.PXTabItem">
+                    <Prop Key="Text" Value="TW GUI" />
+                    <Children Key="Template">
+                        <AddItem>
+                            <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXLayoutRule22" />
+                                <Prop Key="StartGroup" Value="True" />
+                                <Prop Key="GroupCaption" Value="GUI Info" />
+                            </PXLayoutRule>
+                        </AddItem>
+                        <AddItem>
+                            <PXDateTimeEdit TypeFullName="PX.Web.UI.PXDateTimeEdit">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXDateTimeEdit26" />
+                                <Prop Key="DataField" Value="UsrGUIDate" />
+                            </PXDateTimeEdit>
+                        </AddItem>
+                        <AddItem>
+                            <PXSelector TypeFullName="PX.Web.UI.PXSelector">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXSelector27" />
+                                <Prop Key="DataField" Value="UsrGUINo" />
+                            </PXSelector>
+                        </AddItem>
+                        <AddItem>
+                            <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXLayoutRule23" />
+                                <Prop Key="StartGroup" Value="True" />
+                                <Prop Key="GroupCaption" Value="GUI Details" />
+                            </PXLayoutRule>
+                        </AddItem>
+                        <AddItem>
+                            <PXSelector TypeFullName="PX.Web.UI.PXSelector">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXSelector28" />
+                                <Prop Key="DataField" Value="UsrVATOutCode" />
+                            </PXSelector>
+                        </AddItem>
+                        <AddItem>
+                            <PXTextEdit TypeFullName="PX.Web.UI.PXTextEdit">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXTextEdit29" />
+                                <Prop Key="DataField" Value="UsrTaxNbr" />
+                                <Prop Key="CommitChanges" Value="True" />
+                            </PXTextEdit>
+                        </AddItem>
+                        <AddItem>
+                            <PXTextEdit TypeFullName="PX.Web.UI.PXTextEdit">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXTextEdit30" />
+                                <Prop Key="DataField" Value="UsrOurTaxNbr" />
+                            </PXTextEdit>
+                        </AddItem>
+                        <AddItem>
+                            <PXTextEdit TypeFullName="PX.Web.UI.PXTextEdit">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXTextEdit84" />
+                                <Prop Key="DataField" Value="UsrGUITitle" />
+                            </PXTextEdit>
+                        </AddItem>
+                        <AddItem>
+                            <PXCheckBox TypeFullName="PX.Web.UI.PXCheckBox">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXCheckBox87" />
+                                <Prop Key="DataField" Value="UsrPrnGUITitle" />
+                            </PXCheckBox>
+                        </AddItem>
+                        <AddItem>
+                            <PXCheckBox TypeFullName="PX.Web.UI.PXCheckBox">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXCheckBox86" />
+                                <Prop Key="DataField" Value="UsrPrnPayment" />
+                            </PXCheckBox>
+                        </AddItem>
+                        <AddItem>
+                            <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXLayoutRule80" />
+                                <Prop Key="StartGroup" Value="True" />
+                                <Prop Key="GroupCaption" Value="Credit Action" />
+                            </PXLayoutRule>
+                        </AddItem>
+                        <AddItem>
+                            <PXGroupBox TypeFullName="PX.Web.UI.PXGroupBox">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstGroupBox81" />
+                                <Prop Key="CommitChanges" Value="True" />
+                                <Prop Key="DataField" Value="UsrCreditAction" />
+                                <Children Key="Template">
+                                    <AddItem>
+                                        <PXRadioButton TypeFullName="PX.Web.UI.PXRadioButton">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstRadioButton82" />
+                                            <Prop Key="GroupName" Value="CstGroupBox81" />
+                                            <Prop Key="Value" Value="CreditNote" />
+                                            <Prop Key="Text" Value="Credit Note" />
+                                        </PXRadioButton>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXRadioButton TypeFullName="PX.Web.UI.PXRadioButton">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstRadioButton83" />
+                                            <Prop Key="GroupName" Value="CstGroupBox81" />
+                                            <Prop Key="Value" Value="VoidedGUI" />
+                                            <Prop Key="Text" Value="Voided GUI" />
+                                        </PXRadioButton>
+                                    </AddItem>
+                                </Children>
+                            </PXGroupBox>
+                        </AddItem>
+                        <AddItem>
+                            <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXLayoutRule21" />
+                                <Prop Key="StartColumn" Value="True" />
+                            </PXLayoutRule>
+                        </AddItem>
+                        <AddItem>
+                            <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXLayoutRule31" />
+                                <Prop Key="StartGroup" Value="True" />
+                                <Prop Key="GroupCaption" Value="B2C Printing" />
+                            </PXLayoutRule>
+                        </AddItem>
+                        <AddItem>
+                            <PXGroupBox TypeFullName="PX.Web.UI.PXGroupBox">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstGroupBox32" />
+                                <Prop Key="Caption" Value="B2C Type" />
+                                <Prop Key="CommitChanges" Value="True" />
+                                <Prop Key="ContentLayout.Layout" Value="Stack" />
+                                <Children Key="Template">
+                                    <AddItem>
+                                        <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstPXLayoutRule33" />
+                                            <Prop Key="StartColumn" Value="True" />
+                                        </PXLayoutRule>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXRadioButton TypeFullName="PX.Web.UI.PXRadioButton">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstRadioButton35" />
+                                            <Prop Key="GroupName" Value="CstGroupBox32" />
+                                            <Prop Key="Text" Value="Print B2C Report (default value)" />
+                                            <Prop Key="Value" Value="NA" />
+                                        </PXRadioButton>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXRadioButton TypeFullName="PX.Web.UI.PXRadioButton">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstRadioButton36" />
+                                            <Prop Key="GroupName" Value="CstGroupBox32" />
+                                            <Prop Key="Text" Value="Mobile Carrier" />
+                                            <Prop Key="Value" Value="MC" />
+                                        </PXRadioButton>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXRadioButton TypeFullName="PX.Web.UI.PXRadioButton">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstRadioButton37" />
+                                            <Prop Key="GroupName" Value="CstGroupBox32" />
+                                            <Prop Key="Text" Value="NPOBAN" />
+                                            <Prop Key="Value" Value="NPO" />
+                                        </PXRadioButton>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstPXLayoutRule63" />
+                                            <Prop Key="StartColumn" Value="True" />
+                                            <Prop Key="SuppressLabel" Value="True" />
+                                        </PXLayoutRule>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXLabel TypeFullName="PX.Web.UI.PXLabel">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="BlankLine64" />
+                                        </PXLabel>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXTextEdit TypeFullName="PX.Web.UI.PXTextEdit">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstPXTextEdit65" />
+                                            <Prop Key="DataField" Value="UsrCarrierID" />
+                                        </PXTextEdit>
+                                    </AddItem>
+                                    <AddItem>
+                                        <PXSelector TypeFullName="PX.Web.UI.PXSelector">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="CstPXSelector66" />
+                                            <Prop Key="DataField" Value="UsrNPONbr" />
+                                        </PXSelector>
+                                    </AddItem>
+                                </Children>
+                                <Prop Key="DataField" Value="UsrB2CType" />
+                            </PXGroupBox>
+                        </AddItem>
+                        <AddItem>
+                            <PXLayoutRule TypeFullName="PX.Web.UI.PXLayoutRule">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXLayoutRule71" />
+                                <Prop Key="StartGroup" Value="True" />
+                            </PXLayoutRule>
+                        </AddItem>
+                        <AddItem>
+                            <PXSelector TypeFullName="PX.Web.UI.PXSelector">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXSelector88" />
+                                <Prop Key="DataField" Value="UsrPaymMethodID" />
+                            </PXSelector>
+                        </AddItem>
+                        <AddItem>
+                            <PXButton TypeFullName="PX.Web.UI.PXButton">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstButton79" />
+                                <Prop Key="AutoCallBack.Target" Value="ds" />
+                                <Prop Key="AutoCallBack.Command" Value="buyPlasticBag" />
+                                <Prop Key="AlignLeft" Value="True" />
+                            </PXButton>
+                        </AddItem>
+                    </Children>
+                </PXTabItem>
+            </AddItem>
+            <PXTabItem Text="Financial Details" OriginalIndex="1" />
+        </Children>
+    </PXTab>
+    <PXDataSource ID="ds" ParentId="phDS_ds" TypeFullName="PX.Web.UI.PXDataSource">
+        <Children Key="CallbackCommands">
+            <AddItem>
+                <PXDSCallbackCommand TypeFullName="PX.Web.UI.PXDSCallbackCommand">
+                    <Prop Key="Name" Value="buyPlasticBag" />
+                    <Prop Key="Visible" Value="False" />
+                </PXDSCallbackCommand>
+            </AddItem>
+        </Children>
+    </PXDataSource>
+</Page>

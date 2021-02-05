@@ -1,0 +1,5 @@
+﻿<Table TableName="ARRegister">
+    <Column TableName="ARRegister" ColumnName="UsrGUITitle" ColumnType="string" AllowNull="True" MaxLength="80" DecimalPrecision="2" DecimalLength="80" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="ARRegister" ColumnName="UsrPrnGUITitle" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="ARRegister" ColumnName="UsrPrnPayment" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+</Table>

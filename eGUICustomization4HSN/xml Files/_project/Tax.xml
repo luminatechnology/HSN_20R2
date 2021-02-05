@@ -1,0 +1,4 @@
+﻿<Table TableName="Tax">
+    <Column TableName="Tax" ColumnName="UsrGUIType" ColumnType="string" AllowNull="True" MaxLength="5" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="Tax" ColumnName="UsrTWNGUI" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+</Table>

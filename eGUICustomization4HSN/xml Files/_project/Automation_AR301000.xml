@@ -1,0 +1,5 @@
+﻿<Automation screen="AR301000">
+    <Fields ScreenID="AR301000">
+        <Field IsActive="True" FieldName="PAYMENTMETHODID" ObjectName="PX.OBJECTS.AR.ARINVOICE" />
+    </Fields>
+</Automation>

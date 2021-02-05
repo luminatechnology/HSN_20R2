@@ -1,0 +1,29 @@
+﻿<Sql TableName="TWNGUIPreferences" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="TWNGUIPreferences">
+  <col name="CompanyID" type="Int" default="Zero" />
+  <col name="GUI3CopiesNumbering" type="NVarChar(10)" />
+  <col name="GUI2CopiesNumbering" type="NVarChar(10)" nullable="true" />
+  <col name="MediaFileNumbering" type="NVarChar(10)" />
+  <col name="TaxRegistrationID" type="NVarChar(9)" nullable="true" />
+  <col name="OurTaxNbr" type="NVarChar(8)" nullable="true" />
+  <col name="ZeroTaxTaxCntry" type="NChar(1)" nullable="true" />
+  <col name="UserName" type="NVarChar(256)" nullable="true" />
+  <col name="Password" type="NVarChar(1000)" nullable="true" />
+  <col name="Url" type="NVarChar(256)" nullable="true" />
+  <col name="CompanyName" type="NVarChar(255)" nullable="true" />
+  <col name="AddressLine" type="NVarChar(50)" nullable="true" />
+  <col name="AESKey" type="NVarChar(32)" nullable="true" />
+  <col name="PlasticBag" type="Int" nullable="true" />
+  <col name="CreatedByID" type="UniqueIdentifier" />
+  <col name="CreatedByScreenID" type="Char(8)" />
+  <col name="CreatedDateTime" type="DateTime" />
+  <col name="LastModifiedByID" type="UniqueIdentifier" />
+  <col name="LastModifiedByScreenID" type="Char(8)" />
+  <col name="LastModifiedDateTime" type="DateTime" />
+  <col name="NoteID" type="UniqueIdentifier" nullable="true" />
+  <col name="tstamp" type="Timestamp" />
+  <index name="PK_TWNGUIPreferences" clustered="true" primary="true" unique="true">
+    <col name="CompanyID" />
+  </index>
+</table>]]></CDATA>
+</Sql>

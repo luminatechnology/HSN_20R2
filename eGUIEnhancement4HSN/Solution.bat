@@ -1,0 +1,1 @@
+"C:\Program Files\Acumatica ERP\HSN\App_Data\Projects\eGUIEnhancement4HSN\eGUIEnhancement4HSN.sln"

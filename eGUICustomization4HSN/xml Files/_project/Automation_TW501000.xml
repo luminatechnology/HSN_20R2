@@ -1,0 +1,5 @@
+﻿<Automation screen="TW501000">
+    <Fields ScreenID="TW501000">
+        <Field IsActive="True" FieldName="GUISTATUS" ObjectName="EGUICUSTOMIZATION4HSN.DAC.TWNGUITRANS" />
+    </Fields>
+</Automation>
