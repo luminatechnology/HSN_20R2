@@ -1,4 +1,4 @@
-using PX.SM;
+ï»¿using PX.SM;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
@@ -105,15 +105,15 @@ namespace eGUICustomization4HSN.Graph
                     GetCompanyName(),
                     // #12
                     GetVATTransl(),
-                    // #13 ³Æµù = ARTrans.ApporintmentID(The alternative is to write ARTrans.ApporintmentID to GUITrans.Remark, so ³Æµù = GUITrans.Remark)
+                    // #13 Â³Ã†ÂµÃ¹ = ARTrans.ApporintmentID(The alternative is to write ARTrans.ApporintmentID to GUITrans.Remark, so Â³Ã†ÂµÃ¹ = GUITrans.Remark)
                     ViewGUITrans.Current.Remark + GetNoteInfo(),
-                    // #14 If the ARTran.CuryExtPrice = 0, then don¡¦t print out this line.
+                    // #14 If the ARTran.CuryExtPrice = 0, then donÂ¡Â¦t print out this line.
                     GetCustOrdNbr(),
                     // #15 
                     GetDefBranchLoc(aRTrans),
                     // #16 
                     GetPaymMethod(),
-                    // #17 If GUITrans.TaxNbr is blank / null(¤GÁp¦¡) then don¡¦t print µo²¼©ïÀY else µo²¼©ïÀY = GUITrnas.GUITitle
+                    // #17 If GUITrans.TaxNbr is blank / null(Â¤GÃpÂ¦Â¡) then donÂ¡Â¦t print ÂµoÂ²Â¼Â©Ã¯Ã€Y else ÂµoÂ²Â¼Â©Ã¯Ã€Y = GUITrnas.GUITitle
                     ViewGUITrans.Current.GUITitle
                 },
                     rePrint,
@@ -165,7 +165,7 @@ namespace eGUICustomization4HSN.Graph
         }
 
         /// <summary>
-        /// 102¦~11-12
+        /// 102Â¦~11-12
         /// </summary>
         protected string GetMonth()
         {
@@ -201,7 +201,7 @@ namespace eGUICustomization4HSN.Graph
                     break;
             }
 
-            return string.Format("{0}¦~{1}¤ë", tc.GetYear(ViewGUITrans.Current.GUIDate.Value), monFmt);
+            return string.Format("{0}å¹´{1}æœˆ", tc.GetYear(ViewGUITrans.Current.GUIDate.Value), monFmt);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace eGUICustomization4HSN.Graph
         }
 
         /// <summary>
-        /// ½Òµ|§O = If TAXID =¡¦VAT05¡¦ then ¡§À³µ|¡¨ else if TAXID =¡¦VATEX¡¦ then ¡§§Kµ|¡¨ else ¡§¹sµ|²v¡¨
+        /// Â½Ã’Âµ|Â§O = If TAXID =Â¡Â¦VAT05Â¡Â¦ then Â¡Â§Ã€Â³Âµ|Â¡Â¨ else if TAXID =Â¡Â¦VATEXÂ¡Â¦ then Â¡Â§Â§KÂµ|Â¡Â¨ else Â¡Â§Â¹sÂµ|Â²vÂ¡Â¨
         /// </summary>
         /// <returns></returns>
         protected string GetVATTransl()
@@ -242,16 +242,16 @@ namespace eGUICustomization4HSN.Graph
             switch (ViewGUITrans.Current.VATType)
             {
                 case TWNGUIVATType.Five:
-                    return "(À³µ|)TX";
+                    return "(æ‡‰ç¨…)TX";
                 case TWNGUIVATType.Exclude:
-                    return "(§Kµ|)";
+                    return "(å…ç¨…)";
                 default:
-                    return "(¹sµ|²v)";
+                    return "(é›¶ç¨…ç‡))";
             }
         }
 
         /// <summary>
-        /// Get SO Invoice¡¦s Note if the Note is not blank.
+        /// Get SO InvoiceÂ¡Â¦s Note if the Note is not blank.
         /// </summary>
         protected string GetNoteInfo()
         {
@@ -272,7 +272,7 @@ namespace eGUICustomization4HSN.Graph
         }
 
         /// <summary>
-        /// µo²¼¶}¥ß³¡ªù = First ARTran line BranchID to get locatin
+        /// ÂµoÂ²Â¼Â¶}Â¥ÃŸÂ³Â¡ÂªÃ¹ = First ARTran line BranchID to get locatin
         /// </summary>
         protected string GetDefBranchLoc(List<ARTran> aRTrans)
         {
@@ -283,7 +283,7 @@ namespace eGUICustomization4HSN.Graph
         }
 
         /// <summary>
-        /// ¥I´Ú¤è¦¡ = If GUITrans.TaxNbr is not blank  then ¡§¤ëµ²¡¨ else description of ARinvoice.paymentmehtodID
+        /// Â¥IÂ´ÃšÂ¤Ã¨Â¦Â¡ = If GUITrans.TaxNbr is not blank  then Â¡Â§Â¤Ã«ÂµÂ²Â¡Â¨ else description of ARinvoice.paymentmehtodID
         /// </summary>
         protected string GetPaymMethod()
         {
