@@ -23,12 +23,11 @@ namespace PX.Objects.EP
                 claim != null &&
                 claim.Released.Equals(true) )
             {
-                ExpenseClaimEntry graph = PXGraph.CreateInstance<ExpenseClaimEntry>();
                 TWNReleaseProcess rp    = PXGraph.CreateInstance<TWNReleaseProcess>();
 
                 Vendor vendor = new Vendor();
 
-                foreach (TWNManualGUIExpense manualGUIExp in graph.GetExtension<ExpenseClaimEntry_Extension>().manGUIExpense.Cache.Cached)
+                foreach (TWNManualGUIExpense manualGUIExp in SelectFrom<TWNManualGUIExpense>.Where<TWNManualGUIExpense.refNbr.IsEqual<@P.AsString>>.View.Select(Base, claim.RefNbr))
                 {
                     if (PXCache<Tax>.GetExtension<TaxExt>(APReleaseProcess_Extension.SelectTax(Base, manualGUIExp.TaxID)).UsrTWNGUI.Equals(false) ) { continue; }
 
@@ -44,7 +43,7 @@ namespace PX.Objects.EP
                             VATCode       = manualGUIExp.VATInCode,
                             GUINbr        = manualGUIExp.GUINbr,
                             GUIStatus     = TWNGUIStatus.Used,
-                            BranchID      = graph.ExpenseClaimDetailsCurrent.Current.BranchID,
+                            BranchID      = claim.BranchID,
                             GUIDirection  = TWNGUIDirection.Receipt,
                             GUIDate       = manualGUIExp.GUIDate,
                             GUITitle      = vendor.AcctName,
