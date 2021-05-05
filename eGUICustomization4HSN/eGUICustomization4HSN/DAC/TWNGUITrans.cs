@@ -175,8 +175,9 @@ namespace eGUICustomization4HSN.DAC
         [PXDBString(20, IsUnicode = true)]
         [PXUIField(DisplayName = "Cust/Vend")]
         [PXSelector(typeof(Search<PX.Objects.CR.BAccount.acctCD, 
-                                  Where<PX.Objects.CR.BAccount.type.IsEqual<PX.Objects.CR.BAccountType.customerType>
-                                        .Or<PX.Objects.CR.BAccount.type.IsEqual<PX.Objects.CR.BAccountType.vendorType>>>>),
+                                  Where<PX.Objects.CR.BAccount.type.IsIn<PX.Objects.CR.BAccountType.customerType, 
+                                                                         PX.Objects.CR.BAccountType.vendorType,
+                                                                         PX.Objects.CR.BAccountType.employeeType>>>),
                     typeof(PX.Objects.CR.BAccount.acctName))]
         public virtual string CustVend { get; set; }
         public abstract class custVend : PX.Data.BQL.BqlString.Field<custVend> { }
