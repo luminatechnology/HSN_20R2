@@ -58,8 +58,7 @@ namespace eGUICustomization4HSN.DAC
                     typeof(CSAttributeDetail.description))]
         [PXDefault(typeof(Search<CSAnswers.value,
                                  Where<CSAnswers.refNoteID, Equal<Current<Vendor.noteID>>,
-                                       And<CSAnswers.attributeID, Equal<APRegisterExt.VATINFRMTNameAtt>>>>),
-                   PersistingCheck = PXPersistingCheck.Nothing)]
+                                       And<CSAnswers.attributeID, Equal<APRegisterExt.VATINFRMTNameAtt>>>>))]
         [PXFormula(typeof(Default<vendorID>))]
         public virtual string VATInCode { get; set; }
         public abstract class vATInCode : PX.Data.BQL.BqlString.Field<vATInCode> { }
