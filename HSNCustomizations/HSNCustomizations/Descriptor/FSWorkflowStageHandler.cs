@@ -4,7 +4,7 @@ using HSNCustomizations.DAC;
 using PX.Data.BQL.Fluent;
 using PX.Data.BQL;
 using System.Linq;
-using HSNCustomizations.Graph_Extension;
+using HSNCustomizations;
 using System.Collections.Generic;
 using System;
 using System.Reflection;

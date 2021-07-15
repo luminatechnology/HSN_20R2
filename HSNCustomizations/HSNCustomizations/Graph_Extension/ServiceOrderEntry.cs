@@ -64,5 +64,12 @@ namespace PX.Objects.FS
         }
         #endregion
 
+        #region Cache Attached
+        [PXMergeAttributes(Method = MergeMethod.Append)]
+        [PXDBScalar(typeof(Search<INTran.origRefNbr, Where<INTran.docType, Equal<INRegister.docType>,
+                                                           And<INTran.refNbr, Equal<INRegister.refNbr>>>>))]
+        protected void _(Events.CacheAttached<INRegister.transferNbr> e) { }
+        #endregion
+
     }
 }
