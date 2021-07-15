@@ -47,7 +47,7 @@ namespace HSNCustomizations.DAC
         #endregion
 
         #region CurrentStage
-        [PXDBInt()]
+        [PXDBInt(IsKey = true)]
         [PXUIField(DisplayName = "Current Stage")]
         [FSSelectorWorkflowStage(typeof(LUMAutoWorkflowStage.srvOrdType))]
         public virtual int? CurrentStage { get; set; }
@@ -55,7 +55,7 @@ namespace HSNCustomizations.DAC
         #endregion
 
         #region NextStage
-        [PXDBInt()]
+        [PXDBInt(IsKey = true)]
         [PXUIField(DisplayName = "Next Stage")]
         [FSSelectorWorkflowStage(typeof(LUMAutoWorkflowStage.srvOrdType))]
         [PXDefault()]

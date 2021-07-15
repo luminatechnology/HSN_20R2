@@ -10,10 +10,16 @@ namespace HSNCustomizations.Descriptor
     {
         OPEN01 = 0,
         ASSIGN01 = 1,
-        DIAGNOSE01 = 2,
+        START01 = 2,
         QUOTATION01 = 3,
         QUOTATION03 = 4,
-        AWSPARE01 = 5
+        AWSPARE01 = 5,
+        AWSPARE03 = 6,
+        AWSPARE05 = 7,
+        AWSPARE07 = 8,
+        FINISH01 = 9,
+        COMPLETE01 = 10,
+        COMPLETE03 = 11
     }
     #endregion
 
@@ -35,7 +41,13 @@ namespace HSNCustomizations.Descriptor
             "Change to Under Diagnose Stage when appointment is started",
             "Change to Quotation Required Stage when parts is required",
             "Change to Quotation Required Stage when parts is required",
-            "Change to Awaiting Spare Parts Stage when part request is initiated"
+            "Change to Awaiting Spare Parts Stage when part request is initiated",
+            "Change to Under Repair Stage when 1-step transfer is released",
+            "Change to Part in Transit Stage when 2-step transfer out is released",
+            "Change to Under Repair Stage when 2-step transfer is received and released",
+            "Change to Under Testing when Finished Check Box is ticked",
+            "Change to Repair Complete when appointment is 'completed' by QC/ Engineer",
+            "hange to RTS when service order is 'completed' by"
         };
 
         protected virtual IEnumerable GetRecords()

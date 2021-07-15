@@ -4,7 +4,7 @@
   <col name="SrvOrdType" type="Char(4)" />
   <col name="WFRule" type="NVarChar(12)" />
   <col name="Active" type="Bit" nullable="true" />
-  <col name="CurrentStage" type="Int" nullable="true" />
+  <col name="CurrentStage" type="Int" />
   <col name="NextStage" type="Int" />
   <col name="Descr" type="NVarChar(256)" nullable="true" />
   <col name="Remark" type="NVarChar(60)" nullable="true" />
@@ -16,10 +16,16 @@
   <col name="LastModifiedDateTime" type="DateTime" />
   <col name="NoteID" type="UniqueIdentifier" nullable="true" />
   <col name="tstamp" type="Timestamp" />
+  <index name="LUMAutoWorkflowStage_NoteID" unique="true">
+    <col name="NoteID" />
+    <col name="CompanyID" />
+  </index>
   <index name="PK_LUMAutoWorkflowStage" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
     <col name="SrvOrdType" />
     <col name="WFRule" />
+    <col name="CurrentStage" />
+    <col name="NextStage" />
   </index>
 </table>]]></CDATA>
 </Sql>

@@ -2,6 +2,9 @@ using PX.Data;
 using PX.Data.BQL.Fluent;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using PX.Common.Collection;
+using System.Linq;
+using PX.Data.BQL;
 
 namespace PX.Objects.FS
 {
@@ -17,24 +20,30 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
+            var isNewData = Base.AppointmentRecords.Cache.Inserted.RowCast<FSAppointment>().Count() > 0;
+            var oldStatus = SelectFrom<FSAppointment>
+                                .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>
+                                    .And<FSAppointment.refNbr.IsEqual<P.AsString>>>
+                                 .View.Select(new PXGraph(), Base.AppointmentRecords.Current.SrvOrdType, Base.AppointmentRecords.Current.RefNbr)
+                                 .RowCast< FSAppointment>()?.FirstOrDefault()?.Status;
+            var nowStatus = Base.AppointmentRecords.Current.Status;
             baseMethod();
-
             try
             {
-                using (PXTransactionScope ts = new PXTransactionScope() )
+                using (PXTransactionScope ts = new PXTransactionScope())
                 {
                     FSWorkflowStageHandler.apptEntry = Base;
+                    FSWorkflowStageHandler.InitStageList();
 
-                    LUMAutoWorkflowStage autoWFStage = FSWorkflowStageHandler.AutoWFStageRule();
+                    if (oldStatus != nowStatus && oldStatus != null)
+                        FSWorkflowStageHandler.InsertEventHistoryForStatus(nameof(AppointmentEntry),oldStatus,nowStatus);
 
+                    LUMAutoWorkflowStage autoWFStage = isNewData ?
+                        LUMAutoWorkflowStage.PK.Find(Base, Base.AppointmentRecords.Current.SrvOrdType, nameof(WFRule.OPEN01)) :
+                        FSWorkflowStageHandler.AutoWFStageRule(nameof(AppointmentEntry));
                     if (autoWFStage != null && autoWFStage.Active == true)
-                    {
-                        FSWorkflowStageHandler.UpdateWFStageID(autoWFStage.NextStage);
-                        FSWorkflowStageHandler.InsertEventHistory(autoWFStage);
-                    }
-
+                        FSWorkflowStageHandler.UpdateWFStageID(nameof(AppointmentEntry), autoWFStage);
                     baseMethod();
-
                     ts.Complete();
                 }
             }

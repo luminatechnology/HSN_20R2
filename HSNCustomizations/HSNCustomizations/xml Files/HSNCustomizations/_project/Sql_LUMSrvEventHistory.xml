@@ -1,5 +1,5 @@
-﻿<Sql TableName="LUMAppEventHistory" TableSchemaXml="#CDATA">
-    <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMAppEventHistory">
+﻿<Sql TableName="LUMSrvEventHistory" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMSrvEventHistory">
   <col name="CompanyID" type="Int" default="Zero" />
   <col name="IdentityID" type="Int" identity="true" />
   <col name="SrvOrdType" type="Char(4)" nullable="true" />
@@ -12,7 +12,7 @@
   <col name="Descr" type="NVarChar(256)" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedDateTime" type="DateTime" />
-  <index name="PK_LUMAppEventHistory" clustered="true" primary="true" unique="true">
+  <index name="PK_LUMSrvEventHistory" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
     <col name="IdentityID" />
   </index>
