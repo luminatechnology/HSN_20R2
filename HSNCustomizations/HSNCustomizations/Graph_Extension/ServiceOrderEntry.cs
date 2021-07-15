@@ -9,13 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PX.Objects.IN;
 
-namespace HSNCustomizations.Graph_Extension
+namespace PX.Objects.FS
 {
-    public class ServiceOrderEntry_Extension: PXGraphExtension<ServiceOrderEntry>
+    public class ServiceOrderEntry_Extension : PXGraphExtension<ServiceOrderEntry>
     {
 
         #region Selects
+        public SelectFrom<INRegister>.Where<INRegister.docType.IsIn<INDocType.transfer, INDocType.receipt>
+                                            .And<INRegisterExt.usrSrvOrdType.IsEqual<FSServiceOrder.srvOrdType.FromCurrent>
+                                                 .And<INRegisterExt.usrSORefNbr.IsEqual<FSServiceOrder.refNbr.FromCurrent>>>>.View INRegisterView;
         public SelectFrom<LUMSrvEventHistory>.Where<LUMSrvEventHistory.srvOrdType.IsEqual<FSServiceOrder.srvOrdType.FromCurrent>
                                                     .And<LUMSrvEventHistory.sORefNbr.IsEqual<FSServiceOrder.refNbr.FromCurrent>>>.View EventHistory;
         #endregion
