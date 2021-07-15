@@ -264,8 +264,8 @@ namespace HSNCustomizations.Descriptor
                 case nameof(ServiceOrderEntry):
                     List<PXDataFieldAssign> srvAssigns = new List<PXDataFieldAssign>();
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.srvOrdType>(srvOrderType));
-                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.apptRefNbr>(soRefNbr));
-                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.sORefNbr>(refNbr));
+                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.apptRefNbr>(refNbr));
+                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.sORefNbr>(soRefNbr));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.wFRule>(autoWFStage.WFRule));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.descr>(autoWFStage.Descr));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.fromStage>(GetStageName(autoWFStage.CurrentStage)));
