@@ -53,18 +53,30 @@
       <HintPath>..\..\..\..\Bin\PX.Objects.FS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
+    <Compile Include="Descriptor\HSNMessages.cs" />
     <Compile Include="Descriptor\LUMAttribute.cs" />
+    <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
     <Compile Include="Graph_Extension\SvrOrdTypeMaint.cs" />
     <Compile Include="DAC\LUMAppEventHistory.cs" />
     <Compile Include="Graph_Extension\AppointmentEntry.cs" />
+    <Compile Include="DAC\LUMHSNSetup.cs" />
+    <Compile Include="DAC_Extension\INRegisterExtensions.cs" />
+    <Compile Include="DAC_Extension\INTranExtensions.cs" />
+    <Compile Include="LUMHSNSetupMaint.cs" />
+    <Compile Include="Graph_Extension\SMEquipmentMaint.cs" />
+    <Compile Include="Graph_Extension\INReceiptEntry.cs" />
+    <Compile Include="DAC\LUMBranchWarehouse.cs" />
+    <Compile Include="Graph_Extension\ServiceOrderEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
