@@ -133,10 +133,59 @@ namespace PX.Objects.FS
 
             InitTransferEntry(ref transferEntry, Base, HSNMessages.PartRequest);
 
-            throw new PXRedirectRequiredException(transferEntry, false, PXSiteMap.Provider.FindSiteMapNodeByScreenID("IN304000").Title) 
-            { 
-                Mode = PXBaseRedirectException.WindowMode.New 
-            };
+            OpenNewForm(transferEntry, "IN304000");
+        }
+
+        public PXAction<FSAppointmentDet> openPartReceive;
+        [PXUIField(DisplayName = HSNMessages.PartReceive, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXButton]
+        public virtual void OpenPartReceive()
+        {
+            string transferNbr = null;
+
+            foreach (INRegister row in INRegisterView.Select())
+            {
+                switch (row.DocType)
+                {
+                    case INDocType.Receipt:
+                        if (row.Released == true) { goto InitReceipt; }
+                        break;
+
+                    case INDocType.Transfer:
+                        transferNbr = row.Released == true && row.TransferType == INTransferType.TwoStep ? row.TransferNbr : null;
+                        break;
+                }
+            }
+        InitReceipt:
+            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
+
+            InitReceiptEntry(ref receiptEntry, Base, LUMTransferPurposeType.PartRcv, transferNbr);
+
+            OpenNewForm(receiptEntry, "IN301000");
+        }
+
+        public PXAction<FSAppointmentDet> openInitiateRMA;
+        [PXUIField(DisplayName = HSNMessages.InitiateRMA, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXButton]
+        public virtual void OpenInitiateRMA()
+        {
+            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
+
+            InitReceiptEntry(ref receiptEntry, Base, LUMTransferPurposeType.RMAName);
+
+            OpenNewForm(receiptEntry, "IN301000");
+        }
+
+        public PXAction<FSAppointmentDet> openReturnRMA;
+        [PXUIField(DisplayName = HSNMessages.ReturnRMA, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXButton]
+        public virtual void OpenReturnRMA()
+        {
+            INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
+
+            InitTransferEntry(ref transferEntry, Base, HSNMessages.RMAReturned);
+
+            OpenNewForm(transferEntry, "IN304000");
         }
         #endregion
 

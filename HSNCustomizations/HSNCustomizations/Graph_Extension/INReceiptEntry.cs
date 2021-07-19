@@ -1,11 +1,41 @@
+using HSNCustomizations.DAC;
+using HSNCustomizations.Descriptor;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
+using PX.Objects.FS;
+using System.Collections;
+using System.Linq;
 
 namespace PX.Objects.IN
 {
     public class INReceiptEntry_Extension : PXGraphExtension<INReceiptEntry>
     {
+        #region Delegate Method
+        [PXUIField(DisplayName = Messages.Release, MapEnableRights = PXCacheRights.Update, MapViewRights = PXCacheRights.Update)]
+        [PXProcessButton]
+        public virtual IEnumerable release(PXAdapter adapter)
+        {
+            if (string.IsNullOrEmpty(Base.receipt.Current.TransferNbr))
+            { Base.release.PressButton(); }
+            // Process Appointment & Service Order Stage Change
+            PXLongOperation.WaitCompletion(Base.UID);
+            using (PXTransactionScope ts = new PXTransactionScope())
+            {
+                // Release Success
+                if (PXLongOperation.GetStatus(Base.UID) == PXLongRunStatus.Completed)
+                    if (UpdateAppointmentStageManual())
+                        ts.Complete();
+            }
+
+            Base.release.PressButton();
+
+            AdjustRcptAndApptInventory();
+
+            return adapter.Get();
+        }
+        #endregion
+
         #region Event Handlers
         protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler) 
         {
@@ -85,13 +115,16 @@ namespace PX.Objects.IN
                             }
                         }
 
-            row.ExtRefNbr = transfer.ExtRefNbr;
-            row.TranDesc  = transfer.TranDesc;
+                        apptEntry.Save.Press();
 
-            rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
-            rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
-            rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
-            rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
+                        ts.Complete();
+                    }
+                }
+            }
+            catch (PXException)
+            {
+                throw;
+            }
         }
         #endregion
 
@@ -103,7 +136,7 @@ namespace PX.Objects.IN
                 return false;
 
             var transferRow = SelectFrom<INRegister>.Where<INRegister.refNbr.IsEqual<P.AsString>>
-                              .View.Select(Base, row.TransferNbr).RowCast<INRegister>().FirstOrDefault();
+                                .View.Select(Base, row.TransferNbr).RowCast<INRegister>().FirstOrDefault();
             // Check Transfer data is Exists
             if (transferRow == null || string.IsNullOrEmpty(row.TransferNbr))
                 return false;
@@ -136,6 +169,6 @@ namespace PX.Objects.IN
             }
             return true;
         }
+        #endregion
     }
-    #endregion
 }
