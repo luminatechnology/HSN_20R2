@@ -2,13 +2,11 @@ using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
-using HSNCustomizations.DAC;
-using HSNCustomizations.Descriptor;
-using PX.Common.Collection;
 using System.Linq;
-using PX.Data.BQL;
 using System.Collections;
 using System.Collections.Generic;
+using HSNCustomizations.DAC;
+using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.FS
 {
@@ -29,6 +27,9 @@ namespace PX.Objects.FS
             base.Initialize();
 
             Base.menuDetailActions.AddMenuAction(openPartRequest);
+            Base.menuDetailActions.AddMenuAction(openPartReceive);
+            Base.menuDetailActions.AddMenuAction(openInitiateRMA);
+            Base.menuDetailActions.AddMenuAction(openReturnRMA);
         }
         #endregion
 
@@ -98,9 +99,9 @@ namespace PX.Objects.FS
 
             EventHistory.AllowDelete = EventHistory.AllowInsert = EventHistory.AllowUpdate = INRegisterView.AllowDelete = INRegisterView.AllowInsert = INRegisterView.AllowUpdate = false;
 
-            bool enabled = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnablePartReqInAppt == true;
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
 
-            openPartRequest.SetEnabled(enabled);
+            openPartRequest.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
         }
         #endregion
 
@@ -110,19 +111,63 @@ namespace PX.Objects.FS
         [PXButton]
         public virtual void OpenPartRequest()
         {
-            //if (Base.AppointmentDetails.Current.LineType != ID.LineType_ALL.INVENTORY_ITEM)
-            //{
-            //    throw new PXSetPropertyException(HSNMessages.ApptLineTypeInvt);
-            //}
-
             INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
 
-            InitTransferEntry(ref transferEntry, Base);
+            InitTransferEntry(ref transferEntry, Base, HSNMessages.PartRequest);
 
-            throw new PXRedirectRequiredException(transferEntry, false, PXSiteMap.Provider.FindSiteMapNodeByScreenID("IN304000").Title) 
-            { 
-                Mode = PXBaseRedirectException.WindowMode.New 
-            };
+            OpenNewForm(transferEntry, "IN304000");
+        }
+
+        public PXAction<FSAppointmentDet> openPartReceive;
+        [PXUIField(DisplayName = HSNMessages.PartReceive, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXButton]
+        public virtual void OpenPartReceive()
+        {
+            string transferNbr = null;
+
+            foreach (INRegister row in INRegisterView.Select() )
+            {
+                switch (row.DocType)
+                {
+                    case INDocType.Receipt:
+                        if (row.Released == true) { goto InitReceipt; }
+                        break;
+                        
+                    case INDocType.Transfer:
+                        transferNbr = row.Released == true && row.TransferType == INTransferType.TwoStep ? row.TransferNbr : null;
+                        break;
+                }
+            }
+        InitReceipt:
+            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
+
+            InitReceiptEntry(ref receiptEntry, Base, LUMTransferPurposeType.PartRcv, transferNbr);
+
+            OpenNewForm(receiptEntry, "IN301000");
+        }
+
+        public PXAction<FSAppointmentDet> openInitiateRMA;
+        [PXUIField(DisplayName = HSNMessages.InitiateRMA, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXButton]
+        public virtual void OpenInitiateRMA()
+        {
+            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
+
+            InitReceiptEntry(ref receiptEntry, Base, LUMTransferPurposeType.RMAName);
+
+            OpenNewForm(receiptEntry, "IN301000");
+        }
+
+        public PXAction<FSAppointmentDet> openReturnRMA;
+        [PXUIField(DisplayName = HSNMessages.ReturnRMA, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXButton]
+        public virtual void OpenReturnRMA()
+        {
+            INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
+
+            InitTransferEntry(ref transferEntry, Base, HSNMessages.RMAReturned);
+
+            OpenNewForm(transferEntry, "IN304000");
         }
         #endregion
 
@@ -132,7 +177,7 @@ namespace PX.Objects.FS
         /// </summary>
         /// <param name="transferEntry"></param>
         /// <param name="apptEntry"></param>
-        public static void InitTransferEntry(ref INTransferEntry transferEntry, AppointmentEntry apptEntry)
+        public static void InitTransferEntry(ref INTransferEntry transferEntry, AppointmentEntry apptEntry, string descrType = null)
         {
             FSAppointment appointment = apptEntry.AppointmentSelected.Current;
 
@@ -141,12 +186,12 @@ namespace PX.Objects.FS
 
             register.SiteID            = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.SiteID;
             register.TransferType      = INTransferType.TwoStep;
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + appointment.RefNbr;
-            register.TranDesc          = HSNMessages.PartRequest + " | " + appointment.DocDesc;
+            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc          = descrType + " | " + appointment.DocDesc;
             regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
             regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = LUMTransferPurposeType.PartReq;
+            regisExt.UsrTransferPurp   = descrType == HSNMessages.PartRequest ? LUMTransferPurposeType.PartReq : LUMTransferPurposeType.RMAName;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -158,23 +203,75 @@ namespace PX.Objects.FS
 
             foreach (FSAppointmentDet row in list)
             {
-                INTran iNTran = new INTran()
-                {
-                    InventoryID = row.InventoryID,
-                    Qty = row.EstimatedQty
-                };
-
-                iNTran = transferEntry.transactions.Insert(iNTran);
-
-                iNTran.GetExtension<INTranExt>().UsrApptLineRef = row.LineRef;
-
-                transferEntry.transactions.Update(iNTran);
+                CreateINTran(transferEntry, row);
 
                 if (toSiteID == null) { toSiteID = row.SiteID; }
             }
 
             transferEntry.CurrentDocument.Current.ToSiteID = toSiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
+        }
+
+        /// <summary>
+        /// Manually insert records into the receipt data view from appointment to open a new window.
+        /// </summary>
+        /// <param name="receiptEntry"></param>
+        /// <param name="apptEntry"></param>
+        public static void InitReceiptEntry(ref INReceiptEntry receiptEntry, AppointmentEntry apptEntry, string purposeType, string transferNbr = null)
+        {
+            FSAppointment appointment = apptEntry.AppointmentSelected.Current;
+
+            INRegister    register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
+
+            register.TransferNbr       = transferNbr;
+            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc          = (purposeType.Equals(LUMTransferPurposeType.PartRcv) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            regisExt.UsrAppointmentNbr = appointment.RefNbr;
+            regisExt.UsrSORefNbr       = appointment.SORefNbr;
+            regisExt.UsrTransferPurp   = purposeType;
+
+            receiptEntry.CurrentDocument.Insert(register);
+
+            PXView view = new PXView(apptEntry, true, apptEntry.AppointmentDetails.View.BqlSelect);
+
+            var list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM);
+
+            foreach (FSAppointmentDet row in list)
+            {
+                CreateINTran(receiptEntry, row);
+            }
+        }
+
+        public static void CreateINTran(PXGraph graph, FSAppointmentDet apptDet)
+        {
+            INTran iNTran = new INTran()
+            {
+                InventoryID = apptDet.InventoryID,
+                Qty = apptDet.EstimatedQty,
+                SiteID = apptDet.SiteID,
+                LocationID = apptDet.LocationID
+            };
+
+            iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
+
+            iNTran.GetExtension<INTranExt>().UsrApptLineRef = apptDet.LineRef;
+
+            graph.Caches[typeof(INTran)].Update(iNTran);
+        }
+
+        /// <summary>
+        /// Redirect to the specified form.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="screenID"></param>
+        private static void OpenNewForm(PXGraph graph, string screenID)
+        {
+            throw new PXRedirectRequiredException(graph, false, PXSiteMap.Provider.FindSiteMapNodeByScreenID(screenID).Title)
+            {
+                Mode = PXBaseRedirectException.WindowMode.New
+            };
         }
         #endregion
     }
