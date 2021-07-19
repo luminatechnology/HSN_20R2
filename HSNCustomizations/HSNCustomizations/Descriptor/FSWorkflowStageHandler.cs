@@ -32,30 +32,45 @@ namespace HSNCustomizations.Descriptor
                     var appt = apptEntry.AppointmentRecords.Current;
                     var detail = apptEntry.AppointmentDetails.Select() ?? new PXResultset<FSAppointmentDet>();
 
+                    // Valid
+                    if (appt == null)
+                        return null;
+
                     // ASSIGN01
                     if (apptEntry.AppointmentServiceEmployees.Select().Count > 0)
                         ruleID = nameof(WFRule.ASSIGN01);
+
                     // START01
                     if (appt.Status == FSAppointment.status.IN_PROCESS)
                         ruleID = nameof(WFRule.START01);
+
                     // QUOTATION01
                     if (detail.RowCast<FSAppointmentDet>().Any(x => x.LineType == "SLPRO"))
                         ruleID = nameof(WFRule.QUOTATION01);
+
                     // FINISH01
                     if (appt.Finished ?? false)
                         ruleID = nameof(WFRule.FINISH01);
+
                     // COMPLETE01
                     if (appt.Status == FSAppointment.status.COMPLETED)
                         ruleID = nameof(WFRule.COMPLETE01);
+
                     return LUMAutoWorkflowStage.UK.Find(apptEntry, appt.SrvOrdType, ruleID, appt.WFStageID);
                 case nameof(ServiceOrderEntry):
                     var srv = srvEntry.ServiceOrderRecords.Current;
+                    // Valid
+                    if (srv == null)
+                        return null;
+
                     // ASSIGN01
                     if (srvEntry.ServiceOrderEmployees.Select().Count > 0)
                         ruleID = nameof(WFRule.ASSIGN01);
+
                     // COMPLETE03
                     if (srv.Status == FSAppointment.status.COMPLETED)
                         ruleID = nameof(WFRule.COMPLETE03);
+
                     return LUMAutoWorkflowStage.UK.Find(srvEntry, srv.SrvOrdType, ruleID, srv.WFStageID);
             }
             return null;
@@ -209,7 +224,7 @@ namespace HSNCustomizations.Descriptor
         }
 
         /// <summary>
-        /// Update Target Form Stage(maunal)
+        /// Update Target Form Stage(Maunal)
         /// </summary>
         /// <param name="targetForm"></param>
         /// <param name="nextStage"></param>
@@ -237,7 +252,7 @@ namespace HSNCustomizations.Descriptor
         }
 
         /// <summary>
-        /// Insert Target Form History
+        /// Insert Target Form History(Maunal)
         /// </summary>
         /// <param name="targetForm"></param>
         /// <param name="autoWFStage"></param>
@@ -305,11 +320,31 @@ namespace HSNCustomizations.Descriptor
             stageList = SelectFrom<FSWFStage>.View.Select(new PXGraph()).RowCast<FSWFStage>().ToList();
         }
 
+        /// <summary>
+        /// Get Stage Description
+        /// </summary>
+        /// <param name="stageID"></param>
+        /// <returns></returns>
         public static string GetStageName(int? stageID)
             => stageList.FirstOrDefault(x => x.WFStageID == stageID)?.WFStageCD;
 
+        /// <summary>
+        /// Get Appointment Ref Nbr.
+        /// </summary>
+        /// <param name="soID"></param>
+        /// <returns></returns>
         public static string GetAppointmentNbr(int? soID)
             => SelectFrom<FSAppointment>.Where<FSAppointment.sOID.IsEqual<P.AsInt>>
                 .View.Select(new PXGraph(), soID).RowCast<FSAppointment>().FirstOrDefault()?.RefNbr;
+
+        public static FSAppointment GetCurrentAppointment(string srvType, string appNbr)
+            => SelectFrom<FSAppointment>
+               .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>.And<FSAppointment.refNbr.IsEqual<P.AsString>>>
+               .View.Select(new PXGraph(), srvType, appNbr).RowCast<FSAppointment>().FirstOrDefault();
+
+        public static FSServiceOrder GetCurrentServiceOrder(string srvType, string soRef)
+            => SelectFrom<FSServiceOrder>
+               .Where<FSServiceOrder.srvOrdType.IsEqual<P.AsString>.And<FSServiceOrder.refNbr.IsEqual<P.AsString>>>
+               .View.Select(new PXGraph(), srvType, soRef).RowCast<FSServiceOrder>().FirstOrDefault();
     }
 }

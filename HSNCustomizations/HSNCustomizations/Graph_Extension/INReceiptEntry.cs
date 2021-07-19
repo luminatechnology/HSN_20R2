@@ -1,30 +1,13 @@
-using System.Linq;
-using System.Collections;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
-using PX.Objects.FS;
-using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.IN
 {
     public class INReceiptEntry_Extension : PXGraphExtension<INReceiptEntry>
     {
-        #region Delegate Method
-        [PXUIField(DisplayName = Messages.Release, MapEnableRights = PXCacheRights.Update, MapViewRights = PXCacheRights.Update)]
-        [PXProcessButton]
-        public virtual IEnumerable release(PXAdapter adapter)
-        {
-            Base.release.PressButton();
-
-            AdjustRcptAndApptInventory();
-
-            return adapter.Get();
-        }
-        #endregion
-
         #region Event Handlers
-        protected void _(Events.RowPersisting<INRegister> e, PXRowPersisting baseHandler)
+        protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler) 
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
@@ -102,17 +85,57 @@ namespace PX.Objects.IN
                             }
                         }
 
-                        apptEntry.Save.Press();
+            row.ExtRefNbr = transfer.ExtRefNbr;
+            row.TranDesc  = transfer.TranDesc;
 
-                        ts.Complete();
-                    }
-                }
-            }
-            catch (PXException)
-            {
-                throw;
-            }
+            rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
+            rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
+            rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
+            rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
         }
         #endregion
+
+        #region MyRegion
+        public bool UpdateAppointmentStageManual()
+        {
+            var row = Base.receipt.Current;
+            if (row == null)
+                return false;
+
+            var transferRow = SelectFrom<INRegister>.Where<INRegister.refNbr.IsEqual<P.AsString>>
+                              .View.Select(Base, row.TransferNbr).RowCast<INRegister>().FirstOrDefault();
+            // Check Transfer data is Exists
+            if (transferRow == null || string.IsNullOrEmpty(row.TransferNbr))
+                return false;
+
+            var srvType = transferRow.GetExtension<INRegisterExt>().UsrSrvOrdType;
+            var appNbr = transferRow.GetExtension<INRegisterExt>().UsrAppointmentNbr;
+            var soRef = transferRow.GetExtension<INRegisterExt>().UsrSORefNbr;
+            if (string.IsNullOrEmpty(soRef) || string.IsNullOrEmpty(appNbr) || string.IsNullOrEmpty(srvType))
+                return false;
+
+            var apptData = FSWorkflowStageHandler.GetCurrentAppointment(srvType, appNbr);
+            var srvData = FSWorkflowStageHandler.GetCurrentServiceOrder(srvType, soRef);
+            if (apptData == null || srvData == null)
+                return false;
+
+            FSWorkflowStageHandler.InitStageList();
+            LUMAutoWorkflowStage autoWFStage = new LUMAutoWorkflowStage();
+            // AWSPARE07
+            if (row.Status == INDocStatus.Released && transferRow.Status == INDocStatus.Released && transferRow.TransferType == INTransferType.TwoStep)
+                autoWFStage = LUMAutoWorkflowStage.UK.Find(new PXGraph(), srvType, nameof(WFRule.AWSPARE07), apptData.WFStageID);
+            if (autoWFStage != null && autoWFStage.Active == true)
+            {
+                // update Appointment and Insert log
+                FSWorkflowStageHandler.UpdateTargetFormStage(nameof(AppointmentEntry), autoWFStage.NextStage, srvType, appNbr, soRef);
+                FSWorkflowStageHandler.InsertTargetFormHistory(nameof(AppointmentEntry), autoWFStage, srvType, appNbr, soRef);
+
+                // update ServiceOrder and Insert log
+                FSWorkflowStageHandler.UpdateTargetFormStage(nameof(ServiceOrderEntry), autoWFStage.NextStage, srvType, appNbr, soRef);
+                FSWorkflowStageHandler.InsertTargetFormHistory(nameof(ServiceOrderEntry), autoWFStage, srvType, appNbr, soRef);
+            }
+            return true;
+        }
     }
+    #endregion
 }
