@@ -38,28 +38,46 @@ namespace PX.Objects.FS
         public void Persist(PersistDelegate baseMethod)
         {
             var isNewData = Base.AppointmentRecords.Cache.Inserted.RowCast<FSAppointment>().Count() > 0;
-            var oldStatus = SelectFrom<FSAppointment>
-                                .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>
-                                    .And<FSAppointment.refNbr.IsEqual<P.AsString>>>
-                                 .View.Select(new PXGraph(), Base.AppointmentRecords.Current.SrvOrdType, Base.AppointmentRecords.Current.RefNbr)
-                                 .RowCast< FSAppointment>()?.FirstOrDefault()?.Status;
-            var nowStatus = Base.AppointmentRecords.Current.Status;
+            // Check Status is Dirty
+            var statusDirtyResult = CheckStatusIsDirty(Base.AppointmentRecords.Current);
+            // Check Stage is Dirty
+            var wfStageDirtyResult = CheckWFStageIsDirty(Base.AppointmentRecords.Current);
             baseMethod();
             try
             {
                 using (PXTransactionScope ts = new PXTransactionScope())
                 {
+                    // Init object
                     FSWorkflowStageHandler.apptEntry = Base;
                     FSWorkflowStageHandler.InitStageList();
 
-                    if (oldStatus != nowStatus && oldStatus != null)
-                        FSWorkflowStageHandler.InsertEventHistoryForStatus(nameof(AppointmentEntry),oldStatus,nowStatus);
+                    // insert log if status is change
+                    if (statusDirtyResult.IsDirty && !string.IsNullOrEmpty(statusDirtyResult.oldValue))
+                        FSWorkflowStageHandler.InsertEventHistoryForStatus(nameof(AppointmentEntry), statusDirtyResult.oldValue, statusDirtyResult.newValue);
 
-                    LUMAutoWorkflowStage autoWFStage = isNewData ?
-                        LUMAutoWorkflowStage.PK.Find(Base, Base.AppointmentRecords.Current.SrvOrdType, nameof(WFRule.OPEN01)) :
-                        FSWorkflowStageHandler.AutoWFStageRule(nameof(AppointmentEntry));
+                    LUMAutoWorkflowStage autoWFStage = new LUMAutoWorkflowStage();
+
+                    // New Data
+                    if(isNewData)
+                        autoWFStage = LUMAutoWorkflowStage.PK.Find(Base, Base.AppointmentRecords.Current.SrvOrdType, nameof(WFRule.OPEN01));
+                    // Manual Chagne Stage
+                    else if (wfStageDirtyResult.IsDirty && wfStageDirtyResult.oldValue.HasValue && wfStageDirtyResult.newValue.HasValue )
+                        autoWFStage = new LUMAutoWorkflowStage()
+                        {
+                            SrvOrdType = Base.AppointmentRecords.Current.SrvOrdType,
+                            WFRule = "MANUAL",
+                            Active = true,
+                            CurrentStage = wfStageDirtyResult.oldValue,
+                            NextStage = wfStageDirtyResult.newValue,
+                            Descr = "Manual change Stage"
+                        };
+                    // Workflow
+                    else
+                        autoWFStage = FSWorkflowStageHandler.AutoWFStageRule(nameof(AppointmentEntry));
+
                     if (autoWFStage != null && autoWFStage.Active == true)
                         FSWorkflowStageHandler.UpdateWFStageID(nameof(AppointmentEntry), autoWFStage);
+
                     baseMethod();
                     ts.Complete();
                 }
@@ -119,9 +137,9 @@ namespace PX.Objects.FS
 
             InitTransferEntry(ref transferEntry, Base);
 
-            throw new PXRedirectRequiredException(transferEntry, false, PXSiteMap.Provider.FindSiteMapNodeByScreenID("IN304000").Title) 
-            { 
-                Mode = PXBaseRedirectException.WindowMode.New 
+            throw new PXRedirectRequiredException(transferEntry, false, PXSiteMap.Provider.FindSiteMapNodeByScreenID("IN304000").Title)
+            {
+                Mode = PXBaseRedirectException.WindowMode.New
             };
         }
         #endregion
@@ -136,17 +154,17 @@ namespace PX.Objects.FS
         {
             FSAppointment appointment = apptEntry.AppointmentSelected.Current;
 
-            INRegister    register = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegister register = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
             INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
 
-            register.SiteID            = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.SiteID;
-            register.TransferType      = INTransferType.TwoStep;
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + appointment.RefNbr;
-            register.TranDesc          = HSNMessages.PartRequest + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            register.SiteID = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.SiteID;
+            register.TransferType = INTransferType.TwoStep;
+            register.ExtRefNbr = appointment.SrvOrdType + " | " + appointment.RefNbr;
+            register.TranDesc = HSNMessages.PartRequest + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr = appointment.SORefNbr;
+            regisExt.UsrTransferPurp = LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -176,6 +194,42 @@ namespace PX.Objects.FS
             transferEntry.CurrentDocument.Current.ToSiteID = toSiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
         }
+        #endregion
+
+        #region Method
+
+        /// <summary>Check Status Is Drity </summary>
+        public (bool IsDirty, string oldValue, string newValue) CheckStatusIsDirty(FSAppointment row)
+        {
+            if (row == null)
+                return (false, string.Empty, string.Empty);
+
+            string oldVale = SelectFrom<FSAppointment>
+                               .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>
+                                   .And<FSAppointment.refNbr.IsEqual<P.AsString>>>
+                                .View.Select(new PXGraph(), row.SrvOrdType, row.RefNbr)
+                                .RowCast<FSAppointment>()?.FirstOrDefault()?.Status;
+            string newValue = row.Status;
+
+            return (!string.IsNullOrEmpty(oldVale) && oldVale != newValue , oldVale, newValue);
+        }
+
+        /// <summary>Check Stage Is Dirty </summary>
+        public (bool IsDirty, int? oldValue, int? newValue) CheckWFStageIsDirty(FSAppointment row)
+        {
+            if (row == null)
+                return (false, null, null);
+
+            int? oldVale = SelectFrom<FSAppointment>
+                               .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>
+                                   .And<FSAppointment.refNbr.IsEqual<P.AsString>>>
+                                .View.Select(new PXGraph(), row.SrvOrdType, row.RefNbr)
+                                .RowCast<FSAppointment>()?.FirstOrDefault()?.WFStageID;
+            int? newValue = row.WFStageID;
+
+            return (oldVale.HasValue && oldVale != newValue, oldVale, newValue);
+        }
+
         #endregion
     }
 }

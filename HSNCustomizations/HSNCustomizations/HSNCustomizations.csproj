@@ -67,6 +67,7 @@
     <Compile Include="Descriptor\HSNMessages.cs" />
     <Compile Include="Descriptor\LUMAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
+    <Compile Include="Graph_Extension\INTransferEntry.cs" />
     <Compile Include="Graph_Extension\SvrOrdTypeMaint.cs" />
     <Compile Include="DAC\LUMAppEventHistory.cs" />
     <Compile Include="Graph_Extension\AppointmentEntry.cs" />

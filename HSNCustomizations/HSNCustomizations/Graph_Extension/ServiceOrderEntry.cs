@@ -30,12 +30,10 @@ namespace PX.Objects.FS
         public void Persist(PersistDelegate baseMethod)
         {
             var isNewData = Base.ServiceOrderRecords.Cache.Inserted.RowCast<FSServiceOrder>().Count() > 0;
-            var oldStatus = SelectFrom<FSServiceOrder>
-                               .Where<FSServiceOrder.srvOrdType.IsEqual<P.AsString>
-                                   .And<FSServiceOrder.refNbr.IsEqual<P.AsString>>>
-                                .View.Select(new PXGraph(), Base.ServiceOrderRecords.Current.SrvOrdType, Base.ServiceOrderRecords.Current.RefNbr)
-                                .RowCast<FSServiceOrder>()?.FirstOrDefault()?.Status;
-            var nowStatus = Base.ServiceOrderRecords.Current.Status;
+            // Check Status is Dirty
+            var statusDirtyResult = CheckStatusIsDirty(Base.ServiceOrderRecords.Current);
+            // Check Stage is Dirty
+            var wfStageDirtyResult = CheckWFStageIsDirty(Base.ServiceOrderRecords.Current);
             baseMethod();
             try
             {
@@ -44,12 +42,29 @@ namespace PX.Objects.FS
                     FSWorkflowStageHandler.srvEntry = Base;
                     FSWorkflowStageHandler.InitStageList();
 
-                    if (oldStatus != nowStatus && oldStatus != null)
-                        FSWorkflowStageHandler.InsertEventHistoryForStatus(nameof(ServiceOrderEntry), oldStatus, nowStatus);
+                    // insert log if status is change
+                    if (statusDirtyResult.IsDirty && !string.IsNullOrEmpty(statusDirtyResult.oldValue))
+                        FSWorkflowStageHandler.InsertEventHistoryForStatus(nameof(ServiceOrderEntry), statusDirtyResult.oldValue, statusDirtyResult.newValue);
 
-                    LUMAutoWorkflowStage autoWFStage = isNewData ?
-                        LUMAutoWorkflowStage.PK.Find(Base, Base.ServiceOrderRecords.Current.SrvOrdType, nameof(WFRule.OPEN01)) :
-                        FSWorkflowStageHandler.AutoWFStageRule(nameof(ServiceOrderEntry));
+                    LUMAutoWorkflowStage autoWFStage = new LUMAutoWorkflowStage();
+
+                    // New Data
+                    if (isNewData)
+                        autoWFStage = LUMAutoWorkflowStage.PK.Find(Base, Base.ServiceOrderRecords.Current.SrvOrdType, nameof(WFRule.OPEN01));
+                    // Manual Chagne Stage
+                    else if (wfStageDirtyResult.IsDirty && wfStageDirtyResult.oldValue.HasValue && wfStageDirtyResult.newValue.HasValue)
+                        autoWFStage = new LUMAutoWorkflowStage()
+                        {
+                            SrvOrdType = Base.ServiceOrderRecords.Current.SrvOrdType,
+                            WFRule = "MANUAL",
+                            Active = true,
+                            CurrentStage = wfStageDirtyResult.oldValue,
+                            NextStage = wfStageDirtyResult.newValue,
+                            Descr = "Manual change Stage"
+                        };
+                    // Workflow
+                    else
+                        autoWFStage = FSWorkflowStageHandler.AutoWFStageRule(nameof(ServiceOrderEntry));
                     if (autoWFStage != null && autoWFStage.Active == true)
                         FSWorkflowStageHandler.UpdateWFStageID(nameof(ServiceOrderEntry), autoWFStage);
 
@@ -69,6 +84,42 @@ namespace PX.Objects.FS
         [PXDBScalar(typeof(Search<INTran.origRefNbr, Where<INTran.docType, Equal<INRegister.docType>,
                                                            And<INTran.refNbr, Equal<INRegister.refNbr>>>>))]
         protected void _(Events.CacheAttached<INRegister.transferNbr> e) { }
+        #endregion
+
+        #region Method
+
+        /// <summary>Check Status Is Drity </summary>
+        public (bool IsDirty, string oldValue, string newValue) CheckStatusIsDirty(FSServiceOrder row)
+        {
+            if (row == null)
+                return (false, string.Empty, string.Empty);
+
+            var oldVale = SelectFrom<FSServiceOrder>
+                             .Where<FSServiceOrder.srvOrdType.IsEqual<P.AsString>
+                                 .And<FSServiceOrder.refNbr.IsEqual<P.AsString>>>
+                              .View.Select(new PXGraph(), row.SrvOrdType, row.RefNbr)
+                              .RowCast<FSServiceOrder>()?.FirstOrDefault()?.Status;
+            var newValue = row.Status;
+
+            return (!string.IsNullOrEmpty(oldVale) && oldVale != newValue, oldVale, newValue);
+        }
+
+        /// <summary>Check Stage Is Dirty </summary>
+        public (bool IsDirty, int? oldValue, int? newValue) CheckWFStageIsDirty(FSServiceOrder row)
+        {
+            if (row == null)
+                return (false, null, null);
+
+            var oldVale = SelectFrom<FSServiceOrder>
+                             .Where<FSServiceOrder.srvOrdType.IsEqual<P.AsString>
+                                 .And<FSServiceOrder.refNbr.IsEqual<P.AsString>>>
+                              .View.Select(new PXGraph(), row.SrvOrdType, row.RefNbr)
+                              .RowCast<FSServiceOrder>()?.FirstOrDefault()?.WFStageID;
+            var newValue = row.WFStageID;
+
+            return (oldVale.HasValue && oldVale != newValue, oldVale, newValue);
+        }
+
         #endregion
 
     }
