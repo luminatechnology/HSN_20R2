@@ -76,9 +76,9 @@ namespace PX.Objects.IN
 
         #region Methods
         /// <summary>
-        /// When user release the Receipts and the Appointment Nbr is not blank, then if the INTRAN.InventoryID of the ‘Detail Ref Nbr’ <> FSAppointmentDet.InventoryID of the ‘Detail Ref Nbr’ then
-        /// Set Line Status =’Canceled’ of FSAppointmentDet.InventoryID of the ‘Detail Ref Nbr’
-        /// Insert a new line into FSAppointmentDet with inventoryid = INTRAN.InventoryID of the ‘Detail Ref Nbr’. The ‘Estimated Quantity’ is the same as the canceled line.
+        /// When user release the Receipts and the Appointment Nbr is not blank, then if the INTRAN.InventoryID of the ‘Detail Ref Nbr?<> FSAppointmentDet.InventoryID of the ‘Detail Ref Nbr?then
+        /// Set Line Status =’Canceled?of FSAppointmentDet.InventoryID of the ‘Detail Ref Nbr?
+        /// Insert a new line into FSAppointmentDet with inventoryid = INTRAN.InventoryID of the ‘Detail Ref Nbr? The ‘Estimated Quantity?is the same as the canceled line.
         /// In other words, if the inventory ID received is different with the inventory id requested.System cancels the original line, and create a new line with new inventory ID.
         /// </summary>
         public virtual void AdjustRcptAndApptInventory()
