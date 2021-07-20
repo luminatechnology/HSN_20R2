@@ -47,7 +47,7 @@ namespace HSNCustomizations.Descriptor
             "Change to Under Repair Stage when 2-step transfer is received and released",
             "Change to Under Testing when Finished Check Box is ticked",
             "Change to Repair Complete when appointment is 'completed' by QC/ Engineer",
-            "hange to RTS when service order is 'completed' by"
+            "Change to RTS when service order is 'completed' by"
         };
 
         protected virtual IEnumerable GetRecords()
