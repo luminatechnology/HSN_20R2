@@ -1,5 +1,6 @@
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using PX.Common;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
@@ -12,12 +13,12 @@ namespace PX.Objects.IN
     public class INReceiptEntry_Extension : PXGraphExtension<INReceiptEntry>
     {
         #region Delegate Method
-        [PXUIField(DisplayName = Messages.Release, MapEnableRights = PXCacheRights.Update, MapViewRights = PXCacheRights.Update)]
-        [PXProcessButton]
-        public virtual IEnumerable release(PXAdapter adapter)
+        public delegate IEnumerable ReleaseDelegate(PXAdapter adapter);
+        [PXOverride]
+        public virtual IEnumerable Release(PXAdapter adapter, ReleaseDelegate baseMethod)
         {
             if (string.IsNullOrEmpty(Base.receipt.Current.TransferNbr))
-            { Base.release.PressButton(); }
+            { baseMethod(adapter); }
             // Process Appointment & Service Order Stage Change
             PXLongOperation.WaitCompletion(Base.UID);
             using (PXTransactionScope ts = new PXTransactionScope())
@@ -28,7 +29,7 @@ namespace PX.Objects.IN
                         ts.Complete();
             }
 
-            Base.release.PressButton();
+            baseMethod(adapter); ;
 
             AdjustRcptAndApptInventory();
 
@@ -96,22 +97,34 @@ namespace PX.Objects.IN
 
                         foreach (INTran row in Base.transactions.Cache.Cached)
                         {
-                            FSAppointmentDet apptLine = SelectFrom<FSAppointmentDet>.Where<FSAppointmentDet.srvOrdType.IsEqual<@P.AsString>
-                                                                                           .And<FSAppointmentDet.refNbr.IsEqual<@P.AsString>
-                                                                                                .And<FSAppointmentDet.lineRef.IsEqual<@P.AsString>>>>
-                                                                                    .View.SelectSingleBound(Base, null, regisExt.UsrSrvOrdType, regisExt.UsrAppointmentNbr, row.GetExtension<INTranExt>().UsrApptLineRef);
-                            if (!apptLine.InventoryID.Equals(row.InventoryID))
+                            PXResult<FSAppointmentDet, FSAppointment> result = (PXResult<FSAppointmentDet, FSAppointment>)SelectFrom<FSAppointmentDet>.InnerJoin<FSAppointment>.On<FSAppointment.srvOrdType.IsEqual<FSAppointmentDet.srvOrdType>
+                                                                                                                                                                                   .And<FSAppointment.refNbr.IsEqual<FSAppointmentDet.refNbr>>>
+                                                                                                                                                       .Where<FSAppointmentDet.srvOrdType.IsEqual<@P.AsString>
+                                                                                                                                                              .And<FSAppointmentDet.refNbr.IsEqual<@P.AsString>
+                                                                                                                                                                   .And<FSAppointmentDet.lineRef.IsEqual<@P.AsString>>>>
+                                                                                                                                                       .View.SelectSingleBound(Base, null, regisExt.UsrSrvOrdType, regisExt.UsrAppointmentNbr, row.GetExtension<INTranExt>().UsrApptLineRef);
+                            FSAppointmentDet apptLine = result;
+
+                            if (!apptLine.InventoryID.Equals(row.InventoryID) && !apptLine.UIStatus.IsIn(ID.Status_AppointmentDet.CANCELED, ID.Status_AppointmentDet.COMPLETED))
                             {
-                                FSAppointmentDet newLine = apptEntry.AppointmentDetails.Cache.CreateCopy(apptLine) as FSAppointmentDet;
+                                apptEntry.AppointmentRecords.Current = result;
 
-                                newLine.NoteID = null;
-                                newLine.InventoryID = row.InventoryID;
-                                newLine.EstimatedQty = row.Qty;
+                                FSAppointmentDet newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Insert(new FSAppointmentDet()));
 
-                                apptEntry.AppointmentDetails.Insert(newLine);
+                                newLine.InventoryID     = row.InventoryID;
+                                newLine.EstimatedQty    = row.Qty;
+                                newLine.Status          = apptLine.Status;
+                                
+                                newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Update(newLine));
+
+                                //PXCache<FSAppointmentDet>.RestoreCopy(newLine, PXCache<FSAppointmentDet>.CreateCopy(apptLine));
+                                newLine.EquipmentAction = apptLine.EquipmentAction;
+                                newLine.OrigLineNbr     = apptLine.OrigLineNbr;
+
+                                apptEntry.AppointmentDetails.Update(newLine);
 
                                 apptEntry.AppointmentDetails.Cache.SetValue<FSAppointmentDet.status>(apptLine, FSAppointmentDet.status.CANCELED);
-                                apptEntry.AppointmentDetails.UpdateCurrent();
+                                apptEntry.AppointmentDetails.Update(apptLine);
                             }
                         }
 
