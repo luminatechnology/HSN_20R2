@@ -342,9 +342,19 @@ namespace HSNCustomizations.Descriptor
                .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>.And<FSAppointment.refNbr.IsEqual<P.AsString>>>
                .View.Select(new PXGraph(), srvType, appNbr).RowCast<FSAppointment>().FirstOrDefault();
 
+        public static FSAppointment GetCurrentAppointmentBySoRef(string srvType, string soRef)
+           => SelectFrom<FSAppointment>
+              .Where<FSAppointment.srvOrdType.IsEqual<P.AsString>.And<FSAppointment.soRefNbr.IsEqual<P.AsString>>>
+              .View.Select(new PXGraph(), srvType, soRef).RowCast<FSAppointment>().FirstOrDefault();
+
         public static FSServiceOrder GetCurrentServiceOrder(string srvType, string soRef)
             => SelectFrom<FSServiceOrder>
                .Where<FSServiceOrder.srvOrdType.IsEqual<P.AsString>.And<FSServiceOrder.refNbr.IsEqual<P.AsString>>>
                .View.Select(new PXGraph(), srvType, soRef).RowCast<FSServiceOrder>().FirstOrDefault();
+
+        public static FSServiceOrder GetCurrentServiceOrderByGuid(Guid? noteID)
+           => SelectFrom<FSServiceOrder>
+              .Where<FSServiceOrder.noteID.IsEqual<P.AsGuid>>
+              .View.Select(new PXGraph(), noteID).RowCast<FSServiceOrder>().FirstOrDefault();
     }
 }

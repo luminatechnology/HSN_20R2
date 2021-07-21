@@ -40,14 +40,14 @@ namespace HSNCustomizations.Descriptor
             "Change to Assigned Stage when staff is assigned",
             "Change to Under Diagnose Stage when appointment is started",
             "Change to Quotation Required Stage when parts is required",
-            "Change to Quotation Required Stage when parts is required",
+            "Change to Quoted when email is sent to customer",
             "Change to Awaiting Spare Parts Stage when part request is initiated",
             "Change to Under Repair Stage when 1-step transfer is released",
             "Change to Part in Transit Stage when 2-step transfer out is released",
             "Change to Under Repair Stage when 2-step transfer is received and released",
             "Change to Under Testing when Finished Check Box is ticked",
             "Change to Repair Complete when appointment is 'completed' by QC/ Engineer",
-            "hange to RTS when service order is 'completed' by"
+            "Change to RTS when service order is 'completed' by"
         };
 
         protected virtual IEnumerable GetRecords()
