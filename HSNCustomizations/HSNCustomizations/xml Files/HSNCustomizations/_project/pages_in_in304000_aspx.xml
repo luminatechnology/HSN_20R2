@@ -32,4 +32,32 @@
     <PXLayoutRule ParentId="phF_form_PXLayoutRule#7" TypeFullName="PX.Web.UI.PXLayoutRule">
         <Prop Key="LabelsWidth" Value="SM" />
     </PXLayoutRule>
+    <PXDataSource ID="ds" ParentId="phDS_ds" TypeFullName="PX.Web.UI.PXDataSource">
+        <Children Key="CallbackCommands">
+            <AddItem>
+                <PXDSCallbackCommand TypeFullName="PX.Web.UI.PXDSCallbackCommand">
+                    <Prop Key="Name" Value="CopyItemFromAppt" />
+                    <Prop Key="Visible" Value="False" />
+                    <Prop Key="CommitChanges" Value="true" />
+                </PXDSCallbackCommand>
+            </AddItem>
+            <AddItem>
+                <PXDSCallbackCommand TypeFullName="PX.Web.UI.PXDSCallbackCommand">
+                    <Prop Key="Name" Value="CopyItemFromAppt" />
+                    <Prop Key="Visible" Value="True" />
+                </PXDSCallbackCommand>
+            </AddItem>
+        </Children>
+    </PXDataSource>
+    <PXGrid ID="grid" ParentId="phG_tab_Items#0_grid" TypeFullName="PX.Web.UI.PXGrid">
+        <Children Key="ActionBar.CustomItems">
+            <AddItem>
+                <PXToolBarButton TypeFullName="PX.Web.UI.PXToolBarButton">
+                    <Prop Key="CommandName" Value="copyItemFromAppt" />
+                    <Prop Key="CommandSourceID" Value="ds" />
+                    <Prop Key="Text" Value="Copy Item From Appt." />
+                </PXToolBarButton>
+            </AddItem>
+        </Children>
+    </PXGrid>
 </Page>
