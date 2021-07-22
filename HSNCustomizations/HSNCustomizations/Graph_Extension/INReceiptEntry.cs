@@ -1,4 +1,4 @@
-using HSNCustomizations.DAC;
+ï»¿using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
 using PX.Common;
 using PX.Data;
@@ -38,48 +38,49 @@ namespace PX.Objects.IN
         #endregion
 
         #region Event Handlers
+        protected void _(Events.RowPersisting<INTran> e, PXRowPersisting baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            var row = e.Row as INTran;
+            var header = Base.CurrentDocument.Current;
+
+            /// <summary>
+            /// Rule 7: When user save the inventory receive and the Unit cost=0, system show warning message.
+            /// </summary>
+            if (header != null && row != null && !string.IsNullOrEmpty(header.GetExtension<INRegisterExt>().UsrAppointmentNbr) && row.UnitCost == 0)
+            {
+                e.Cache.RaiseExceptionHandling<INTran.unitCost>(row, row.UnitCost, new PXSetPropertyException<INTran.unitCost>(HSNMessages.UnitCostIsZero, PXErrorLevel.Warning));
+            }
+        }
+
         protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler)
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
             var row = e.Row as INRegister;
+            var rowExt = row.GetExtension<INRegisterExt>();
 
-            /// <summary>
-            /// Rule 7: When user save the inventory receive and the Unit cost=0, system show warning message.
-            /// </summary>
-            if (row != null && !string.IsNullOrEmpty(row.GetExtension<INRegisterExt>().UsrAppointmentNbr) && Base.transactions.Select().RowCast<INTran>().Where(x => x.UnitCost == 0).Count() > 0)
-            {
-                throw new PXSetPropertyException<INTran.unitCost>(HSNMessages.UnitCostIsZero, PXErrorLevel.Warning);
-            }
+            INRegister transfer = SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<INDocType.transfer>
+                                                               .And<INRegister.refNbr.IsEqual<@P.AsString>>>.View.Select(Base, e.NewValue.ToString());
+
+            INRegisterExt transferExt = transfer.GetExtension<INRegisterExt>();
+
+            row.ExtRefNbr = transfer.ExtRefNbr;
+            row.TranDesc  = transfer.TranDesc;
+
+            rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
+            rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
+            rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
+            rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
         }
-
-        //protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler) 
-        //{
-        //    baseHandler?.Invoke(e.Cache, e.Args);
-
-        //    var row = e.Row as INRegister;
-        //    var rowExt = row.GetExtension<INRegisterExt>();
-
-        //    INRegister transfer = SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<INDocType.transfer>
-        //                                                       .And<INRegister.refNbr.IsEqual<@P.AsString>>>.View.Select(Base, e.NewValue.ToString());
-
-        //    INRegisterExt transferExt = transfer.GetExtension<INRegisterExt>();
-
-        //    row.ExtRefNbr = transfer.ExtRefNbr;
-        //    row.TranDesc  = transfer.TranDesc;
-
-        //    rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
-        //    rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
-        //    rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
-        //    rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
-        //}
         #endregion
 
         #region Methods
         /// <summary>
-        /// When user release the Receipts and the Appointment Nbr is not blank, then if the INTRAN.InventoryID of the ‘Detail Ref Nbr?<> FSAppointmentDet.InventoryID of the ‘Detail Ref Nbr?then
-        /// Set Line Status =’Canceled?of FSAppointmentDet.InventoryID of the ‘Detail Ref Nbr?
-        /// Insert a new line into FSAppointmentDet with inventoryid = INTRAN.InventoryID of the ‘Detail Ref Nbr? The ‘Estimated Quantity?is the same as the canceled line.
+        /// When user release the Receipts and the Appointment Nbr is not blank, then if the INTRAN.InventoryID of the ï¿½Detail Ref Nbr?<> FSAppointmentDet.InventoryID of the ï¿½Detail Ref Nbr?then
+        /// Set Line Status =ï¿½Canceled?of FSAppointmentDet.InventoryID of the ï¿½Detail Ref Nbr?
+        /// Insert a new line into FSAppointmentDet with inventoryid = INTRAN.InventoryID of the ï¿½Detail Ref Nbr? The ï¿½Estimated Quantity?is the same as the canceled line.
         /// In other words, if the inventory ID received is different with the inventory id requested.System cancels the original line, and create a new line with new inventory ID.
         /// </summary>
         public virtual void AdjustRcptAndApptInventory()
@@ -105,7 +106,7 @@ namespace PX.Objects.IN
                                                                                                                                                        .View.SelectSingleBound(Base, null, regisExt.UsrSrvOrdType, regisExt.UsrAppointmentNbr, row.GetExtension<INTranExt>().UsrApptLineRef);
                             FSAppointmentDet apptLine = result;
 
-                            if (!apptLine.InventoryID.Equals(row.InventoryID) && !apptLine.UIStatus.IsIn(ID.Status_AppointmentDet.CANCELED, ID.Status_AppointmentDet.COMPLETED))
+                            if (apptLine != null && !apptLine.InventoryID.Equals(row.InventoryID) && !apptLine.UIStatus.IsIn(ID.Status_AppointmentDet.CANCELED, ID.Status_AppointmentDet.COMPLETED))
                             {
                                 apptEntry.AppointmentRecords.Current = result;
 

@@ -15,5 +15,7 @@ namespace HSNCustomizations.Descriptor
         public const string ApptLineTypeInvt  = "The Button Is Disabled Because Line Type Isn't Invetory Item";
         public const string InvtTranNoAllRlsd = "There Are Related Inventory Transactions Of This Appointment Are Not Yet Released";
         public const string UnitCostIsZero    = "The Unit Cost Is 0, Please Double Check.";
+        public const string InitRMANotCompl   = "The Initiate RMA Receipt Not Yet Complete.";
+        public const string NoInitRMARcpt     = "You Must Initiate RMA Process For The Inventory.";
     }
 }

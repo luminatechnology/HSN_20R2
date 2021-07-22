@@ -1,0 +1,28 @@
+using PX.Data;
+
+namespace PX.Objects.FS
+{
+    public class FSAppointmentDetExt : PXCacheExtension<PX.Objects.FS.FSAppointmentDet>
+    {
+        #region UsrDummyRMAReq
+        [PXString]
+        [PXUIField(DisplayName = "", Enabled = false, Visible = false)]
+        [PXUnboundDefault(typeof(Search2<CS.CSAnswers.value, InnerJoin<IN.InventoryItem, On<IN.InventoryItem.noteID, Equal<CS.CSAnswers.refNoteID>,
+                                                                                            And<CS.CSAnswers.attributeID, Equal<AppointmentEntry_Extension.rMAReqAttrID>>>>,
+                                                             Where<IN.InventoryItem.inventoryID, Equal<Current<FSAppointmentDet.inventoryID>>>>),
+                   PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXFormula(typeof(Default<FSAppointmentDet.inventoryID>))]
+        public virtual string UsrDummyRMAReq { get; set; }
+        public abstract class usrDummyRMAReq : PX.Data.BQL.BqlString.Field<usrDummyRMAReq> { }
+        #endregion
+
+        #region UsrRMARequired
+        [PXDBBool()]
+        [PXUIField(DisplayName = "RMA Required", Enabled = false)]
+        [PXDefault(typeof(IIf<Where<FSAppointmentDetExt.usrDummyRMAReq, Equal<CS.string1>>, True, False>), PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXFormula(typeof(Default<FSAppointmentDetExt.usrDummyRMAReq>))]
+        public virtual bool? UsrRMARequired { get; set; }
+        public abstract class usrRMARequired : PX.Data.BQL.BqlBool.Field<usrRMARequired> { }
+        #endregion
+    }
+}
