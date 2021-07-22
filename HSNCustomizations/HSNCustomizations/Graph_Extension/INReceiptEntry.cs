@@ -17,10 +17,12 @@ namespace PX.Objects.IN
         [PXOverride]
         public virtual IEnumerable Release(PXAdapter adapter, ReleaseDelegate baseMethod)
         {
-            if (string.IsNullOrEmpty(Base.receipt.Current.TransferNbr))
-            { baseMethod(adapter); }
+            // Doing release
+            baseMethod(adapter);
             // Process Appointment & Service Order Stage Change
-            PXLongOperation.WaitCompletion(Base.UID);
+            // if TransferNbr is not null then wait for release complete (need to cheange status to  release)
+            if (!string.IsNullOrEmpty(Base.receipt.Current.TransferNbr))
+                PXLongOperation.WaitCompletion(Base.UID);
             using (PXTransactionScope ts = new PXTransactionScope())
             {
                 // Release Success
@@ -29,8 +31,6 @@ namespace PX.Objects.IN
                         ts.Complete();
             }
 
-            baseMethod(adapter); ;
-
             AdjustRcptAndApptInventory();
 
             return adapter.Get();
@@ -38,7 +38,7 @@ namespace PX.Objects.IN
         #endregion
 
         #region Event Handlers
-        protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler) 
+        protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler)
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
@@ -47,7 +47,7 @@ namespace PX.Objects.IN
             /// <summary>
             /// Rule 7: When user save the inventory receive and the Unit cost=0, system show warning message.
             /// </summary>
-            if (row != null && !string.IsNullOrEmpty(row.GetExtension<INRegisterExt>().UsrAppointmentNbr) && Base.transactions.Select().RowCast<INTran>().Where(x => x.UnitCost == 0).Count() > 0 )
+            if (row != null && !string.IsNullOrEmpty(row.GetExtension<INRegisterExt>().UsrAppointmentNbr) && Base.transactions.Select().RowCast<INTran>().Where(x => x.UnitCost == 0).Count() > 0)
             {
                 throw new PXSetPropertyException<INTran.unitCost>(HSNMessages.UnitCostIsZero, PXErrorLevel.Warning);
             }
@@ -111,15 +111,15 @@ namespace PX.Objects.IN
 
                                 FSAppointmentDet newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Insert(new FSAppointmentDet()));
 
-                                newLine.InventoryID     = row.InventoryID;
-                                newLine.EstimatedQty    = row.Qty;
-                                newLine.Status          = apptLine.Status;
-                                
+                                newLine.InventoryID = row.InventoryID;
+                                newLine.EstimatedQty = row.Qty;
+                                newLine.Status = apptLine.Status;
+
                                 newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Update(newLine));
 
                                 //PXCache<FSAppointmentDet>.RestoreCopy(newLine, PXCache<FSAppointmentDet>.CreateCopy(apptLine));
                                 newLine.EquipmentAction = apptLine.EquipmentAction;
-                                newLine.OrigLineNbr     = apptLine.OrigLineNbr;
+                                newLine.OrigLineNbr = apptLine.OrigLineNbr;
 
                                 apptEntry.AppointmentDetails.Update(newLine);
 
