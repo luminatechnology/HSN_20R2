@@ -155,9 +155,9 @@ namespace PX.Objects.IN
             if (transferRow == null || string.IsNullOrEmpty(row.TransferNbr))
                 return false;
 
-            var srvType = transferRow.GetExtension<INRegisterExt>().UsrSrvOrdType;
-            var appNbr = transferRow.GetExtension<INRegisterExt>().UsrAppointmentNbr;
-            var soRef = transferRow.GetExtension<INRegisterExt>().UsrSORefNbr;
+            var srvType = row.GetExtension<INRegisterExt>().UsrSrvOrdType;
+            var appNbr = row.GetExtension<INRegisterExt>().UsrAppointmentNbr;
+            var soRef = row.GetExtension<INRegisterExt>().UsrSORefNbr;
             if (string.IsNullOrEmpty(soRef) || string.IsNullOrEmpty(appNbr) || string.IsNullOrEmpty(srvType))
                 return false;
 
