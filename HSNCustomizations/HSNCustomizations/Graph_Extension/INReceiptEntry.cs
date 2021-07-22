@@ -38,41 +38,42 @@ namespace PX.Objects.IN
         #endregion
 
         #region Event Handlers
-        protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler) 
+        protected void _(Events.RowPersisting<INTran> e, PXRowPersisting baseHandler)
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
-            var row = e.Row as INRegister;
+            var row = e.Row as INTran;
+            var header = Base.CurrentDocument.Current;
 
             /// <summary>
             /// Rule 7: When user save the inventory receive and the Unit cost=0, system show warning message.
             /// </summary>
-            if (row != null && !string.IsNullOrEmpty(row.GetExtension<INRegisterExt>().UsrAppointmentNbr) && Base.transactions.Select().RowCast<INTran>().Where(x => x.UnitCost == 0).Count() > 0 )
+            if (header != null && row != null && !string.IsNullOrEmpty(header.GetExtension<INRegisterExt>().UsrAppointmentNbr) && row.UnitCost == 0)
             {
-                throw new PXSetPropertyException<INTran.unitCost>(HSNMessages.UnitCostIsZero, PXErrorLevel.Warning);
+                e.Cache.RaiseExceptionHandling<INTran.unitCost>(row, row.UnitCost, new PXSetPropertyException<INTran.unitCost>(HSNMessages.UnitCostIsZero, PXErrorLevel.Warning));
             }
         }
 
-        //protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler) 
-        //{
-        //    baseHandler?.Invoke(e.Cache, e.Args);
+        protected void _(Events.FieldUpdated<INRegister.transferNbr> e, PXFieldUpdated baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
 
-        //    var row = e.Row as INRegister;
-        //    var rowExt = row.GetExtension<INRegisterExt>();
+            var row = e.Row as INRegister;
+            var rowExt = row.GetExtension<INRegisterExt>();
 
-        //    INRegister transfer = SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<INDocType.transfer>
-        //                                                       .And<INRegister.refNbr.IsEqual<@P.AsString>>>.View.Select(Base, e.NewValue.ToString());
+            INRegister transfer = SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<INDocType.transfer>
+                                                               .And<INRegister.refNbr.IsEqual<@P.AsString>>>.View.Select(Base, e.NewValue.ToString());
 
-        //    INRegisterExt transferExt = transfer.GetExtension<INRegisterExt>();
+            INRegisterExt transferExt = transfer.GetExtension<INRegisterExt>();
 
-        //    row.ExtRefNbr = transfer.ExtRefNbr;
-        //    row.TranDesc  = transfer.TranDesc;
+            row.ExtRefNbr = transfer.ExtRefNbr;
+            row.TranDesc  = transfer.TranDesc;
 
-        //    rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
-        //    rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
-        //    rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
-        //    rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
-        //}
+            rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
+            rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
+            rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
+            rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
+        }
         #endregion
 
         #region Methods
@@ -105,7 +106,7 @@ namespace PX.Objects.IN
                                                                                                                                                        .View.SelectSingleBound(Base, null, regisExt.UsrSrvOrdType, regisExt.UsrAppointmentNbr, row.GetExtension<INTranExt>().UsrApptLineRef);
                             FSAppointmentDet apptLine = result;
 
-                            if (!apptLine.InventoryID.Equals(row.InventoryID) && !apptLine.UIStatus.IsIn(ID.Status_AppointmentDet.CANCELED, ID.Status_AppointmentDet.COMPLETED))
+                            if (apptLine != null && !apptLine.InventoryID.Equals(row.InventoryID) && !apptLine.UIStatus.IsIn(ID.Status_AppointmentDet.CANCELED, ID.Status_AppointmentDet.COMPLETED))
                             {
                                 apptEntry.AppointmentRecords.Current = result;
 
