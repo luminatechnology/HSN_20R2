@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
-using System;
 
 namespace PX.Objects.FS
 {
@@ -240,8 +239,6 @@ namespace PX.Objects.FS
 
             transferEntry.CurrentDocument.Insert(register);
 
-            int? toSiteID = null;
-
             PXView view = new PXView(apptEntry, true, apptEntry.AppointmentDetails.View.BqlSelect);
 
             var list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM);
@@ -251,16 +248,16 @@ namespace PX.Objects.FS
                 list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM && x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true);
             }
 
-            foreach (FSAppointmentDet row in list)
-            {   
-                CreateINTran(transferEntry, row);
-
-                if (toSiteID == null) { toSiteID = row.SiteID; }
-            }
+            int? toSiteID = list.Single<FSAppointmentDet>()?.SiteID;
 
             transferEntry.CurrentDocument.Current.SiteID   = isRMA ? toSiteID : prefSiteID;
             transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? prefSiteID : toSiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
+
+            foreach (FSAppointmentDet row in list)
+            {   
+                CreateINTran(transferEntry, row);
+            }            
         }
 
         /// <summary>

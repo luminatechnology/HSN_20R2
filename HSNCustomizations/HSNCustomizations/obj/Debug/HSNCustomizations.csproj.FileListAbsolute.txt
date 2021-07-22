@@ -32,3 +32,5 @@ C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNCustomizations\
 C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNCustomizations\HSNCustomizations\obj\Debug\HSNCustomizations.pdb
 C:\Program Files\Acumatica ERP\HSN_Malaysia\Bin\HSNCustomizations.dll
 C:\Program Files\Acumatica ERP\HSN_Malaysia\Bin\HSNCustomizations.pdb
+C:\Program Files\Acumatica ERP\HSN\Bin\HSNCustomizations.dll
+C:\Program Files\Acumatica ERP\HSN\Bin\HSNCustomizations.pdb
