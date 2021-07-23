@@ -46,10 +46,6 @@
                         <ChildField>AdjgRefNbr</ChildField>
                         <ParentField>RefNbr</ParentField>
                     </RelationRow>
-                    <RelationRow>
-                        <ChildField>AdjdOrderNbr</ChildField>
-                        <ParentField>AdjCntr</ParentField>
-                    </RelationRow>
                 </Links>
                 <ParentName>ARPayment</ParentName>
             </ReportRelation>
