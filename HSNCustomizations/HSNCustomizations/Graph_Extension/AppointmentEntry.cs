@@ -49,6 +49,11 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
+            if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED)
+            {
+                SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
+            }
+
             var isNewData = Base.AppointmentRecords.Cache.Inserted.RowCast<FSAppointment>().Count() > 0;
             // Check Status is Dirty
             var statusDirtyResult = CheckStatusIsDirty(Base.AppointmentRecords.Current);
@@ -338,6 +343,23 @@ namespace PX.Objects.FS
             {
                 Mode = PXBaseRedirectException.WindowMode.New
             };
+        }
+
+        /// <summary>
+        /// Enable Header Note Sync between Service Order and Appointment.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="fromType"></param>
+        /// <param name="toType"></param>
+        public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType)
+        {
+            string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
+
+            if (!string.IsNullOrEmpty(note) )
+            {
+                PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
+                graph.Caches[toType].Update(graph.Caches[toType].Current);
+            }
         }
         #endregion
 

@@ -3,19 +3,13 @@ using HSNCustomizations.Descriptor;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
-using PX.Objects.FS;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PX.Objects.IN;
 
 namespace PX.Objects.FS
 {
     public class ServiceOrderEntry_Extension : PXGraphExtension<ServiceOrderEntry>
     {
-
         #region Selects
         public SelectFrom<INRegister>.Where<INRegister.docType.IsIn<INDocType.transfer, INDocType.receipt>
                                             .And<INRegisterExt.usrSrvOrdType.IsEqual<FSServiceOrder.srvOrdType.FromCurrent>
@@ -29,6 +23,11 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
+            if (Base.ServiceOrderRecords.Current.Status != FSAppointment.status.CLOSED)
+            {
+                AppointmentEntry_Extension.SyncNoteApptOrSrvOrd(Base, typeof(FSServiceOrder), typeof(FSAppointment));
+            }
+
             var isNewData = Base.ServiceOrderRecords.Cache.Inserted.RowCast<FSServiceOrder>().Count() > 0;
             // Check Status is Dirty
             var statusDirtyResult = CheckStatusIsDirty(Base.ServiceOrderRecords.Current);
