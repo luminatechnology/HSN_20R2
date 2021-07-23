@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using PX.Common;
 using PX.Data;
-using PX.Objects;
-using PX.Objects.AR;
 
 namespace PX.Objects.AR
 {
@@ -32,6 +27,13 @@ namespace PX.Objects.AR
             }
             return adapter.Get();
         }
+        #endregion
+
+        #region Cache Attached 
+        [PXRemoveBaseAttribute(typeof(ARPaymentType.NumberingAttribute))]
+        [PXMergeAttributes(Method = MergeMethod.Merge)]
+        [HSNCustomizations.Descriptor.ARPymtNumbering()]
+        protected void _(Events.CacheAttached<ARPayment.refNbr> e) { }
         #endregion
     }
 }

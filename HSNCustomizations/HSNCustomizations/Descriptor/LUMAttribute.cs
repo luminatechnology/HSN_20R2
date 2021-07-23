@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using PX.Data;
+using PX.Data.BQL.Fluent;
+using PX.Objects.AR;
 
 namespace HSNCustomizations.Descriptor
 {
@@ -84,6 +86,30 @@ namespace HSNCustomizations.Descriptor
             #endregion
         }
         #endregion
+    }
+    #endregion
+
+    #region ARPymtNumberingAttribute
+    /// <summary>
+    /// If “Customer Prepayment Numbering Sequence” is blank, follow the standard numbering sequence when the transaction Type is “Prepayment”.
+    /// </summary>
+    public class ARPymtNumberingAttribute : ARPaymentType.NumberingAttribute
+    {
+        public override void RowPersisting(PXCache sender, PXRowPersistingEventArgs e)
+        {
+            string curDoType = sender.GetValue<ARPayment.docType>(e.Row) as string;
+
+            HSNCustomizations.DAC.LUMHSNSetup hSNSetup = SelectFrom<HSNCustomizations.DAC.LUMHSNSetup>.View.Select(sender.Graph);
+
+            if (curDoType == ARDocType.Prepayment && !string.IsNullOrEmpty(hSNSetup?.CPrepaymentNumberingID) && this.UserNumbering == false)
+            {
+                string generated = PX.Objects.CS.AutoNumberAttribute.GetNextNumber(sender, e.Row, hSNSetup.CPrepaymentNumberingID, (e.Row as ARPayment).DocDate);
+
+                sender.SetValue(e.Row, _FieldName, generated);
+            }
+            else
+            { base.RowPersisting(sender, e); }
+        }
     }
     #endregion
 }
