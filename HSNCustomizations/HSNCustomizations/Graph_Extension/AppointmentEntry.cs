@@ -4,7 +4,6 @@ using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
 
@@ -109,15 +108,21 @@ namespace PX.Objects.FS
         [PXOverride]
         public IEnumerable CloseAppointment(PXAdapter adapter, CloseAppointmentDelegate baseMethod)
         {
-            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAName).Count() <= 0 &&
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() <= 0 &&
                 Base.AppointmentDetails.Select().RowCast<FSAppointmentDet>().Where(x => x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true).Count() > 0)
             {
                 throw new PXException(HSNMessages.NoInitRMARcpt);
             }
 
-            List<INRegister> list = this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.Status != INDocStatus.Released).ToList();
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.Status != INDocStatus.Released).Count() > 0) 
+            { 
+                throw new PXException(HSNMessages.InvtTranNoAllRlsd); 
+            }
 
-            if (list.Count > 0) { throw new PXException(HSNMessages.InvtTranNoAllRlsd); }
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMARetu).Count() <= 0)
+            {
+                throw new PXException(HSNMessages.MustReturnRMA);
+            }
 
             return baseMethod(adapter);
         }
@@ -205,7 +210,7 @@ namespace PX.Objects.FS
         {
             if (new PXView(Base, true, this.INRegisterView.View.BqlSelect).SelectMulti().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && 
                                                                                                                           x.Status != INDocStatus.Released &&
-                                                                                                                          x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAName).Count<INRegister>() > 0)
+                                                                                                                          x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count<INRegister>() > 0)
             {
                 throw new PXException (HSNMessages.InitRMANotCompl);
             }
@@ -240,7 +245,7 @@ namespace PX.Objects.FS
             regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
             regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMAName :LUMTransferPurposeType.PartReq;
+            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu :LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -253,7 +258,7 @@ namespace PX.Objects.FS
                 list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM && x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true);
             }
 
-            int? toSiteID = list.Single<FSAppointmentDet>()?.SiteID;
+            int? toSiteID = list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
 
             transferEntry.CurrentDocument.Current.SiteID   = isRMA ? toSiteID : prefSiteID;
             transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? prefSiteID : toSiteID;
@@ -278,11 +283,11 @@ namespace PX.Objects.FS
             INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
 
             register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc          = HSNMessages.RMAInitiated + " | " + appointment.DocDesc;
+            register.TranDesc          = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
             regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
             regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = LUMTransferPurposeType.RMAName;
+            regisExt.UsrTransferPurp   = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
 
             register = receiptEntry.CurrentDocument.Insert(register);
 
