@@ -72,7 +72,7 @@ namespace PX.Objects.IN
             rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
             rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
             rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
-            rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp;
+            rowExt.UsrTransferPurp   = rowExt.UsrTransferPurp ?? transferExt.UsrTransferPurp;
         }
         #endregion
 
