@@ -19,5 +19,7 @@ namespace HSNCustomizations.Descriptor
         public const string InitRMANotCompl   = "The Initiate RMA Receipt Not Yet Complete.";
         public const string NoInitRMARcpt     = "You Must Initiate RMA Process For The Inventory.";
         public const string MustReturnRMA     = "Please Return The RMA.";
+        public const string ReturnRMAB4Init   = "Please Initiate RMA Before Return RMA";
+        public const string PartReqNotRlsd    = "Please Request Part Before Receiving And Eensure Part Request Is Released";
     }
 }
