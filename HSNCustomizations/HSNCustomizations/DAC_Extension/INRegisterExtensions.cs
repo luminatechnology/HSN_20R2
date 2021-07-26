@@ -40,7 +40,8 @@ namespace PX.Objects.IN
         [PXDBString(3, IsFixed = true, IsUnicode = true)]
         [PXUIField(DisplayName = "Transfer Purpose", IsReadOnly = true)]
         [LUMTransferPurposeType()]
-        [PXDefault(LUMTransferPurposeType.Transfer, PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXDefault(typeof(IIf<Where<INRegister.docType, Equal<INDocType.receipt>>, LUMTransferPurposeType.receipt, IIf<Where<INRegister.docType, Equal<INDocType.transfer>>, LUMTransferPurposeType.transfer, Null>>), 
+                   PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual string UsrTransferPurp { get; set; }
         public abstract class usrTransferPurp : PX.Data.BQL.BqlString.Field<usrTransferPurp> { }
         #endregion
