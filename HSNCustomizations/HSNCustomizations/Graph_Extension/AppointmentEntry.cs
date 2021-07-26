@@ -215,8 +215,8 @@ namespace PX.Objects.FS
         public virtual void OpenReturnRMA()
         {
             if (new PXView(Base, true, this.INRegisterView.View.BqlSelect).SelectMulti().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && 
-                                                                                                                          x.Status != INDocStatus.Released &&
-                                                                                                                          x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() > 0)
+                                                                                                                          x.Status == INDocStatus.Released &&
+                                                                                                                          x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() <= 0)
             {
                 throw new PXException (HSNMessages.ReturnRMAB4Init);
             }
