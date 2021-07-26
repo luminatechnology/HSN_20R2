@@ -175,12 +175,14 @@ namespace PX.Objects.FS
 
             string transferNbr = null;
 
+            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
+
             foreach (INRegister row in INRegisterView.Select())
             {
                 switch (row.DocType)
                 {
                     case INDocType.Receipt:
-                        if (row.Released == true) { goto InitReceipt; }
+                        if (row.Released == true) { goto BlankReceipt; }
                         break;
 
                     case INDocType.Transfer:
@@ -188,11 +190,10 @@ namespace PX.Objects.FS
                         break;
                 }
             }
-        InitReceipt:
-            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
-
+        
             InitReceiptEntry(ref receiptEntry, Base, transferNbr);
 
+        BlankReceipt:
             OpenNewForm(receiptEntry, ReceiptScr);
         }
 
