@@ -168,6 +168,11 @@ namespace PX.Objects.FS
         [PXButton]
         public virtual void OpenPartReceive()
         {
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.Released == true && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.PartReq).Count() <= 0)
+            {
+                throw new PXException(HSNMessages.PartReqNotRlsd);
+            }
+
             string transferNbr = null;
 
             foreach (INRegister row in INRegisterView.Select())
@@ -210,9 +215,9 @@ namespace PX.Objects.FS
         {
             if (new PXView(Base, true, this.INRegisterView.View.BqlSelect).SelectMulti().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && 
                                                                                                                           x.Status != INDocStatus.Released &&
-                                                                                                                          x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count<INRegister>() > 0)
+                                                                                                                          x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() > 0)
             {
-                throw new PXException (HSNMessages.InitRMANotCompl);
+                throw new PXException (HSNMessages.ReturnRMAB4Init);
             }
 
             INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
