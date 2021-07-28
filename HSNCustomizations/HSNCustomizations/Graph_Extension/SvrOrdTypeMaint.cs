@@ -11,6 +11,10 @@ namespace PX.Objects.FS
         #region Selects
         [PXImport(typeof(LUMAutoWorkflowStage))]
         public SelectFrom<LUMAutoWorkflowStage>.Where<LUMAutoWorkflowStage.srvOrdType.IsEqual<FSSrvOrdType.srvOrdType.FromCurrent>>.View WorkflowStage;
+
+        [PXImport(typeof(LumStageControl))]
+        public SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<FSSrvOrdType.srvOrdType.FromCurrent>>.View StageControl;
+
         #endregion
 
         #region Event Handler

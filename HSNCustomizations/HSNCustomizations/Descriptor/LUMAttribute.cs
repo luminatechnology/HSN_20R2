@@ -12,16 +12,17 @@ namespace HSNCustomizations.Descriptor
     {
         OPEN01 = 0,
         ASSIGN01 = 1,
-        START01 = 2,
-        QUOTATION01 = 3,
-        QUOTATION03 = 4,
-        AWSPARE01 = 5,
-        AWSPARE03 = 6,
-        AWSPARE05 = 7,
-        AWSPARE07 = 8,
-        FINISH01 = 9,
-        COMPLETE01 = 10,
-        COMPLETE03 = 11
+        ASSIGN03 = 2,
+        START01 = 3,
+        QUOTATION01 = 4,
+        QUOTATION03 = 5,
+        AWSPARE01 = 6,
+        AWSPARE03 = 7,
+        AWSPARE05 = 8,
+        AWSPARE07 = 9,
+        FINISH01 = 10,
+        COMPLETE01 = 11,
+        COMPLETE03 = 12
     }
     #endregion
 
@@ -40,6 +41,7 @@ namespace HSNCustomizations.Descriptor
         {
             "Change to Open Stage when appointment is created",
             "Change to Assigned Stage when staff is assigned",
+            "Change to Waiting Stage when driver is arranged to pick up machine",
             "Change to Under Diagnose Stage when appointment is started",
             "Change to Quotation Required Stage when parts is required",
             "Change to Quoted when email is sent to customer",
