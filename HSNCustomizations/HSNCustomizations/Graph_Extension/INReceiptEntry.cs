@@ -127,10 +127,14 @@ namespace PX.Objects.IN
                                 apptEntry.AppointmentDetails.Cache.SetValue<FSAppointmentDet.status>(apptLine, FSAppointmentDet.status.CANCELED);
                                 apptEntry.AppointmentDetails.Update(apptLine);
                             }
+                            else
+                            {
+                                goto Complete;
+                            }
                         }
-
                         apptEntry.Save.Press();
 
+                    Complete:
                         ts.Complete();
                     }
                 }
