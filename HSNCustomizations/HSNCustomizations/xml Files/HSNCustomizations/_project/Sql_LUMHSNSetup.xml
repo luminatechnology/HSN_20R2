@@ -5,6 +5,10 @@
   <col name="EnableUniqSerialNbrByEquipType" type="Bit" nullable="true" />
   <col name="EnablePartReqInAppt" type="Bit" nullable="true" />
   <col name="EnableRMAProcInAppt" type="Bit" nullable="true" />
+  <col name="EnableHeaderNoteSync" type="Bit" nullable="true" />
+  <col name="EnableChgInvTypeOnBill" type="Bit" nullable="true" />
+  <col name="DisplayTransferToHQ" type="Bit" nullable="true" />
+  <col name="DispApptActiviteInSrvOrd" type="Bit" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />
   <col name="CreatedDateTime" type="DateTime" />

@@ -44,7 +44,35 @@ namespace HSNCustomizations.DAC
         public virtual bool? EnableRMAProcInAppt { get; set; }
         public abstract class enableRMAProcInAppt : PX.Data.BQL.BqlBool.Field<enableRMAProcInAppt> { }
         #endregion
-    
+
+        #region EnableHeaderNoteSync
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Header Notes Synchronization")]
+        public virtual bool? EnableHeaderNoteSync { get; set; }
+        public abstract class enableHeaderNoteSync : PX.Data.BQL.BqlBool.Field<enableHeaderNoteSync> { }
+        #endregion
+
+        #region EnableChgInvTypeOnBill
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Invoice Type Change When Run Billing")]
+        public virtual bool? EnableChgInvTypeOnBill { get; set; }
+        public abstract class enableChgInvTypeOnBill : PX.Data.BQL.BqlBool.Field<enableChgInvTypeOnBill> { }
+        #endregion
+
+        #region DisplayTransferToHQ
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Display Transfer To HQ")]
+        public virtual bool? DisplayTransferToHQ { get; set; }
+        public abstract class displayTransferToHQ : PX.Data.BQL.BqlBool.Field<displayTransferToHQ> { }
+        #endregion
+
+        #region DispApptActiviteInSrvOrd
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Display Appointment Activities in Service Order")]
+        public virtual bool? DispApptActiviteInSrvOrd { get; set; }
+        public abstract class dispApptActiviteInSrvOrd : PX.Data.BQL.BqlBool.Field<dispApptActiviteInSrvOrd> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }
