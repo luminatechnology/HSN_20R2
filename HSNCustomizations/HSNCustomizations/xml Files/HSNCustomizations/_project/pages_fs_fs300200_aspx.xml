@@ -154,6 +154,12 @@
                                                 </AddItem>
                                                 <AddItem>
                                                     <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ExtRefNbr" />
+                                                        <Prop Key="Width" Value="180" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                                                         <Prop Key="DataField" Value="TranDesc" />
                                                         <Prop Key="Width" Value="280" />
                                                     </PXGridColumn>
