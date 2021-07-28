@@ -29,6 +29,8 @@ namespace PX.Objects.FS
         public SelectFrom<INRegister>.Where<INRegister.docType.IsIn<INDocType.transfer, INDocType.receipt>
                                             .And<INRegisterExt.usrSrvOrdType.IsEqual<FSAppointment.srvOrdType.FromCurrent>
                                                  .And<INRegisterExt.usrAppointmentNbr.IsEqual<FSAppointment.refNbr.FromCurrent>>>>.View INRegisterView;
+
+        public SelectFrom<LUMHSNSetup>.View HSNSetupView;
         #endregion
 
         #region Override Method
@@ -48,7 +50,7 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
-            if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED)
+            if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED  && HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
             {
                 SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
             }
@@ -142,9 +144,10 @@ namespace PX.Objects.FS
 
             EventHistory.AllowDelete = EventHistory.AllowInsert = EventHistory.AllowUpdate = INRegisterView.AllowDelete = INRegisterView.AllowInsert = INRegisterView.AllowUpdate = false;
 
-            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+            LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             openPartRequest.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
+            openPartReceive.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
             openInitiateRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
             openReturnRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
         }
