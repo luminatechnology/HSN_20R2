@@ -6,6 +6,9 @@ using System.Linq;
 using System.Collections;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using System.Collections.Generic;
+using PX.Objects.CR.Standalone;
+using PX.Objects.CS;
 
 namespace PX.Objects.FS
 {
@@ -40,10 +43,14 @@ namespace PX.Objects.FS
             Base.menuDetailActions.AddMenuAction(openPartReceive);
             Base.menuDetailActions.AddMenuAction(openInitiateRMA);
             Base.menuDetailActions.AddMenuAction(openReturnRMA);
+
+            //AddAllStageButton();
+            this.lumStages.MenuAutoOpen = true;
         }
         #endregion
 
         #region Delegate Method
+
         public delegate void PersistDelegate();
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
@@ -58,12 +65,15 @@ namespace PX.Objects.FS
             var statusDirtyResult = CheckStatusIsDirty(Base.AppointmentRecords.Current);
             // Check Stage is Dirty
             var wfStageDirtyResult = CheckWFStageIsDirty(Base.AppointmentRecords.Current);
+            // Get New Staff Record
+            var newStaffRecords = Base.AppointmentServiceEmployees.Cache.Inserted.RowCast<FSAppointmentEmployee>().ToList();
             baseMethod();
             try
             {
                 using (PXTransactionScope ts = new PXTransactionScope())
                 {
                     // Init object
+                    bool isDriveStaff = false;
                     FSWorkflowStageHandler.apptEntry = Base;
                     FSWorkflowStageHandler.InitStageList();
 
@@ -73,11 +83,25 @@ namespace PX.Objects.FS
 
                     LUMAutoWorkflowStage autoWFStage = new LUMAutoWorkflowStage();
 
+                    // check staff is driver
+                    foreach (var staff in newStaffRecords)
+                    {
+                        var employee = EPEmployee.PK.Find(Base, staff.EmployeeID);
+                        var attr = CSAnswers.PK.Find(Base, employee?.NoteID, "DRIVER");
+                        if (attr != null && attr.Value == "1")
+                        {
+                            isDriveStaff = true;
+                            break;
+                        }
+                    }
+
+                    #region WorkFlower
+
                     // New Data
-                    if(isNewData)
+                    if (isNewData)
                         autoWFStage = LUMAutoWorkflowStage.PK.Find(Base, Base.AppointmentRecords.Current.SrvOrdType, nameof(WFRule.OPEN01));
                     // Manual Chagne Stage
-                    else if (wfStageDirtyResult.IsDirty && wfStageDirtyResult.oldValue.HasValue && wfStageDirtyResult.newValue.HasValue )
+                    else if (wfStageDirtyResult.IsDirty && wfStageDirtyResult.oldValue.HasValue && wfStageDirtyResult.newValue.HasValue)
                         autoWFStage = new LUMAutoWorkflowStage()
                         {
                             SrvOrdType = Base.AppointmentRecords.Current.SrvOrdType,
@@ -87,12 +111,17 @@ namespace PX.Objects.FS
                             NextStage = wfStageDirtyResult.newValue,
                             Descr = "Manual change Stage"
                         };
+                    // Staff Drive stage
+                    else if (isDriveStaff)
+                        autoWFStage = LUMAutoWorkflowStage.PK.Find(Base, Base.AppointmentRecords.Current.SrvOrdType, nameof(WFRule.ASSIGN03));
                     // Workflow
                     else
                         autoWFStage = FSWorkflowStageHandler.AutoWFStageRule(nameof(AppointmentEntry));
 
                     if (autoWFStage != null && autoWFStage.Active == true)
                         FSWorkflowStageHandler.UpdateWFStageID(nameof(AppointmentEntry), autoWFStage);
+
+                    #endregion
 
                     baseMethod();
                     ts.Complete();
@@ -114,9 +143,9 @@ namespace PX.Objects.FS
                 throw new PXException(HSNMessages.NoInitRMARcpt);
             }
 
-            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.Status != INDocStatus.Released).Count() > 0) 
-            { 
-                throw new PXException(HSNMessages.InvtTranNoAllRlsd); 
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.Status != INDocStatus.Released).Count() > 0)
+            {
+                throw new PXException(HSNMessages.InvtTranNoAllRlsd);
             }
 
             if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMARetu).Count() <= 0)
@@ -190,10 +219,10 @@ namespace PX.Objects.FS
                         break;
                 }
             }
-        
+
             InitReceiptEntry(ref receiptEntry, Base, transferNbr);
 
-        BlankReceipt:
+            BlankReceipt:
             OpenNewForm(receiptEntry, ReceiptScr);
         }
 
@@ -214,11 +243,11 @@ namespace PX.Objects.FS
         [PXButton]
         public virtual void OpenReturnRMA()
         {
-            if (new PXView(Base, true, this.INRegisterView.View.BqlSelect).SelectMulti().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && 
+            if (new PXView(Base, true, this.INRegisterView.View.BqlSelect).SelectMulti().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt &&
                                                                                                                           x.Status == INDocStatus.Released &&
                                                                                                                           x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() <= 0)
             {
-                throw new PXException (HSNMessages.ReturnRMAB4Init);
+                throw new PXException(HSNMessages.ReturnRMAB4Init);
             }
 
             INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
@@ -227,6 +256,13 @@ namespace PX.Objects.FS
 
             OpenNewForm(transferEntry, TransferScr);
         }
+
+        public PXMenuAction<FSAppointment> lumStages;
+        [PXUIField(DisplayName = "STAGES", MapEnableRights = PXCacheRights.Select)]
+        [PXButton(MenuAutoOpen = true)]
+        public virtual void LumStages() { }
+
+
         #endregion
 
         #region Static Methods
@@ -245,13 +281,13 @@ namespace PX.Objects.FS
             int? prefSiteID = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.SiteID;
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
-            register.TransferType      = INTransferType.TwoStep;
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc          = descrType + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            register.TransferType = INTransferType.TwoStep;
+            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc = descrType + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu :LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr = appointment.SORefNbr;
+            regisExt.UsrTransferPurp = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -266,14 +302,14 @@ namespace PX.Objects.FS
 
             int? toSiteID = list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
 
-            transferEntry.CurrentDocument.Current.SiteID   = isRMA ? toSiteID : prefSiteID;
+            transferEntry.CurrentDocument.Current.SiteID = isRMA ? toSiteID : prefSiteID;
             transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? prefSiteID : toSiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
 
             foreach (FSAppointmentDet row in list)
-            {   
+            {
                 CreateINTran(transferEntry, row);
-            }            
+            }
         }
 
         /// <summary>
@@ -285,15 +321,15 @@ namespace PX.Objects.FS
         {
             FSAppointment appointment = apptEntry.AppointmentSelected.Current;
 
-            INRegister    register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegister register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
             INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
 
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc          = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
+            regisExt.UsrSORefNbr = appointment.SORefNbr;
+            regisExt.UsrTransferPurp = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
 
             register = receiptEntry.CurrentDocument.Insert(register);
 
@@ -366,7 +402,7 @@ namespace PX.Objects.FS
         {
             string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
 
-            if (!string.IsNullOrEmpty(note) )
+            if (!string.IsNullOrEmpty(note))
             {
                 PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
                 graph.Caches[toType].Update(graph.Caches[toType].Current);
@@ -389,7 +425,7 @@ namespace PX.Objects.FS
                                 .RowCast<FSAppointment>()?.FirstOrDefault()?.Status;
             string newValue = row.Status;
 
-            return (!string.IsNullOrEmpty(oldVale) && oldVale != newValue , oldVale, newValue);
+            return (!string.IsNullOrEmpty(oldVale) && oldVale != newValue, oldVale, newValue);
         }
 
         /// <summary>Check Stage Is Dirty </summary>
@@ -406,6 +442,63 @@ namespace PX.Objects.FS
             int? newValue = row.WFStageID;
 
             return (oldVale.HasValue && oldVale != newValue, oldVale, newValue);
+        }
+
+        public void AddAllStageButton()
+        {
+            var primatryView = Base.AppointmentRecords.Cache.GetItemType();
+            FSWorkflowStageHandler.InitStageList();
+            var list = FSWorkflowStageHandler.stageList;
+            var actionLst = new List<PXAction>();
+            foreach (var item in list)
+            {
+                actionLst.Add(
+                    PXNamedAction.AddAction(Base, primatryView, item.WFStageCD, item.WFStageCD,
+                    x =>
+                    {
+                        if (Base.AppointmentRecords.Current != null)
+                            Base.AppointmentRecords.Current.WFStageID = item.WFStageID;
+                        Base.Save.Press();
+                        return x.Get();
+                    },
+                    new PXEventSubscriberAttribute[] { new PXButtonAttribute() { } }
+                ));
+            }
+            foreach (var a in actionLst)
+                this.lumStages.AddMenuAction(a);
+        }
+
+        public void TestControlButton()
+        {
+            var row = Base.AppointmentRecords.Current;
+            if (row != null && !string.IsNullOrEmpty(row.SrvOrdType) && row.WFStageID.HasValue)
+            {
+                var activeMenu = new List<ButtonMenu>();
+                var stageActions = SelectFrom<LumStageControl>
+                                   .Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
+                                        .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
+                                    .View.Select(Base, row.SrvOrdType, row.WFStageID).RowCast<LumStageControl>().ToList();
+                var buttonState = Base.Actions["lumStages"].GetState(null) as PXButtonState;
+                if (activeMenu.Count == 0 || activeMenu == null)
+                {
+                    for (int i = 0; i < stageActions.Count; i++)
+                    {
+                        var stageName = "ASSIGNED";
+                        activeMenu = buttonState.Menus.Where(x => x.Command.ToUpper() == stageName).Distinct().ToList();
+                    }
+                }
+                //foreach (var item in stageActions)
+                //{
+                //    var stageName = "ASSIGNED";
+                //    //activeMenu.AddRange(buttonState.Menus.Where(x => x.Command.ToUpper() == stageName).Distinct().ToArray());
+                //    activeMenu = buttonState.Menus.Where(x => x.Command.ToUpper() == stageName).Distinct().ToList();
+                //    //Base.Actions["lumStages"].SetMenu(activeMenu.ToArray());
+                //}
+                //var temp = buttonState.Menus.W here(x => x.Command.ToUpper() == stageName).Distinct().ToArray();
+                //var temp = buttonState.Menus.Where(b => stageActions.Select(x => FSWorkflowStageHandler.GetStageName(x.ToStage)).Contains(b.Command.ToUpper())).ToArray();
+                //if (activeMenu.Count > 0 && activeMenu != null)
+                this.lumStages.SetMenu(activeMenu.ToArray());
+            }
         }
 
         #endregion

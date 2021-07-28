@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
+    <Compile Include="DAC\LumStageControl.cs" />
+    <Compile Include="Descriptor\FSStageControlHandler.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />
     <Compile Include="Descriptor\LUMAttribute.cs" />
