@@ -51,7 +51,6 @@ namespace PX.Objects.FS
         #endregion
 
         #region Delegate Method
-
         public delegate void PersistDelegate();
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
@@ -138,20 +137,22 @@ namespace PX.Objects.FS
         [PXOverride]
         public IEnumerable CloseAppointment(PXAdapter adapter, CloseAppointmentDelegate baseMethod)
         {
-            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() <= 0 &&
-                Base.AppointmentDetails.Select().RowCast<FSAppointmentDet>().Where(x => x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true).Count() > 0)
+            if (Base.AppointmentDetails.Select().RowCast<FSAppointmentDet>().Where(x => x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true).Count() > 0)
             {
-                throw new PXException(HSNMessages.NoInitRMARcpt);
+                if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Receipt && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMAInit).Count() <= 0)
+                {
+                    throw new PXException(HSNMessages.NoInitRMARcpt);
+                }
+
+                if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMARetu).Count() <= 0)
+                {
+                    throw new PXException(HSNMessages.MustReturnRMA);
+                }
             }
 
             if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.Status != INDocStatus.Released).Count() > 0)
             {
                 throw new PXException(HSNMessages.InvtTranNoAllRlsd);
-            }
-
-            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.RMARetu).Count() <= 0)
-            {
-                throw new PXException(HSNMessages.MustReturnRMA);
             }
 
             return baseMethod(adapter);
