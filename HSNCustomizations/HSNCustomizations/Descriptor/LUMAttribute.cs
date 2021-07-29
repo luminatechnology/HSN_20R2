@@ -103,7 +103,7 @@ namespace HSNCustomizations.Descriptor
 
             HSNCustomizations.DAC.LUMHSNSetup hSNSetup = SelectFrom<HSNCustomizations.DAC.LUMHSNSetup>.View.Select(sender.Graph);
 
-            if (curDoType == ARDocType.Prepayment && !string.IsNullOrEmpty(hSNSetup?.CPrepaymentNumberingID) && this.UserNumbering == false)
+            if (curDoType == ARDocType.Prepayment && !string.IsNullOrEmpty(hSNSetup?.CPrepaymentNumberingID) && this.UserNumbering == false && e.Operation == PXDBOperation.Insert)
             {
                 string generated = PX.Objects.CS.AutoNumberAttribute.GetNextNumber(sender, e.Row, hSNSetup.CPrepaymentNumberingID, (e.Row as ARPayment).DocDate);
 
