@@ -72,7 +72,7 @@ namespace PX.Objects.IN
             rowExt.UsrSrvOrdType     = transferExt.UsrSrvOrdType;
             rowExt.UsrAppointmentNbr = transferExt.UsrAppointmentNbr;
             rowExt.UsrSORefNbr       = transferExt.UsrSORefNbr;
-            rowExt.UsrTransferPurp   = rowExt.UsrTransferPurp ?? transferExt.UsrTransferPurp;
+            rowExt.UsrTransferPurp   = transferExt.UsrTransferPurp == LUMTransferPurposeType.RMARetu ? LUMTransferPurposeType.RMARcpt : rowExt.UsrTransferPurp;
         }
         #endregion
 
@@ -127,14 +127,9 @@ namespace PX.Objects.IN
                                 apptEntry.AppointmentDetails.Cache.SetValue<FSAppointmentDet.status>(apptLine, FSAppointmentDet.status.CANCELED);
                                 apptEntry.AppointmentDetails.Update(apptLine);
                             }
-                            else
-                            {
-                                goto Complete;
-                            }
                         }
-                        apptEntry.Save.Press();
-
-                    Complete:
+                        if (apptEntry.AppointmentRecords.Current != null) { apptEntry.Save.Press(); }
+                        
                         ts.Complete();
                     }
                 }
