@@ -32,6 +32,8 @@ namespace PX.Objects.FS
         public SelectFrom<INRegister>.Where<INRegister.docType.IsIn<INDocType.transfer, INDocType.receipt>
                                             .And<INRegisterExt.usrSrvOrdType.IsEqual<FSAppointment.srvOrdType.FromCurrent>
                                                  .And<INRegisterExt.usrAppointmentNbr.IsEqual<FSAppointment.refNbr.FromCurrent>>>>.View INRegisterView;
+
+        public SelectFrom<LUMHSNSetup>.View HSNSetupView;
         #endregion
 
         #region Override Method
@@ -54,7 +56,7 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
-            if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED)
+            if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED  && HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
             {
                 SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
             }
@@ -170,11 +172,14 @@ namespace PX.Objects.FS
 
             EventHistory.AllowDelete = EventHistory.AllowInsert = EventHistory.AllowUpdate = INRegisterView.AllowDelete = INRegisterView.AllowInsert = INRegisterView.AllowUpdate = false;
 
-            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+            LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             openPartRequest.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
+            openPartReceive.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
             openInitiateRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
             openReturnRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
+
+            PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
             TestControlButton();
         }
         #endregion
@@ -399,13 +404,16 @@ namespace PX.Objects.FS
         /// <param name="toType"></param>
         public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType)
         {
-            string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
+            //string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
 
-            if (!string.IsNullOrEmpty(note))
-            {
-                PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
-                graph.Caches[toType].Update(graph.Caches[toType].Current);
-            }
+            //if (!string.IsNullOrEmpty(note))
+            //{
+            //    PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
+            //    graph.Caches[toType].Update(graph.Caches[toType].Current);
+            //}
+            PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
+
+            //graph.Caches[toType].Update(graph.Caches[toType].Current);
         }
         #endregion
 

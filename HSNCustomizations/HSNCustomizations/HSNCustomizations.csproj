@@ -85,6 +85,8 @@
     <Compile Include="Graph_Extension\ServiceOrderEntry.cs" />
     <Compile Include="DAC_Extension\FSAppointmentDetExtensions.cs" />
     <Compile Include="DAC_Extension\FSSODetExtensions.cs" />
+    <Compile Include="DAC_Extension\FSAppointmentExtensions.cs" />
+    <Compile Include="DAC_Extension\CustomerClassExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
