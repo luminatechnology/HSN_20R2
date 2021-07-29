@@ -6,6 +6,7 @@ using PX.Data.BQL.Fluent;
 using System.Linq;
 using PX.Objects.IN;
 using PX.Objects.CR;
+using System.Collections.Generic;
 
 namespace PX.Objects.FS
 {
@@ -20,6 +21,15 @@ namespace PX.Objects.FS
                                                     .And<LUMSrvEventHistory.sORefNbr.IsEqual<FSServiceOrder.refNbr.FromCurrent>>>.View EventHistory;
 
         public CRActivityListReadonly<FSAppointment> Activities;
+        #endregion
+
+        #region Override Method
+        public override void Initialize()
+        {
+            base.Initialize();
+            FSWorkflowStageHandler.InitStageList();
+            AddAllStageButton();
+        }
         #endregion
 
         #region Delegate Method
@@ -95,7 +105,28 @@ namespace PX.Objects.FS
             baseHandler?.Invoke(e.Cache, e.Args);
 
             Activities.AllowSelect = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.DispApptActiviteInSrvOrd ?? false;
+
+            SettingStageButton();
         }
+        #endregion
+
+        #region Action
+
+        public PXMenuAction<FSServiceOrder> lumStages;
+        [PXUIField(DisplayName = "STAGES", MapEnableRights = PXCacheRights.Select)]
+        [PXButton(MenuAutoOpen = true, CommitChanges = true)]
+        public virtual void LumStages() { }
+
+        public PXMenuAction<FSServiceOrder> cleanUpStageButton;
+        [PXUIField(DisplayName = "Clean up Button", MapEnableRights = PXCacheRights.Select, Visible = false)]
+        [PXButton(CommitChanges = true)]
+        public virtual void CleanUpStageButton()
+        {
+            var btn = Base.Actions["lumStages"].GetState(null) as PXButtonState;
+            foreach (ButtonMenu item in btn.Menus)
+                Base.Actions[item.Command].SetEnabled(false);
+        }
+
         #endregion
 
         #region Method
@@ -130,6 +161,59 @@ namespace PX.Objects.FS
             var newValue = row.WFStageID;
 
             return (oldVale.HasValue && oldVale != newValue, oldVale, newValue);
+        }
+
+        /// <summary> Add All Stage Button </summary>
+        public void AddAllStageButton()
+        {
+            var primatryView = Base.ServiceOrderRecords.Cache.GetItemType();
+            var list = FSWorkflowStageHandler.stageList.Select(x => new { x.WFStageID, x.WFStageCD }).Distinct();
+            var actionLst = new List<PXAction>();
+            foreach (var item in list)
+            {
+                var temp = PXNamedAction.AddAction(Base, primatryView, item.WFStageCD, item.WFStageCD,
+                    adapter =>
+                    {
+                        CleanUpStageButton();
+                        var row = Base.ServiceOrderRecords.Current;
+                        if (row != null)
+                        {
+                            var srvOrderData = FSSrvOrdType.PK.Find(new PXGraph(), row.SrvOrdType);
+                            var stageList = FSWorkflowStageHandler.stageList.Where(x => x.WFID == srvOrderData.SrvOrdTypeID);
+                            var currStageIDByType = stageList.Where(x => x.WFStageCD == item.WFStageCD).FirstOrDefault().WFStageID;
+                            Base.ServiceOrderRecords.Cache.SetValueExt<FSServiceOrder.wFStageID>(Base.ServiceOrderRecords.Current, currStageIDByType);
+                            Base.ServiceOrderRecords.Cache.MarkUpdated(Base.ServiceOrderRecords.Current);
+                            Base.ServiceOrderRecords.Update(Base.ServiceOrderRecords.Current);
+
+                            Base.ServiceOrderRecords.Cache.AllowUpdate = true;
+                            Base.ServiceOrderRecords.Cache.SetStatus(Base.ServiceOrderRecords.Current, PXEntryStatus.Updated);
+                            return Base.Save.Press(adapter);
+                        }
+                        return adapter.Get();
+                    },
+                    new PXEventSubscriberAttribute[] { new PXButtonAttribute() { CommitChanges = true } }
+                );
+                temp.SetEnabled(false);
+                actionLst.Add(temp);
+            }
+            foreach (var a in actionLst)
+                this.lumStages.AddMenuAction(a);
+        }
+
+        /// <summary> Setting Stage Button Status </summary>
+        public void SettingStageButton()
+        {
+            this.cleanUpStageButton.PressButton();
+            var row = Base.ServiceOrderRecords.Current;
+            if (row != null && !string.IsNullOrEmpty(row.SrvOrdType) && row.WFStageID.HasValue)
+            {
+                var stageActions = SelectFrom<LumStageControl>
+                                   .Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
+                                        .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
+                                    .View.Select(Base, row.SrvOrdType, row.WFStageID).RowCast<LumStageControl>().ToList();
+                foreach (var item in stageActions)
+                    Base.Actions[FSWorkflowStageHandler.GetStageName(item.ToStage)].SetEnabled(true);
+            }
         }
 
         #endregion
