@@ -179,6 +179,8 @@ namespace PX.Objects.FS
             openPartReceive.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
             openInitiateRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
             openReturnRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
+
+            PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
         }
         #endregion
 
@@ -403,13 +405,16 @@ namespace PX.Objects.FS
         /// <param name="toType"></param>
         public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType)
         {
-            string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
+            //string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
 
-            if (!string.IsNullOrEmpty(note))
-            {
-                PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
-                graph.Caches[toType].Update(graph.Caches[toType].Current);
-            }
+            //if (!string.IsNullOrEmpty(note))
+            //{
+            //    PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
+            //    graph.Caches[toType].Update(graph.Caches[toType].Current);
+            //}
+            PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
+
+            //graph.Caches[toType].Update(graph.Caches[toType].Current);
         }
         #endregion
 
