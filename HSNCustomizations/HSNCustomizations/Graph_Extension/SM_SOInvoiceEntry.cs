@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HSNCustomizations.DAC;
 using PX.Data;
+using PX.Data.BQL.Fluent;
 using PX.Objects.AR;
 using PX.Objects.SO;
 
@@ -42,9 +44,16 @@ namespace PX.Objects.FS
                 /// <summary>
                 /// Add the following logic per spec [Design Concept - Service Order Enhancement-V1.7] 1.10.2
                 /// </summary>
-                CustomerClass custClass = CustomerClass.PK.Find(Base, Customer.PK.Find(Base, fsServiceOrderRow.BillCustomerID)?.CustomerClassID);
+                string doctype = ARInvoiceType.Invoice;
 
-                arInvoiceRow.DocType = custClass?.GetExtension<CustomerClassExt>().UsrInvoiceDocType ?? ARInvoiceType.Invoice;
+                if (SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableChgInvTypeOnBill ?? false)
+                {
+                    CustomerClass custClass = CustomerClass.PK.Find(Base, Customer.PK.Find(Base, fsServiceOrderRow.BillCustomerID)?.CustomerClassID);
+
+                    doctype = custClass?.GetExtension<CustomerClassExt>().UsrInvoiceDocType ?? doctype;
+                }
+
+                arInvoiceRow.DocType = doctype; //ARInvoiceType.Invoice;
                 AutoNumberHelper.CheckAutoNumbering(Base, Base.ARSetup.SelectSingle().InvoiceNumberingID);
             }
             else
