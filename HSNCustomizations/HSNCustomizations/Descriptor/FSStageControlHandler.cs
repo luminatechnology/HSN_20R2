@@ -10,15 +10,17 @@ using System.Threading.Tasks;
 
 namespace HSNCustomizations.Descriptor
 {
-    public class FSStageControlHandler
+    public static class FSStageControlHandler
     {
+        public static IEnumerable<LumStageControl> StageControls;
         /// <summary> Get Availalbe Stage </summary>
-        public virtual IEnumerable<LumStageControl> GetStageAction(string srvOrderType, int? currentStage)
+        public static void InitialStageControl(string srvOrderType, int? currentStage)
         {
-            return SelectFrom<LumStageControl>
-                   .Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
-                            .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
-                   .View.Select(new PXGraph(),srvOrderType,currentStage).RowCast<LumStageControl>().ToList();
+            if (!string.IsNullOrEmpty(srvOrderType) && currentStage.HasValue)
+                StageControls = SelectFrom<LumStageControl>
+                       .Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
+                                .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
+                       .View.Select(new PXGraph(), srvOrderType, currentStage).RowCast<LumStageControl>().ToList();
         }
     }
 }
