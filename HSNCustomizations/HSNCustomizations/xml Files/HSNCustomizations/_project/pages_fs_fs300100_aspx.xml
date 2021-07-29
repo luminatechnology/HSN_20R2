@@ -3,6 +3,199 @@
         <Children Key="Items">
             <AddItem>
                 <PXTabItem TypeFullName="PX.Web.UI.PXTabItem">
+                    <Prop Key="Text" Value="Appt. Activities" />
+                    <Prop Key="LoadOnDemand" Value="True" />
+                    <Children Key="Template">
+                        <AddItem>
+                            <PXGridWithPreview TypeFullName="PX.Web.Controls.PXGridWithPreview">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="gridActivities" />
+                                <Prop Key="PrimaryViewControlID" Value="form" />
+                                <Prop Key="AutoSize.Enabled" Value="true" />
+                                <Prop Key="PreviewPanelStyle" Value="z-index: 100; background-color: Window" />
+                                <Prop Key="SplitterStyle" Value="z-index: 100; border-top: solid 1px Gray;  border-bottom: solid 1px Gray" />
+                                <Prop Key="GridSkinID" Value="Inquire" />
+                                <Prop Key="PreviewPanelSkinID" Value="Preview" />
+                                <Prop Key="NoteField" Value="NoteText" />
+                                <Prop Key="AllowSearch" Value="True" />
+                                <Prop Key="AllowPaging" Value="true" />
+                                <Prop Key="GridMode.AllowAddNew" Value="False" />
+                                <Prop Key="GridMode.AllowUpdate" Value="False" />
+                                <Prop Key="GridMode.AllowDelete" Value="False" />
+                                <Prop Key="GridMode.AllowFormEdit" Value="False" />
+                                <Prop Key="GridMode.AllowUpload" Value="False" />
+                                <Prop Key="BlankFilterHeader" Value="All Activities" />
+                                <Prop Key="MatrixMode" Value="true" />
+                                <Prop Key="DataSourceID" Value="ds" />
+                                <Prop Key="DataMember" Value="Activities" />
+                                <Prop Key="BorderWidth" Value="0px" />
+                                <Prop Key="Width" Value="100%" />
+                                <Children Key="Levels">
+                                    <AddItem>
+                                        <PXGridLevel TypeFullName="PX.Web.UI.PXGridLevel">
+                                            <Prop Key="DataMember" Value="Activities" />
+                                            <Children Key="Columns">
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="IsCompleteIcon" />
+                                                        <Prop Key="AllowResize" Value="False" />
+                                                        <Prop Key="AllowShowHide" Value="False" />
+                                                        <Prop Key="ForceExport" Value="True" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="PriorityIcon" />
+                                                        <Prop Key="AllowResize" Value="False" />
+                                                        <Prop Key="AllowShowHide" Value="False" />
+                                                        <Prop Key="ForceExport" Value="True" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="CRReminder__ReminderIcon" />
+                                                        <Prop Key="AllowResize" Value="False" />
+                                                        <Prop Key="AllowShowHide" Value="False" />
+                                                        <Prop Key="ForceExport" Value="True" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ClassIcon" />
+                                                        <Prop Key="AllowResize" Value="False" />
+                                                        <Prop Key="AllowShowHide" Value="False" />
+                                                        <Prop Key="ForceExport" Value="True" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ClassInfo" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="RefNoteID" />
+                                                        <Prop Key="Visible" Value="false" />
+                                                        <Prop Key="AllowShowHide" Value="False" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="Subject" />
+                                                        <Prop Key="LinkCommand" Value="ViewActivity" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="UIStatus" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="Released" />
+                                                        <Prop Key="Type" Value="CheckBox" />
+                                                        <Prop Key="TextAlign" Value="Center" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="StartDate" />
+                                                        <Prop Key="DisplayFormat" Value="g" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="CreatedDateTime" />
+                                                        <Prop Key="DisplayFormat" Value="g" />
+                                                        <Prop Key="Visible" Value="False" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="TimeSpent" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="CreatedByID" />
+                                                        <Prop Key="Visible" Value="false" />
+                                                        <Prop Key="AllowShowHide" Value="False" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="CreatedByID_Creator_Username" />
+                                                        <Prop Key="Visible" Value="false" />
+                                                        <Prop Key="Width" Value="108px" />
+                                                        <Children Key="NavigateParams">
+                                                            <AddItem>
+                                                                <PXControlParam TypeFullName="PX.Web.UI.PXControlParam">
+                                                                    <Prop Key="Name" Value="PKID" />
+                                                                    <Prop Key="ControlID" Value="gridActivities" />
+                                                                    <Prop Key="PropertyName" Value="DataValues[&quot;CreatedByID&quot;]" />
+                                                                </PXControlParam>
+                                                            </AddItem>
+                                                        </Children>
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="WorkgroupID" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="OwnerID" />
+                                                        <Prop Key="DisplayMode" Value="Text" />
+                                                        <Prop Key="LinkCommand" Value="OpenActivityOwner" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ProjectID" />
+                                                        <Prop Key="Visible" Value="false" />
+                                                        <Prop Key="AllowShowHide" Value="true" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ProjectTaskID" />
+                                                        <Prop Key="Visible" Value="false" />
+                                                        <Prop Key="AllowShowHide" Value="true" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="Source" />
+                                                        <Prop Key="AllowResize" Value="True" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                            </Children>
+                                        </PXGridLevel>
+                                    </AddItem>
+                                </Children>
+                                <Children Key="PreviewPanelTemplate">
+                                    <AddItem>
+                                        <PXHtmlView TypeFullName="PX.Web.UI.PXHtmlView">
+                                            <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                            <Prop Key="ID" Value="edBody" />
+                                            <Prop Key="AutoSize.Enabled" Value="true" />
+                                            <Prop Key="AutoSize.Container" Value="Parent" />
+                                            <Prop Key="DataField" Value="body" />
+                                            <Prop Key="Height" Value="100px" />
+                                            <Prop Key="SkinID" Value="Label" />
+                                            <Prop Key="Width" Value="100%" />
+                                        </PXHtmlView>
+                                    </AddItem>
+                                </Children>
+                            </PXGridWithPreview>
+                        </AddItem>
+                    </Children>
+                </PXTabItem>
+            </AddItem>
+            <PXTabItem Text="Totals" OriginalIndex="10" />
+            <AddItem>
+                <PXTabItem TypeFullName="PX.Web.UI.PXTabItem">
                     <Prop Key="Text" Value="Inventory Trans" />
                     <Children Key="Template">
                         <AddItem>

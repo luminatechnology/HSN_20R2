@@ -5,6 +5,7 @@ using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using System.Linq;
 using PX.Objects.IN;
+using PX.Objects.CR;
 
 namespace PX.Objects.FS
 {
@@ -14,8 +15,11 @@ namespace PX.Objects.FS
         public SelectFrom<INRegister>.Where<INRegister.docType.IsIn<INDocType.transfer, INDocType.receipt>
                                             .And<INRegisterExt.usrSrvOrdType.IsEqual<FSServiceOrder.srvOrdType.FromCurrent>
                                                  .And<INRegisterExt.usrSORefNbr.IsEqual<FSServiceOrder.refNbr.FromCurrent>>>>.View INRegisterView;
+
         public SelectFrom<LUMSrvEventHistory>.Where<LUMSrvEventHistory.srvOrdType.IsEqual<FSServiceOrder.srvOrdType.FromCurrent>
                                                     .And<LUMSrvEventHistory.sORefNbr.IsEqual<FSServiceOrder.refNbr.FromCurrent>>>.View EventHistory;
+
+        public CRActivityListReadonly<FSAppointment> Activities;
         #endregion
 
         #region Delegate Method
@@ -23,7 +27,7 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
-            if (Base.ServiceOrderRecords.Current.Status != FSAppointment.status.CLOSED)
+            if (Base.ServiceOrderRecords.Current.Status != FSAppointment.status.CLOSED && SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableHeaderNoteSync == true)
             {
                 AppointmentEntry_Extension.SyncNoteApptOrSrvOrd(Base, typeof(FSServiceOrder), typeof(FSAppointment));
             }
@@ -85,6 +89,15 @@ namespace PX.Objects.FS
         protected void _(Events.CacheAttached<INRegister.transferNbr> e) { }
         #endregion
 
+        #region Event Handlers
+        protected void _(Events.RowSelected<FSServiceOrder> e, PXRowSelected baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            Activities.AllowSelect = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.DispApptActiviteInSrvOrd ?? false;
+        }
+        #endregion
+
         #region Method
 
         /// <summary>Check Status Is Drity </summary>
@@ -120,6 +133,5 @@ namespace PX.Objects.FS
         }
 
         #endregion
-
     }
 }
