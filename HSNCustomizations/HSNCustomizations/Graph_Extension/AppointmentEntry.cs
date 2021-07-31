@@ -181,6 +181,7 @@ namespace PX.Objects.FS
             openReturnRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
+            
             SettingStageButton();
         }
         #endregion
@@ -268,16 +269,15 @@ namespace PX.Objects.FS
         [PXButton(MenuAutoOpen = true, CommitChanges = true)]
         public virtual void LumStages() { }
 
-        public PXMenuAction<FSAppointment> cleanUpStageButton;
-        [PXUIField(DisplayName = "Clean up Button", MapEnableRights = PXCacheRights.Select,Visible = false)]
-        [PXButton(CommitChanges = true)]
-        public virtual void CleanUpStageButton()
-        {
-            var btn = Base.Actions["lumStages"].GetState(null) as PXButtonState;
-            foreach (ButtonMenu item in btn.Menus)
-                Base.Actions[item.Command].SetEnabled(false);
-        }
-
+        //public PXMenuAction<FSAppointment> cleanUpStageButton;
+        //[PXUIField(DisplayName = "Clean up Button", MapEnableRights = PXCacheRights.Select,Visible = false)]
+        //[PXButton(CommitChanges = true)]
+        //public virtual void CleanUpStageButton()
+        //{
+        //    var btn = Base.Actions["lumStages"].GetState(null) as PXButtonState;
+        //    foreach (ButtonMenu item in btn.Menus)
+        //        Base.Actions[item.Command].SetEnabled(false);
+        //}
         #endregion
 
         #region Static Methods
@@ -429,7 +429,6 @@ namespace PX.Objects.FS
         #endregion
 
         #region Method
-
         /// <summary>Check Status Is Drity </summary>
         public (bool IsDirty, string oldValue, string newValue) CheckStatusIsDirty(FSAppointment row)
         {
@@ -473,48 +472,63 @@ namespace PX.Objects.FS
                 var temp = PXNamedAction.AddAction(Base, primatryView, item.WFStageCD, item.WFStageCD,
                     adapter =>
                     {
-                        CleanUpStageButton();
+                        //CleanUpStageButton();
                         var row = Base.AppointmentRecords.Current;
                         if (row != null)
                         {
-                            var srvOrderData = FSSrvOrdType.PK.Find(new PXGraph(), row.SrvOrdType);
+                            var srvOrderData = FSSrvOrdType.PK.Find(Base, row.SrvOrdType);
                             var stageList = FSWorkflowStageHandler.stageList.Where(x => x.WFID == srvOrderData.SrvOrdTypeID);
                             var currStageIDByType = stageList.Where(x => x.WFStageCD == item.WFStageCD).FirstOrDefault().WFStageID;
                             Base.AppointmentRecords.Cache.SetValueExt<FSAppointment.wFStageID>(Base.AppointmentRecords.Current, currStageIDByType);
                             Base.AppointmentRecords.Cache.MarkUpdated(Base.AppointmentRecords.Current);
                             Base.AppointmentRecords.Update(Base.AppointmentRecords.Current);
 
-                            Base.AppointmentRecords.Cache.AllowUpdate = true;
-                            Base.AppointmentRecords.Cache.SetStatus(Base.AppointmentRecords.Current, PXEntryStatus.Updated);
-                            return Base.Save.Press(adapter);
+                            Base.Persist();
+                            //Base.AppointmentRecords.Cache.AllowUpdate = true;
+                            //Base.AppointmentRecords.Cache.SetStatus(Base.AppointmentRecords.Current, PXEntryStatus.Updated);
+                            //return Base.Save.Press(adapter);
                         }
                         return adapter.Get();
                     },
                     new PXEventSubscriberAttribute[] { new PXButtonAttribute() { CommitChanges = true } }
                 );
-                temp.SetEnabled(false);
+                //temp.SetEnabled(false);
                 actionLst.Add(temp);
             }
             foreach (var a in actionLst)
+            {
                 this.lumStages.AddMenuAction(a);
+            }
         }
 
         /// <summary> Setting Stage Button Status </summary>
         public void SettingStageButton()
         {
-            this.cleanUpStageButton.PressButton();
+            //this.cleanUpStageButton.PressButton();
             var row = Base.AppointmentRecords.Current;
+
             if (row != null && !string.IsNullOrEmpty(row.SrvOrdType))
             {
-                var stageActions = SelectFrom<LumStageControl>
-                                   .Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
-                                        .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
-                                    .View.Select(Base, row.SrvOrdType, row.WFStageID).RowCast<LumStageControl>().ToList();
-                foreach (var item in stageActions)
-                    Base.Actions[FSWorkflowStageHandler.GetStageName(item.ToStage)].SetEnabled(true);
+                List<PXResult<LumStageControl>> lists = SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
+                                                                                          .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
+                                                                                   .View.Select(Base, row.SrvOrdType, row.WFStageID).ToList();
+
+                var btn = this.lumStages.GetState(null) as PXButtonState;
+
+                foreach (ButtonMenu btnMenu in btn.Menus)
+                {
+                    this.lumStages.SetVisible(btnMenu.Command, lists.Exists(x => FSWorkflowStageHandler.GetStageName(x.GetItem<LumStageControl>().ToStage) == btnMenu.Command));
+                }
+                //var stageActions = SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
+                //                                                     .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
+                //                                              .View.Select(Base, row.SrvOrdType, row.WFStageID).RowCast<LumStageControl>().ToList();
+                //foreach (var item in stageActions)
+                //{
+                //    //Base.Actions[FSWorkflowStageHandler.GetStageName(item.ToStage)].SetEnabled(true);
+                //    this.lumStages.SetVisible(FSWorkflowStageHandler.GetStageName(item.ToStage), true);
+                //}
             }
         }
-
         #endregion
     }
 }
