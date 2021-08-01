@@ -515,9 +515,12 @@ namespace PX.Objects.FS
 
                 var btn = this.lumStages.GetState(null) as PXButtonState;
 
-                foreach (ButtonMenu btnMenu in btn.Menus)
+                if (btn.Menus != null)
                 {
-                    this.lumStages.SetVisible(btnMenu.Command, lists.Exists(x => FSWorkflowStageHandler.GetStageName(x.GetItem<LumStageControl>().ToStage) == btnMenu.Command));
+                    foreach (ButtonMenu btnMenu in btn.Menus)
+                    {
+                        this.lumStages.SetVisible(btnMenu.Command, lists.Exists(x => FSWorkflowStageHandler.GetStageName(x.GetItem<LumStageControl>().ToStage) == btnMenu.Command));
+                    }
                 }
                 //var stageActions = SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
                 //                                                     .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
