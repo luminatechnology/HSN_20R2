@@ -3059,7 +3059,7 @@
                 <Visible>False</Visible>
             </PageHeader>
             <Detail Name="detailSection1">
-                <Height>0.16667in</Height>
+                <Height>0.33333in</Height>
                 <Variables>
                     <ReportVariable>
                         <Name>LineNbr</Name>
@@ -3070,7 +3070,7 @@
                 <Items>
                     <TextBox Name="textBox14">
                         <Location>400px, 0px</Location>
-                        <Size>104px, 16px</Size>
+                        <Size>104px, 32px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
@@ -3079,13 +3079,13 @@
                     </TextBox>
                     <TextBox Name="textBox15">
                         <Location>0px, 0px</Location>
-                        <Size>40px, 16px</Size>
+                        <Size>40px, 32px</Size>
                         <StyleName>Normal</StyleName>
                         <Value>=$LineNbr</Value>
                     </TextBox>
                     <TextBox Name="textBox16">
                         <Location>256px, 0px</Location>
-                        <Size>80px, 16px</Size>
+                        <Size>80px, 32px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
@@ -3094,7 +3094,7 @@
                     </TextBox>
                     <TextBox Name="textBox17">
                         <Location>592px, 0px</Location>
-                        <Size>104px, 16px</Size>
+                        <Size>104px, 32px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
@@ -3103,7 +3103,7 @@
                     </TextBox>
                     <TextBox Name="textBox28">
                         <Location>336px, 0px</Location>
-                        <Size>64px, 16px</Size>
+                        <Size>64px, 32px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
@@ -3113,7 +3113,7 @@
                     <TextBox Name="textBox39">
                         <Format>#########0.######%</Format>
                         <Location>504px, 0px</Location>
-                        <Size>88px, 16px</Size>
+                        <Size>88px, 32px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
@@ -3123,7 +3123,7 @@
                     <TextBox Name="textBox42">
                         <CanGrow>True</CanGrow>
                         <Location>40px, 0px</Location>
-                        <Size>216px, 16px</Size>
+                        <Size>216px, 32px</Size>
                         <StyleName>Normal</StyleName>
                         <Value>='Prepayment for Service Order ' + [FSAdjust.AdjdOrderNbr] + ' ' + [FSServiceOrder.DocDesc]</Value>
                     </TextBox>
@@ -3296,7 +3296,7 @@
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Document Name</StyleName>
-                                <Value>INVOICE</Value>
+                                <Value>RECEIPT</Value>
                             </TextBox>
                             <TextBox Name="textBox23">
                                 <CanGrow>True</CanGrow>
@@ -3385,7 +3385,7 @@
                                 <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
                                 <Items>
                                     <TextBox Name="textBox35">
-                                        <Location>512px, 8px</Location>
+                                        <Location>504px, 8px</Location>
                                         <ProcessOrder>WhilePrint</ProcessOrder>
                                         <Size>88px, 16px</Size>
                                         <StyleName>Heading 1</StyleName>
@@ -3393,13 +3393,13 @@
                                         <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
                                     </TextBox>
                                     <TextBox Name="textBox36">
-                                        <Location>512px, 24px</Location>
+                                        <Location>504px, 24px</Location>
                                         <Size>88px, 16px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Tax Total:</Value>
                                     </TextBox>
                                     <TextBox Name="textBox37">
-                                        <Location>512px, 40px</Location>
+                                        <Location>504px, 40px</Location>
                                         <Size>88px, 16px</Size>
                                         <Style>
                                             <BackColor>Transparent</BackColor>
@@ -3408,7 +3408,7 @@
                                         <Value>='Total (' + [ARPayment.CuryID] + '):'</Value>
                                     </TextBox>
                                     <TextBox Name="textBox38">
-                                        <Location>600px, 8px</Location>
+                                        <Location>592px, 8px</Location>
                                         <ProcessOrder>WhilePrint</ProcessOrder>
                                         <Size>96px, 16px</Size>
                                         <Style>
@@ -3419,7 +3419,7 @@
                                         <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
                                     </TextBox>
                                     <TextBox Name="textBox6">
-                                        <Location>600px, 24px</Location>
+                                        <Location>592px, 24px</Location>
                                         <Size>96px, 16px</Size>
                                         <Style>
                                             <TextAlign>Right</TextAlign>
@@ -3428,7 +3428,7 @@
                                         <Value>0</Value>
                                     </TextBox>
                                     <TextBox Name="textBox8">
-                                        <Location>600px, 40px</Location>
+                                        <Location>592px, 40px</Location>
                                         <Size>96px, 16px</Size>
                                         <Style>
                                             <TextAlign>Right</TextAlign>
@@ -3449,83 +3449,6 @@
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>='This is computer generated. No signature is required'</Value>
-                            </TextBox>
-                            <TextBox Name="textBox57">
-                                <Location>0px, 32px</Location>
-                                <Size>696px, 176px</Size>
-                                <Style>
-                                    <BorderColor>
-                                        <Bottom>Black</Bottom>
-                                        <Left>Black</Left>
-                                        <Right>Black</Right>
-                                    </BorderColor>
-                                    <BorderStyle>
-                                        <Bottom>Solid</Bottom>
-                                        <Left>Solid</Left>
-                                        <Right>Solid</Right>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Bottom>1px</Bottom>
-                                        <Left>1px</Left>
-                                        <Right>1px</Right>
-                                    </BorderWidth>
-                                    <Font>
-                                        <Name>Arial</Name>
-                                        <Size>10px</Size>
-                                    </Font>
-                                </Style>
-                                <Value>='1.Cheque should be crossed and make payable to : Highpoint Service Network Sdn Bhd{br}#010;2.Please Quote Invoice No. when making payment.{br}#010;3.Bank information: RHB (21404400059381-RHBBMYKL), SCB (312143582508-SCBLMYK){br}#010;4.Interest will be charged at 1.5% per 30 days on all overdue accounts.{br}#010;5.Ownership transferred to customer only upon full payment.{br}#010;6.Term of Delivery: CIF{br}#010;7.Goods sold are not returnable.{br}#010;E. &amp; O.E.'</Value>
-                            </TextBox>
-                            <TextBox Name="textBox58">
-                                <Location>0px, 0px</Location>
-                                <Size>696px, 16px</Size>
-                                <Style>
-                                    <BorderColor>
-                                        <Left>Black</Left>
-                                        <Right>Black</Right>
-                                        <Top>Black</Top>
-                                    </BorderColor>
-                                    <BorderStyle>
-                                        <Left>Solid</Left>
-                                        <Right>Solid</Right>
-                                        <Top>Solid</Top>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Left>1px</Left>
-                                        <Right>1px</Right>
-                                        <Top>1px</Top>
-                                    </BorderWidth>
-                                    <Font>
-                                        <Name>Arial</Name>
-                                        <Size>10px</Size>
-                                    </Font>
-                                    <VerticalAlign>Middle</VerticalAlign>
-                                </Style>
-                                <Value>='This is a computer generated invoice. No signature is required.'</Value>
-                            </TextBox>
-                            <TextBox Name="textBox59">
-                                <Location>0px, 16px</Location>
-                                <Size>696px, 16px</Size>
-                                <Style>
-                                    <BorderColor>
-                                        <Left>Black</Left>
-                                        <Right>Black</Right>
-                                    </BorderColor>
-                                    <BorderStyle>
-                                        <Left>Solid</Left>
-                                        <Right>Solid</Right>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Left>1px</Left>
-                                        <Right>1px</Right>
-                                    </BorderWidth>
-                                    <Font>
-                                        <Name>Arial</Name>
-                                        <Size>14px</Size>
-                                        <Style>Bold</Style>
-                                    </Font>
-                                </Style>
-                                <Value>='Note:'</Value>
                             </TextBox>
                         </Items>
                     </Footer>

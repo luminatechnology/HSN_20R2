@@ -25,7 +25,7 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title="Print Prepayment Invoice" Url="~/Frames/ReportLauncher.aspx?ID=LM602000.rpx" ScreenID="LM602000" NodeID="455425b3-fe24-4727-bbe9-0adda1943f9a" ParentID="00000000-0000-0000-0000-000000000000">
+                <row Title="Print Prepayment Receipt" Url="~/Frames/ReportLauncher.aspx?ID=LM602000.rpx" ScreenID="LM602000" NodeID="455425b3-fe24-4727-bbe9-0adda1943f9a" ParentID="00000000-0000-0000-0000-000000000000">
                     <MUIScreen IsPortal="0" WorkspaceID="d5cbc4c3-5f8b-40da-80c9-49897f1f74b8" Order="260" SubcategoryID="0b491e12-c58d-4e47-8a0d-96dd3a8ab395" />
                 </row>
             </SiteMap>
