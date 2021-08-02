@@ -112,9 +112,10 @@ namespace PX.Objects.IN
 
                                 FSAppointmentDet newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Insert(new FSAppointmentDet()));
 
-                                newLine.InventoryID = row.InventoryID;
-                                newLine.EstimatedQty = row.Qty;
-                                newLine.Status = apptLine.Status;
+                                newLine.InventoryID   = row.InventoryID;
+                                newLine.EstimatedQty  = apptLine.EstimatedQty;
+                                newLine.CuryUnitPrice = apptLine.CuryUnitPrice;
+                                newLine.Status        = apptLine.Status;
 
                                 newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Update(newLine));
 
