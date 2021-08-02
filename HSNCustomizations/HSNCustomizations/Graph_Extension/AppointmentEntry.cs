@@ -184,6 +184,19 @@ namespace PX.Objects.FS
             
             SettingStageButton();
         }
+
+        public void _(Events.FieldUpdated<FSAppointmentExt.usrTransferToHQ> e)
+        {
+            if (e.NewValue != null && (bool)e.NewValue == true)
+            {
+                FSWorkflowStageHandler.apptEntry = Base;
+                FSWorkflowStageHandler.InsertEventHistory(nameof(AppointmentEntry), new LUMAutoWorkflowStage()
+                {
+                    SrvOrdType = Base.AppointmentRecords.Current.SrvOrdType,
+                    Descr = PXUIFieldAttribute.GetDisplayName(e.Cache, nameof(FSAppointmentExt.UsrTransferToHQ))
+                }); ;
+            }
+        }
         #endregion
 
         #region Actions
