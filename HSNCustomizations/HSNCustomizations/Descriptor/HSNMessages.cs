@@ -11,7 +11,7 @@ namespace HSNCustomizations.Descriptor
         public const string RMAInitiated      = "RMA Initiated";
         public const string ReturnRMA         = "Return RMA";
         public const string RMAReturned       = "RMA Returned";
-        public const string RMAReceipted      = "RMA Receipted";
+        public const string RMAReceipted      = "RMA Received";
         public const string NonUniqueSerNbr   = "The Serial Number Isn't Unique For This Equipment Type.";
         public const string ApptLineTypeInvt  = "The Button Is Disabled Because Line Type Isn't Invetory Item";
         public const string InvtTranNoAllRlsd = "There Are Related Inventory Transactions Of This Appointment Are Not Yet Released";
