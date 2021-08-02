@@ -5,7 +5,6 @@ using PX.Objects.CS;
 using eGUICustomization4HSN.DAC;
 using eGUICustomization4HSN.Graph;
 using eGUICustomization4HSN.StringList;
-using eGUICustomization4HSN.Descriptor;
 
 namespace PX.Objects.AR
 {
@@ -38,9 +37,9 @@ namespace PX.Objects.AR
 
         [TaxNbrVerify(8, IsUnicode = true)]
         [PXUIField(DisplayName = "Tax Nbr")]
-        [PXDefault(typeof(Search<CSAnswers.value,
-                                 Where<CSAnswers.refNoteID, Equal<Current<Customer.noteID>>,
-                                       And<CSAnswers.attributeID, Equal<TaxNbrNameAtt>>>>),
+        [PXDefault(typeof(Search2<CSAnswers.value, InnerJoin<Customer, On<Customer.noteID, Equal<CSAnswers.refNoteID>>>,
+                                                   Where<Customer.bAccountID, Equal<Current<ARRegister.customerID>>,
+                                                         And<CSAnswers.attributeID, Equal<TaxNbrNameAtt>>>>),
                    PersistingCheck = PXPersistingCheck.Nothing)]
         [PXFormula(typeof(Default<ARInvoice.customerID>))]      
         public virtual string UsrTaxNbr { get; set; }
@@ -56,9 +55,9 @@ namespace PX.Objects.AR
 
         [TaxNbrVerify(8, IsUnicode = true)]
         [PXUIField(DisplayName = "Our Tax Nbr")]
-        [PXDefault(typeof(Search<CSAnswers.value,
-                          Where<CSAnswers.refNoteID, Equal<Current<Customer.noteID>>,
-                            And<CSAnswers.attributeID, Equal<OurTaxNbrNameAtt>>>>),
+        [PXDefault(typeof(Search2<CSAnswers.value, InnerJoin<Customer, On<Customer.noteID, Equal<CSAnswers.refNoteID>>>,
+                                                   Where<Customer.bAccountID, Equal<Current<ARRegister.customerID>>,
+                                                         And<CSAnswers.attributeID, Equal<OurTaxNbrNameAtt>>>>),
                    PersistingCheck = PXPersistingCheck.Nothing)]
         [PXFormula(typeof(Default<ARInvoice.customerID>))]      
         public virtual string UsrOurTaxNbr { get; set; }
