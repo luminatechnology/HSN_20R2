@@ -73,7 +73,16 @@ namespace PX.Objects.IN
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+
+            bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
+
             copyItemFromAppt.SetEnabled(Base.transactions.Select().Count == 0);
+            copyItemFromAppt.SetVisible(activePartRequest);
+
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrAppointmentNbr>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
         }
         #endregion
 

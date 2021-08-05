@@ -104,23 +104,28 @@ namespace PX.Objects.FS
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
-            Activities.AllowSelect = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.DispApptActiviteInSrvOrd ?? false;
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+
+            bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
+
+            lumStages.SetVisible(activeWFStageCtrl);
+
+            Activities.AllowSelect = hSNSetup?.DispApptActiviteInSrvOrd ?? false;
+            EventHistory.AllowSelect = activeWFStageCtrl;
+            INRegisterView.AllowSelect = hSNSetup?.EnablePartReqInAppt == true;
 
             SettingStageButton();
         }
         #endregion
 
         #region Action
-
         public PXMenuAction<FSServiceOrder> lumStages;
         [PXUIField(DisplayName = "STAGES", MapEnableRights = PXCacheRights.Select)]
         [PXButton(MenuAutoOpen = true, CommitChanges = true)]
         public virtual void LumStages() { }
-
         #endregion
 
-        #region Method
-
+        #region Methods
         /// <summary>Check Status Is Drity </summary>
         public (bool IsDirty, string oldValue, string newValue) CheckStatusIsDirty(FSServiceOrder row)
         {
@@ -207,7 +212,6 @@ namespace PX.Objects.FS
                 }
             }
         }
-
         #endregion
     }
 }
