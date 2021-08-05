@@ -30,7 +30,14 @@ namespace HSNCustomizations.DAC
         public virtual bool? EnableUniqSerialNbrByEquipType { get; set; }
         public abstract class enableUniqSerialNbrByEquipType : PX.Data.BQL.BqlBool.Field<enableUniqSerialNbrByEquipType> { }
         #endregion
-    
+
+        #region EnableWFStageCtrlInAppt
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Workflow Stages Control In Appointment")]
+        public virtual bool? EnableWFStageCtrlInAppt { get; set; }
+        public abstract class enableWFStageCtrlInAppt : PX.Data.BQL.BqlBool.Field<enableWFStageCtrlInAppt> { }
+        #endregion
+
         #region EnablePartReqInAppt
         [PXDBBool()]
         [PXUIField(DisplayName = "Enable Part Request In Appointment")]
