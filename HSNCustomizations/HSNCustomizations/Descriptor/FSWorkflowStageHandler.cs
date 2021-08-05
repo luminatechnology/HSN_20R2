@@ -17,6 +17,7 @@ namespace HSNCustomizations.Descriptor
         public static AppointmentEntry apptEntry = null;
         public static ServiceOrderEntry srvEntry = null;
         public static List<FSWFStage> stageList = null;
+        public static bool IsNewDetailRecord = false;
         /*
          * Rule OPEN01 – Change to Open Stage when appointment is created when a new appointment nbr is assigned.
          * Rule ASSIGN01 – Change to Assigned Stage when staff is assigned when the (WFStageID of Appointment=Current Stage or blank) and new record is inserted into table FSAppointmentEmployee.
@@ -30,7 +31,7 @@ namespace HSNCustomizations.Descriptor
             {
                 case nameof(AppointmentEntry):
                     var appt = apptEntry.AppointmentRecords.Current;
-                    var detail = apptEntry.AppointmentDetails.Select() ?? new PXResultset<FSAppointmentDet>();
+                    var detail = apptEntry.AppointmentDetails.Cache.Inserted.RowCast<FSAppointmentDet>().ToList();
 
                     // Valid
                     if (appt == null)
@@ -45,7 +46,7 @@ namespace HSNCustomizations.Descriptor
                         ruleID = nameof(WFRule.START01);
 
                     // QUOTATION01
-                    if (detail.RowCast<FSAppointmentDet>().Any(x => x.LineType == "SLPRO"))
+                    if (IsNewDetailRecord)
                         ruleID = nameof(WFRule.QUOTATION01);
 
                     // FINISH01

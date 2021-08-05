@@ -65,8 +65,10 @@ namespace PX.Objects.FS
             var statusDirtyResult = CheckStatusIsDirty(Base.AppointmentRecords.Current);
             // Check Stage is Dirty
             var wfStageDirtyResult = CheckWFStageIsDirty(Base.AppointmentRecords.Current);
-            // Get New Staff Record
+            // Detect is New Staff Record & lineType = InventoryItem or Service type
             var newStaffRecords = Base.AppointmentServiceEmployees.Cache.Inserted.RowCast<FSAppointmentEmployee>().ToList();
+            // IsNew Detail Record
+            FSWorkflowStageHandler.IsNewDetailRecord = Base.AppointmentDetails.Cache.Inserted.RowCast<FSAppointmentDet>().Any(x => x.LineType == "SLPRO" || x.LineType == "SERVI");
             baseMethod();
             try
             {
@@ -282,15 +284,6 @@ namespace PX.Objects.FS
         [PXButton(MenuAutoOpen = true, CommitChanges = true)]
         public virtual void LumStages() { }
 
-        //public PXMenuAction<FSAppointment> cleanUpStageButton;
-        //[PXUIField(DisplayName = "Clean up Button", MapEnableRights = PXCacheRights.Select,Visible = false)]
-        //[PXButton(CommitChanges = true)]
-        //public virtual void CleanUpStageButton()
-        //{
-        //    var btn = Base.Actions["lumStages"].GetState(null) as PXButtonState;
-        //    foreach (ButtonMenu item in btn.Menus)
-        //        Base.Actions[item.Command].SetEnabled(false);
-        //}
         #endregion
 
         #region Static Methods
@@ -485,7 +478,6 @@ namespace PX.Objects.FS
                 var temp = PXNamedAction.AddAction(Base, primatryView, item.WFStageCD, item.WFStageCD,
                     adapter =>
                     {
-                        //CleanUpStageButton();
                         var row = Base.AppointmentRecords.Current;
                         if (row != null)
                         {
@@ -497,15 +489,11 @@ namespace PX.Objects.FS
                             Base.AppointmentRecords.Update(Base.AppointmentRecords.Current);
 
                             Base.Persist();
-                            //Base.AppointmentRecords.Cache.AllowUpdate = true;
-                            //Base.AppointmentRecords.Cache.SetStatus(Base.AppointmentRecords.Current, PXEntryStatus.Updated);
-                            //return Base.Save.Press(adapter);
                         }
                         return adapter.Get();
                     },
                     new PXEventSubscriberAttribute[] { new PXButtonAttribute() { CommitChanges = true } }
                 );
-                //temp.SetEnabled(false);
                 actionLst.Add(temp);
             }
             foreach (var a in actionLst)
@@ -517,7 +505,6 @@ namespace PX.Objects.FS
         /// <summary> Setting Stage Button Status </summary>
         public void SettingStageButton()
         {
-            //this.cleanUpStageButton.PressButton();
             var row = Base.AppointmentRecords.Current;
 
             if (row != null && !string.IsNullOrEmpty(row.SrvOrdType))
@@ -535,14 +522,6 @@ namespace PX.Objects.FS
                         this.lumStages.SetVisible(btnMenu.Command, lists.Exists(x => FSWorkflowStageHandler.GetStageName(x.GetItem<LumStageControl>().ToStage) == btnMenu.Command));
                     }
                 }
-                //var stageActions = SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
-                //                                                     .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
-                //                                              .View.Select(Base, row.SrvOrdType, row.WFStageID).RowCast<LumStageControl>().ToList();
-                //foreach (var item in stageActions)
-                //{
-                //    //Base.Actions[FSWorkflowStageHandler.GetStageName(item.ToStage)].SetEnabled(true);
-                //    this.lumStages.SetVisible(FSWorkflowStageHandler.GetStageName(item.ToStage), true);
-                //}
             }
         }
         #endregion
