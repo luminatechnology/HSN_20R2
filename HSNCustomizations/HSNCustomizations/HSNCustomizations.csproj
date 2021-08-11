@@ -89,6 +89,7 @@
     <Compile Include="DAC_Extension\FSSODetExtensions.cs" />
     <Compile Include="DAC_Extension\FSAppointmentExtensions.cs" />
     <Compile Include="DAC_Extension\CustomerClassExtensions.cs" />
+    <Compile Include="Graph\PrintTransferProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
