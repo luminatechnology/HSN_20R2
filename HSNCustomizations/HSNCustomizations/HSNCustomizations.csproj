@@ -68,8 +68,10 @@
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />
     <Compile Include="Descriptor\LUMAttribute.cs" />
+    <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
     <Compile Include="Graph_Extension\ARPaymentEntry.cs" />
+    <Compile Include="Graph_Extension\CADepositEntry.cs" />
     <Compile Include="Graph_Extension\CREmailActivityMaint.cs" />
     <Compile Include="Graph_Extension\INTransferEntry.cs" />
     <Compile Include="Graph_Extension\SM_SOInvoiceEntry.cs" />
