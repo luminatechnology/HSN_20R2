@@ -59,9 +59,9 @@ namespace HSNCustomizations.Graph
             var currentSearchEndDate = ((TransferFilter)this.Caches[typeof(TransferFilter)].Current)?.EndDate;
 
             if (currentSearchStartDate == null)
-                return SelectFrom<INRegister>.Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>>.View.Select(this, ((DateTime)currentSearchEndDate).ToString("yyyy-MM-dd"));
+                return SelectFrom<INRegister>.Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>.View.Select(this, ((DateTime)currentSearchEndDate).ToString("yyyy-MM-dd"), "T");
             else
-                return SelectFrom<INRegister>.Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>>>.View.Select(this, ((DateTime)currentSearchStartDate).ToString("yyyy-MM-dd"), ((DateTime)currentSearchEndDate).ToString("yyyy-MM-dd"));
+                return SelectFrom<INRegister>.Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>>.View.Select(this, ((DateTime)currentSearchStartDate).ToString("yyyy-MM-dd"), ((DateTime)currentSearchEndDate).ToString("yyyy-MM-dd"), "T");
         }
         #endregion
 
