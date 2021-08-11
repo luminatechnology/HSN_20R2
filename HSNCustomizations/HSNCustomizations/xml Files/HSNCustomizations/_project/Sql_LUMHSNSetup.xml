@@ -3,6 +3,7 @@
   <col name="CompanyID" type="Int" default="Zero" />
   <col name="CPrepaymentNumberingID" type="NVarChar(10)" nullable="true" />
   <col name="EnableUniqSerialNbrByEquipType" type="Bit" nullable="true" />
+  <col name="EnableWFStageCtrlInAppt" type="Bit" nullable="true" />
   <col name="EnablePartReqInAppt" type="Bit" nullable="true" />
   <col name="EnableRMAProcInAppt" type="Bit" nullable="true" />
   <col name="EnableHeaderNoteSync" type="Bit" nullable="true" />

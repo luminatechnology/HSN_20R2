@@ -2,13 +2,13 @@ using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
+using PX.Objects.CS;
+using PX.Objects.CR.Standalone;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
-using System.Collections.Generic;
-using PX.Objects.CR.Standalone;
-using PX.Objects.CS;
 
 namespace PX.Objects.FS
 {
@@ -177,10 +177,24 @@ namespace PX.Objects.FS
 
             LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
-            openPartRequest.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
-            openPartReceive.SetEnabled(hSNSetup?.EnablePartReqInAppt == true);
-            openInitiateRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
-            openReturnRMA.SetEnabled(hSNSetup?.EnableRMAProcInAppt == true);
+            bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
+            bool activeRMAProcess  = hSNSetup?.EnableRMAProcInAppt == true;
+            bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
+
+            openPartRequest.SetEnabled(activePartRequest);
+            openPartReceive.SetEnabled(activePartRequest);
+            openInitiateRMA.SetEnabled(activeRMAProcess);
+            openReturnRMA.SetEnabled  (activeRMAProcess);
+
+            Base.menuDetailActions.SetVisible(nameof(OpenPartRequest), activePartRequest);
+            Base.menuDetailActions.SetVisible(nameof(OpenPartReceive), activePartRequest);
+            Base.menuDetailActions.SetVisible(nameof(OpenInitiateRMA), activeRMAProcess);
+            Base.menuDetailActions.SetVisible(nameof(OpenReturnRMA),   activeRMAProcess);
+
+            lumStages.SetVisible(activeWFStageCtrl);
+
+            EventHistory.AllowSelect   = activeWFStageCtrl;
+            INRegisterView.AllowSelect = activePartRequest;
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
             
@@ -202,7 +216,7 @@ namespace PX.Objects.FS
         #endregion
 
         #region Actions
-        public PXAction<FSAppointmentDet> openPartRequest;
+        public PXAction<FSAppointment> openPartRequest;
         [PXUIField(DisplayName = HSNMessages.PartRequest, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
         [PXButton]
         public virtual void OpenPartRequest()
@@ -214,7 +228,7 @@ namespace PX.Objects.FS
             OpenNewForm(transferEntry, TransferScr);
         }
 
-        public PXAction<FSAppointmentDet> openPartReceive;
+        public PXAction<FSAppointment> openPartReceive;
         [PXUIField(DisplayName = HSNMessages.PartReceive, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
         [PXButton]
         public virtual void OpenPartReceive()
@@ -248,7 +262,7 @@ namespace PX.Objects.FS
             OpenNewForm(receiptEntry, ReceiptScr);
         }
 
-        public PXAction<FSAppointmentDet> openInitiateRMA;
+        public PXAction<FSAppointment> openInitiateRMA;
         [PXUIField(DisplayName = HSNMessages.InitiateRMA, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
         [PXButton]
         public virtual void OpenInitiateRMA()
@@ -260,7 +274,7 @@ namespace PX.Objects.FS
             OpenNewForm(receiptEntry, ReceiptScr);
         }
 
-        public PXAction<FSAppointmentDet> openReturnRMA;
+        public PXAction<FSAppointment> openReturnRMA;
         [PXUIField(DisplayName = HSNMessages.ReturnRMA, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
         [PXButton]
         public virtual void OpenReturnRMA()
@@ -283,7 +297,6 @@ namespace PX.Objects.FS
         [PXUIField(DisplayName = "STAGES", MapEnableRights = PXCacheRights.Select)]
         [PXButton(MenuAutoOpen = true, CommitChanges = true)]
         public virtual void LumStages() { }
-
         #endregion
 
         #region Static Methods
@@ -512,7 +525,6 @@ namespace PX.Objects.FS
                 List<PXResult<LumStageControl>> lists = SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<P.AsString>
                                                                                           .And<LumStageControl.currentStage.IsEqual<P.AsInt>>>
                                                                                    .View.Select(Base, row.SrvOrdType, row.WFStageID).ToList();
-
                 var btn = this.lumStages.GetState(null) as PXButtonState;
 
                 if (btn.Menus != null)

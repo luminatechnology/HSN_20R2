@@ -19,6 +19,7 @@
 								<px:PXSelector runat="server" ID="CstPXSelector3" DataField="CPrepaymentNumberingID" AllowEdit="True" ></px:PXSelector>
 					<px:PXLayoutRule GroupCaption="DATA ENTRY SETTING" runat="server" ID="CstPXLayoutRule2" StartGroup="True" LabelsWidth="M" ControlSize="" ></px:PXLayoutRule>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox4" DataField="EnableUniqSerialNbrByEquipType" ></px:PXCheckBox>
+								<px:PXCheckBox runat="server" ID="CstPXCheckBox14" DataField="EnableWFStageCtrlInAppt" AlignLeft="True" />
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox5" DataField="EnablePartReqInAppt" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox6" DataField="EnableRMAProcInAppt" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox10" DataField="EnableHeaderNoteSync" ></px:PXCheckBox>

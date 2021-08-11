@@ -14,10 +14,14 @@ namespace PX.Objects.FS
 
         [PXImport(typeof(LumStageControl))]
         public SelectFrom<LumStageControl>.Where<LumStageControl.srvOrdType.IsEqual<FSSrvOrdType.srvOrdType.FromCurrent>>.View StageControl;
-
         #endregion
 
         #region Event Handler
+        protected void _(Events.RowSelected<FSSrvOrdType> e, PXRowSelected baseHandler)
+        {
+            WorkflowStage.AllowSelect = StageControl.AllowSelect = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableWFStageCtrlInAppt == true;
+        }
+
         protected void _(Events.FieldDefaulting<LUMAutoWorkflowStage.descr> e)
         {
             var row = e.Row as LUMAutoWorkflowStage;

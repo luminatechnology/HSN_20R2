@@ -5,11 +5,21 @@ using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.FS;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace PX.Objects.IN
 {
     public class INTransferEntry_Extension : PXGraphExtension<INTransferEntry>
     {
+        public override void Initialize()
+        {
+            base.Initialize();
+            PickingListReport.SetVisible(true);
+            DeliveryOrderReport.SetVisible(true);
+            Base.report.AddMenuAction(PickingListReport);
+            Base.report.AddMenuAction(DeliveryOrderReport);
+        }
+
         #region Delegate
         public delegate void PersistDelegate();
         [PXOverride]
@@ -66,6 +76,36 @@ namespace PX.Objects.IN
 
             return adapter.Get();
         }
+
+        public PXAction<INRegister> PickingListReport;
+        [PXButton()]
+        [PXUIField(DisplayName = "Print Picking List", Enabled = true, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        protected virtual IEnumerable pickingListReport(PXAdapter adapter)
+        {
+            if (Base.transfer.Current != null)
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters["DocType"] = Base.transfer.Current.DocType;
+                parameters["RefNbr"] = Base.transfer.Current.RefNbr;
+                throw new PXReportRequiredException(parameters, "LM644005", "Report LM644005");
+            }
+            return adapter.Get();
+        }
+
+        public PXAction<INRegister> DeliveryOrderReport;
+        [PXButton()]
+        [PXUIField(DisplayName = "Print Delivery Order", Enabled = true, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        protected virtual IEnumerable deliveryOrderReport(PXAdapter adapter)
+        {
+            if (Base.transfer.Current != null)
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                parameters["DocType"] = Base.transfer.Current.DocType;
+                parameters["RefNbr"] = Base.transfer.Current.RefNbr;
+                throw new PXReportRequiredException(parameters, "LM644010", "Report LM644010");
+            }
+            return adapter.Get();
+        }
         #endregion
 
         #region Event Handlers
@@ -73,7 +113,16 @@ namespace PX.Objects.IN
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+
+            bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
+
             copyItemFromAppt.SetEnabled(Base.transactions.Select().Count == 0);
+            copyItemFromAppt.SetVisible(activePartRequest);
+
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrAppointmentNbr>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
         }
         #endregion
 

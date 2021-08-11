@@ -73,6 +73,7 @@
     <Compile Include="Graph_Extension\ARPaymentEntry.cs" />
     <Compile Include="Graph_Extension\CADepositEntry.cs" />
     <Compile Include="Graph_Extension\CREmailActivityMaint.cs" />
+    <Compile Include="Graph_Extension\CustomerClassMaint.cs" />
     <Compile Include="Graph_Extension\INTransferEntry.cs" />
     <Compile Include="Graph_Extension\SM_SOInvoiceEntry.cs" />
     <Compile Include="Graph_Extension\SvrOrdTypeMaint.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="DAC_Extension\FSSODetExtensions.cs" />
     <Compile Include="DAC_Extension\FSAppointmentExtensions.cs" />
     <Compile Include="DAC_Extension\CustomerClassExtensions.cs" />
+    <Compile Include="Graph\PrintTransferProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

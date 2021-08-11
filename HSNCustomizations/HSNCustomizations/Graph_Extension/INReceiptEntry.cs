@@ -38,6 +38,18 @@ namespace PX.Objects.IN
         #endregion
 
         #region Event Handlers
+        protected void _(Events.RowSelected<INRegister> e, PXRowSelected baseHandler)
+        {
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+
+            bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
+
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrAppointmentNbr>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
+        }
+
+
         protected void _(Events.RowPersisting<INTran> e, PXRowPersisting baseHandler)
         {
             baseHandler?.Invoke(e.Cache, e.Args);
