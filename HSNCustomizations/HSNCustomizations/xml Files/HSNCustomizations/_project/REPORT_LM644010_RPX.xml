@@ -39,18 +39,10 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         </Filters>
         <MailSettings>
             <ActivitySource>INRegister.NoteID</ActivitySource>
-            <Bcc>
-            </Bcc>
-            <Body>
-            </Body>
-            <Cc>
-            </Cc>
-            <Format>
-            </Format>
-            <Subject>
-            </Subject>
-            <To>
-            </To>
+            <ParentSource>
+            </ParentSource>
+            <TemplateID>
+            </TemplateID>
         </MailSettings>
         <PageSettings>
             <Landscape>True</Landscape>
@@ -2887,6 +2879,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                 <Top>3px</Top>
                             </Padding>
                         </Style>
+                        <StyleName>Normal</StyleName>
                         <Value>=IIf([ShipToInfo.FullName] &lt;&gt; null, [ShipToInfo.FullName] + '{br}', '') #010;+IIf([ShipToAddr.AddressLine1] &lt;&gt; null,[ShipToAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipToAddr.AddressLine2] &lt;&gt; null,[ShipToAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipToAddr.City] &lt;&gt; null, [ShipToAddr.City] + ' ', '')#010;+IIf([ShipToAddr.State] &lt;&gt; null, [ShipToAddr.State] + ' ', '')#010;+IIf([ShipToAddr.PostalCode] &lt;&gt; null, [ShipToAddr.PostalCode] + '{br}', '')#010;+IIf([ShipToInfo.Phone1] &lt;&gt; null,'Phone: ' + [ShipToInfo.Phone1], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox27">
@@ -2907,6 +2900,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                 <Top>3px</Top>
                             </Padding>
                         </Style>
+                        <StyleName>Heading 1</StyleName>
                         <Value>Ship From</Value>
                     </TextBox>
                     <TextBox Name="textBox33">
@@ -2927,6 +2921,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                 <Top>3px</Top>
                             </Padding>
                         </Style>
+                        <StyleName>Heading 1</StyleName>
                         <Value>Ship To</Value>
                     </TextBox>
                     <TextBox Name="textBox4">
@@ -2941,6 +2936,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                 <Top>3px</Top>
                             </Padding>
                         </Style>
+                        <StyleName>Normal</StyleName>
                         <Value>=IIf([ShipFromInfo.FullName] &lt;&gt; null, [ShipFromInfo.FullName] + '{br}', '') #010;+IIf([ShipFromAddr.AddressLine1] &lt;&gt; null,[ShipFromAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipFromAddr.AddressLine2] &lt;&gt; null,[ShipFromAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipFromAddr.City] &lt;&gt; null, [ShipFromAddr.City] + ' ', '')#010;+IIf([ShipFromAddr.State] &lt;&gt; null, [ShipFromAddr.State] + ' ', '')#010;+IIf([ShipFromAddr.PostalCode] &lt;&gt; null, [ShipFromAddr.PostalCode] + '{br}', '')#010;+IIf([ShipFromInfo.Phone1] &lt;&gt; null,'Phone: ' + [ShipFromInfo.Phone1], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox9">
