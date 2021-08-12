@@ -17,12 +17,16 @@ namespace HSNCustomizations.Graph
         //public PXSave<TransferFilter> Save;
         public PXCancel<TransferFilter> Cancel;
         public PXFilteredProcessing<INRegister, TransferFilter> TransferRecords;
-
+        
         public PXFilter<TransferFilter> MasterView;
+        [PXFilterable]
         public SelectFrom<INRegister>.View DetailsView;
 
         public PrintTransferProcess()
         {
+            this.TransferRecords.Cache.AllowInsert = false;
+            this.TransferRecords.Cache.AllowDelete = false;
+            this.TransferRecords.Cache.AllowUpdate = false;
             TransferRecords.SetProcessDelegate(list => PrintTransfers(list));
         }
 
@@ -55,8 +59,9 @@ namespace HSNCustomizations.Graph
         #region Delegate DataView
         public IEnumerable detailsView()
         {
-            var currentSearchStartDate = ((TransferFilter)this.Caches[typeof(TransferFilter)].Current)?.StartDate;
-            var currentSearchEndDate = ((TransferFilter)this.Caches[typeof(TransferFilter)].Current)?.EndDate;
+            TransferFilter transferFilter = MasterView.Current as TransferFilter;
+            var currentSearchStartDate = transferFilter?.StartDate;
+            var currentSearchEndDate = transferFilter?.EndDate;
 
             if (currentSearchStartDate == null)
                 return SelectFrom<INRegister>.Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>.View.Select(this, ((DateTime)currentSearchEndDate).ToString("yyyy-MM-dd"), "T");
