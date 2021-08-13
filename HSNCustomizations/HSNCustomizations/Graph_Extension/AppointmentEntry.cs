@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using System;
 
 namespace PX.Objects.FS
 {
@@ -55,6 +56,9 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
+            if (HSNSetupView.Select().TopFirst?.EnableEquipmentMandatory ?? false)
+                VerifyEquipmentIDMandatory();
+
             if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED && HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
             {
                 SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
@@ -178,26 +182,26 @@ namespace PX.Objects.FS
             LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
-            bool activeRMAProcess  = hSNSetup?.EnableRMAProcInAppt == true;
+            bool activeRMAProcess = hSNSetup?.EnableRMAProcInAppt == true;
             bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
 
             openPartRequest.SetEnabled(activePartRequest);
             openPartReceive.SetEnabled(activePartRequest);
             openInitiateRMA.SetEnabled(activeRMAProcess);
-            openReturnRMA.SetEnabled  (activeRMAProcess);
+            openReturnRMA.SetEnabled(activeRMAProcess);
 
             Base.menuDetailActions.SetVisible(nameof(OpenPartRequest), activePartRequest);
             Base.menuDetailActions.SetVisible(nameof(OpenPartReceive), activePartRequest);
             Base.menuDetailActions.SetVisible(nameof(OpenInitiateRMA), activeRMAProcess);
-            Base.menuDetailActions.SetVisible(nameof(OpenReturnRMA),   activeRMAProcess);
+            Base.menuDetailActions.SetVisible(nameof(OpenReturnRMA), activeRMAProcess);
 
             lumStages.SetVisible(activeWFStageCtrl);
 
-            EventHistory.AllowSelect   = activeWFStageCtrl;
+            EventHistory.AllowSelect = activeWFStageCtrl;
             INRegisterView.AllowSelect = activePartRequest;
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
-            
+
             SettingStageButton();
         }
 
@@ -213,6 +217,20 @@ namespace PX.Objects.FS
                 }); ;
             }
         }
+
+        public void _(Events.FieldUpdated<FSAppointment.finished> e, PXFieldUpdated baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+            var row = Base.AppointmentSelected.Current;
+            if ((this.HSNSetupView.Select().TopFirst?.EnableAppointmentUpdateEndDate ?? false) && row != null)
+            {
+                if ((bool)e.NewValue && !row.ActualDateTimeEnd.HasValue)
+                    Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row, DateTime.Now);
+                else if (!(bool)e.NewValue)
+                    Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row, null);
+            }
+        }
+
         #endregion
 
         #region Actions
@@ -536,6 +554,18 @@ namespace PX.Objects.FS
                 }
             }
         }
+
+        /// <summary> Check Equipment ID is Mandatory </summary>
+        public void VerifyEquipmentIDMandatory()
+        {
+            var details = Base.AppointmentDetails.Select();
+            foreach (FSAppointmentDet item in details)
+            {
+                if (item.LineType == "SERVI" && !item.SMEquipmentID.HasValue)
+                    throw new PXException("Target Equipment ID cannot be blank for service");
+            }
+        }   
+
         #endregion
     }
 }

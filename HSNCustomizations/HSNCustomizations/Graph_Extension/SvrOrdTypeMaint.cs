@@ -19,6 +19,7 @@ namespace PX.Objects.FS
         #region Event Handler
         protected void _(Events.RowSelected<FSSrvOrdType> e, PXRowSelected baseHandler)
         {
+            baseHandler?.Invoke(e.Cache,e.Args);
             WorkflowStage.AllowSelect = StageControl.AllowSelect = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableWFStageCtrlInAppt == true;
         }
 

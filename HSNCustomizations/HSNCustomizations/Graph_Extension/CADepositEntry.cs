@@ -50,6 +50,13 @@ namespace PX.Objects.CA
             Base.Details.Cache.AllowInsert = Base.Details.Cache.AllowUpdate = true;
         }
 
+        public virtual void _(Events.RowSelected<CADepositDetail> e, PXRowSelected baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+            PXUIFieldAttribute.SetEnabled<CADepositDetail.curyTranAmt>(e.Cache, null, false);
+            PXUIFieldAttribute.SetEnabled<CADepositDetail.curyOrigAmt>(e.Cache, null, false);
+        }
+
         public virtual void _(Events.FieldUpdated<CADepositDetail.origRefNbr> e)
         {
             var row = e.Row as CADepositDetail;
