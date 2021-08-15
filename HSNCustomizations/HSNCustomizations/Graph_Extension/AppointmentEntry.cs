@@ -225,7 +225,7 @@ namespace PX.Objects.FS
             if ((this.HSNSetupView.Select().TopFirst?.EnableAppointmentUpdateEndDate ?? false) && row != null)
             {
                 if ((bool)e.NewValue && !row.ActualDateTimeEnd.HasValue)
-                    Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row, DateTime.Now);
+                    Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row,PX.Common.PXTimeZoneInfo.Now);
                 else if (!(bool)e.NewValue)
                     Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row, null);
             }
