@@ -10,6 +10,11 @@ namespace HSNCustomizations
         public PXCancel<LUMHSNSetup> Cancel;
 
         public SelectFrom<LUMHSNSetup>.View hSNSetup;
-        public SelectFrom<LUMBranchWarehouse>.View BranchWarehouse; 
+
+        [PXImport(typeof(LUMBranchWarehouse))]
+        public SelectFrom<LUMBranchWarehouse>.View BranchWarehouse;
+
+        [PXImport(typeof(LUMTermsConditions))]
+        public SelectFrom<LUMTermsConditions>.View TermsConditions;
     }
 }

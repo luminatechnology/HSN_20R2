@@ -94,6 +94,13 @@ namespace HSNCustomizations.DAC
         public abstract class enableAppointmentUpdateEndDate : PX.Data.BQL.BqlBool.Field<enableAppointmentUpdateEndDate> { }
         #endregion
 
+        #region EnableOpportunityEnhance
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Opportunity Enhancements")]
+        public virtual bool? EnableOpportunityEnhance { get; set; }
+        public abstract class enableOpportunityEnhance : PX.Data.BQL.BqlBool.Field<enableOpportunityEnhance> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }

@@ -1,0 +1,7 @@
+﻿<Table TableName="CROpportunity">
+    <Column TableName="CROpportunity" ColumnName="UsrValidityDate" ColumnType="date" AllowNull="True" MaxLength="25" DecimalPrecision="2" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="CROpportunity" ColumnName="UsrPODate" ColumnType="date" AllowNull="True" MaxLength="25" DecimalPrecision="2" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="CROpportunity" ColumnName="UsrBilledDate" ColumnType="date" AllowNull="True" MaxLength="25" DecimalPrecision="2" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="CROpportunity" ColumnName="UsrTotalMargin" ColumnType="decimal" AllowNull="True" DecimalPrecision="2" DecimalLength="25" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="CROpportunity" ColumnName="UsrTotalMarginPct" ColumnType="decimal" AllowNull="True" DecimalPrecision="2" DecimalLength="25" IsNewColumn="True" IsUnicode="True" />
+</Table>

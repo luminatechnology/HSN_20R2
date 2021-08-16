@@ -24,24 +24,34 @@
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox6" DataField="EnableRMAProcInAppt" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox10" DataField="EnableHeaderNoteSync" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox11" DataField="EnableChgInvTypeOnBill" ></px:PXCheckBox>
-								<px:PXCheckBox runat="server" ID="CstPXCheckBox16" DataField="EnableEquipmentMandatory" />
-								<px:PXCheckBox runat="server" ID="CstPXCheckBox15" DataField="EnableAppointmentUpdateEndDate" />
+								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox16" DataField="EnableEquipmentMandatory" ></px:PXCheckBox>
+								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox15" DataField="EnableAppointmentUpdateEndDate" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox12" DataField="DisplayTransferToHQ" ></px:PXCheckBox>
-								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox13" DataField="DispApptActiviteInSrvOrd" ></px:PXCheckBox></Template></px:PXTabItem>
+								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox13" DataField="DispApptActiviteInSrvOrd" ></px:PXCheckBox>
+								<px:PXCheckBox runat="server" ID="CstPXCheckBox17" DataField="EnableOpportunityEnhance" AlignLeft="True" ></px:PXCheckBox></Template></px:PXTabItem>
 			<px:PXTabItem Text="Branch Warehouse">
 			
 				<Template>
-					<px:PXGrid runat="server" ID="CstPXGrid7" Width="100%" SkinID="DetailsInTab" DataSourceID="ds" SyncPosition="True">
+					<px:PXGrid FilesIndicator="False" NoteIndicator="False" runat="server" ID="CstPXGrid7" Width="100%" SkinID="DetailsInTab" DataSourceID="ds" SyncPosition="True">
 						<Levels>
 							<px:PXGridLevel DataMember="BranchWarehouse" >
 								<Columns>
-									<px:PXGridColumn DataField="BranchID" Width="140" />
-									<px:PXGridColumn DataField="SiteID" Width="140" /></Columns>
+									<px:PXGridColumn DataField="BranchID" Width="140" ></px:PXGridColumn>
+									<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn></Columns>
 								<RowTemplate>
 									<px:PXSegmentMask AllowEdit="True" runat="server" ID="CstPXSegmentMask8" DataField="BranchID" ></px:PXSegmentMask>
-									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask9" DataField="SiteID" AllowEdit="True" /></RowTemplate></px:PXGridLevel></Levels>
-						<AutoSize Enabled="True" /></px:PXGrid></Template></px:PXTabItem>
-		</Items>
+									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask9" DataField="SiteID" AllowEdit="True" ></px:PXSegmentMask></RowTemplate></px:PXGridLevel></Levels>
+						<AutoSize Enabled="True" ></AutoSize></px:PXGrid></Template></px:PXTabItem>
+			<px:PXTabItem Text="Terms And Conditions">
+				<Template>
+					<px:PXGrid AutoAdjustColumns="True" FilesIndicator="False" NoteIndicator="False" runat="server" ID="CstPXGrid18" Width="100%" SkinID="DetailsInTab" DataSourceID="ds" SyncPosition="True">
+						<Levels>
+							<px:PXGridLevel DataMember="TermsConditions" >
+								<Columns>
+									<px:PXGridColumn TextAlign="Left" DataField="SortOrder" Width="50" ></px:PXGridColumn>
+									<px:PXGridColumn DataField="Definition" Width="70" /></Columns></px:PXGridLevel></Levels>
+						<Mode AllowUpload="True" ></Mode>
+						<AutoSize Enabled="True" ></AutoSize></px:PXGrid></Template></px:PXTabItem></Items>
 		<AutoSize Container="Window" Enabled="True" MinHeight="200" ></AutoSize>
 	</px:PXTab>
 </asp:Content>
