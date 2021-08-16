@@ -4,12 +4,12 @@ using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
 using PX.Objects.CS;
 using PX.Objects.CR.Standalone;
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
-using System;
 
 namespace PX.Objects.FS
 {
@@ -59,7 +59,9 @@ namespace PX.Objects.FS
             if (HSNSetupView.Select().TopFirst?.EnableEquipmentMandatory ?? false)
                 VerifyEquipmentIDMandatory();
 
-            if (Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED && HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
+            if (Base.AppointmentRecords.Current != null &&
+                Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED && 
+                HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
             {
                 SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
             }
