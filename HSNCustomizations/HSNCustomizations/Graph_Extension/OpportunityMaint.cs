@@ -1,11 +1,12 @@
 using PX.Data;
 using PX.Data.BQL.Fluent;
+using PX.Objects.FS;
 using PX.Objects.IN;
 using HSNCustomizations.DAC;
 
 namespace PX.Objects.CR
 {
-    public class OpportunityMaint_Extension : PXGraphExtension<OpportunityMaint>
+    public class OpportunityMaint_Extension : PXGraphExtension<SM_OpportunityMaint, OpportunityMaint>
     {
         #region Selects
         public SelectFrom<LUMHSNSetup>.View HSNSetupView;
@@ -34,14 +35,12 @@ namespace PX.Objects.CR
             bool isActived = HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance ?? false;
 
             TermsConditions.AllowSelect = isActived;
-
+            
             PXUIFieldAttribute.SetVisible<CROpportunityExt.usrTotalMargin>(e.Cache, e.Row, isActived);
             PXUIFieldAttribute.SetVisible<CROpportunityExt.usrTotalMarginPct>(e.Cache, e.Row, isActived);
             PXUIFieldAttribute.SetVisible<CROpportunityExt.usrValidityDate>(e.Cache, e.Row, isActived);
             PXUIFieldAttribute.SetVisible<CROpportunityExt.usrPODate>(e.Cache, e.Row, isActived);
             PXUIFieldAttribute.SetVisible<CROpportunityExt.usrBilledDate>(e.Cache, e.Row, isActived);
-
-            PXUIFieldAttribute.SetEnabled<CROpportunityProducts.curyUnitCost>(e.Cache, null, true);
         }
 
         protected void _(Events.RowSelected<CROpportunityProducts> e, PXRowSelected baseHandler)
