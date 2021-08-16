@@ -37,9 +37,10 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
-            if (Base.ServiceOrderRecords.Current != null &&
-                Base.ServiceOrderRecords.Current.Status != FSAppointment.status.CLOSED && 
-                SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableHeaderNoteSync == true)
+            if (SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableEquipmentMandatory ?? false)
+                VerifyEquipmentIDMandatory();
+
+            if (Base.ServiceOrderRecords.Current.Status != FSAppointment.status.CLOSED && SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableHeaderNoteSync == true)
             {
                 AppointmentEntry_Extension.SyncNoteApptOrSrvOrd(Base, typeof(FSServiceOrder), typeof(FSAppointment));
             }
@@ -214,6 +215,17 @@ namespace PX.Objects.FS
                 }
             }
         }
+
+        public void VerifyEquipmentIDMandatory()
+        {
+            var details = Base.ServiceOrderDetails.Select();
+            foreach (FSSODet item in details)
+            {
+                if (item.LineType == "SERVI" && !item.SMEquipmentID.HasValue)
+                    throw new PXException("Target Equipment ID cannot be blank for service");
+            }
+        }
+
         #endregion
     }
 }
