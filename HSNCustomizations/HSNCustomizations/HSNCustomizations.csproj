@@ -62,8 +62,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
+    <Compile Include="DAC\LUMOpprTermCond.cs" />
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
     <Compile Include="DAC\LumStageControl.cs" />
+    <Compile Include="DAC\LUMTermsConditions.cs" />
+    <Compile Include="DAC_Extension\CROpportunityExtensions.cs" />
+    <Compile Include="DAC_Extension\CROpportunityProductsExtensions.cs" />
     <Compile Include="Descriptor\FSStageControlHandler.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />
@@ -75,6 +79,8 @@
     <Compile Include="Graph_Extension\CREmailActivityMaint.cs" />
     <Compile Include="Graph_Extension\CustomerClassMaint.cs" />
     <Compile Include="Graph_Extension\INTransferEntry.cs" />
+    <Compile Include="Graph_Extension\OpportunityMaint.cs" />
+    <Compile Include="Graph_Extension\QuoteMaint.cs" />
     <Compile Include="Graph_Extension\SM_SOInvoiceEntry.cs" />
     <Compile Include="Graph_Extension\SvrOrdTypeMaint.cs" />
     <Compile Include="DAC\LUMAppEventHistory.cs" />
