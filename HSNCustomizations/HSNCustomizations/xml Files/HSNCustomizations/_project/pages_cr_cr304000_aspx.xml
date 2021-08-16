@@ -24,6 +24,7 @@
                     <Prop Key="ID" Value="CstPXDateTimeEdit5" />
                     <Prop Key="DataField" Value="UsrValidityDate" />
                     <Prop Key="Size" Value="M" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXDateTimeEdit>
             </AddItem>
             <AddItem>
@@ -32,6 +33,7 @@
                     <Prop Key="ID" Value="CstPXDateTimeEdit6" />
                     <Prop Key="DataField" Value="UsrBilledDate" />
                     <Prop Key="Size" Value="M" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXDateTimeEdit>
             </AddItem>
             <PXLayoutRule OriginalIndex="8" />
@@ -41,6 +43,7 @@
                     <Prop Key="ID" Value="CstPXDateTimeEdit9" />
                     <Prop Key="DataField" Value="UsrPODate" />
                     <Prop Key="Size" Value="XM" />
+                    <Prop Key="CommitChanges" Value="True" />
                 </PXDateTimeEdit>
             </AddItem>
             <PXLayoutRule OriginalIndex="14" />
