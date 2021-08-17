@@ -4,7 +4,6 @@ using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
 using PX.Objects.CS;
 using PX.Objects.CR.Standalone;
-using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -332,7 +331,7 @@ namespace PX.Objects.FS
             INRegister register = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
             INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
 
-            int? prefSiteID = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.SiteID;
+            int? prefSiteID = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.FaultySiteID;
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
             register.TransferType = INTransferType.TwoStep;
@@ -422,8 +421,10 @@ namespace PX.Objects.FS
 
             if (defective == true)
             {
-                iNTran.SiteID = apptDet.SiteID;
-                iNTran.LocationID = apptDet.LocationID;
+                INSiteExt siteExt = INSite.PK.Find(graph, apptDet.SiteID).GetExtension<INSiteExt>();
+
+                iNTran.SiteID     = siteExt.UsrIsFaultySite == true ? LUMBranchWarehouse.PK.Find(graph, graph.Accessinfo.BranchID)?.FaultySiteID : apptDet.SiteID;
+                iNTran.LocationID = siteExt.UsrIsFaultySite == true ? null : apptDet.SiteLocationID;
             }
 
             iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
