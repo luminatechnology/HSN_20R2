@@ -37,10 +37,12 @@
 							<px:PXGridLevel DataMember="BranchWarehouse" >
 								<Columns>
 									<px:PXGridColumn DataField="BranchID" Width="140" ></px:PXGridColumn>
-									<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn></Columns>
+									<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn>
+									<px:PXGridColumn DataField="FaultySiteID" Width="140" /></Columns>
 								<RowTemplate>
 									<px:PXSegmentMask AllowEdit="True" runat="server" ID="CstPXSegmentMask8" DataField="BranchID" ></px:PXSegmentMask>
-									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask9" DataField="SiteID" AllowEdit="True" ></px:PXSegmentMask></RowTemplate></px:PXGridLevel></Levels>
+									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask9" DataField="SiteID" AllowEdit="True" ></px:PXSegmentMask>
+									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask19" DataField="FaultySiteID" AllowEdit="True" /></RowTemplate></px:PXGridLevel></Levels>
 						<AutoSize Enabled="True" ></AutoSize></px:PXGrid></Template></px:PXTabItem>
 			<px:PXTabItem Text="Terms And Conditions">
 				<Template>

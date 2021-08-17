@@ -1,6 +1,7 @@
 using System;
 using PX.Data;
 using PX.Data.ReferentialIntegrity.Attributes;
+using PX.Objects.IN;
 
 namespace HSNCustomizations.DAC
 {
@@ -16,7 +17,6 @@ namespace HSNCustomizations.DAC
         #endregion
 
         #region BranchID
-        [PXUIField(DisplayName = "Branch")]
         [PX.Objects.GL.Branch(IsKey = true)]
         [PXDefault()]
         public virtual int? BranchID { get; set; }
@@ -24,13 +24,18 @@ namespace HSNCustomizations.DAC
         #endregion
   
         #region SiteID
-        [PXUIField(DisplayName = "Warehouse")]
-        [PX.Objects.IN.Site()]
+        [Site()]
         [PXDefault()]
         public virtual int? SiteID { get; set; }
         public abstract class siteID : PX.Data.BQL.BqlInt.Field<siteID> { }
         #endregion
-  
+
+        #region FaultySiteID
+        [Site(DisplayName = "Faulty Warehouse")]
+        public virtual int? FaultySiteID { get; set; }
+        public abstract class faultysiteID : PX.Data.BQL.BqlInt.Field<faultysiteID> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }
