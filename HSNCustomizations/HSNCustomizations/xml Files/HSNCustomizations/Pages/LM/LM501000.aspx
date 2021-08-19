@@ -15,23 +15,27 @@
 	<px:PXFormView ID="form" runat="server" DataSourceID="ds" DataMember="MasterView" Width="100%" Height="80px" AllowAutoHide="false">
 		<Template>
 			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule11" StartRow="True" ></px:PXLayoutRule>
-			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule13" StartColumn="True" />
-			<px:PXDropDown runat="server" ID="CstPXDropDown12" DataField="ReportType" />
+			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule13" StartColumn="True" ></px:PXLayoutRule>
+			<px:PXDropDown Size="M" runat="server" ID="CstPXDropDown12" DataField="ReportType" ></px:PXDropDown>
+			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule16" StartColumn="True" ></px:PXLayoutRule>
+			<px:PXDateTimeEdit CommitChanges="True" runat="server" ID="CstPXDateTimeEdit7" DataField="StartDate" ></px:PXDateTimeEdit>
 			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule10" StartRow="True" ></px:PXLayoutRule>
 			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule8" StartColumn="True" ></px:PXLayoutRule>
-			<px:PXDateTimeEdit CommitChanges="True" runat="server" ID="CstPXDateTimeEdit7" DataField="StartDate" ></px:PXDateTimeEdit>
+			<px:PXSegmentMask Size="M" CommitChanges="True" runat="server" ID="CstPXSegmentMask15" DataField="SiteID" ></px:PXSegmentMask>
 			<px:PXLayoutRule runat="server" ID="CstPXLayoutRule9" StartColumn="True" ></px:PXLayoutRule>
 			<px:PXDateTimeEdit CommitChanges="True" runat="server" ID="CstPXDateTimeEdit6" DataField="EndDate" ></px:PXDateTimeEdit></Template>
 	</px:PXFormView>
 </asp:Content>
 <asp:Content ID="cont3" ContentPlaceHolderID="phG" Runat="Server">
-	<px:PXGrid ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" SkinID="Details" AllowAutoHide="false">
+	<px:PXGrid SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" ActionsPosition="Top" SkinID="PrimaryInquire" AllowAutoHide="false">
 		<Levels>
 			<px:PXGridLevel DataMember="DetailsView">
 			    <Columns>
-				<px:PXGridColumn DataField="Selected" Width="60" Type="CheckBox" ></px:PXGridColumn>
+				<px:PXGridColumn TextAlign="Center" AllowCheckAll="True" Type="CheckBox" DataField="Selected" Width="60" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="RefNbr" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="DocType" Width="70" ></px:PXGridColumn>
+				<px:PXGridColumn Type="CheckBox" DataField="UsrPLIsPrinted" Width="60" ></px:PXGridColumn>
+				<px:PXGridColumn Type="CheckBox" DataField="UsrDOIsPrinted" Width="60" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="SiteID_description" Width="220" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="ToSiteID" Width="140" ></px:PXGridColumn>

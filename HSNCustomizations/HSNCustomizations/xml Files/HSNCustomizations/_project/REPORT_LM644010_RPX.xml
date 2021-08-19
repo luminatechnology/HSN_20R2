@@ -11,38 +11,24 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         <Filters>
             <FilterExp>
                 <Condition>Less</Condition>
-                <DataField>INTran.InvtMult</DataField>
+                <DataField>LumINTran.InvtMult</DataField>
                 <Value>1</Value>
-            </FilterExp>
-            <FilterExp>
-                <DataField>INRegister.DocType</DataField>
-                <OpenBraces>1</OpenBraces>
-                <Operator>Or</Operator>
-                <Value>@DocType</Value>
-            </FilterExp>
-            <FilterExp>
-                <CloseBraces>1</CloseBraces>
-                <Condition>IsNull</Condition>
-                <DataField>@DocType</DataField>
-            </FilterExp>
-            <FilterExp>
-                <DataField>INRegister.RefNbr</DataField>
-                <OpenBraces>1</OpenBraces>
-                <Operator>Or</Operator>
-                <Value>@RefNbr</Value>
-            </FilterExp>
-            <FilterExp>
-                <CloseBraces>1</CloseBraces>
-                <Condition>IsNull</Condition>
-                <DataField>@RefNbr</DataField>
             </FilterExp>
         </Filters>
         <MailSettings>
             <ActivitySource>INRegister.NoteID</ActivitySource>
-            <ParentSource>
-            </ParentSource>
-            <TemplateID>
-            </TemplateID>
+            <Bcc>
+            </Bcc>
+            <Body>
+            </Body>
+            <Cc>
+            </Cc>
+            <Format>
+            </Format>
+            <Subject>
+            </Subject>
+            <To>
+            </To>
         </MailSettings>
         <PageSettings>
             <Landscape>True</Landscape>
@@ -74,38 +60,30 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
             </ReportParameter>
             <ReportParameter>
                 <ColumnSpan>2</ColumnSpan>
-                <Name>RefNbr</Name>
+                <Name>RefNbrStart</Name>
                 <Nullable>True</Nullable>
-                <Prompt>Reference Number</Prompt>
+                <Prompt>Reference Number Start</Prompt>
+                <ViewName>=Report.GetFieldSchema('INRegister.RefNbr,DocType')</ViewName>
+            </ReportParameter>
+            <ReportParameter>
+                <ColumnSpan>2</ColumnSpan>
+                <Name>RefNbrEnd</Name>
+                <Nullable>True</Nullable>
+                <Prompt>Reference Number End</Prompt>
                 <ViewName>=Report.GetFieldSchema('INRegister.RefNbr,DocType')</ViewName>
             </ReportParameter>
         </Parameters>
         <Relations>
-            <ReportRelation>
-                <ChildName>INTran</ChildName>
-                <JoinType>Inner</JoinType>
-                <Links>
-                    <RelationRow>
-                        <ChildField>DocType</ChildField>
-                        <ParentField>DocType</ParentField>
-                    </RelationRow>
-                    <RelationRow>
-                        <ChildField>RefNbr</ChildField>
-                        <ParentField>RefNbr</ParentField>
-                    </RelationRow>
-                </Links>
-                <ParentName>INRegister</ParentName>
-            </ReportRelation>
             <ReportRelation>
                 <ChildName>INSite</ChildName>
                 <JoinType>Inner</JoinType>
                 <Links>
                     <RelationRow>
                         <ChildField>SiteID</ChildField>
-                        <ParentField>SiteID</ParentField>
+                        <ParentField>Siteid</ParentField>
                     </RelationRow>
                 </Links>
-                <ParentName>INTran</ParentName>
+                <ParentName>LumINTran</ParentName>
             </ReportRelation>
             <ReportRelation>
                 <ChildName>InventoryItem</ChildName>
@@ -116,7 +94,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <ParentField>InventoryID</ParentField>
                     </RelationRow>
                 </Links>
-                <ParentName>INTran</ParentName>
+                <ParentName>LumINTran</ParentName>
             </ReportRelation>
             <ReportRelation>
                 <ChildAlias>ShipFromSite</ChildAlias>
@@ -124,10 +102,10 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 <Links>
                     <RelationRow>
                         <ChildField>SiteID</ChildField>
-                        <ParentField>SiteID</ParentField>
+                        <ParentField>Siteid</ParentField>
                     </RelationRow>
                 </Links>
-                <ParentName>INRegister</ParentName>
+                <ParentName>LumINTran</ParentName>
             </ReportRelation>
             <ReportRelation>
                 <ChildAlias>ShipFromAddr</ChildAlias>
@@ -152,15 +130,26 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 <ParentName>INSite</ParentName>
             </ReportRelation>
             <ReportRelation>
+                <ChildAlias>ShipFromInfoR</ChildAlias>
+                <ChildName>ContactR</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>ContactID</ChildField>
+                        <ParentField>ShipFromSite.ContactID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>INSite</ParentName>
+            </ReportRelation>
+            <ReportRelation>
                 <ChildAlias>ShipToSite</ChildAlias>
                 <ChildName>INSite</ChildName>
                 <Links>
                     <RelationRow>
                         <ChildField>SiteID</ChildField>
-                        <ParentField>ToSiteID</ParentField>
+                        <ParentField>Tositeid</ParentField>
                     </RelationRow>
                 </Links>
-                <ParentName>INRegister</ParentName>
+                <ParentName>LumINTran</ParentName>
             </ReportRelation>
             <ReportRelation>
                 <ChildAlias>ShipToAddr</ChildAlias>
@@ -184,11 +173,32 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 </Links>
                 <ParentName>INSite</ParentName>
             </ReportRelation>
+            <ReportRelation>
+                <ChildAlias>ShipToInfoR</ChildAlias>
+                <ChildName>ContactR</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>ContactID</ChildField>
+                        <ParentField>ShipToSite.ContactID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>INSite</ParentName>
+            </ReportRelation>
+            <ReportRelation>
+                <ChildName>INLocation</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>LocationID</ChildField>
+                        <ParentField>LocationID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>LumINTran</ParentName>
+            </ReportRelation>
         </Relations>
         <SchemaUrl>http://localhost/AcumaticaHSN</SchemaUrl>
         <Sorting>
             <SortExp>
-                <DataField>INTran.InventoryID</DataField>
+                <DataField>LumINTran.InventoryID</DataField>
             </SortExp>
         </Sorting>
         <StylesTemplate>TemplateReport.rpx</StylesTemplate>
@@ -2785,31 +2795,471 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 </Fields>
                 <FullName>PX.Objects.GL.DAC.Organization</FullName>
             </ReportTable>
+            <ReportTable Name="LumINTran">
+                <Fields>
+                    <ReportField Name="DocType">
+                    </ReportField>
+                    <ReportField Name="InventoryID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="InvtMult">
+                        <DataType>Int16</DataType>
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_description">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_displayName">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_Username">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByScreenID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="LineNbr">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="LocationID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Qty">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="RefNbr">
+                    </ReportField>
+                    <ReportField Name="Siteid">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Tositeid">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="TranDate">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="TranDate_Day">
+                    </ReportField>
+                    <ReportField Name="TranDate_Hour">
+                    </ReportField>
+                    <ReportField Name="TranDate_Month">
+                    </ReportField>
+                    <ReportField Name="TranDate_Quarter">
+                    </ReportField>
+                    <ReportField Name="TranDesc">
+                    </ReportField>
+                    <ReportField Name="TranType">
+                    </ReportField>
+                    <ReportField Name="Uom">
+                    </ReportField>
+                    <ReportField Name="UsrAppointmentNbr">
+                    </ReportField>
+                </Fields>
+                <FullName>HSNCustomizations.DAC.LumINTran</FullName>
+            </ReportTable>
+            <ReportTable Name="ContactR">
+                <Fields>
+                    <ReportField Name="Address">
+                    </ReportField>
+                    <ReportField Name="Anniversary">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="Anniversary_Day">
+                    </ReportField>
+                    <ReportField Name="Anniversary_Hour">
+                    </ReportField>
+                    <ReportField Name="Anniversary_Month">
+                    </ReportField>
+                    <ReportField Name="Anniversary_Quarter">
+                    </ReportField>
+                    <ReportField Name="AssignDate">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="AssignDate_Day">
+                    </ReportField>
+                    <ReportField Name="AssignDate_Hour">
+                    </ReportField>
+                    <ReportField Name="AssignDate_Month">
+                    </ReportField>
+                    <ReportField Name="AssignDate_Quarter">
+                    </ReportField>
+                    <ReportField Name="Attention">
+                    </ReportField>
+                    <ReportField Name="BAccountID">
+                    </ReportField>
+                    <ReportField Name="BAccountID_BAccount_acctName">
+                    </ReportField>
+                    <ReportField Name="BAccountID_description">
+                    </ReportField>
+                    <ReportField Name="CampaignID">
+                    </ReportField>
+                    <ReportField Name="CampaignID_CRCampaign_campaignName">
+                    </ReportField>
+                    <ReportField Name="CampaignID_description">
+                    </ReportField>
+                    <ReportField Name="CanBeMadePrimary">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="ClassID">
+                    </ReportField>
+                    <ReportField Name="ClassID_CRContactClass_description">
+                    </ReportField>
+                    <ReportField Name="ClassID_description">
+                    </ReportField>
+                    <ReportField Name="ConsentAgreement">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="ConsentDate">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="ConsentDate_Day">
+                    </ReportField>
+                    <ReportField Name="ConsentDate_Hour">
+                    </ReportField>
+                    <ReportField Name="ConsentDate_Month">
+                    </ReportField>
+                    <ReportField Name="ConsentDate_Quarter">
+                    </ReportField>
+                    <ReportField Name="ConsentExpirationDate">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="ConsentExpirationDate_Day">
+                    </ReportField>
+                    <ReportField Name="ConsentExpirationDate_Hour">
+                    </ReportField>
+                    <ReportField Name="ConsentExpirationDate_Month">
+                    </ReportField>
+                    <ReportField Name="ConsentExpirationDate_Quarter">
+                    </ReportField>
+                    <ReportField Name="ContactID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="ContactPriority">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="ContactType">
+                    </ReportField>
+                    <ReportField Name="CreatedByID">
+                    </ReportField>
+                    <ReportField Name="CreatedByID_Creator_displayName">
+                    </ReportField>
+                    <ReportField Name="CreatedByID_Creator_Username">
+                    </ReportField>
+                    <ReportField Name="CreatedByID_description">
+                    </ReportField>
+                    <ReportField Name="CreatedByScreenID">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="DateOfBirth">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="DateOfBirth_Day">
+                    </ReportField>
+                    <ReportField Name="DateOfBirth_Hour">
+                    </ReportField>
+                    <ReportField Name="DateOfBirth_Month">
+                    </ReportField>
+                    <ReportField Name="DateOfBirth_Quarter">
+                    </ReportField>
+                    <ReportField Name="DefAddressID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="DeletedDatabaseRecord">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="DisplayName">
+                    </ReportField>
+                    <ReportField Name="DuplicateFound">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="DuplicateStatus">
+                    </ReportField>
+                    <ReportField Name="EMail">
+                    </ReportField>
+                    <ReportField Name="EntityTypeID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="ExtRefNbr">
+                    </ReportField>
+                    <ReportField Name="Fax">
+                    </ReportField>
+                    <ReportField Name="FaxType">
+                    </ReportField>
+                    <ReportField Name="FirstName">
+                    </ReportField>
+                    <ReportField Name="FullName">
+                    </ReportField>
+                    <ReportField Name="Gender">
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime_Date">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="GrammValidationDateTime_Time">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="HSEntityTypeID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Img">
+                    </ReportField>
+                    <ReportField Name="IsActive">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsAddressSameAsMain">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsConvertable">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsMeaningfull">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsNotEmployee">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="IsPrimary">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="LanguageID">
+                    </ReportField>
+                    <ReportField Name="LanguageID_description">
+                    </ReportField>
+                    <ReportField Name="LanguageID_Locale_description">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_description">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_displayName">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_Username">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByScreenID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="LastName">
+                    </ReportField>
+                    <ReportField Name="MaritalStatus">
+                    </ReportField>
+                    <ReportField Name="MemberName">
+                    </ReportField>
+                    <ReportField Name="Method">
+                    </ReportField>
+                    <ReportField Name="MidName">
+                    </ReportField>
+                    <ReportField Name="NoCall">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="NoEMail">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="NoFax">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="NoMail">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="NoMarketing">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="NoMassMail">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="NoteActivity">
+                    </ReportField>
+                    <ReportField Name="NoteFiles">
+                    </ReportField>
+                    <ReportField Name="NoteID">
+                        <DataType>Object</DataType>
+                    </ReportField>
+                    <ReportField Name="NoteImages">
+                    </ReportField>
+                    <ReportField Name="NoteText">
+                    </ReportField>
+                    <ReportField Name="OverrideAddress">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="OwnerID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="OwnerID_description">
+                    </ReportField>
+                    <ReportField Name="OwnerID_Owner_displayName">
+                    </ReportField>
+                    <ReportField Name="ParentBAccountID">
+                    </ReportField>
+                    <ReportField Name="ParentBAccountID_BAccountR_acctName">
+                    </ReportField>
+                    <ReportField Name="ParentBAccountID_description">
+                    </ReportField>
+                    <ReportField Name="ParentBAccountID_Segment1">
+                    </ReportField>
+                    <ReportField Name="Phone1">
+                    </ReportField>
+                    <ReportField Name="Phone1Type">
+                    </ReportField>
+                    <ReportField Name="Phone2">
+                    </ReportField>
+                    <ReportField Name="Phone2Type">
+                    </ReportField>
+                    <ReportField Name="Phone3">
+                    </ReportField>
+                    <ReportField Name="Phone3Type">
+                    </ReportField>
+                    <ReportField Name="PseudonymizationStatus">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Resolution">
+                    </ReportField>
+                    <ReportField Name="RevisionID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Salutation">
+                    </ReportField>
+                    <ReportField Name="SearchSuggestion">
+                    </ReportField>
+                    <ReportField Name="Selected">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="Source">
+                    </ReportField>
+                    <ReportField Name="Spouse">
+                    </ReportField>
+                    <ReportField Name="Status">
+                    </ReportField>
+                    <ReportField Name="Synchronize">
+                        <DataType>Boolean</DataType>
+                    </ReportField>
+                    <ReportField Name="Title">
+                    </ReportField>
+                    <ReportField Name="tstamp">
+                    </ReportField>
+                    <ReportField Name="UserID">
+                        <DataType>Object</DataType>
+                    </ReportField>
+                    <ReportField Name="WebSite">
+                    </ReportField>
+                    <ReportField Name="WorkgroupID">
+                    </ReportField>
+                    <ReportField Name="WorkgroupID_description">
+                    </ReportField>
+                    <ReportField Name="WorkgroupID_EPCompanyTree_description">
+                    </ReportField>
+                </Fields>
+                <FullName>PX.Objects.AR.ARStatementPrint+ContactR</FullName>
+            </ReportTable>
         </Tables>
         <ViewerFields>
-            <ViewerField Name="SOShipment.ShipmentNbr">
+            <ViewerField Name="INTran.InventoryID">
             </ViewerField>
-            <ViewerField Name="SOShipment.SiteID">
+            <ViewerField Name="INTran.InvtMult">
             </ViewerField>
-            <ViewerField Name="SOShipment.ShipDate">
+            <ViewerField Name="INRegister.DocType">
             </ViewerField>
-            <ViewerField Name="SOShipment.CustomerID">
+            <ViewerField Name="INTran.RefNbr">
             </ViewerField>
-            <ViewerField Name="SOShipment.CustomerLocationID">
+            <ViewerField Name="INTran.SiteID">
             </ViewerField>
-            <ViewerField Name="SOShipment.ShipVia">
+            <ViewerField Name="INTran.ToSiteID">
             </ViewerField>
-            <ViewerField Name="SOShipment.FOBPoint">
+            <ViewerField Name="INRegister.NoteID">
             </ViewerField>
-            <ViewerField Name="LineNote.NoteText">
+            <ViewerField Name="ShipToInfo.FullName">
+            </ViewerField>
+            <ViewerField Name="ShipToAddr.AddressLine1">
+            </ViewerField>
+            <ViewerField Name="ShipToAddr.AddressLine2">
+            </ViewerField>
+            <ViewerField Name="ShipToAddr.City">
+            </ViewerField>
+            <ViewerField Name="ShipToAddr.State">
+            </ViewerField>
+            <ViewerField Name="ShipToAddr.PostalCode">
+            </ViewerField>
+            <ViewerField Name="ShipToInfo.Phone1">
+            </ViewerField>
+            <ViewerField Name="ShipFromInfo.FullName">
+            </ViewerField>
+            <ViewerField Name="ShipFromAddr.AddressLine1">
+            </ViewerField>
+            <ViewerField Name="ShipFromAddr.AddressLine2">
+            </ViewerField>
+            <ViewerField Name="ShipFromAddr.City">
+            </ViewerField>
+            <ViewerField Name="ShipFromAddr.State">
+            </ViewerField>
+            <ViewerField Name="ShipFromAddr.PostalCode">
+            </ViewerField>
+            <ViewerField Name="ShipFromInfo.Phone1">
+            </ViewerField>
+            <ViewerField Name="SOShipLine.ShippedQty">
+            </ViewerField>
+            <ViewerField Name="INTran.UOM">
+            </ViewerField>
+            <ViewerField Name="INTran.TranDesc">
+            </ViewerField>
+            <ViewerField Name="INTran.LocationID">
+            </ViewerField>
+            <ViewerField Name="INTran.Qty">
+            </ViewerField>
+            <ViewerField Name="INRegister.RefNbr">
+            </ViewerField>
+            <ViewerField Name="INRegister.SiteID">
+            </ViewerField>
+            <ViewerField Name="INRegister.UsrSrvOrdType">
+            </ViewerField>
+            <ViewerField Name="INRegister.TranDate">
+            </ViewerField>
+            <ViewerField Name="INRegister.ToSiteID">
+            </ViewerField>
+            <ViewerField Name="INRegister.UsrAppointmentNbr">
             </ViewerField>
         </ViewerFields>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
-                <Height>4.02116cm</Height>
+                <Height>4.65608cm</Height>
                 <Items>
                     <Line Name="line1">
-                        <Location>8px, 144px</Location>
+                        <Location>8px, 166px</Location>
                         <Size>1008px, 1px</Size>
                     </Line>
                     <TextBox Name="textBox10">
@@ -2869,7 +3319,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                     </TextBox>
                     <TextBox Name="textBox26">
                         <Location>280px, 72px</Location>
-                        <Size>264px, 64px</Size>
+                        <Size>264px, 80px</Size>
                         <Style>
                             <Font>
                                 <Size>11px</Size>
@@ -2880,7 +3330,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                             </Padding>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf([ShipToInfo.FullName] &lt;&gt; null, [ShipToInfo.FullName] + '{br}', '') #010;+IIf([ShipToAddr.AddressLine1] &lt;&gt; null,[ShipToAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipToAddr.AddressLine2] &lt;&gt; null,[ShipToAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipToAddr.City] &lt;&gt; null, [ShipToAddr.City] + ' ', '')#010;+IIf([ShipToAddr.State] &lt;&gt; null, [ShipToAddr.State] + ' ', '')#010;+IIf([ShipToAddr.PostalCode] &lt;&gt; null, [ShipToAddr.PostalCode] + '{br}', '')#010;+IIf([ShipToInfo.Phone1] &lt;&gt; null,'Phone: ' + [ShipToInfo.Phone1], '')</Value>
+                        <Value>=IIf([ShipToInfo.FullName] &lt;&gt; null, [ShipToInfo.FullName] + '{br}', '') #010;+IIf([ShipToInfoR.Attention] &lt;&gt; null, [ShipToInfoR.Attention] + '{br}', '')#010;+IIf([ShipToAddr.AddressLine1] &lt;&gt; null, [ShipToAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipToAddr.AddressLine2] &lt;&gt; null, [ShipToAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipToAddr.City] &lt;&gt; null, [ShipToAddr.City] + ' ', '')#010;+IIf([ShipToAddr.State] &lt;&gt; null, ', ' + [ShipToAddr.State] + ' ', '')#010;+IIf([ShipToAddr.PostalCode] &lt;&gt; null, ', ' + [ShipToAddr.PostalCode], '')#010;+IIf([ShipToAddr.CountryID] &lt;&gt; null, ', ' + [ShipToAddr.CountryID], '')#010;+IIf([ShipToInfo.Phone1] &lt;&gt; null,'{br}Phone: ' + [ShipToInfo.Phone1], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox27">
                         <Location>8px, 56px</Location>
@@ -2926,7 +3376,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                     </TextBox>
                     <TextBox Name="textBox4">
                         <Location>8px, 72px</Location>
-                        <Size>264px, 64px</Size>
+                        <Size>264px, 80px</Size>
                         <Style>
                             <Font>
                                 <Size>11px</Size>
@@ -2937,7 +3387,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                             </Padding>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf([ShipFromInfo.FullName] &lt;&gt; null, [ShipFromInfo.FullName] + '{br}', '') #010;+IIf([ShipFromAddr.AddressLine1] &lt;&gt; null,[ShipFromAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipFromAddr.AddressLine2] &lt;&gt; null,[ShipFromAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipFromAddr.City] &lt;&gt; null, [ShipFromAddr.City] + ' ', '')#010;+IIf([ShipFromAddr.State] &lt;&gt; null, [ShipFromAddr.State] + ' ', '')#010;+IIf([ShipFromAddr.PostalCode] &lt;&gt; null, [ShipFromAddr.PostalCode] + '{br}', '')#010;+IIf([ShipFromInfo.Phone1] &lt;&gt; null,'Phone: ' + [ShipFromInfo.Phone1], '')</Value>
+                        <Value>=IIf([ShipFromInfo.FullName] &lt;&gt; null, [ShipFromInfo.FullName] + '{br}', '') #010;+IIf([ShipFromInfoR.Attention] &lt;&gt; null, [ShipFromInfoR.Attention] + '{br}', '')#010;+IIf([ShipFromAddr.AddressLine1] &lt;&gt; null,[ShipFromAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipFromAddr.AddressLine2] &lt;&gt; null,[ShipFromAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipFromAddr.City] &lt;&gt; null, [ShipFromAddr.City] + ' ', '')#010;+IIf([ShipFromAddr.State] &lt;&gt; null, ', ' + [ShipFromAddr.State] + ' ', '')#010;+IIf([ShipFromAddr.PostalCode] &lt;&gt; null, ', ' + [ShipFromAddr.PostalCode], '')#010;+IIf([ShipFromAddr.CountryID] &lt;&gt; null, ', ' + [ShipFromAddr.CountryID], '')#010;+IIf([ShipFromInfo.Phone1] &lt;&gt; null,'{br}Phone: ' + [ShipFromInfo.Phone1], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox9">
                         <Location>8px, 32px</Location>
@@ -2952,20 +3402,19 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 <Variables>
                     <ReportVariable>
                         <Name>LineNbr</Name>
-                        <ResetGroup>groupKit</ResetGroup>
+                        <ResetGroup>groupInvoice</ResetGroup>
                         <ValueExpr>=$LineNbr+1</ValueExpr>
                     </ReportVariable>
                 </Variables>
                 <Items>
                     <TextBox Name="textBox12">
-                        <Format>=[SOShipLine.ShippedQty.Format]</Format>
                         <Location>648px, 0px</Location>
-                        <Size>96px, 16px</Size>
+                        <Size>112px, 16px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>0.00</Value>
+                        <Value>=[LumINTran.RefNbr]</Value>
                     </TextBox>
                     <TextBox Name="textBox15">
                         <Location>16px, 0px</Location>
@@ -2974,42 +3423,44 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Value>=$LineNbr</Value>
                     </TextBox>
                     <TextBox Name="textBox16">
-                        <Location>840px, 0px</Location>
-                        <Size>64px, 16px</Size>
+                        <Location>872px, 0px</Location>
+                        <Size>144px, 16px</Size>
+                        <Style>
+                            <TextAlign>Right</TextAlign>
+                        </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>=[INTran.UOM]</Value>
+                        <Value>=[LumINTran.UsrAppointmentNbr]</Value>
                     </TextBox>
                     <TextBox Name="textBox17">
-                        <Format>=[SOShipLine.ShippedQty.Format]</Format>
-                        <Location>744px, 0px</Location>
+                        <Location>768px, 0px</Location>
                         <Size>96px, 16px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>0.00</Value>
+                        <Value>=[LumINTran.TranDate]</Value>
                     </TextBox>
                     <TextBox Name="textBox42">
                         <CanGrow>True</CanGrow>
-                        <Location>240px, 0px</Location>
-                        <Size>408px, 16px</Size>
+                        <Location>192px, 0px</Location>
+                        <Size>376px, 16px</Size>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf([INTran.InventoryID] &lt;&gt; Null, [INTran.InventoryID], '') + ' '#010;+IIF([INTran.TranDesc] &lt;&gt; Null, [INTran.TranDesc], '')</Value>
+                        <Value>=IIf([LumINTran.InventoryID] &lt;&gt; Null, [LumINTran.InventoryID], '') + ' '#010;+IIF([LumINTran.TranDesc] &lt;&gt; Null, [LumINTran.TranDesc], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox50">
-                        <Location>56px, 0px</Location>
-                        <Size>184px, 16px</Size>
+                        <Location>64px, 0px</Location>
+                        <Size>120px, 16px</Size>
                         <StyleName>Normal</StyleName>
-                        <Value>=[INTran.LocationID]</Value>
+                        <Value>=[INLocation.LocationCD]</Value>
                     </TextBox>
                     <TextBox Name="textBox51">
-                        <Location>904px, 0px</Location>
-                        <Size>104px, 16px</Size>
+                        <Location>576px, 0px</Location>
+                        <Size>64px, 16px</Size>
                         <Style>
                             <TextAlign>Right</TextAlign>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>=[INTran.Qty]</Value>
+                        <Value>=[LumINTran.Qty]</Value>
                     </TextBox>
                 </Items>
             </Detail>
@@ -3022,7 +3473,10 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
             <Group Name="groupInvoice">
                 <Grouping>
                     <GroupExp>
-                        <DataField>INRegister.ToSiteID</DataField>
+                        <DataField>LumINTran.Siteid</DataField>
+                    </GroupExp>
+                    <GroupExp>
+                        <DataField>LumINTran.Tositeid</DataField>
                     </GroupExp>
                 </Grouping>
                 <Headers>
@@ -3048,95 +3502,33 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                     </BorderWidth>
                                 </Style>
                                 <Items>
-                                    <TextBox Name="textBox29">
-                                        <Location>0px, 0px</Location>
-                                        <Size>120px, 15px</Size>
-                                        <StyleName>Heading 1</StyleName>
-                                        <Value>Shipment Number</Value>
-                                    </TextBox>
-                                    <TextBox Name="textBox30">
-                                        <Location>128px, 0px</Location>
-                                        <Size>96px, 15px</Size>
-                                        <StyleName>Heading 1</StyleName>
-                                        <Value>Shipment Date</Value>
-                                    </TextBox>
-                                    <TextBox Name="textBox31">
-                                        <Location>232px, 0px</Location>
-                                        <Size>112px, 15px</Size>
-                                        <StyleName>Heading 1</StyleName>
-                                        <Value>Service Order Type</Value>
-                                    </TextBox>
                                     <TextBox Name="textBox40">
-                                        <Location>720px, 0px</Location>
+                                        <Location>184px, 0px</Location>
                                         <Size>144px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>To Warehouse</Value>
                                     </TextBox>
-                                    <TextBox Name="textBox48">
-                                        <Location>352px, 0px</Location>
-                                        <Size>184px, 15px</Size>
-                                        <StyleName>Heading 1</StyleName>
-                                        <Value>Appointment Number</Value>
-                                    </TextBox>
                                     <TextBox Name="textBox5">
-                                        <Location>544px, 0px</Location>
+                                        <Location>8px, 0px</Location>
                                         <Size>88px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Warehouse</Value>
                                     </TextBox>
-                                    <TextBox Name="textBox54">
-                                        <Location>872px, 0px</Location>
-                                        <Size>88px, 15px</Size>
-                                        <StyleName>Heading 1</StyleName>
-                                        <Value>Ship Via</Value>
-                                    </TextBox>
                                 </Items>
                             </Panel>
-                            <TextBox Name="textBox1">
-                                <Location>8px, 16px</Location>
-                                <Size>120px, 16px</Size>
-                                <StyleName>Heading 1</StyleName>
-                                <Value>=[INRegister.RefNbr]</Value>
-                            </TextBox>
                             <TextBox Name="textBox14">
                                 <CanGrow>True</CanGrow>
-                                <Location>552px, 16px</Location>
+                                <Location>16px, 16px</Location>
                                 <Size>168px, 16px</Size>
                                 <StyleName>Normal</StyleName>
-                                <Value>=[INRegister.SiteID]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox23">
-                                <CanGrow>True</CanGrow>
-                                <Location>240px, 16px</Location>
-                                <Size>112px, 16px</Size>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[INRegister.UsrSrvOrdType]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox3">
-                                <Location>136px, 16px</Location>
-                                <Size>96px, 16px</Size>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[INRegister.TranDate]</Value>
+                                <Value>=[ShipFromSite.SiteCD]</Value>
                             </TextBox>
                             <TextBox Name="textBox43">
                                 <CanGrow>True</CanGrow>
-                                <Location>728px, 16px</Location>
+                                <Location>192px, 16px</Location>
                                 <Size>144px, 16px</Size>
                                 <StyleName>Normal</StyleName>
-                                <Value>=[INRegister.ToSiteID]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox49">
-                                <CanGrow>True</CanGrow>
-                                <Location>360px, 16px</Location>
-                                <Size>184px, 16px</Size>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[INRegister.UsrAppointmentNbr]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox55">
-                                <CanGrow>True</CanGrow>
-                                <Location>880px, 16px</Location>
-                                <Size>136px, 16px</Size>
-                                <StyleName>Normal</StyleName>
+                                <Value>=[ShipToSite.SiteCD]</Value>
                             </TextBox>
                         </Items>
                     </Header>
@@ -3164,8 +3556,8 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                 </Style>
                                 <Items>
                                     <TextBox Name="textBox57">
-                                        <Location>888px, 0px</Location>
-                                        <Size>104px, 14px</Size>
+                                        <Location>560px, 0px</Location>
+                                        <Size>64px, 14px</Size>
                                         <Style>
                                             <TextAlign>Right</TextAlign>
                                         </Style>
@@ -3173,17 +3565,17 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <Value>Qty.</Value>
                                     </TextBox>
                                     <TextBox Name="textBox58">
-                                        <Location>728px, 0px</Location>
+                                        <Location>752px, 0px</Location>
                                         <Size>96px, 14px</Size>
                                         <Style>
                                             <TextAlign>Right</TextAlign>
                                         </Style>
                                         <StyleName>Heading 1</StyleName>
-                                        <Value>Unit Volume</Value>
+                                        <Value>Shipment Date</Value>
                                     </TextBox>
                                     <TextBox Name="textBox60">
-                                        <Location>40px, 0px</Location>
-                                        <Size>184px, 14px</Size>
+                                        <Location>48px, 0px</Location>
+                                        <Size>120px, 14px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Location</Value>
                                     </TextBox>
@@ -3194,25 +3586,28 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <Value>No.</Value>
                                     </TextBox>
                                     <TextBox Name="textBox62">
-                                        <Location>824px, 0px</Location>
-                                        <Size>64px, 14px</Size>
+                                        <Location>856px, 0px</Location>
+                                        <Size>144px, 14px</Size>
+                                        <Style>
+                                            <TextAlign>Right</TextAlign>
+                                        </Style>
                                         <StyleName>Heading 1</StyleName>
-                                        <Value>UOM</Value>
+                                        <Value>Appointment Number</Value>
                                     </TextBox>
                                     <TextBox Name="textBox63">
-                                        <Location>224px, 0px</Location>
-                                        <Size>408px, 14px</Size>
+                                        <Location>176px, 0px</Location>
+                                        <Size>376px, 14px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Item</Value>
                                     </TextBox>
                                     <TextBox Name="textBox64">
                                         <Location>632px, 0px</Location>
-                                        <Size>96px, 14px</Size>
+                                        <Size>112px, 14px</Size>
                                         <Style>
                                             <TextAlign>Right</TextAlign>
                                         </Style>
                                         <StyleName>Heading 1</StyleName>
-                                        <Value>Unit Weight</Value>
+                                        <Value>Shipment Number</Value>
                                     </TextBox>
                                 </Items>
                             </Panel>
@@ -3249,36 +3644,17 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <ProcessOrder>WhilePrint</ProcessOrder>
                                         <Size>88px, 16px</Size>
                                         <StyleName>Heading 1</StyleName>
-                                        <Value>Total Weight</Value>
-                                        <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
-                                    </TextBox>
-                                    <TextBox Name="textBox25">
-                                        <Location>456px, 32px</Location>
-                                        <ProcessOrder>WhilePrint</ProcessOrder>
-                                        <Size>88px, 16px</Size>
-                                        <StyleName>Heading 1</StyleName>
-                                        <Value>Total Volume</Value>
+                                        <Value>Total Qty</Value>
                                         <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
                                     </TextBox>
                                     <TextBox Name="textBox28">
-                                        <Format>=[SOShipLine.ShippedQty.Format]</Format>
                                         <Location>552px, 8px</Location>
                                         <Size>104px, 16px</Size>
                                         <Style>
                                             <TextAlign>Right</TextAlign>
                                         </Style>
                                         <StyleName>Normal</StyleName>
-                                        <Value>0.00</Value>
-                                    </TextBox>
-                                    <TextBox Name="textBox32">
-                                        <Format>=[SOShipLine.ShippedQty.Format]</Format>
-                                        <Location>552px, 32px</Location>
-                                        <Size>104px, 16px</Size>
-                                        <Style>
-                                            <TextAlign>Right</TextAlign>
-                                        </Style>
-                                        <StyleName>Normal</StyleName>
-                                        <Value>0.00</Value>
+                                        <Value>=Sum([LumINTran.Qty])</Value>
                                     </TextBox>
                                     <TextBox Name="textBox35">
                                         <Location>704px, 8px</Location>

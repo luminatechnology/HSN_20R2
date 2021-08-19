@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
+    <Compile Include="DAC\LumINTran.cs" />
     <Compile Include="DAC\LUMOpprTermCond.cs" />
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
     <Compile Include="DAC\LumStageControl.cs" />
