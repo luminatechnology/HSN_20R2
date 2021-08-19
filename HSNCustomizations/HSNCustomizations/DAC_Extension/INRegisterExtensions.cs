@@ -45,5 +45,21 @@ namespace PX.Objects.IN
         public virtual string UsrTransferPurp { get; set; }
         public abstract class usrTransferPurp : PX.Data.BQL.BqlString.Field<usrTransferPurp> { }
         #endregion
+
+        #region UsrPLIsPrinted
+        [PXDBBool()]
+        [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXUIField(DisplayName = "Picking List Printed", Enabled = false)]
+        public bool? UsrPLIsPrinted { get; set; }
+        public abstract class usrPLIsPrinted : PX.Data.BQL.BqlBool.Field<usrPLIsPrinted> { }
+        #endregion
+
+        #region UsrDOIsPrinted
+        [PXDBBool()]
+        [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXUIField(DisplayName = "Delivery Order Printed", Enabled = false)]
+        public bool? UsrDOIsPrinted { get; set; }
+        public abstract class usrDOIsPrinted : PX.Data.BQL.BqlBool.Field<usrDOIsPrinted> { }
+        #endregion
     }
 }

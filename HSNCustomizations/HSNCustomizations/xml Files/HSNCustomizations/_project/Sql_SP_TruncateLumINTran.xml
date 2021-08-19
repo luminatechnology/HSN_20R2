@@ -1,0 +1,17 @@
+﻿<Sql TableName="SP_TruncateLumINTran" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM SYS.procedures
+	WHERE name = 'SP_TruncateLumINTran' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP PROCEDURE [dbo].[SP_TruncateLumINTran]
+GO
+
+CREATE PROCEDURE [dbo].[SP_TruncateLumINTran]
+
+AS
+BEGIN
+     TRUNCATE TABLE [dbo].[LumINTran]
+END]]></CDATA>
+</Sql>
