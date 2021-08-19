@@ -50,7 +50,7 @@ namespace HSNCustomizations.DAC
         #region QuoteID
         [PXDBGuid()]
         [PXUIField(DisplayName = "Quote Nbr.")]
-        [PXDBDefault(typeof(CROpportunity.defQuoteID))]
+        //[PXDBDefault(typeof(CROpportunity.defQuoteID), PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual Guid? QuoteID { get; set; }
         public abstract class quoteID : PX.Data.BQL.BqlGuid.Field<quoteID> { }
         #endregion
