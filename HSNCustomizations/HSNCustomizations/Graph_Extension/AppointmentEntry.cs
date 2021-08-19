@@ -326,21 +326,20 @@ namespace PX.Objects.FS
         /// <param name="apptEntry"></param>
         public static void InitTransferEntry(ref INTransferEntry transferEntry, AppointmentEntry apptEntry, string descrType = null)
         {
-            FSAppointment appointment = apptEntry.AppointmentSelected.Current;
+            FSAppointment appointment   = apptEntry.AppointmentSelected.Current;
+            INRegister register         = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegisterExt regisExt      = register.GetExtension<INRegisterExt>();
+            LUMBranchWarehouse branchWH = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID);
 
-            INRegister register = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
-            INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
-
-            int? prefSiteID = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.FaultySiteID;
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
-            register.TransferType = INTransferType.TwoStep;
-            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc = descrType + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
+            register.TransferType      = INTransferType.TwoStep;
+            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc          = descrType + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr = appointment.SORefNbr;
-            regisExt.UsrTransferPurp = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr       = appointment.SORefNbr;
+            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -353,10 +352,8 @@ namespace PX.Objects.FS
                 list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM && x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true);
             }
 
-            int? toSiteID = list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
-
-            transferEntry.CurrentDocument.Current.SiteID = isRMA ? toSiteID : prefSiteID;
-            transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? prefSiteID : toSiteID;
+            transferEntry.CurrentDocument.Current.SiteID = isRMA ? GetFaultyWFByBranch(transferEntry, transferEntry.Accessinfo.BranchID) : branchWH?.SiteID;
+            transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? branchWH?.FaultySiteID : list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
 
             foreach (FSAppointmentDet row in list)
@@ -421,10 +418,8 @@ namespace PX.Objects.FS
 
             if (defective == true)
             {
-                INSiteExt siteExt = INSite.PK.Find(graph, apptDet.SiteID).GetExtension<INSiteExt>();
-
-                iNTran.SiteID     = siteExt.UsrIsFaultySite == true ? LUMBranchWarehouse.PK.Find(graph, graph.Accessinfo.BranchID)?.FaultySiteID : apptDet.SiteID;
-                iNTran.LocationID = siteExt.UsrIsFaultySite == true ? null : apptDet.SiteLocationID;
+                iNTran.SiteID     = GetFaultyWFByBranch(graph, apptDet.BranchID);
+                iNTran.LocationID = apptDet.SiteLocationID;
             }
 
             iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
@@ -465,6 +460,18 @@ namespace PX.Objects.FS
             PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
 
             //graph.Caches[toType].Update(graph.Caches[toType].Current);
+        }
+
+        /// <summary>
+        /// Get faulty warehouse by branch which only uses for RMA customization.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="branchID"></param>
+        /// <returns></returns>
+        public static int? GetFaultyWFByBranch(PXGraph graph, int? branchID)
+        {
+            return SelectFrom<INSite>.Where<INSite.branchID.IsEqual<@P.AsInt>
+                                            .And<INSiteExt.usrIsFaultySite.IsEqual<True>>>.View.Select(graph, branchID).TopFirst?.SiteID;
         }
         #endregion
 
