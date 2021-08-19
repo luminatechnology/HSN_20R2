@@ -419,7 +419,7 @@ namespace PX.Objects.FS
             if (defective == true)
             {
                 iNTran.SiteID     = GetFaultyWFByBranch(graph, apptDet.BranchID);
-                iNTran.LocationID = apptDet.SiteLocationID;
+                //iNTran.LocationID = apptDet.SiteLocationID;
             }
 
             iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
