@@ -92,6 +92,7 @@ namespace HSNCustomizations.Graph
 
                 if (transferFilter.ReportType == dicTransferReportType["PickingList"])      transfer.GetExtension<INRegisterExt>().UsrPLIsPrinted = true;
                 if (transferFilter.ReportType == dicTransferReportType["DeliveryOrder"])    transfer.GetExtension<INRegisterExt>().UsrDOIsPrinted = true;
+                this.Caches[typeof(INRegister)].Update(transfer);
 
                 this.Actions.PressSave();
             }
