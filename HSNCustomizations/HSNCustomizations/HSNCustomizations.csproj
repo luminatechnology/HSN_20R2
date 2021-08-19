@@ -71,6 +71,7 @@
     <Compile Include="Descriptor\FSStageControlHandler.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />
+    <Compile Include="Descriptor\InvoicingFuncations2.cs" />
     <Compile Include="Descriptor\LUMAttribute.cs" />
     <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HSNCustomizations.DAC;
 using PX.Data;
 using PX.Data.BQL.Fluent;
 using PX.Objects.AR;
 using PX.Objects.SO;
+using HSNCustomizations.DAC;
+using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.FS
 {
@@ -39,6 +40,8 @@ namespace PX.Objects.FS
 
             ARInvoice arInvoiceRow = new ARInvoice();
 
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
+
             if (invtMult >= 0)
             {
                 /// <summary>
@@ -46,7 +49,7 @@ namespace PX.Objects.FS
                 /// </summary>
                 string doctype = ARInvoiceType.Invoice;
 
-                if (SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableChgInvTypeOnBill ?? false)
+                if (hSNSetup?.EnableChgInvTypeOnBill ?? false)
                 {
                     CustomerClass custClass = CustomerClass.PK.Find(Base, Customer.PK.Find(Base, fsServiceOrderRow.BillCustomerID)?.CustomerClassID);
 
@@ -97,7 +100,14 @@ namespace PX.Objects.FS
             arInvoiceRow.FinPeriodID = invoiceFinPeriodID;
             arInvoiceRow = Base.Document.Update(arInvoiceRow);
 
-            InvoicingFunctions.SetContactAndAddress(Base, fsServiceOrderRow);
+            if (hSNSetup?.EnableChgInvTypeOnBill ?? false)
+            { 
+                InvoicingFuncations2.SetContactAndAddressFromSOContact(Base, fsServiceOrderRow, arInvoiceRow.DocType == ARDocType.CashSale);
+            }
+            else
+            {
+                InvoicingFunctions.SetContactAndAddress(Base, fsServiceOrderRow); 
+            }
 
             if (onDocumentHeaderInserted != null)
             {
