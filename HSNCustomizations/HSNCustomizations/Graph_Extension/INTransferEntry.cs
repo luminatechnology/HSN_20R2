@@ -114,6 +114,8 @@ namespace PX.Objects.IN
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrAppointmentNbr>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPLIsPrinted>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDOIsPrinted>(e.Cache, null, activePartRequest);
         }
         #endregion
 

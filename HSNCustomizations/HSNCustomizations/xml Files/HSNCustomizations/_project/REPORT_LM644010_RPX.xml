@@ -198,6 +198,9 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         <SchemaUrl>http://localhost/AcumaticaHSN</SchemaUrl>
         <Sorting>
             <SortExp>
+                <DataField>LumINTran.RefNbr</DataField>
+            </SortExp>
+            <SortExp>
                 <DataField>LumINTran.InventoryID</DataField>
             </SortExp>
         </Sorting>
