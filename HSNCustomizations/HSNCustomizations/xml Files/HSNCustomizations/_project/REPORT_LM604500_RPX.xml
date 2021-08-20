@@ -2273,16 +2273,15 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         </Items>
                     </Footer>
                     <Footer Name="groupFooterSection2">
-                        <Height>5.9cm</Height>
-                        <PageBreak>BeforeAndAfter</PageBreak>
+                        <Height>6.1cm</Height>
                         <PrintEmpty>False</PrintEmpty>
                         <Items>
                             <Line Name="line1">
-                                <Location>0px, 176px</Location>
+                                <Location>0px, 184px</Location>
                                 <Size>180px, 2px</Size>
                             </Line>
                             <PictureBox Name="pictureBox1">
-                                <Location>0px, 120px</Location>
+                                <Location>0px, 128px</Location>
                                 <MimeType>image/png</MimeType>
                                 <QRCodeSettings />
                                 <Size>144px, 56px</Size>
@@ -2290,7 +2289,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>signature</Value>
                             </PictureBox>
                             <TextBox Name="textBox27">
-                                <Location>0px, 0px</Location>
+                                <Location>0px, 8px</Location>
                                 <Size>136px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2302,7 +2301,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox28">
                                 <CanGrow>True</CanGrow>
-                                <Location>0px, 16px</Location>
+                                <Location>0px, 24px</Location>
                                 <Size>752px, 16px</Size>
                                 <Style>
                                     <VerticalAlign>Top</VerticalAlign>
@@ -2312,14 +2311,14 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox36">
                                 <CanGrow>True</CanGrow>
-                                <Location>0px, 40px</Location>
+                                <Location>0px, 48px</Location>
                                 <Size>752px, 80px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,#010;HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
                             </TextBox>
                             <TextBox Name="textBox37">
                                 <CanGrow>True</CanGrow>
-                                <Location>0px, 184px</Location>
+                                <Location>0px, 186px</Location>
                                 <Size>752px, 40px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>='MICHAEL CHONG#010;Manager#010;VAS Division'</Value>
