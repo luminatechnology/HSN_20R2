@@ -5,4 +5,6 @@
     <Column TableName="INRegister" ColumnName="UsrTransferPurp" ColumnType="string" AllowNull="True" MaxLength="3" DecimalPrecision="2" DecimalLength="3" IsNewColumn="True" IsUnicode="True" />
     <Column TableName="INRegister" ColumnName="UsrPLIsPrinted" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
     <Column TableName="INRegister" ColumnName="UsrDOIsPrinted" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="INRegister" ColumnName="UsrPickingListNumber" ColumnType="string" AllowNull="True" MaxLength="10" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="INRegister" ColumnName="UsrDeliveryOrderNumber" ColumnType="string" AllowNull="True" MaxLength="10" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
 </Table>

@@ -116,6 +116,8 @@ namespace PX.Objects.IN
             PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrPLIsPrinted>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrDOIsPrinted>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPickingListNumber>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDeliveryOrderNumber>(e.Cache, null, activePartRequest);
         }
         #endregion
 

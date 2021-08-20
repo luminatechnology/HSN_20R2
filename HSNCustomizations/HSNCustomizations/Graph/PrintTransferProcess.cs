@@ -9,6 +9,7 @@ using PX.Data.BQL.Fluent;
 using PX.Data.ReferentialIntegrity.Attributes;
 using PX.Objects.Common;
 using PX.Objects.Common.Bql;
+using PX.Objects.CS;
 using PX.Objects.FS;
 using PX.Objects.IN;
 
@@ -59,6 +60,8 @@ namespace HSNCustomizations.Graph
                 }
             }
 
+            Dictionary<string, string> dicNumberingSequence = new Dictionary<string, string>();
+
             foreach (var transfer in list)
             {
                 var result = SelectFrom<INTran>
@@ -90,8 +93,31 @@ namespace HSNCustomizations.Graph
                     this.Caches[typeof(LumINTran)].Update(lumINTran);
                 }
 
-                if (transferFilter.ReportType == dicTransferReportType["PickingList"])      transfer.GetExtension<INRegisterExt>().UsrPLIsPrinted = true;
-                if (transferFilter.ReportType == dicTransferReportType["DeliveryOrder"])    transfer.GetExtension<INRegisterExt>().UsrDOIsPrinted = true;
+                string _numberingID = transferFilter.ReportType == dicTransferReportType["PickingList"] ? SelectFrom<LUMHSNSetup>.View.Select(this).TopFirst.PickingListNumberingID : SelectFrom<LUMHSNSetup>.View.Select(this).TopFirst.DeliveryOrderNumberingID;
+                if (_numberingID == null) throw new AutoNumberException(_numberingID);
+
+                string _numberingSequence = "";
+                if (dicNumberingSequence.ContainsKey($"{transfer.SiteID}-{transfer.ToSiteID}"))
+                {
+                    _numberingSequence = dicNumberingSequence[$"{transfer.SiteID}-{transfer.ToSiteID}"];
+                }
+                else
+                {
+                    _numberingSequence = AutoNumberAttribute.GetNextNumber(cache, transfer, _numberingID, DateTime.Now);
+                    dicNumberingSequence.Add($"{transfer.SiteID}-{transfer.ToSiteID}", _numberingSequence);
+                }
+
+                if (transferFilter.ReportType == dicTransferReportType["PickingList"])
+                {
+                    transfer.GetExtension<INRegisterExt>().UsrPLIsPrinted = true;
+                    if (transfer.GetExtension<INRegisterExt>().UsrPickingListNumber == null) transfer.GetExtension<INRegisterExt>().UsrPickingListNumber = _numberingSequence;
+                }
+                if (transferFilter.ReportType == dicTransferReportType["DeliveryOrder"])
+                {
+                    transfer.GetExtension<INRegisterExt>().UsrDOIsPrinted = true;
+                    if (transfer.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber == null) transfer.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber = _numberingSequence;
+                }
+
                 this.Caches[typeof(INRegister)].Update(transfer);
 
                 this.Actions.PressSave();
@@ -109,32 +135,33 @@ namespace HSNCustomizations.Graph
             var currentSearchEndDate = transferFilter?.EndDate;
             var currentFromWarehouse = transferFilter?.SiteID;
 
+            // Default: DocType = T, Released = 1
             if (currentFromWarehouse == null)
             {
                 if (currentSearchStartDate == null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>
+                        .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>>
                         .View.Select(this, currentSearchEndDate, "T");
                 else if (currentSearchStartDate != null && currentSearchEndDate != null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>>
+                        .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>>>
                         .View.Select(this, currentSearchStartDate, currentSearchEndDate, "T");
                 else
-                    return SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<@P.AsString>>
+                    return SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>
                         .View.Select(this, "T");
             }
             else
             {
                 if (currentSearchStartDate == null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>.And<INRegister.siteID.IsEqual<@P.AsInt>>>
+                        .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
                         .View.Select(this, currentSearchEndDate, "T", currentFromWarehouse);
                 else if (currentSearchStartDate != null && currentSearchEndDate != null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>.And<INRegister.siteID.IsEqual<@P.AsInt>>>
+                        .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
                         .View.Select(this, currentSearchStartDate, currentSearchEndDate, "T", currentFromWarehouse);
                 else
-                    return SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.siteID.IsEqual<@P.AsInt>>>
+                    return SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
                         .View.Select(this, "T", currentFromWarehouse);
             }
         }
