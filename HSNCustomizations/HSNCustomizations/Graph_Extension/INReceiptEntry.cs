@@ -1,12 +1,12 @@
-﻿using HSNCustomizations.DAC;
-using HSNCustomizations.Descriptor;
-using PX.Common;
+﻿using PX.Common;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.FS;
 using System.Collections;
 using System.Linq;
+using HSNCustomizations.DAC;
+using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.IN
 {
@@ -40,6 +40,8 @@ namespace PX.Objects.IN
         #region Event Handlers
         protected void _(Events.RowSelected<INRegister> e, PXRowSelected baseHandler)
         {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
             LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
