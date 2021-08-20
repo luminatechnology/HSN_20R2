@@ -30,12 +30,16 @@ namespace HSNCustomizations.Descriptor
             switch (contactAddressSource.BillingSource)
             {
                 case ID.Send_Invoices_To.BILLING_CUSTOMER_BILL_TO:
-                    Contact contact = null;
-
-                    if (isCachSale == true) { contact = Contact.PK.Find(graph, fsServiceOrderRow.ContactID); }
-
-                    contactRow = ContactAddressHelper.GetIContact(contact ?? PXSelect<Contact, Where<Contact.contactID, Equal<Required<Contact.contactID>>>>.Select(graph, billCustomer.DefBillContactID));
-                    addressRow = ContactAddressHelper.GetIAddress(Address.PK.Find(graph, contact?.DefAddressID) ?? PXSelect<Address, Where<Address.addressID, Equal<Required<Address.addressID>>>>.Select(graph, billCustomer.DefBillAddressID));
+                    if (isCachSale == true)
+                    {
+                        contactRow = FSContact.PK.Find(graph, fsServiceOrderRow.ServiceOrderContactID);
+                        addressRow = FSAddress.PK.Find(graph, fsServiceOrderRow.ServiceOrderAddressID);
+                    }
+                    else
+                    {
+                        contactRow = ContactAddressHelper.GetIContact(PXSelect<Contact, Where<Contact.contactID, Equal<Required<Contact.contactID>>>>.Select(graph, billCustomer.DefBillContactID));
+                        addressRow = ContactAddressHelper.GetIAddress(PXSelect<Address, Where<Address.addressID, Equal<Required<Address.addressID>>>>.Select(graph, billCustomer.DefBillAddressID));
+                    }
                     break;
 
                 case ID.Send_Invoices_To.SO_BILLING_CUSTOMER_LOCATION:
