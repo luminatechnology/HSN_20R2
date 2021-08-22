@@ -183,7 +183,7 @@ namespace PX.Objects.FS
             LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
-            bool activeRMAProcess = hSNSetup?.EnableRMAProcInAppt == true;
+            bool activeRMAProcess  = hSNSetup?.EnableRMAProcInAppt == true;
             bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
 
             openPartRequest.SetEnabled(activePartRequest);
@@ -202,6 +202,7 @@ namespace PX.Objects.FS
             INRegisterView.AllowSelect = activePartRequest;
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
+            PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrRMARequired>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
 
             SettingStageButton();
         }
