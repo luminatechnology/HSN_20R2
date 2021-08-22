@@ -53,7 +53,8 @@
 							<px:PXGridLevel DataMember="TermsConditions" >
 								<Columns>
 									<px:PXGridColumn TextAlign="Left" DataField="SortOrder" Width="50" ></px:PXGridColumn>
-									<px:PXGridColumn DataField="Definition" Width="70" /></Columns></px:PXGridLevel></Levels>
+									<px:PXGridColumn DataField="Title" Width="140" />
+									<px:PXGridColumn DataField="Definition" Width="70" ></px:PXGridColumn></Columns></px:PXGridLevel></Levels>
 						<Mode AllowUpload="True" ></Mode>
 						<AutoSize Enabled="True" ></AutoSize></px:PXGrid></Template></px:PXTabItem></Items>
 		<AutoSize Container="Window" Enabled="True" MinHeight="200" ></AutoSize>

@@ -14,6 +14,13 @@ namespace HSNCustomizations.DAC
         public abstract class sortOrder : PX.Data.BQL.BqlInt.Field<sortOrder> { }
         #endregion
 
+        #region Title
+        [PXDBString(30, IsUnicode = true)]
+        [PXUIField(DisplayName = "Tile")]
+        public virtual string Title { get; set; }
+        public abstract class title : PX.Data.BQL.BqlString.Field<title> { }
+        #endregion
+
         #region Definition
         [PXDBString(IsUnicode = true)]
         [PXUIField(DisplayName = "Terms & Conditions")]

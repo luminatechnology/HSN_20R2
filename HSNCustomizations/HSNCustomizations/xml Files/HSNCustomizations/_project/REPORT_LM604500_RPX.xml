@@ -611,6 +611,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                     <ReportField Name="SortOrder">
                         <DataType>Int32</DataType>
                     </ReportField>
+                    <ReportField Name="Title">
+                    </ReportField>
                     <ReportField Name="Tstamp">
                     </ReportField>
                 </Fields>
@@ -1872,7 +1874,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
             </Detail>
             <PageFooter Name="pageFooterSection1">
                 <Height>0.42328cm</Height>
-                <PrintOnFirstPage>False</PrintOnFirstPage>
+                <VisibleExpr>=[PageIndex] = [PageCount]</VisibleExpr>
                 <Items>
                     <TextBox Name="textBox29">
                         <Location>0px, 0px</Location>
@@ -2290,7 +2292,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </PictureBox>
                             <TextBox Name="textBox27">
                                 <Location>0px, 8px</Location>
-                                <Size>136px, 16px</Size>
+                                <Size>130px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Style>Bold, Underline</Style>
@@ -2301,13 +2303,23 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox28">
                                 <CanGrow>True</CanGrow>
-                                <Location>0px, 24px</Location>
-                                <Size>752px, 16px</Size>
+                                <Location>110px, 24px</Location>
+                                <Size>642px, 16px</Size>
                                 <Style>
                                     <VerticalAlign>Top</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=Substring($Defineitions, 1, Len($Defineitions) - 1)</Value>
+                            </TextBox>
+                            <TextBox Name="textBox30">
+                                <CanGrow>True</CanGrow>
+                                <Location>0px, 24px</Location>
+                                <Size>110px, 16px</Size>
+                                <Style>
+                                    <VerticalAlign>Top</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=Substring($Titles, 1, Len($Titles) - 1)</Value>
                             </TextBox>
                             <TextBox Name="textBox36">
                                 <CanGrow>True</CanGrow>
@@ -2350,6 +2362,10 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             <ReportVariable>
                                 <Name>LineNbr</Name>
                                 <ValueExpr>=$LineNbr + 1</ValueExpr>
+                            </ReportVariable>
+                            <ReportVariable>
+                                <Name>Titles</Name>
+                                <ValueExpr>=$Titles + '{br}' + [LUMOpprTermCond.Title]</ValueExpr>
                             </ReportVariable>
                         </Variables>
                         <Visible>False</Visible>
