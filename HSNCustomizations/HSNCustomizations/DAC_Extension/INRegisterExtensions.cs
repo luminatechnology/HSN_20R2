@@ -5,6 +5,19 @@ using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.IN
 {
+    [PXNonInstantiatedExtension]
+    public class INRegister_ExistingColumn : PXCacheExtension<PX.Objects.IN.INRegister>
+    {
+        #region TotalQty
+        [PXMergeAttributes(Method = MergeMethod.Merge)]
+        //[PXDBQuantity()]
+        [PXDefault(TypeCode.Decimal, "0.0")]
+        [PXUIField(DisplayName = "Total Qty.", Visibility = PXUIVisibility.SelectorVisible, Enabled = false)]
+        [INTotalQtyVerification]
+        public virtual decimal? TotalQty { get; set; }
+        #endregion
+    }
+
     public class INRegisterExt : PXCacheExtension<PX.Objects.IN.INRegister>
     {
         #region UsrSrvOrdType

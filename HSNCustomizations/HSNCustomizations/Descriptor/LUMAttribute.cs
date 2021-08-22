@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
+using PX.Common;
 using PX.Data;
 using PX.Data.BQL.Fluent;
 using PX.Objects.AR;
+using PX.Objects.IN;
+using HSNCustomizations.DAC;
 
 namespace HSNCustomizations.Descriptor
 {
@@ -99,9 +102,9 @@ namespace HSNCustomizations.Descriptor
     {
         public override void RowPersisting(PXCache sender, PXRowPersistingEventArgs e)
         {
-            string curDoType = sender.GetValue<ARPayment.docType>(e.Row) as string;
+            string curDoType = (string)sender.GetValue<ARPayment.docType>(e.Row);
 
-            HSNCustomizations.DAC.LUMHSNSetup hSNSetup = SelectFrom<HSNCustomizations.DAC.LUMHSNSetup>.View.Select(sender.Graph);
+            LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(sender.Graph);
 
             if (curDoType == ARDocType.Prepayment && !string.IsNullOrEmpty(hSNSetup?.CPrepaymentNumberingID) && this.UserNumbering == false && e.Operation == PXDBOperation.Insert)
             {
@@ -111,6 +114,27 @@ namespace HSNCustomizations.Descriptor
             }
             else
             { base.RowPersisting(sender, e); }
+        }
+    }
+    #endregion
+
+    #region INTotalQtyVerificationAttribute
+    /// <summary>
+    /// If LUMHSNSetup.EnablePartReqInAppt=True, then if INRegister.TotalQty=0, then display error “System cannot save records with 0 quantity” when user click SAVE button.
+    /// This rule should apply to Inventory Receipts, Issue, and Transfer.
+    /// </summary>
+    public class INTotalQtyVerificationAttribute : PXDBQuantityAttribute, IPXRowPersistingSubscriber
+    {
+        public override void RowPersisting(PXCache sender, PXRowPersistingEventArgs e)
+        {
+            string  doType   = (string)sender.GetValue<INRegister.docType>(e.Row);
+            decimal totalQty = (decimal)sender.GetValue<INRegister.totalQty>(e.Row);
+
+            if (e.Operation != PXDBOperation.Delete && doType.IsIn(INDocType.Receipt, INDocType.Issue, INDocType.Transfer) && 
+                SelectFrom<LUMHSNSetup>.View.Select(sender.Graph).TopFirst?.EnablePartReqInAppt == true && totalQty <= 0)
+            {
+                sender.RaiseExceptionHandling<INRegister.totalQty>(e.Row, totalQty, new PXSetPropertyException(HSNMessages.TotalQtyIsZero, PXErrorLevel.Error));
+            }
         }
     }
     #endregion
