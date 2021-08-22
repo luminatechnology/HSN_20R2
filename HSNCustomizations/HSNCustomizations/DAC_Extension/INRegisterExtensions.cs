@@ -74,5 +74,19 @@ namespace PX.Objects.IN
         public bool? UsrDOIsPrinted { get; set; }
         public abstract class usrDOIsPrinted : PX.Data.BQL.BqlBool.Field<usrDOIsPrinted> { }
         #endregion
+
+        #region UsrPickingListNumber
+        [PXDBString(10, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Picking List Number", Enabled = false)]
+        public virtual string UsrPickingListNumber { get; set; }
+        public abstract class usrPickingListNumber : PX.Data.BQL.BqlString.Field<usrPickingListNumber> { }
+        #endregion
+
+        #region UsrDeliveryOrderNumber
+        [PXDBString(10, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Delivery Order Number", Enabled = false)]
+        public virtual string UsrDeliveryOrderNumber { get; set; }
+        public abstract class usrDeliveryOrderNumber : PX.Data.BQL.BqlString.Field<usrDeliveryOrderNumber> { }
+        #endregion
     }
 }

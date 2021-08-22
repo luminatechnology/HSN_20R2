@@ -40,6 +40,7 @@
 				<px:PXGridColumn DataField="SiteID_description" Width="220" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="ToSiteID" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="ToSiteID_description" Width="220" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="TranDate" Width="90" />
 				<px:PXGridColumn DataField="UsrSrvOrdType" Width="70" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrSrvOrdType_FSSrvOrdType_descr" Width="220" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrSrvOrdType_description" Width="220" ></px:PXGridColumn>

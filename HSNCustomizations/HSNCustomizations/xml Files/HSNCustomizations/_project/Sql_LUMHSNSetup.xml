@@ -20,6 +20,8 @@
   <col name="LastModifiedByScreenID" type="Char(8)" />
   <col name="LastModifiedDateTime" type="DateTime" />
   <col name="tstamp" type="Timestamp" />
+  <col name="PickingListNumberingID" type="NVarChar(10)" nullable="true" />
+  <col name="DeliveryOrderNumberingID" type="NVarChar(10)" nullable="true" />
   <index name="PK_LUMHSNSetup" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
   </index>
