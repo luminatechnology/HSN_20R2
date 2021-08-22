@@ -427,7 +427,7 @@ namespace PX.Objects.FS
 
             if (defective == true) { iNTran.SiteID = GetFaultyWFByBranch(graph, apptDet.BranchID); }
 
-            if (overrideLocation == true) { iNTran.LocationID = apptDet.SiteLocationID; }
+            if (overrideLocation == true) { iNTran.ToLocationID = apptDet.SiteLocationID; }
 
             iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
 
