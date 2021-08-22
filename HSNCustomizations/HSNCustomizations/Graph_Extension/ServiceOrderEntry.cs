@@ -1,12 +1,13 @@
-﻿using HSNCustomizations.DAC;
-using HSNCustomizations.Descriptor;
-using PX.Data;
+﻿using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
-using System.Linq;
-using PX.Objects.IN;
 using PX.Objects.CR;
+using PX.Objects.CS;
+using PX.Objects.IN;
+using System.Linq;
 using System.Collections.Generic;
+using HSNCustomizations.DAC;
+using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.FS
 {
@@ -121,6 +122,16 @@ namespace PX.Objects.FS
 
             SettingStageButton();
         }
+
+        protected void _(Events.RowUpdated<FSServiceOrder> e, PXRowUpdated baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            if (e.OldRow.ContactID != e.Row.ContactID)
+            {
+                SetSrvContactInfo(Base.ServiceOrder_Contact.Cache, e.Row.ContactID, e.Row.ServiceOrderContactID);
+            }
+        }
         #endregion
 
         #region Action
@@ -228,6 +239,36 @@ namespace PX.Objects.FS
             }
         }
 
+        #endregion
+
+        #region Static Methods
+        /// <summary>
+        /// Spec [Design Concept - Service Order Enhancement-V2.1] 1.10.4 Override Company Name and Attention
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="contactID"></param>
+        /// <param name="srvOrdContactID"></param>
+        public static void SetSrvContactInfo(PXCache cache, int? contactID,  int? srvOrdContactID)
+        {
+            var contact = cache.Cached.RowCast<FSContact>().Where(x => x.ContactID == srvOrdContactID).FirstOrDefault();
+
+            foreach (CSAnswers row in SelectFrom<CSAnswers>.InnerJoin<Contact>.On<CSAnswers.refNoteID.IsEqual<Contact.noteID>>
+                                                           .Where<Contact.contactID.IsEqual<@P.AsInt>>.View.Select(cache.Graph, contactID))
+            {
+                switch (row.AttributeID)
+                {
+                    case HSNMessages.CompanyName_Attr:
+                        contact.FullName = row.Value;
+                        break;
+
+                    case HSNMessages.Attention_Attr:
+                        contact.Attention = row.Value;
+                        break;
+                }
+            }
+
+            cache.MarkUpdated(contact);
+        }
         #endregion
     }
 }
