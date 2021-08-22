@@ -202,7 +202,7 @@ namespace PX.Objects.FS
             INRegisterView.AllowSelect = activePartRequest;
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
-            PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrRMARequired>(e.Cache, e.Row, activeRMAProcess);
+            PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrRMARequired>(Base.AppointmentDetails.Cache, null, activeRMAProcess);
 
             SettingStageButton();
         }
