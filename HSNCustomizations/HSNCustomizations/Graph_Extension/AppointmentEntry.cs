@@ -183,7 +183,7 @@ namespace PX.Objects.FS
             LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
-            bool activeRMAProcess = hSNSetup?.EnableRMAProcInAppt == true;
+            bool activeRMAProcess  = hSNSetup?.EnableRMAProcInAppt == true;
             bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
 
             openPartRequest.SetEnabled(activePartRequest);
@@ -202,11 +202,12 @@ namespace PX.Objects.FS
             INRegisterView.AllowSelect = activePartRequest;
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
+            PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrRMARequired>(Base.AppointmentDetails.Cache, null, activeRMAProcess);
 
             SettingStageButton();
         }
 
-        public void _(Events.FieldUpdated<FSAppointmentExt.usrTransferToHQ> e)
+        protected void _(Events.FieldUpdated<FSAppointmentExt.usrTransferToHQ> e)
         {
             if (e.NewValue != null && (bool)e.NewValue == true)
             {
@@ -232,6 +233,15 @@ namespace PX.Objects.FS
             }
         }
 
+        protected void _(Events.RowUpdated<FSServiceOrder> e, PXRowUpdated baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            if (e.OldRow.ContactID != e.Row.ContactID)
+            {
+                ServiceOrderEntry_Extension.SetSrvContactInfo(Base.ServiceOrder_Contact.Cache, e.Row.ContactID, e.Row.ServiceOrderContactID);
+            }
+        }
         #endregion
 
         #region Actions
@@ -358,7 +368,7 @@ namespace PX.Objects.FS
 
             foreach (FSAppointmentDet row in list)
             {
-                CreateINTran(transferEntry, row);
+                CreateINTran(transferEntry, row, false, isRMA == false);
             }
         }
 
@@ -408,7 +418,7 @@ namespace PX.Objects.FS
         /// <param name="graph"></param>
         /// <param name="apptDet"></param>
         /// <param name="defective"></param>
-        public static void CreateINTran(PXGraph graph, FSAppointmentDet apptDet, bool defective = false)
+        public static void CreateINTran(PXGraph graph, FSAppointmentDet apptDet, bool defective = false, bool overrideLocation = false)
         {
             INTran iNTran = new INTran()
             {
@@ -416,11 +426,9 @@ namespace PX.Objects.FS
                 Qty = apptDet.EstimatedQty
             };
 
-            if (defective == true)
-            {
-                iNTran.SiteID     = GetFaultyWFByBranch(graph, apptDet.BranchID);
-                //iNTran.LocationID = apptDet.SiteLocationID;
-            }
+            if (defective == true) { iNTran.SiteID = GetFaultyWFByBranch(graph, apptDet.BranchID); }
+
+            if (overrideLocation == true) { iNTran.ToLocationID = apptDet.SiteLocationID; }
 
             iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
 

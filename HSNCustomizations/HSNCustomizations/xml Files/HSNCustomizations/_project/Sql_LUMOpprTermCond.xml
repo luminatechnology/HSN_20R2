@@ -5,6 +5,7 @@
   <col name="SortOrder" type="Int" />
   <col name="IsActive" type="Bit" nullable="true" />
   <col name="QuoteID" type="UniqueIdentifier" nullable="true" />
+  <col name="Title" type="NVarChar(30)" nullable="true" />
   <col name="Definition" type="NVarChar(MAX)" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />

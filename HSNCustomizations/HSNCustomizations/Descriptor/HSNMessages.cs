@@ -5,6 +5,9 @@ namespace HSNCustomizations.Descriptor
     [PXLocalizable("HSN")]
     public class HSNMessages
     {
+        public const string Attention_Attr   = "ATTENTION";
+        public const string CompanyName_Attr = "COMPANYNAM";
+
         public const string PartRequest       = "Part Request";
         public const string PartReceive       = "Part Receive";
         public const string InitiateRMA       = "Initiate RMA";
@@ -21,5 +24,6 @@ namespace HSNCustomizations.Descriptor
         public const string MustReturnRMA     = "Please Return The RMA.";
         public const string ReturnRMAB4Init   = "Please Initiate RMA Before Return RMA";
         public const string PartReqNotRlsd    = "Please Request Part Before Receiving And Eensure Part Request Is Released";
+        public const string TotalQtyIsZero    = "System Cannot Save Records With 0 Quantity.";
     }
 }

@@ -2,6 +2,7 @@
     <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMTermsConditions">
   <col name="CompanyID" type="Int" default="Zero" />
   <col name="SortOrder" type="Int" />
+  <col name="Title" type="NVarChar(30)" nullable="true" />
   <col name="Definition" type="NVarChar(MAX)" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />

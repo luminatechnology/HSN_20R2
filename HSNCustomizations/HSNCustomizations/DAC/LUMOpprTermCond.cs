@@ -55,8 +55,15 @@ namespace HSNCustomizations.DAC
         public abstract class quoteID : PX.Data.BQL.BqlGuid.Field<quoteID> { }
         #endregion
 
+        #region Title
+        [PXDBString(30, IsUnicode = true)]
+        [PXUIField(DisplayName = "Tile")]
+        public virtual string Title { get; set; }
+        public abstract class title : PX.Data.BQL.BqlString.Field<title> { }
+        #endregion
+
         #region Definition
-        [PXDBString(IsUnicode = true, InputMask = "")]
+        [PXDBString(IsUnicode = true)]
         [PXUIField(DisplayName = "Terms & Conditions")]
         public virtual string Definition { get; set; }
         public abstract class definition : PX.Data.BQL.BqlString.Field<definition> { }

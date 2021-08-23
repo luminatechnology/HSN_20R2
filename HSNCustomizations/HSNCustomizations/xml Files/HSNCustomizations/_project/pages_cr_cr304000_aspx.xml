@@ -94,8 +94,14 @@
                                                 </AddItem>
                                                 <AddItem>
                                                     <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="Title" />
+                                                        <Prop Key="Width" Value="140" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                                                         <Prop Key="DataField" Value="Definition" />
-                                                        <Prop Key="Width" Value="70" />
+                                                        <Prop Key="Width" Value="150" />
                                                     </PXGridColumn>
                                                 </AddItem>
                                             </Children>
