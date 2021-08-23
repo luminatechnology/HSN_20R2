@@ -57,7 +57,7 @@ namespace PX.Objects.CR
                     [nameof(CRQuote.QuoteNbr)]      = Base.Quote.Current.QuoteNbr
                 };
 
-                throw new PXReportRequiredException(parameters, QuoteMyRptID, QuoteMyRptID) { SeparateWindows = true };
+                throw new PXReportRequiredException(parameters, QuoteMyRptID, QuoteMyRptID) { Mode = PXBaseRedirectException.WindowMode.NewWindow };
             }
         }
         #endregion
