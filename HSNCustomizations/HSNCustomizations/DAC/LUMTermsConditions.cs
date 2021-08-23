@@ -16,7 +16,7 @@ namespace HSNCustomizations.DAC
 
         #region Title
         [PXDBString(30, IsUnicode = true)]
-        [PXUIField(DisplayName = "Tile")]
+        [PXUIField(DisplayName = "Title")]
         public virtual string Title { get; set; }
         public abstract class title : PX.Data.BQL.BqlString.Field<title> { }
         #endregion
