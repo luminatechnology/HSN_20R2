@@ -1901,7 +1901,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 </Grouping>
                 <Headers>
                     <Header Name="groupHeaderSection1">
-                        <Height>8.67725cm</Height>
+                        <Height>9.11cm</Height>
                         <Items>
                             <PictureBox Name="pictureBox2">
                                 <Location>648px, 0px</Location>
@@ -1923,7 +1923,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>Date:</Value>
                             </TextBox>
                             <TextBox Name="textBox10">
-                                <Location>0px, 232px</Location>
+                                <Location>0px, 248px</Location>
                                 <Size>752px, 24px</Size>
                                 <Style>
                                     <Font>
@@ -1934,13 +1934,13 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>='Quotation For ' + [CRQuote.Subject]</Value>
                             </TextBox>
                             <TextBox Name="textBox11">
-                                <Location>0px, 256px</Location>
+                                <Location>0px, 272px</Location>
                                 <Size>752px, 32px</Size>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>We would like to thank you for your continues support and are pleased to submit herewith our quotation as requested, for your kind consideration.</Value>
                             </TextBox>
                             <TextBox Name="textBox12">
-                                <Location>0px, 288px</Location>
+                                <Location>0px, 304px</Location>
                                 <Size>24px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
@@ -1962,7 +1962,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>No.</Value>
                             </TextBox>
                             <TextBox Name="textBox13">
-                                <Location>24px, 288px</Location>
+                                <Location>24px, 304px</Location>
                                 <Size>80px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
@@ -1982,7 +1982,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>='Part #010;Number'</Value>
                             </TextBox>
                             <TextBox Name="textBox14">
-                                <Location>664px, 288px</Location>
+                                <Location>664px, 304px</Location>
                                 <Size>88px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
@@ -1999,10 +1999,10 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                     <TextAlign>Center</TextAlign>
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
-                                <Value>Total Extended Amount (RM)</Value>
+                                <Value>='Total Extended Amount (' + [CRQuote.CuryID] + ')'</Value>
                             </TextBox>
                             <TextBox Name="textBox15">
-                                <Location>608px, 288px</Location>
+                                <Location>608px, 304px</Location>
                                 <Size>56px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
@@ -2019,10 +2019,10 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                     <TextAlign>Center</TextAlign>
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
-                                <Value>Unit Price (RM)</Value>
+                                <Value>='Unit Price (' + [CRQuote.CuryID] + ')'</Value>
                             </TextBox>
                             <TextBox Name="textBox16">
-                                <Location>568px, 288px</Location>
+                                <Location>568px, 304px</Location>
                                 <Size>40px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
@@ -2042,7 +2042,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>Qty</Value>
                             </TextBox>
                             <TextBox Name="textBox17">
-                                <Location>104px, 288px</Location>
+                                <Location>104px, 304px</Location>
                                 <Size>464px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
@@ -2091,6 +2091,23 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>=[CRQuote.DocumentDate]</Value>
                             </TextBox>
+                            <TextBox Name="textBox31">
+                                <Location>96px, 88px</Location>
+                                <Size>256px, 16px</Size>
+                                <StyleName>SenderCompany</StyleName>
+                                <Value>=[CRQuote.OwnerID_Owner_displayName]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox38">
+                                <Location>0px, 88px</Location>
+                                <Size>96px, 16px</Size>
+                                <Style>
+                                    <Font>
+                                        <Style>Bold</Style>
+                                    </Font>
+                                </Style>
+                                <StyleName>SenderCompany</StyleName>
+                                <Value>Owner:</Value>
+                            </TextBox>
                             <TextBox Name="textBox4">
                                 <Location>96px, 72px</Location>
                                 <Size>256px, 16px</Size>
@@ -2098,7 +2115,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>=[CRQuote.OpportunityID]</Value>
                             </TextBox>
                             <TextBox Name="textBox5">
-                                <Location>0px, 104px</Location>
+                                <Location>0px, 120px</Location>
                                 <Size>96px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2109,7 +2126,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>Attn:</Value>
                             </TextBox>
                             <TextBox Name="textBox6">
-                                <Location>96px, 104px</Location>
+                                <Location>96px, 120px</Location>
                                 <Size>256px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2120,13 +2137,13 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>=[CRContact.Attention]</Value>
                             </TextBox>
                             <TextBox Name="textBox7">
-                                <Location>96px, 120px</Location>
+                                <Location>96px, 136px</Location>
                                 <Size>256px, 16px</Size>
                                 <StyleName>Normal Small</StyleName>
                                 <Value>=[CRContact.Salutation]</Value>
                             </TextBox>
                             <TextBox Name="textBox8">
-                                <Location>0px, 152px</Location>
+                                <Location>0px, 168px</Location>
                                 <Size>352px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2137,7 +2154,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>=[CRContact.FullName]</Value>
                             </TextBox>
                             <TextBox Name="textBox9">
-                                <Location>0px, 176px</Location>
+                                <Location>0px, 192px</Location>
                                 <Size>352px, 48px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=IIf([CRAddress.AddressLine1]&lt;&gt; null, [CRAddress.AddressLine1] + '{br}', '')#010;+IIf([CRAddress.AddressLine2]&lt;&gt;null,[CRAddress.AddressLine2] + '{br}','')#010;+IIf([CRAddress.City]&lt;&gt;null, [CRAddress.City],'')#010;+IIf([CRAddress.City]&lt;&gt;null And [CRAddress.State]&lt;&gt;null, ', ', '')#010;+IIf([CRAddress.State]&lt;&gt;null,[CRAddress.State],'')#010;+IIf([CRAddress.PostalCode]&lt;&gt;null And [CRAddress.State]&lt;&gt;null, ', ', ' ')#010;+IIf([CRAddress.PostalCode]&lt;&gt;null,[CRAddress.PostalCode],'')</Value>
@@ -2284,11 +2301,9 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </Line>
                             <PictureBox Name="pictureBox1">
                                 <Location>0px, 128px</Location>
-                                <MimeType>image/png</MimeType>
+                                <MimeType />
                                 <QRCodeSettings />
                                 <Size>144px, 56px</Size>
-                                <Source>Embedded</Source>
-                                <Value>signature</Value>
                             </PictureBox>
                             <TextBox Name="textBox27">
                                 <Location>0px, 8px</Location>
@@ -2303,8 +2318,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox28">
                                 <CanGrow>True</CanGrow>
-                                <Location>110px, 24px</Location>
-                                <Size>642px, 16px</Size>
+                                <Location>104px, 24px</Location>
+                                <Size>648px, 16px</Size>
                                 <Style>
                                     <VerticalAlign>Top</VerticalAlign>
                                 </Style>
@@ -2314,7 +2329,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             <TextBox Name="textBox30">
                                 <CanGrow>True</CanGrow>
                                 <Location>0px, 24px</Location>
-                                <Size>110px, 16px</Size>
+                                <Size>104px, 16px</Size>
                                 <Style>
                                     <VerticalAlign>Top</VerticalAlign>
                                 </Style>
@@ -2357,7 +2372,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         <Variables>
                             <ReportVariable>
                                 <Name>Defineitions</Name>
-                                <ValueExpr>=$Defineitions + '{br}' + [LUMOpprTermCond.Definition]</ValueExpr>
+                                <ValueExpr>=$Defineitions + [LUMOpprTermCond.Definition] + '{br}'</ValueExpr>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>LineNbr</Name>
@@ -2365,7 +2380,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>Titles</Name>
-                                <ValueExpr>=$Titles + '{br}' + [LUMOpprTermCond.Title]</ValueExpr>
+                                <ValueExpr>=$Titles + [LUMOpprTermCond.Title] + IIf(Len([LUMOpprTermCond.Definition]) &gt;= 142,  '{br}{br}','{br}')</ValueExpr>
                             </ReportVariable>
                         </Variables>
                         <Visible>False</Visible>
