@@ -102,6 +102,7 @@ namespace HSNCustomizations.Graph
                     lumINTran.Siteid = iNTranLine.SiteID;
                     lumINTran.InvtMult = iNTranLine.InvtMult;
                     lumINTran.LocationID = iNTranLine.LocationID;
+                    lumINTran.ToLocationID = iNTranLine.ToLocationID;
                     lumINTran.Qty = iNTranLine.Qty;
                     lumINTran.TranDesc = iNTranLine.TranDesc;
                     lumINTran.Uom = iNTranLine.UOM;
@@ -111,7 +112,7 @@ namespace HSNCustomizations.Graph
                 }
 
                 string _numberingID = transferFilter.ReportType == dicTransferReportType["PickingList"] ? SelectFrom<LUMHSNSetup>.View.Select(this).TopFirst.PickingListNumberingID : SelectFrom<LUMHSNSetup>.View.Select(this).TopFirst.DeliveryOrderNumberingID;
-                if (_numberingID == null) throw new AutoNumberException(_numberingID);
+                if (_numberingID == null) throw new PXException("Please select a Numbering Sequence in HSN Preferences page.");
 
                 string _numberingSequence = "";
                 if (dicNumberingSequence.ContainsKey($"{transfer.SiteID}-{transfer.ToSiteID}"))

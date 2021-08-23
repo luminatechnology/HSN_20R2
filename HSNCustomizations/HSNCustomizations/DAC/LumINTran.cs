@@ -63,6 +63,13 @@ namespace HSNCustomizations.DAC
         public abstract class locationID : PX.Data.BQL.BqlInt.Field<locationID> { }
         #endregion
 
+        #region ToLocationID
+        [PXDBInt()]
+        [PXUIField(DisplayName = "To Location ID")]
+        public virtual int? ToLocationID { get; set; }
+        public abstract class toLocationID : PX.Data.BQL.BqlInt.Field<toLocationID> { }
+        #endregion
+
         #region InvtMult
         [PXDBShort()]
         [PXUIField(DisplayName = "Invt Mult")]

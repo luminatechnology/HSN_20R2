@@ -9,6 +9,7 @@
   <col name="InventoryID" type="Int" />
   <col name="SiteID" type="Int" />
   <col name="LocationID" type="Int" nullable="true" />
+  <col name="ToLocationID" type="Int" nullable="true" />
   <col name="InvtMult" type="SmallInt" nullable="true" />
   <col name="Qty" type="Decimal(25,6)" />
   <col name="TranDesc" type="NVarChar(256)" nullable="true" />
