@@ -48,6 +48,23 @@ namespace HSNCustomizations.Graph
             TransferFilter transferFilter = MasterView.Current as TransferFilter;
             PXCache cache = this.Caches[typeof(LumINTran)];
 
+            //check - cannot be checked items included unprinted and printed
+            int _countPrinted, _countUnprinted;
+            foreach (var transfer in list)
+            {
+                if (transferFilter.ReportType == dicTransferReportType["PickingList"])
+                {
+                    _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != null).Count();
+                    _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber == null).Count();
+                }
+                else
+                {
+                    _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber != null).Count();
+                    _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber == null).Count();
+                }
+                if (_countPrinted > 0 && _countUnprinted > 0) throw new PXException("Cannot print the report which including both printed and unprinted transactions.");
+            }
+
             // Truncate Table
             /*Connect to Database*/
             using (new PXConnectionScope())
