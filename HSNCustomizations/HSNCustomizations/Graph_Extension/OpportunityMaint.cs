@@ -68,10 +68,9 @@ namespace PX.Objects.CR
             {
                 LUMOpprTermCond termCond = new LUMOpprTermCond()
                 {
-                    SortOrder  = row.SortOrder,
-                    Title      = row.Title,
-                    Definition = row.Definition,
-                    QuoteID    = Base.Opportunity.Current.DefQuoteID
+                    SortOrder     = row.SortOrder,
+                    Title         = row.Title,
+                    Definition    = row.Definition
                 };
 
                 TermsConditions.Insert(termCond);

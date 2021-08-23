@@ -26,8 +26,8 @@ namespace HSNCustomizations.DAC
                             typeof(CROpportunity.isActive),
                             typeof(BAccount.acctName),
                             typeof(Contact.displayName) },
-                    Filterable = true)]
-        [PXDBDefault(typeof(CRQuote.opportunityID))]
+                    Filterable = true, ValidateValue = false)]
+        [PXDBDefault(typeof(CROpportunity.opportunityID), PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual string OpportunityID { get; set; }
         public abstract class opportunityID : PX.Data.BQL.BqlString.Field<opportunityID> { }
         #endregion
@@ -50,7 +50,7 @@ namespace HSNCustomizations.DAC
         #region QuoteID
         [PXDBGuid()]
         [PXUIField(DisplayName = "Quote ID")]
-        [PXDBDefault(typeof(CRQuote.quoteID), PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXDBDefault(typeof(CROpportunity.defQuoteID), DefaultForInsert = false, PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual Guid? QuoteID { get; set; }
         public abstract class quoteID : PX.Data.BQL.BqlGuid.Field<quoteID> { }
         #endregion

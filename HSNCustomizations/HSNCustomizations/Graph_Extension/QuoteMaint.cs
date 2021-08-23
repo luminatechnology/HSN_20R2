@@ -69,6 +69,17 @@ namespace PX.Objects.CR
 
             TermsConditions.AllowSelect = HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance ?? false;
         }
+
+        protected void _(Events.RowInserted<LUMOpprTermCond> e)
+        {
+            /// Because LUMOppoTermCond is used between CROpportunity and CRQuote, it can only select one main DAC as the default value of the key field DB, 
+            /// and then use this event with the relevant field value when creating the sales quote form.
+            if (e.Row != null)
+            {
+                e.Row.OpportunityID = Base.Quote.Current.OpportunityID;
+                e.Row.QuoteID = Base.Quote.Current.QuoteID;
+            }
+        }
         #endregion
     }
 }
