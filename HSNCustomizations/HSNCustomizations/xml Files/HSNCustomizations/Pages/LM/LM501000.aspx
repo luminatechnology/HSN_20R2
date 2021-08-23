@@ -33,18 +33,20 @@
 			    <Columns>
 				<px:PXGridColumn TextAlign="Center" AllowCheckAll="True" Type="CheckBox" DataField="Selected" Width="60" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="RefNbr" Width="140" ></px:PXGridColumn>
-				<px:PXGridColumn DataField="DocType" Width="70" ></px:PXGridColumn>
 				<px:PXGridColumn Type="CheckBox" DataField="UsrPLIsPrinted" Width="60" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="UsrPickingListNumber" Width="120" ></px:PXGridColumn>
 				<px:PXGridColumn Type="CheckBox" DataField="UsrDOIsPrinted" Width="60" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="UsrDeliveryOrderNumber" Width="120" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn>
-				<px:PXGridColumn DataField="SiteID_description" Width="220" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="ToSiteID" Width="140" ></px:PXGridColumn>
-				<px:PXGridColumn DataField="ToSiteID_description" Width="220" ></px:PXGridColumn>
-				<px:PXGridColumn DataField="TranDate" Width="90" />
+				<px:PXGridColumn DataField="UsrAppointmentNbr" Width="140" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="TranDate" Width="90" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrSrvOrdType" Width="70" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="DocType" Width="70" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="ToSiteID_description" Width="220" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="SiteID_description" Width="220" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrSrvOrdType_FSSrvOrdType_descr" Width="220" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrSrvOrdType_description" Width="220" ></px:PXGridColumn>
-				<px:PXGridColumn DataField="UsrAppointmentNbr" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="TransferType" Width="70" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="TransferNbr" Width="140" ></px:PXGridColumn></Columns>
 			</px:PXGridLevel>
