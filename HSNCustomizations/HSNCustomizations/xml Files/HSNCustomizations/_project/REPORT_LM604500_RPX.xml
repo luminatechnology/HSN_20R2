@@ -2027,7 +2027,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <Visible>False</Visible>
             </Detail>
             <PageFooter Name="pageFooterSection1">
-                <Height />
+                <Height>0px</Height>
+                <Visible>False</Visible>
             </PageFooter>
         </Sections>
         <Items />
@@ -2444,9 +2445,6 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             <TextBox Name="textBox29">
                                 <Location>0px, 152px</Location>
                                 <Size>752px, 16px</Size>
-                                <Style>
-                                    <TextAlign>Center</TextAlign>
-                                </Style>
                                 <StyleName>Heading 1</StyleName>
                                 <Value>This is computer generated. No signature is required</Value>
                             </TextBox>
@@ -2465,7 +2463,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Location>0px, 48px</Location>
                                 <Size>752px, 88px</Size>
                                 <StyleName>Normal</StyleName>
-                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,'#010;+ [CRQuote.OwnerID_Owner_displayName] + '{br}' +#010;'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
+                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' + '{br}' + [CRQuote.OwnerID_Owner_displayName] + '{br}' + 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
                             </TextBox>
                         </Items>
                     </Footer>
