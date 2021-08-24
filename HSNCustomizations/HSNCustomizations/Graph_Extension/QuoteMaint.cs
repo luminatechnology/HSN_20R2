@@ -68,6 +68,8 @@ namespace PX.Objects.CR
             baseHandler?.Invoke(e.Cache, e.Args);
 
             TermsConditions.AllowSelect = HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance ?? false;
+
+            printQuoteMY.SetEnabled(Base.printQuote.GetEnabled());
         }
 
         protected void _(Events.RowInserted<LUMOpprTermCond> e)
