@@ -2056,7 +2056,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </PictureBox>
                             <TextBox Name="textBox1">
                                 <Location>0px, 56px</Location>
-                                <Size>96px, 16px</Size>
+                                <Size>112px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Style>Bold</Style>
@@ -2218,7 +2218,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox2">
                                 <Location>0px, 72px</Location>
-                                <Size>96px, 16px</Size>
+                                <Size>112px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Style>Bold</Style>
@@ -2229,38 +2229,38 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox3">
                                 <Format>dd MMM, yyyy</Format>
-                                <Location>96px, 56px</Location>
+                                <Location>112px, 56px</Location>
                                 <Size>256px, 16px</Size>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>=[CRQuote.DocumentDate]</Value>
                             </TextBox>
                             <TextBox Name="textBox31">
                                 <Format>dd MMM, yyyy</Format>
-                                <Location>96px, 88px</Location>
+                                <Location>112px, 88px</Location>
                                 <Size>256px, 16px</Size>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>=[CRQuote.ExpirationDate]</Value>
                             </TextBox>
                             <TextBox Name="textBox37">
                                 <Location>0px, 88px</Location>
-                                <Size>96px, 16px</Size>
+                                <Size>112px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Style>Bold</Style>
                                     </Font>
                                 </Style>
                                 <StyleName>SenderCompany</StyleName>
-                                <Value>ExpirationDate:</Value>
+                                <Value>Expiration Date:</Value>
                             </TextBox>
                             <TextBox Name="textBox4">
-                                <Location>96px, 72px</Location>
+                                <Location>112px, 72px</Location>
                                 <Size>256px, 16px</Size>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>=[CRQuote.OpportunityID]</Value>
                             </TextBox>
                             <TextBox Name="textBox5">
                                 <Location>0px, 104px</Location>
-                                <Size>96px, 16px</Size>
+                                <Size>112px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Style>Bold</Style>
@@ -2271,7 +2271,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox6">
-                                <Location>96px, 104px</Location>
+                                <Location>112px, 104px</Location>
                                 <Size>256px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2283,7 +2283,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox7">
-                                <Location>96px, 120px</Location>
+                                <Location>112px, 120px</Location>
                                 <Size>256px, 16px</Size>
                                 <StyleName>Normal Small</StyleName>
                                 <Value>=[CRContact.Salutation]</Value>
