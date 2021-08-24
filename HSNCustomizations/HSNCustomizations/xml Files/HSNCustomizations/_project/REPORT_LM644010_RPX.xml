@@ -3294,10 +3294,10 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         </ViewerFields>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
-                <Height>5.50265cm</Height>
+                <Height>4.44444cm</Height>
                 <Items>
                     <Line Name="line1">
-                        <Location>8px, 200px</Location>
+                        <Location>8px, 160px</Location>
                         <Size>1008px, 1px</Size>
                     </Line>
                     <TextBox Name="textBox10">
@@ -3355,35 +3355,8 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <StyleName>Report Params</StyleName>
                         <Value>Company:</Value>
                     </TextBox>
-                    <TextBox Name="textBox23">
-                        <Location>8px, 72px</Location>
-                        <Size>64px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Size>11px</Size>
-                            </Font>
-                        </Style>
-                        <StyleName>Heading 1</StyleName>
-                        <Value>Ship Date:</Value>
-                    </TextBox>
-                    <TextBox Name="textBox25">
-                        <CanGrow>True</CanGrow>
-                        <Location>120px, 56px</Location>
-                        <Size>144px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Size>11px</Size>
-                            </Font>
-                            <Padding>
-                                <Left>2px</Left>
-                            </Padding>
-                            <VerticalAlign>Middle</VerticalAlign>
-                        </Style>
-                        <StyleName>Normal</StyleName>
-                        <Value>=[INRegister.UsrDeliveryOrderNumber]</Value>
-                    </TextBox>
                     <TextBox Name="textBox26">
-                        <Location>280px, 112px</Location>
+                        <Location>280px, 72px</Location>
                         <Size>264px, 80px</Size>
                         <Style>
                             <Font>
@@ -3398,7 +3371,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Value>=IIf([ShipToInfo.FullName] &lt;&gt; null, [ShipToInfo.FullName] + '{br}', '') #010;+IIf([ShipToInfoR.Attention] &lt;&gt; null, [ShipToInfoR.Attention] + '{br}', '')#010;+IIf([ShipToAddr.AddressLine1] &lt;&gt; null, [ShipToAddr.AddressLine1] + '{br}', '')#010;+IIf([ShipToAddr.AddressLine2] &lt;&gt; null, [ShipToAddr.AddressLine2] + '{br}', '')#010;+IIf([ShipToAddr.City] &lt;&gt; null, [ShipToAddr.City] + ' ', '')#010;+IIf([ShipToAddr.State] &lt;&gt; null, ', ' + [ShipToAddr.State] + ' ', '')#010;+IIf([ShipToAddr.PostalCode] &lt;&gt; null, ', ' + [ShipToAddr.PostalCode], '')#010;+IIf([ShipToAddr.CountryID] &lt;&gt; null, ', ' + [ShipToAddr.CountryID], '')#010;+IIf([ShipToInfo.Phone1] &lt;&gt; null,'{br}Phone: ' + [ShipToInfo.Phone1], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox27">
-                        <Location>8px, 96px</Location>
+                        <Location>8px, 56px</Location>
                         <Size>264px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -3418,36 +3391,8 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <StyleName>Heading 1</StyleName>
                         <Value>Ship From</Value>
                     </TextBox>
-                    <TextBox Name="textBox29">
-                        <CanGrow>True</CanGrow>
-                        <Format>dd-MMM-yyyy</Format>
-                        <Location>120px, 72px</Location>
-                        <Size>144px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Size>11px</Size>
-                            </Font>
-                            <Padding>
-                                <Left>2px</Left>
-                            </Padding>
-                            <VerticalAlign>Middle</VerticalAlign>
-                        </Style>
-                        <StyleName>Normal</StyleName>
-                        <Value>=[INRegister.TranDate]</Value>
-                    </TextBox>
-                    <TextBox Name="textBox3">
-                        <Location>8px, 56px</Location>
-                        <Size>104px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Size>11px</Size>
-                            </Font>
-                        </Style>
-                        <StyleName>Heading 1</StyleName>
-                        <Value>Delivery Order Nbr:</Value>
-                    </TextBox>
                     <TextBox Name="textBox33">
-                        <Location>280px, 96px</Location>
+                        <Location>280px, 56px</Location>
                         <Size>264px, 16px</Size>
                         <Style>
                             <BorderStyle>
@@ -3468,7 +3413,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Value>Ship To</Value>
                     </TextBox>
                     <TextBox Name="textBox4">
-                        <Location>8px, 112px</Location>
+                        <Location>8px, 72px</Location>
                         <Size>264px, 80px</Size>
                         <Style>
                             <Font>
@@ -3624,14 +3569,26 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                     </BorderWidth>
                                 </Style>
                                 <Items>
+                                    <TextBox Name="textBox37">
+                                        <Location>8px, 0px</Location>
+                                        <Size>104px, 15px</Size>
+                                        <StyleName>Heading 1</StyleName>
+                                        <Value>Delivery Order Nbr</Value>
+                                    </TextBox>
                                     <TextBox Name="textBox40">
-                                        <Location>184px, 0px</Location>
+                                        <Location>312px, 0px</Location>
                                         <Size>144px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>To Warehouse</Value>
                                     </TextBox>
+                                    <TextBox Name="textBox45">
+                                        <Location>120px, 0px</Location>
+                                        <Size>88px, 15px</Size>
+                                        <StyleName>Heading 1</StyleName>
+                                        <Value>Ship Date</Value>
+                                    </TextBox>
                                     <TextBox Name="textBox5">
-                                        <Location>8px, 0px</Location>
+                                        <Location>216px, 0px</Location>
                                         <Size>88px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Warehouse</Value>
@@ -3640,17 +3597,32 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                             </Panel>
                             <TextBox Name="textBox14">
                                 <CanGrow>True</CanGrow>
-                                <Location>16px, 16px</Location>
-                                <Size>168px, 16px</Size>
+                                <Location>224px, 16px</Location>
+                                <Size>88px, 16px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[ShipFromSite.SiteCD]</Value>
                             </TextBox>
+                            <TextBox Name="textBox39">
+                                <CanGrow>True</CanGrow>
+                                <Location>16px, 16px</Location>
+                                <Size>104px, 16px</Size>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[INRegister.UsrDeliveryOrderNumber]</Value>
+                            </TextBox>
                             <TextBox Name="textBox43">
                                 <CanGrow>True</CanGrow>
-                                <Location>192px, 16px</Location>
+                                <Location>320px, 16px</Location>
                                 <Size>144px, 16px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[ShipToSite.SiteCD]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox46">
+                                <CanGrow>True</CanGrow>
+                                <Format>dd-MMM-yyyy</Format>
+                                <Location>128px, 16px</Location>
+                                <Size>88px, 16px</Size>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[INRegister.TranDate]</Value>
                             </TextBox>
                         </Items>
                     </Header>
