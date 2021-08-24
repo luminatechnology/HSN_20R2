@@ -2234,6 +2234,24 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>=[CRQuote.DocumentDate]</Value>
                             </TextBox>
+                            <TextBox Name="textBox31">
+                                <Format>dd MMM, yyyy</Format>
+                                <Location>96px, 88px</Location>
+                                <Size>256px, 16px</Size>
+                                <StyleName>SenderCompany</StyleName>
+                                <Value>=[CRQuote.ExpirationDate]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox37">
+                                <Location>0px, 88px</Location>
+                                <Size>96px, 16px</Size>
+                                <Style>
+                                    <Font>
+                                        <Style>Bold</Style>
+                                    </Font>
+                                </Style>
+                                <StyleName>SenderCompany</StyleName>
+                                <Value>ExpirationDate:</Value>
+                            </TextBox>
                             <TextBox Name="textBox4">
                                 <Location>96px, 72px</Location>
                                 <Size>256px, 16px</Size>
@@ -2241,7 +2259,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>=[CRQuote.OpportunityID]</Value>
                             </TextBox>
                             <TextBox Name="textBox5">
-                                <Location>0px, 96px</Location>
+                                <Location>0px, 104px</Location>
                                 <Size>96px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2250,9 +2268,10 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 </Style>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>Attn:</Value>
+                                <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox6">
-                                <Location>96px, 96px</Location>
+                                <Location>96px, 104px</Location>
                                 <Size>256px, 16px</Size>
                                 <Style>
                                     <Font>
@@ -2261,12 +2280,14 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 </Style>
                                 <StyleName>SenderCompany</StyleName>
                                 <Value>=[CRContact.Attention]</Value>
+                                <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox7">
-                                <Location>96px, 112px</Location>
+                                <Location>96px, 120px</Location>
                                 <Size>256px, 16px</Size>
                                 <StyleName>Normal Small</StyleName>
                                 <Value>=[CRContact.Salutation]</Value>
+                                <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox8">
                                 <Location>0px, 144px</Location>
@@ -2544,6 +2565,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>=[CROpportunityProducts.SortOrder]</Value>
                             </TextBox>
                             <TextBox Name="textBox20">
+                                <CanGrow>True</CanGrow>
                                 <Location>24px, 0px</Location>
                                 <Size>80px, 32px</Size>
                                 <Style>
@@ -2563,7 +2585,6 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox21">
                                 <CanGrow>True</CanGrow>
-                                <CanSplit>True</CanSplit>
                                 <Location>104px, 0px</Location>
                                 <Size>464px, 32px</Size>
                                 <Style>
