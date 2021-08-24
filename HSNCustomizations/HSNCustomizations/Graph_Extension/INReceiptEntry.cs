@@ -136,6 +136,9 @@ namespace PX.Objects.IN
                                 //PXCache<FSAppointmentDet>.RestoreCopy(newLine, PXCache<FSAppointmentDet>.CreateCopy(apptLine));
                                 newLine.EquipmentAction = apptLine.EquipmentAction;
                                 newLine.OrigLineNbr = apptLine.OrigLineNbr;
+                                // Per YJ's request to include the following two fields
+                                newLine.SiteID = apptLine.SiteID;
+                                newLine.SiteLocationID = apptLine.SiteLocationID;
 
                                 apptEntry.AppointmentDetails.Update(newLine);
 
