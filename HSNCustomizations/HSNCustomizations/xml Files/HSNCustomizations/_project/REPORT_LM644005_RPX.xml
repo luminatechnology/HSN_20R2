@@ -2919,10 +2919,10 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         </Tables>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
-                <Height>2.32804cm</Height>
+                <Height>1.69312cm</Height>
                 <Items>
                     <Line Name="line1">
-                        <Location>8px, 78px</Location>
+                        <Location>8px, 56px</Location>
                         <Size>1008px, 1px</Size>
                     </Line>
                     <TextBox Name="textBox10">
@@ -2979,32 +2979,6 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Size>76px, 14px</Size>
                         <StyleName>Report Params</StyleName>
                         <Value>Company:</Value>
-                    </TextBox>
-                    <TextBox Name="textBox23">
-                        <Location>8px, 56px</Location>
-                        <Size>72px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Size>11px</Size>
-                            </Font>
-                        </Style>
-                        <StyleName>Heading 1</StyleName>
-                        <Value>Pick List Nbr:</Value>
-                    </TextBox>
-                    <TextBox Name="textBox25">
-                        <CanGrow>True</CanGrow>
-                        <Location>88px, 56px</Location>
-                        <Size>144px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Size>11px</Size>
-                            </Font>
-                            <Padding>
-                                <Left>2px</Left>
-                            </Padding>
-                        </Style>
-                        <StyleName>Normal</StyleName>
-                        <Value>=[INRegister.UsrPickingListNumber]</Value>
                     </TextBox>
                     <TextBox Name="textBox9">
                         <Location>8px, 32px</Location>
@@ -3139,14 +3113,20 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                     </BorderWidth>
                                 </Style>
                                 <Items>
+                                    <TextBox Name="textBox1">
+                                        <Location>8px, 0px</Location>
+                                        <Size>88px, 15px</Size>
+                                        <StyleName>Heading 1</StyleName>
+                                        <Value>Pick List Nbr</Value>
+                                    </TextBox>
                                     <TextBox Name="textBox40">
-                                        <Location>184px, 0px</Location>
+                                        <Location>200px, 0px</Location>
                                         <Size>144px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>To Warehouse</Value>
                                     </TextBox>
                                     <TextBox Name="textBox5">
-                                        <Location>8px, 0px</Location>
+                                        <Location>104px, 0px</Location>
                                         <Size>88px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Warehouse</Value>
@@ -3156,13 +3136,20 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                             <TextBox Name="textBox14">
                                 <CanGrow>True</CanGrow>
                                 <Location>16px, 16px</Location>
-                                <Size>168px, 16px</Size>
+                                <Size>88px, 16px</Size>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[INRegister.UsrPickingListNumber]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox2">
+                                <CanGrow>True</CanGrow>
+                                <Location>112px, 16px</Location>
+                                <Size>88px, 16px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[ShipFromSite.SiteCD]</Value>
                             </TextBox>
                             <TextBox Name="textBox43">
                                 <CanGrow>True</CanGrow>
-                                <Location>192px, 16px</Location>
+                                <Location>208px, 16px</Location>
                                 <Size>144px, 16px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[ShipToSite.SiteCD]</Value>
