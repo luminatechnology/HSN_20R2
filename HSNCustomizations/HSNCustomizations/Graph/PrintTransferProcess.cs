@@ -24,7 +24,7 @@ namespace HSNCustomizations.Graph
         
         public PXFilter<TransferFilter> MasterView;
         [PXFilterable]
-        public SelectFrom<INRegister>.View DetailsView;
+        public SelectFrom<INRegister>.OrderBy<Desc<INRegister.refNbr>>.View DetailsView;
         public SelectFrom<LumINTran>.View LumINTranView;
 
         #region Transfer Report Type
@@ -158,29 +158,29 @@ namespace HSNCustomizations.Graph
             {
                 if (currentSearchStartDate == null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>>
-                        .View.Select(this, currentSearchEndDate, "T");
+                            .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>>
+                            .View.Select(this, currentSearchEndDate, "T");
                 else if (currentSearchStartDate != null && currentSearchEndDate != null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>>>
-                        .View.Select(this, currentSearchStartDate, currentSearchEndDate, "T");
+                            .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>>>
+                            .View.Select(this, currentSearchStartDate, currentSearchEndDate, "T");
                 else
                     return SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.released.IsEqual<True>>>
-                        .View.Select(this, "T");
+                            .View.Select(this, "T");
             }
             else
             {
                 if (currentSearchStartDate == null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
-                        .View.Select(this, currentSearchEndDate, "T", currentFromWarehouse);
+                            .Where<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
+                            .View.Select(this, currentSearchEndDate, "T", currentFromWarehouse);
                 else if (currentSearchStartDate != null && currentSearchEndDate != null)
                     return SelectFrom<INRegister>
-                        .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
-                        .View.Select(this, currentSearchStartDate, currentSearchEndDate, "T", currentFromWarehouse);
+                            .Where<INRegister.tranDate.IsGreaterEqual<@P.AsDateTime>.And<INRegister.tranDate.IsLessEqual<@P.AsDateTime>.And<INRegister.docType.IsEqual<@P.AsString>>>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
+                            .View.Select(this, currentSearchStartDate, currentSearchEndDate, "T", currentFromWarehouse);
                 else
                     return SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<@P.AsString>.And<INRegister.siteID.IsEqual<@P.AsInt>.And<INRegister.released.IsEqual<True>>>>
-                        .View.Select(this, "T", currentFromWarehouse);
+                            .View.Select(this, "T", currentFromWarehouse);
             }
         }
         #endregion
