@@ -128,7 +128,6 @@ namespace PX.Objects.IN
 
                                 newLine.InventoryID   = row.InventoryID;
                                 newLine.EstimatedQty  = apptLine.EstimatedQty;
-                                newLine.CuryUnitPrice = apptLine.CuryUnitPrice;
                                 newLine.Status        = apptLine.Status;
 
                                 newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Update(newLine));
@@ -136,6 +135,7 @@ namespace PX.Objects.IN
                                 //PXCache<FSAppointmentDet>.RestoreCopy(newLine, PXCache<FSAppointmentDet>.CreateCopy(apptLine));
                                 newLine.EquipmentAction = apptLine.EquipmentAction;
                                 newLine.OrigLineNbr = apptLine.OrigLineNbr;
+                                newLine.CuryUnitPrice = apptLine.CuryUnitPrice;
                                 // Per YJ's request to include the following two fields
                                 newLine.SiteID = apptLine.SiteID;
                                 newLine.SiteLocationID = apptLine.SiteLocationID;
