@@ -173,6 +173,17 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 </Links>
                 <ParentName>BAccount</ParentName>
             </ReportRelation>
+            <ReportRelation>
+                <ChildAlias>OpportunityContact</ChildAlias>
+                <ChildName>Contact</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>ContactID</ChildField>
+                        <ParentField>OwnerID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>CRQuote</ParentName>
+            </ReportRelation>
         </Relations>
         <SchemaUrl>http://localhost/HSN</SchemaUrl>
         <StylesTemplate>TemplateForm.rpx</StylesTemplate>
@@ -2019,11 +2030,12 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
                 <Height>0px</Height>
+                <PrintEmpty>False</PrintEmpty>
                 <Visible>False</Visible>
             </PageHeader>
             <Detail Name="detailSection1">
-                <Expanded>False</Expanded>
                 <Height>0px</Height>
+                <PrintAtBottom>True</PrintAtBottom>
                 <Visible>False</Visible>
             </Detail>
             <PageFooter Name="pageFooterSection1">
@@ -2484,7 +2496,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Location>0px, 48px</Location>
                                 <Size>752px, 88px</Size>
                                 <StyleName>Normal</StyleName>
-                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' + '{br}' + [CRQuote.OwnerID_Owner_displayName] + '{br}' + 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
+                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' #010;+ '{br}' #010;+ [CRQuote.OwnerID_Owner_displayName] #010;+ '{br}' #010;+ IsNull([OpportunityContact.Phone1] + '{br}', '') #010;+ 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
                             </TextBox>
                         </Items>
                     </Footer>
@@ -2499,6 +2511,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <Headers>
                     <Header Name="groupHeaderSection2">
                         <Height>0px</Height>
+                        <PrintEmpty>False</PrintEmpty>
                         <Visible>False</Visible>
                     </Header>
                 </Headers>
@@ -2535,18 +2548,231 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <Headers>
                     <Header Name="groupHeaderSection3">
                         <Height>0px</Height>
+                        <PrintEmpty>False</PrintEmpty>
                         <Visible>False</Visible>
                     </Header>
                 </Headers>
                 <Footers>
                     <Footer Name="groupFooterSection4">
-                        <Height>0.84656cm</Height>
+                        <Height>1.48148cm</Height>
                         <VisibleExpr>=$LineNbr = 0</VisibleExpr>
                         <Items>
                             <TextBox Name="textBox19">
+                                <CanGrow>True</CanGrow>
                                 <Format>N1</Format>
                                 <Location>0px, 0px</Location>
-                                <Size>24px, 32px</Size>
+                                <Size>24px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Left>Solid</Left>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Left>2px</Left>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.SortOrder]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox20">
+                                <CanGrow>True</CanGrow>
+                                <Location>24px, 0px</Location>
+                                <Size>80px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.InventoryID]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox21">
+                                <CanGrow>True</CanGrow>
+                                <Location>104px, 0px</Location>
+                                <Size>464px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.Descr]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox22">
+                                <CanGrow>True</CanGrow>
+                                <Location>568px, 0px</Location>
+                                <Size>40px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.Quantity]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox23">
+                                <CanGrow>True</CanGrow>
+                                <Location>608px, 0px</Location>
+                                <Size>56px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.CuryUnitPrice]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox24">
+                                <CanGrow>True</CanGrow>
+                                <Format>=[CROpportunityProducts.CuryAmount.Format]</Format>
+                                <Location>664px, 0px</Location>
+                                <Size>88px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Right>2px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.CuryExtPrice]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox44">
+                                <CanGrow>True</CanGrow>
+                                <Format>=[CROpportunityProducts.CuryAmount.Format]</Format>
+                                <Location>664px, 0px</Location>
+                                <Size>88px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>2px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.CuryExtPrice]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &lt;= 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox45">
+                                <CanGrow>True</CanGrow>
+                                <Location>608px, 0px</Location>
+                                <Size>56px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.CuryUnitPrice]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &lt;= 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox46">
+                                <CanGrow>True</CanGrow>
+                                <Location>568px, 0px</Location>
+                                <Size>40px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.Quantity]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &lt;= 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox47">
+                                <CanGrow>True</CanGrow>
+                                <Location>104px, 0px</Location>
+                                <Size>464px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.Descr]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &lt;= 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox48">
+                                <CanGrow>True</CanGrow>
+                                <Location>24px, 0px</Location>
+                                <Size>80px, 56px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <TextAlign>Center</TextAlign>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.InventoryID]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &lt;= 0</VisibleExpr>
+                            </TextBox>
+                            <TextBox Name="textBox49">
+                                <CanGrow>True</CanGrow>
+                                <Format>N1</Format>
+                                <Location>0px, 0px</Location>
+                                <Size>24px, 56px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -2563,85 +2789,20 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.SortOrder]</Value>
+                                <VisibleExpr>=Len([CROpportunityProducts.NoteText]) &lt;= 0</VisibleExpr>
                             </TextBox>
-                            <TextBox Name="textBox20">
+                        </Items>
+                    </Footer>
+                    <Footer Name="groupFooterSection6">
+                        <Height>1.69312cm</Height>
+                        <KeepTogether>False</KeepTogether>
+                        <PrintEmpty>False</PrintEmpty>
+                        <VisibleExpr>=$LineNbr = 0 And Len([CROpportunityProducts.NoteText]) &gt; 0</VisibleExpr>
+                        <Items>
+                            <TextBox Name="textBox38">
                                 <CanGrow>True</CanGrow>
-                                <Location>24px, 0px</Location>
-                                <Size>80px, 32px</Size>
-                                <Style>
-                                    <BorderStyle>
-                                        <Bottom>Solid</Bottom>
-                                        <Right>Solid</Right>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Bottom>1px</Bottom>
-                                        <Right>1px</Right>
-                                    </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
-                                </Style>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[CROpportunityProducts.InventoryID]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox21">
-                                <CanGrow>True</CanGrow>
-                                <Location>104px, 0px</Location>
-                                <Size>464px, 32px</Size>
-                                <Style>
-                                    <BorderStyle>
-                                        <Bottom>Solid</Bottom>
-                                        <Right>Solid</Right>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Bottom>1px</Bottom>
-                                        <Right>1px</Right>
-                                    </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
-                                </Style>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[CROpportunityProducts.Descr]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox22">
-                                <Location>568px, 0px</Location>
-                                <Size>40px, 32px</Size>
-                                <Style>
-                                    <BorderStyle>
-                                        <Bottom>Solid</Bottom>
-                                        <Right>Solid</Right>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Bottom>1px</Bottom>
-                                        <Right>1px</Right>
-                                    </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
-                                </Style>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[CROpportunityProducts.Quantity]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox23">
-                                <Location>608px, 0px</Location>
-                                <Size>56px, 32px</Size>
-                                <Style>
-                                    <BorderStyle>
-                                        <Bottom>Solid</Bottom>
-                                        <Right>Solid</Right>
-                                    </BorderStyle>
-                                    <BorderWidth>
-                                        <Bottom>1px</Bottom>
-                                        <Right>1px</Right>
-                                    </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
-                                </Style>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[CROpportunityProducts.CuryUnitPrice]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox24">
-                                <Format>=[CROpportunityProducts.CuryAmount.Format]</Format>
                                 <Location>664px, 0px</Location>
-                                <Size>88px, 32px</Size>
+                                <Size>88px, 64px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -2651,11 +2812,96 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                         <Bottom>1px</Bottom>
                                         <Right>2px</Right>
                                     </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
-                                <Value>=[CROpportunityProducts.CuryExtPrice]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox39">
+                                <CanGrow>True</CanGrow>
+                                <Location>608px, 0px</Location>
+                                <Size>56px, 64px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                            </TextBox>
+                            <TextBox Name="textBox40">
+                                <CanGrow>True</CanGrow>
+                                <Location>568px, 0px</Location>
+                                <Size>40px, 64px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                            </TextBox>
+                            <TextBox Name="textBox41">
+                                <CanGrow>True</CanGrow>
+                                <Location>104px, 0px</Location>
+                                <Size>464px, 64px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[CROpportunityProducts.NoteText]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox42">
+                                <CanGrow>True</CanGrow>
+                                <Location>24px, 0px</Location>
+                                <Size>80px, 64px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
+                            </TextBox>
+                            <TextBox Name="textBox43">
+                                <CanGrow>True</CanGrow>
+                                <Location>0px, 0px</Location>
+                                <Size>24px, 64px</Size>
+                                <Style>
+                                    <BorderStyle>
+                                        <Bottom>Solid</Bottom>
+                                        <Left>Solid</Left>
+                                        <Right>Solid</Right>
+                                    </BorderStyle>
+                                    <BorderWidth>
+                                        <Bottom>1px</Bottom>
+                                        <Left>2px</Left>
+                                        <Right>1px</Right>
+                                    </BorderWidth>
+                                    <VerticalAlign>Middle</VerticalAlign>
+                                </Style>
+                                <StyleName>Normal</StyleName>
                             </TextBox>
                         </Items>
                     </Footer>
