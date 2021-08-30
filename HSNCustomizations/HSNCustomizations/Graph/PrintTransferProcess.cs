@@ -61,7 +61,7 @@ namespace HSNCustomizations.Graph
                 var TrackingNbrTop = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != null).FirstOrDefault();
                 if (TrackingNbrTop != null) _countPickingNbr = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != TrackingNbrTop.GetExtension<INRegisterExt>().UsrPickingListNumber).Count();
                 else _countPickingNbr = 0;
-                if (_countPickingNbr > 0) throw new PXException("Cannot print the report which including two or more Picking Number.");
+                if (_countPickingNbr > 0) throw new PXException("Cannot print the Delivery Order which including two or more Picking Number.");
 
                 _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber != null).Count();
                 _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber == null).Count();
