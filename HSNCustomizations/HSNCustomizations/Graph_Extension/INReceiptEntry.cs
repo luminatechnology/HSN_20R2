@@ -157,9 +157,8 @@ namespace PX.Objects.IN
                 throw;
             }
         }
-        #endregion
 
-        #region MyRegion
+        /// <summary> Update Appointmnet/ServiceOrder Stage Manual </summary>
         public bool UpdateAppointmentStageManual()
         {
             var row = Base.receipt.Current;
