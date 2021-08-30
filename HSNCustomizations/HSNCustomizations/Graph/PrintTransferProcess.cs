@@ -91,7 +91,14 @@ namespace HSNCustomizations.Graph
                                 .Where<INTran.docType.IsEqual<@P.AsString>.And<INTran.refNbr.IsEqual<@P.AsString>>>
                                 .View.Select(this, transfer.DocType, transfer.RefNbr);
 
-                string _checkingNbr = list.Where(x => x.GetExtension<INRegisterExt>().UsrTrackingNbr != null).FirstOrDefault().GetExtension<INRegisterExt>().UsrTrackingNbr;
+                string _checkingNbr;
+                if (transferFilter.ReportType == dicTransferReportType["PickingList"]) _checkingNbr = null;
+                else 
+                {
+                    var currentTrackingNbr = list.Where(x => x.GetExtension<INRegisterExt>().UsrTrackingNbr != null).FirstOrDefault();
+                    if (currentTrackingNbr != null) _checkingNbr = list.Where(x => x.GetExtension<INRegisterExt>().UsrTrackingNbr != null).FirstOrDefault().GetExtension<INRegisterExt>().UsrTrackingNbr;
+                    else throw new PXException("Please enter a Tracking Number.");
+                } 
 
                 foreach (PXResult<INTran, INRegister> line in result)
                 {
