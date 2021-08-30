@@ -4,7 +4,6 @@ using PX.Data.BQL.Fluent;
 using PX.Objects.IN;
 using PX.Objects.CS;
 using PX.Objects.CR.Standalone;
-using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -184,7 +183,7 @@ namespace PX.Objects.FS
             LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
-            bool activeRMAProcess = hSNSetup?.EnableRMAProcInAppt == true;
+            bool activeRMAProcess  = hSNSetup?.EnableRMAProcInAppt == true;
             bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
 
             openPartRequest.SetEnabled(activePartRequest);
@@ -203,11 +202,12 @@ namespace PX.Objects.FS
             INRegisterView.AllowSelect = activePartRequest;
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
+            PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrRMARequired>(Base.AppointmentDetails.Cache, null, activeRMAProcess);
 
             SettingStageButton();
         }
 
-        public void _(Events.FieldUpdated<FSAppointmentExt.usrTransferToHQ> e)
+        protected void _(Events.FieldUpdated<FSAppointmentExt.usrTransferToHQ> e)
         {
             if (e.NewValue != null && (bool)e.NewValue == true)
             {
@@ -233,6 +233,15 @@ namespace PX.Objects.FS
             }
         }
 
+        protected void _(Events.RowUpdated<FSServiceOrder> e, PXRowUpdated baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            if (e.OldRow.ContactID != e.Row.ContactID)
+            {
+                ServiceOrderEntry_Extension.SetSrvContactInfo(Base.ServiceOrder_Contact.Cache, e.Row.ContactID, e.Row.ServiceOrderContactID);
+            }
+        }
         #endregion
 
         #region Actions
@@ -327,21 +336,20 @@ namespace PX.Objects.FS
         /// <param name="apptEntry"></param>
         public static void InitTransferEntry(ref INTransferEntry transferEntry, AppointmentEntry apptEntry, string descrType = null)
         {
-            FSAppointment appointment = apptEntry.AppointmentSelected.Current;
+            FSAppointment appointment   = apptEntry.AppointmentSelected.Current;
+            INRegister register         = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegisterExt regisExt      = register.GetExtension<INRegisterExt>();
+            LUMBranchWarehouse branchWH = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID);
 
-            INRegister register = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
-            INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
-
-            int? prefSiteID = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID)?.SiteID;
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
-            register.TransferType = INTransferType.TwoStep;
-            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc = descrType + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
+            register.TransferType      = INTransferType.TwoStep;
+            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc          = descrType + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr = appointment.SORefNbr;
-            regisExt.UsrTransferPurp = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr       = appointment.SORefNbr;
+            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -354,15 +362,13 @@ namespace PX.Objects.FS
                 list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM && x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true);
             }
 
-            int? toSiteID = list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
-
-            transferEntry.CurrentDocument.Current.SiteID = isRMA ? toSiteID : prefSiteID;
-            transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? prefSiteID : toSiteID;
+            transferEntry.CurrentDocument.Current.SiteID = isRMA ? GetFaultyWFByBranch(transferEntry, transferEntry.Accessinfo.BranchID) : branchWH?.SiteID;
+            transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? branchWH?.FaultySiteID : list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
 
             foreach (FSAppointmentDet row in list)
             {
-                CreateINTran(transferEntry, row);
+                CreateINTran(transferEntry, row, false, isRMA == false);
             }
         }
 
@@ -412,7 +418,7 @@ namespace PX.Objects.FS
         /// <param name="graph"></param>
         /// <param name="apptDet"></param>
         /// <param name="defective"></param>
-        public static void CreateINTran(PXGraph graph, FSAppointmentDet apptDet, bool defective = false)
+        public static void CreateINTran(PXGraph graph, FSAppointmentDet apptDet, bool defective = false, bool overrideLocation = false)
         {
             INTran iNTran = new INTran()
             {
@@ -420,11 +426,9 @@ namespace PX.Objects.FS
                 Qty = apptDet.EstimatedQty
             };
 
-            if (defective == true)
-            {
-                iNTran.SiteID = apptDet.SiteID;
-                iNTran.LocationID = apptDet.LocationID;
-            }
+            if (defective == true) { iNTran.SiteID = GetFaultyWFByBranch(graph, apptDet.BranchID); }
+
+            if (overrideLocation == true) { iNTran.ToLocationID = apptDet.SiteLocationID; }
 
             iNTran = graph.Caches[typeof(INTran)].Insert(iNTran) as INTran;
 
@@ -464,6 +468,18 @@ namespace PX.Objects.FS
             PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
 
             //graph.Caches[toType].Update(graph.Caches[toType].Current);
+        }
+
+        /// <summary>
+        /// Get faulty warehouse by branch which only uses for RMA customization.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="branchID"></param>
+        /// <returns></returns>
+        public static int? GetFaultyWFByBranch(PXGraph graph, int? branchID)
+        {
+            return SelectFrom<INSite>.Where<INSite.branchID.IsEqual<@P.AsInt>
+                                            .And<INSiteExt.usrIsFaultySite.IsEqual<True>>>.View.Select(graph, branchID).TopFirst?.SiteID;
         }
         #endregion
 

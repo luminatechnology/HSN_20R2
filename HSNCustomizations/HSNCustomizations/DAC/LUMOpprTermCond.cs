@@ -26,8 +26,8 @@ namespace HSNCustomizations.DAC
                             typeof(CROpportunity.isActive),
                             typeof(BAccount.acctName),
                             typeof(Contact.displayName) },
-                    Filterable = true)]
-        [PXDBDefault(typeof(CROpportunity.opportunityID))]
+                    Filterable = true, ValidateValue = false)]
+        [PXDBDefault(typeof(CROpportunity.opportunityID), PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual string OpportunityID { get; set; }
         public abstract class opportunityID : PX.Data.BQL.BqlString.Field<opportunityID> { }
         #endregion
@@ -49,14 +49,21 @@ namespace HSNCustomizations.DAC
 
         #region QuoteID
         [PXDBGuid()]
-        [PXUIField(DisplayName = "Quote Nbr.")]
-        [PXDBDefault(typeof(CROpportunity.defQuoteID))]
+        [PXUIField(DisplayName = "Quote ID")]
+        [PXDBDefault(typeof(CROpportunity.defQuoteID), DefaultForInsert = false, PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual Guid? QuoteID { get; set; }
         public abstract class quoteID : PX.Data.BQL.BqlGuid.Field<quoteID> { }
         #endregion
 
+        #region Title
+        [PXDBString(30, IsUnicode = true)]
+        [PXUIField(DisplayName = "Title")]
+        public virtual string Title { get; set; }
+        public abstract class title : PX.Data.BQL.BqlString.Field<title> { }
+        #endregion
+
         #region Definition
-        [PXDBString(IsUnicode = true, InputMask = "")]
+        [PXDBString(IsUnicode = true)]
         [PXUIField(DisplayName = "Terms & Conditions")]
         public virtual string Definition { get; set; }
         public abstract class definition : PX.Data.BQL.BqlString.Field<definition> { }

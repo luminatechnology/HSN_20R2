@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
+    <Compile Include="DAC\LumINTran.cs" />
     <Compile Include="DAC\LUMOpprTermCond.cs" />
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
     <Compile Include="DAC\LumStageControl.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Descriptor\FSStageControlHandler.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />
+    <Compile Include="Descriptor\InvoicingFuncations2.cs" />
     <Compile Include="Descriptor\LUMAttribute.cs" />
     <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
@@ -82,7 +84,6 @@
     <Compile Include="Graph_Extension\OpportunityMaint.cs" />
     <Compile Include="Graph_Extension\QuoteMaint.cs" />
     <Compile Include="Graph_Extension\SM_SOInvoiceEntry.cs" />
-    <Compile Include="Graph_Extension\SOInvoiceEntry.cs" />
     <Compile Include="Graph_Extension\SvrOrdTypeMaint.cs" />
     <Compile Include="DAC\LUMAppEventHistory.cs" />
     <Compile Include="Graph_Extension\AppointmentEntry.cs" />
@@ -99,6 +100,8 @@
     <Compile Include="DAC_Extension\FSAppointmentExtensions.cs" />
     <Compile Include="DAC_Extension\CustomerClassExtensions.cs" />
     <Compile Include="Graph\PrintTransferProcess.cs" />
+    <Compile Include="DAC_Extension\INSiteExtensions.cs" />
+    <Compile Include="Graph_Extension\INSiteMaint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

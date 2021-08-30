@@ -69,6 +69,7 @@ namespace PX.Objects.CR
                 LUMOpprTermCond termCond = new LUMOpprTermCond()
                 {
                     SortOrder     = row.SortOrder,
+                    Title         = row.Title,
                     Definition    = row.Definition
                 };
 

@@ -17,6 +17,8 @@
 				<Template>
 					<px:PXLayoutRule GroupCaption="NUMBERING SETTING" runat="server" ID="CstPXLayoutRule1" StartGroup="True" LabelsWidth="L" ControlSize="" ></px:PXLayoutRule>
 								<px:PXSelector runat="server" ID="CstPXSelector3" DataField="CPrepaymentNumberingID" AllowEdit="True" ></px:PXSelector>
+								<px:PXSelector runat="server" ID="CstPXSelector21" DataField="PickingListNumberingID" AllowEdit="True" ></px:PXSelector>
+								<px:PXSelector runat="server" ID="CstPXSelector20" DataField="DeliveryOrderNumberingID"  AllowEdit="True" ></px:PXSelector>
 					<px:PXLayoutRule GroupCaption="DATA ENTRY SETTING" runat="server" ID="CstPXLayoutRule2" StartGroup="True" LabelsWidth="M" ControlSize="" ></px:PXLayoutRule>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox4" DataField="EnableUniqSerialNbrByEquipType" ></px:PXCheckBox>
 								<px:PXCheckBox runat="server" ID="CstPXCheckBox14" DataField="EnableWFStageCtrlInAppt" AlignLeft="True" ></px:PXCheckBox>
@@ -37,10 +39,12 @@
 							<px:PXGridLevel DataMember="BranchWarehouse" >
 								<Columns>
 									<px:PXGridColumn DataField="BranchID" Width="140" ></px:PXGridColumn>
-									<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn></Columns>
+									<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn>
+									<px:PXGridColumn DataField="FaultySiteID" Width="140" /></Columns>
 								<RowTemplate>
 									<px:PXSegmentMask AllowEdit="True" runat="server" ID="CstPXSegmentMask8" DataField="BranchID" ></px:PXSegmentMask>
-									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask9" DataField="SiteID" AllowEdit="True" ></px:PXSegmentMask></RowTemplate></px:PXGridLevel></Levels>
+									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask9" DataField="SiteID" AllowEdit="True" ></px:PXSegmentMask>
+									<px:PXSegmentMask runat="server" ID="CstPXSegmentMask19" DataField="FaultySiteID" AllowEdit="True" /></RowTemplate></px:PXGridLevel></Levels>
 						<AutoSize Enabled="True" ></AutoSize></px:PXGrid></Template></px:PXTabItem>
 			<px:PXTabItem Text="Terms And Conditions">
 				<Template>
@@ -49,7 +53,8 @@
 							<px:PXGridLevel DataMember="TermsConditions" >
 								<Columns>
 									<px:PXGridColumn TextAlign="Left" DataField="SortOrder" Width="50" ></px:PXGridColumn>
-									<px:PXGridColumn DataField="Definition" Width="70" /></Columns></px:PXGridLevel></Levels>
+									<px:PXGridColumn DataField="Title" Width="140" />
+									<px:PXGridColumn DataField="Definition" Width="70" ></px:PXGridColumn></Columns></px:PXGridLevel></Levels>
 						<Mode AllowUpload="True" ></Mode>
 						<AutoSize Enabled="True" ></AutoSize></px:PXGrid></Template></px:PXTabItem></Items>
 		<AutoSize Container="Window" Enabled="True" MinHeight="200" ></AutoSize>

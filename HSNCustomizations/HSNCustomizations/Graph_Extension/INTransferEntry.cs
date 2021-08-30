@@ -11,15 +11,6 @@ namespace PX.Objects.IN
 {
     public class INTransferEntry_Extension : PXGraphExtension<INTransferEntry>
     {
-        public override void Initialize()
-        {
-            base.Initialize();
-            PickingListReport.SetVisible(true);
-            DeliveryOrderReport.SetVisible(true);
-            Base.report.AddMenuAction(PickingListReport);
-            Base.report.AddMenuAction(DeliveryOrderReport);
-        }
-
         #region Delegate
         public delegate void PersistDelegate();
         [PXOverride]
@@ -79,7 +70,7 @@ namespace PX.Objects.IN
 
         public PXAction<INRegister> PickingListReport;
         [PXButton()]
-        [PXUIField(DisplayName = "Print Picking List", Enabled = true, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXUIField(DisplayName = "Print Picking List", Enabled = true, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select, Visible = false)]
         protected virtual IEnumerable pickingListReport(PXAdapter adapter)
         {
             if (Base.transfer.Current != null)
@@ -94,7 +85,7 @@ namespace PX.Objects.IN
 
         public PXAction<INRegister> DeliveryOrderReport;
         [PXButton()]
-        [PXUIField(DisplayName = "Print Delivery Order", Enabled = true, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        [PXUIField(DisplayName = "Print Delivery Order", Enabled = true, MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select, Visible = false)]
         protected virtual IEnumerable deliveryOrderReport(PXAdapter adapter)
         {
             if (Base.transfer.Current != null)
@@ -123,6 +114,10 @@ namespace PX.Objects.IN
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrAppointmentNbr>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPLIsPrinted>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDOIsPrinted>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPickingListNumber>(e.Cache, null, activePartRequest);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDeliveryOrderNumber>(e.Cache, null, activePartRequest);
         }
         #endregion
 

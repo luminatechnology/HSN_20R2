@@ -23,7 +23,23 @@ namespace HSNCustomizations.DAC
         public virtual string CPrepaymentNumberingID { get; set; }
         public abstract class cPrepaymentNumberingID : PX.Data.BQL.BqlString.Field<cPrepaymentNumberingID> { }
         #endregion
-    
+
+        #region PickingListNumberingID
+        [PXDBString(10, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Picking List Numbering Sequence")]
+        [PXSelector(typeof(Numbering.numberingID), DescriptionField = typeof(Numbering.descr))]
+        public virtual string PickingListNumberingID { get; set; }
+        public abstract class pickingListNumberingID : PX.Data.BQL.BqlString.Field<pickingListNumberingID> { }
+        #endregion
+
+        #region DeliveryOrderNumberingID
+        [PXDBString(10, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Delivery Order Numbering Sequence")]
+        [PXSelector(typeof(Numbering.numberingID), DescriptionField = typeof(Numbering.descr))]
+        public virtual string DeliveryOrderNumberingID { get; set; }
+        public abstract class deliveryOrderNumberingID : PX.Data.BQL.BqlString.Field<deliveryOrderNumberingID> { }
+        #endregion
+
         #region EnableUniqSerialNbrByEquipType
         [PXDBBool()]
         [PXUIField(DisplayName = "Enable Unique Serial Nbr By Equipment Type")]
