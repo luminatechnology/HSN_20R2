@@ -104,6 +104,7 @@ namespace PX.Objects.CR
 
         protected void _(Events.FieldVerifying<LUMOpprTermCond.sortOrder> e)
         {
+            ///<remarks> Add the following verification to avoid that this field is not numbered in order or maintained incorrectly.</remarks>
             if (TermsConditions.Select().RowCast<LUMOpprTermCond>().Where(x => x.SortOrder == (int)e.NewValue).Count() > 0)
             {
                 throw new PXSetPropertyException<LUMOpprTermCond.sortOrder>(HSNMessages.DuplicSortOrder);
