@@ -8,10 +8,10 @@ namespace HSNCustomizations.DAC
     [PXCacheName("Opportunity Terms & Conditions")]
     public class LUMOpprTermCond : IBqlTable
     {
-        #region IdenityID
+        #region IdentityID
         [PXDBIdentity(IsKey = true)]
-        public virtual int? IdenityID { get; set; }
-        public abstract class idenityID : PX.Data.BQL.BqlInt.Field<idenityID> { }
+        public virtual int? IdentityID { get; set; }
+        public abstract class identityID : PX.Data.BQL.BqlInt.Field<identityID> { }
         #endregion
 
         #region OpportunityID
