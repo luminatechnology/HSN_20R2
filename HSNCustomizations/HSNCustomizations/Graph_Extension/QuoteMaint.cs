@@ -1,8 +1,10 @@
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
+using System.Linq;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
+using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.CR
 {
@@ -13,7 +15,7 @@ namespace PX.Objects.CR
 
         #region Selects
         public SelectFrom<LUMHSNSetup>.View HSNSetupView;
-        public SelectFrom<LUMOpprTermCond>.Where<LUMOpprTermCond.quoteID.IsEqual<CRQuote.quoteID.FromCurrent>>.View TermsConditions;
+        public SelectFrom<LUMOpprTermCond>.Where<LUMOpprTermCond.quoteID.IsEqual<CRQuote.quoteID.FromCurrent>>.OrderBy<LUMOpprTermCond.sortOrder.Asc>.View TermsConditions;
         #endregion
 
         #region Override Methods
@@ -99,6 +101,18 @@ namespace PX.Objects.CR
             printQuoteMY.SetEnabled(Base.printQuote.GetEnabled());
             printQuoteMY2.SetEnabled(Base.printQuote.GetEnabled());
         }
+
+        protected void _(Events.FieldVerifying<LUMOpprTermCond.sortOrder> e)
+        {
+            if (TermsConditions.Select().RowCast<LUMOpprTermCond>().Where(x => x.SortOrder == (int)e.NewValue).Count() > 0)
+            {
+                throw new PXSetPropertyException<LUMOpprTermCond.sortOrder>(HSNMessages.DuplicSortOrder);
+            }
+            if (SelectFrom<LUMOpprTermCond>.Where<LUMOpprTermCond.quoteID.IsEqual<@P.AsGuid>>.AggregateTo<Max<LUMOpprTermCond.sortOrder>>.View.Select(Base, Base.QuoteCurrent.Current?.QuoteID)?.TopFirst.SortOrder > (int)e.NewValue)
+            {
+                throw new PXSetPropertyException<LUMOpprTermCond.sortOrder>(HSNMessages.SortOrdMustGreater);
+            }
+        }
         #endregion
 
         #region Methods
@@ -108,6 +122,7 @@ namespace PX.Objects.CR
             {
                 LUMOpprTermCond termCond = new LUMOpprTermCond()
                 {
+                    IsActive   = row.IsActive,
                     SortOrder  = row.SortOrder,
                     Title      = row.Title,
                     Definition = row.Definition
