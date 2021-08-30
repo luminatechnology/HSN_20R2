@@ -129,10 +129,6 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         <ChildField>=True</ChildField>
                         <ParentField>LUMOpprTermCond.IsActive</ParentField>
                     </RelationRow>
-                    <RelationRow>
-                        <ChildField>OpportunityID</ChildField>
-                        <ParentField>OpportunityID</ParentField>
-                    </RelationRow>
                 </Links>
                 <ParentName>CRQuote</ParentName>
             </ReportRelation>
@@ -590,6 +586,9 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                     <ReportField Name="CreatedDateTime_Quarter">
                     </ReportField>
                     <ReportField Name="Definition">
+                    </ReportField>
+                    <ReportField Name="IdentityID">
+                        <DataType>Int32</DataType>
                     </ReportField>
                     <ReportField Name="IsActive">
                         <DataType>Boolean</DataType>
@@ -2035,7 +2034,6 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
             </PageHeader>
             <Detail Name="detailSection1">
                 <Height>0px</Height>
-                <PrintAtBottom>True</PrintAtBottom>
                 <Visible>False</Visible>
             </Detail>
             <PageFooter Name="pageFooterSection1">
@@ -2477,7 +2475,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Location>0px, 48px</Location>
                                 <Size>752px, 88px</Size>
                                 <StyleName>Normal</StyleName>
-                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' #010;+ '{br}' #010;+ [CRQuote.OwnerID_Owner_displayName] #010;+ '{br}' #010;+ IsNull([OpportunityContact.Phone1] + '{br}', '') #010;+ 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
+                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' #010;+ '{br}' #010;+ IsNull([CRQuote.OwnerID_Owner_displayName] + '{br}', '')#010;+ IsNull([OpportunityContact.Phone1] + '{br}', '') #010;+ 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
                             </TextBox>
                         </Items>
                     </Footer>
@@ -2492,7 +2490,6 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <Headers>
                     <Header Name="groupHeaderSection2">
                         <Height>0px</Height>
-                        <PrintEmpty>False</PrintEmpty>
                         <Visible>False</Visible>
                     </Header>
                 </Headers>
@@ -2502,7 +2499,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         <Variables>
                             <ReportVariable>
                                 <Name>Defineitions</Name>
-                                <ValueExpr>=$Defineitions + [LUMOpprTermCond.Definition] + '{br}'</ValueExpr>
+                                <ValueExpr>=$Defineitions + IsNull([LUMOpprTermCond.Definition], '') + '{br}'</ValueExpr>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>LineNbr</Name>
@@ -2510,7 +2507,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>Titles</Name>
-                                <ValueExpr>=$Titles + [LUMOpprTermCond.Title] + IIf(Len([LUMOpprTermCond.Definition]) &gt;= 142,  '{br}{br}','{br}')</ValueExpr>
+                                <ValueExpr>=$Titles #010;+IsNull([LUMOpprTermCond.Title], '')#010;+IIf(Len([LUMOpprTermCond.Definition]) &gt;= 142, '{br}{br}', '{br}')</ValueExpr>
                             </ReportVariable>
                         </Variables>
                         <Visible>False</Visible>
@@ -2529,78 +2526,65 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <Headers>
                     <Header Name="groupHeaderSection3">
                         <Height>0px</Height>
-                        <PrintEmpty>False</PrintEmpty>
                         <Visible>False</Visible>
                     </Header>
                 </Headers>
                 <Footers>
                     <Footer Name="groupFooterSection4">
-                        <Height>1.0582cm</Height>
+                        <Height>0.63492cm</Height>
                         <VisibleExpr>=$LineNbr = 0</VisibleExpr>
                         <Items>
                             <TextBox Name="textBox44">
-                                <CanGrow>True</CanGrow>
                                 <Format>=[CROpportunityProducts.CuryAmount.Format]</Format>
-                                <Location>664px, 0px</Location>
-                                <Size>88px, 40px</Size>
+                                <Location>664px, 2px</Location>
+                                <Size>88px, 22px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.CuryExtPrice]</Value>
                             </TextBox>
                             <TextBox Name="textBox45">
-                                <CanGrow>True</CanGrow>
-                                <Location>608px, 0px</Location>
-                                <Size>56px, 40px</Size>
+                                <Location>608px, 2px</Location>
+                                <Size>56px, 22px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.CuryUnitPrice]</Value>
                             </TextBox>
                             <TextBox Name="textBox46">
-                                <CanGrow>True</CanGrow>
-                                <Location>568px, 0px</Location>
-                                <Size>40px, 40px</Size>
+                                <Location>568px, 2px</Location>
+                                <Size>40px, 22px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.Quantity]</Value>
                             </TextBox>
                             <TextBox Name="textBox47">
                                 <CanGrow>True</CanGrow>
-                                <Location>104px, 0px</Location>
-                                <Size>464px, 40px</Size>
-                                <Style>
-                                    <VerticalAlign>Middle</VerticalAlign>
-                                </Style>
+                                <CanSplit>True</CanSplit>
+                                <Location>104px, 2px</Location>
+                                <Size>464px, 22px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.Descr]#010;+IsNull('{br}' + [CROpportunityProducts.NoteText], '')</Value>
                             </TextBox>
                             <TextBox Name="textBox48">
-                                <CanGrow>True</CanGrow>
-                                <Location>24px, 0px</Location>
-                                <Size>80px, 40px</Size>
+                                <Location>24px, 2px</Location>
+                                <Size>80px, 22px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.InventoryID]</Value>
                             </TextBox>
                             <TextBox Name="textBox49">
-                                <CanGrow>True</CanGrow>
                                 <Format>N1</Format>
-                                <Location>0px, 0px</Location>
-                                <Size>24px, 40px</Size>
+                                <Location>0px, 2px</Location>
+                                <Size>24px, 22px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
-                                    <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.SortOrder]</Value>

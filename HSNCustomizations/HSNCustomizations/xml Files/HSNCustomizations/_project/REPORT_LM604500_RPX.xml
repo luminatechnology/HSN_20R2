@@ -129,10 +129,6 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         <ChildField>=True</ChildField>
                         <ParentField>LUMOpprTermCond.IsActive</ParentField>
                     </RelationRow>
-                    <RelationRow>
-                        <ChildField>OpportunityID</ChildField>
-                        <ParentField>OpportunityID</ParentField>
-                    </RelationRow>
                 </Links>
                 <ParentName>CRQuote</ParentName>
             </ReportRelation>
@@ -2496,7 +2492,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Location>0px, 48px</Location>
                                 <Size>752px, 88px</Size>
                                 <StyleName>Normal</StyleName>
-                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' #010;+ '{br}' #010;+ [CRQuote.OwnerID_Owner_displayName] #010;+ '{br}' #010;+ IsNull([OpportunityContact.Phone1] + '{br}', '') #010;+ 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
+                                <Value>='We believe that our quotation meets your requirements and we look forward to receiving your favorable response.#010;Meanwhile, should you need any additional information, please feel free to contact the undersigned.#010;#010;Thank you.#010;Yours sincerely,' #010;+ '{br}' #010;+ IsNull([CRQuote.OwnerID_Owner_displayName] + '{br}', '') #010;+ IsNull([OpportunityContact.Phone1] + '{br}', '') #010;+ 'HIGHPOINT SERVICE NETWORK SDN. BHD'#010;#010;</Value>
                             </TextBox>
                         </Items>
                     </Footer>
@@ -2521,7 +2517,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         <Variables>
                             <ReportVariable>
                                 <Name>Defineitions</Name>
-                                <ValueExpr>=$Defineitions + [LUMOpprTermCond.Definition] + '{br}'</ValueExpr>
+                                <ValueExpr>=$Defineitions + IsNull([LUMOpprTermCond.Definition], '') + '{br}'</ValueExpr>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>LineNbr</Name>
@@ -2529,7 +2525,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>Titles</Name>
-                                <ValueExpr>=$Titles + [LUMOpprTermCond.Title] + IIf(Len([LUMOpprTermCond.Definition]) &gt;= 142,  '{br}{br}','{br}')</ValueExpr>
+                                <ValueExpr>=$Titles + IsNull([LUMOpprTermCond.Title], '') + IIf(Len([LUMOpprTermCond.Definition]) &gt;= 142,  '{br}{br}','{br}')</ValueExpr>
                             </ReportVariable>
                         </Variables>
                         <Visible>False</Visible>
