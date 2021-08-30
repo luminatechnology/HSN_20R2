@@ -1,10 +1,11 @@
 ﻿<Sql TableName="LUMOpprTermCond" TableSchemaXml="#CDATA">
     <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMOpprTermCond">
   <col name="CompanyID" type="Int" default="Zero" />
-  <col name="OpportunityID" type="NVarChar(10)" />
-  <col name="SortOrder" type="Int" />
-  <col name="IsActive" type="Bit" nullable="true" />
+  <col name="IdentityID" type="Int" identity="true" />
+  <col name="OpportunityID" type="NVarChar(10)" nullable="true" />
   <col name="QuoteID" type="UniqueIdentifier" nullable="true" />
+  <col name="IsActive" type="Bit" nullable="true" />
+  <col name="SortOrder" type="Int" />
   <col name="Title" type="NVarChar(30)" nullable="true" />
   <col name="Definition" type="NVarChar(MAX)" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
@@ -21,8 +22,7 @@
   </index>
   <index name="PK_LUMOpprTermCond" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
-    <col name="OpportunityID" />
-    <col name="SortOrder" />
+    <col name="IdentityID" />
   </index>
 </table>]]></CDATA>
 </Sql>
