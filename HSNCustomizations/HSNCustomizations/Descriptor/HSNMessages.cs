@@ -25,5 +25,7 @@ namespace HSNCustomizations.Descriptor
         public const string ReturnRMAB4Init   = "Please Initiate RMA Before Return RMA";
         public const string PartReqNotRlsd    = "Please Request Part Before Receiving And Eensure Part Request Is Released";
         public const string TotalQtyIsZero    = "System Cannot Save Records With 0 Quantity.";
+        public const string DuplicSortOrder   = "The Sort Order Cannot Be Repeated.";
+        public const string SortOrdMustGreater = "The Sort Order Must Be Greater Than The Last One.";
     }
 }
