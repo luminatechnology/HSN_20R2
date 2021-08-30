@@ -37,6 +37,7 @@ namespace HSNCustomizations.Graph
 
         public PrintTransferProcess()
         {
+            PXUIFieldAttribute.SetEnabled<INRegisterExt.usrTrackingNbr>(DetailsView.Cache, null, true);
             //TransferRecords.SetProcessVisible(false);
             TransferRecords.SetProcessAllVisible(false);
             TransferRecords.SetProcessDelegate(list => PrintTransfers(list));
@@ -49,21 +50,25 @@ namespace HSNCustomizations.Graph
             PXCache cache = this.Caches[typeof(LumINTran)];
 
             //check - cannot be checked items included unprinted and printed
-            int _countPrinted, _countUnprinted;
-            foreach (var transfer in list)
+            int _countPrinted, _countUnprinted, _countPickingNbr;
+            if (transferFilter.ReportType == dicTransferReportType["PickingList"])
             {
-                if (transferFilter.ReportType == dicTransferReportType["PickingList"])
-                {
-                    _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != null).Count();
-                    _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber == null).Count();
-                }
-                else
-                {
-                    _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber != null).Count();
-                    _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber == null).Count();
-                }
-                if (_countPrinted > 0 && _countUnprinted > 0) throw new PXException("Cannot print the report which including both printed and unprinted transactions.");
+                _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != null).Count();
+                _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber == null).Count();
             }
+            else
+            {
+                var TrackingNbrTop = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != null).FirstOrDefault();
+                if (TrackingNbrTop != null) _countPickingNbr = list.Where(x => x.GetExtension<INRegisterExt>().UsrPickingListNumber != TrackingNbrTop.GetExtension<INRegisterExt>().UsrPickingListNumber).Count();
+                else _countPickingNbr = 0;
+                if (_countPickingNbr > 0) throw new PXException("Cannot print the report which including two or more Picking Number.");
+
+                _countPrinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber != null).Count();
+                _countUnprinted = list.Where(x => x.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber == null).Count();
+            }
+            if (_countPrinted > 0 && _countUnprinted > 0) throw new PXException("Cannot print the report which including both printed and unprinted transactions.");
+
+            this.Actions.PressSave();
 
             // Truncate Table
             /*Connect to Database*/
@@ -85,6 +90,8 @@ namespace HSNCustomizations.Graph
                                 .LeftJoin<INRegister>.On<INRegister.docType.IsEqual<INTran.docType>.And<INRegister.refNbr.IsEqual<INTran.refNbr>>>
                                 .Where<INTran.docType.IsEqual<@P.AsString>.And<INTran.refNbr.IsEqual<@P.AsString>>>
                                 .View.Select(this, transfer.DocType, transfer.RefNbr);
+
+                string _checkingNbr = list.Where(x => x.GetExtension<INRegisterExt>().UsrTrackingNbr != null).FirstOrDefault().GetExtension<INRegisterExt>().UsrTrackingNbr;
 
                 foreach (PXResult<INTran, INRegister> line in result)
                 {
@@ -108,6 +115,7 @@ namespace HSNCustomizations.Graph
                     lumINTran.Uom = iNTranLine.UOM;
                     lumINTran.Tositeid = iNTranLine.ToSiteID;
                     lumINTran.UsrAppointmentNbr = iNRegisterLine.GetExtension<INRegisterExt>().UsrAppointmentNbr;
+                    lumINTran.UsrTrackingNbr = _checkingNbr;
                     this.Caches[typeof(LumINTran)].Update(lumINTran);
                 }
 
@@ -125,6 +133,7 @@ namespace HSNCustomizations.Graph
                     dicNumberingSequence.Add($"{transfer.SiteID}-{transfer.ToSiteID}", _numberingSequence);
                 }
 
+                //insert numbering sequence
                 if (transferFilter.ReportType == dicTransferReportType["PickingList"])
                 {
                     transfer.GetExtension<INRegisterExt>().UsrPLIsPrinted = true;
@@ -134,6 +143,7 @@ namespace HSNCustomizations.Graph
                 {
                     transfer.GetExtension<INRegisterExt>().UsrDOIsPrinted = true;
                     if (transfer.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber == null) transfer.GetExtension<INRegisterExt>().UsrDeliveryOrderNumber = _numberingSequence;
+                    if (transfer.GetExtension<INRegisterExt>().UsrTrackingNbr == null) transfer.GetExtension<INRegisterExt>().UsrTrackingNbr = _checkingNbr;
                 }
 
                 this.Caches[typeof(INRegister)].Update(transfer);
