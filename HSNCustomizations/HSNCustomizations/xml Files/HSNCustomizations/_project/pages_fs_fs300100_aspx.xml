@@ -389,4 +389,7 @@
             </AddItem>
         </Children>
     </PXGridLevel>
+    <PXSelector DataField="SMEquipmentID" ParentId="phG_tab_Items#1_PXGridDetails_Levels#0_edUSMEquipmentID" TypeFullName="PX.Web.UI.PXSelector">
+        <Prop Key="FilterByAllFields" Value="True" />
+    </PXSelector>
 </Page>
