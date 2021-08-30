@@ -8,8 +8,14 @@ namespace HSNCustomizations.DAC
     [PXCacheName("Opportunity Terms & Conditions")]
     public class LUMOpprTermCond : IBqlTable
     {
+        #region IdenityID
+        [PXDBIdentity(IsKey = true)]
+        public virtual int? IdenityID { get; set; }
+        public abstract class idenityID : PX.Data.BQL.BqlInt.Field<idenityID> { }
+        #endregion
+
         #region OpportunityID
-        [PXDBString(10, IsKey = true, IsUnicode = true, InputMask = ">CCCCCCCCCCCCCCC")]
+        [PXDBString(10, IsUnicode = true, InputMask = ">CCCCCCCCCCCCCCC")]
         [PXUIField(DisplayName = "Opportunity ID")]
         [PXSelector(typeof(Search2<CROpportunity.opportunityID, LeftJoin<BAccount, On<BAccount.bAccountID, Equal<CROpportunity.bAccountID>>,
                                                                          LeftJoin<Contact, On<Contact.contactID, Equal<CROpportunity.contactID>>>>,
@@ -32,8 +38,16 @@ namespace HSNCustomizations.DAC
         public abstract class opportunityID : PX.Data.BQL.BqlString.Field<opportunityID> { }
         #endregion
 
+        #region QuoteID
+        [PXDBGuid()]
+        [PXUIField(DisplayName = "Quote ID")]
+        [PXDBDefault(typeof(CRQuote.defQuoteID), PersistingCheck = PXPersistingCheck.Nothing)]
+        public virtual Guid? QuoteID { get; set; }
+        public abstract class quoteID : PX.Data.BQL.BqlGuid.Field<quoteID> { }
+        #endregion
+
         #region SortOrder
-        [PXDBInt(IsKey = true)]
+        [PXDBInt()]
         [PXUIField(DisplayName = "Sort Order")]
         public virtual int? SortOrder { get; set; }
         public abstract class sortOrder : PX.Data.BQL.BqlInt.Field<sortOrder> { }
@@ -45,14 +59,6 @@ namespace HSNCustomizations.DAC
         [PXDefault(true)]
         public virtual bool? IsActive { get; set; }
         public abstract class isActive : PX.Data.BQL.BqlBool.Field<isActive> { }
-        #endregion
-
-        #region QuoteID
-        [PXDBGuid()]
-        [PXUIField(DisplayName = "Quote ID")]
-        [PXDBDefault(typeof(CROpportunity.defQuoteID), DefaultForInsert = false, PersistingCheck = PXPersistingCheck.Nothing)]
-        public virtual Guid? QuoteID { get; set; }
-        public abstract class quoteID : PX.Data.BQL.BqlGuid.Field<quoteID> { }
         #endregion
 
         #region Title
