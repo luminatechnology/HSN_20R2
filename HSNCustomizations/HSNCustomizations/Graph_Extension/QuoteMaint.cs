@@ -1,4 +1,5 @@
 using PX.Data;
+using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
@@ -7,7 +8,8 @@ namespace PX.Objects.CR
 {
     public class QuoteMaint_Extension : PXGraphExtension<QuoteMaint>
     {
-        public const string QuoteMyRptID = "LM604500";
+        public const string QuoteMYRptID  = "LM604500";
+        public const string QuoteMY2RptID = "LM604501";
 
         #region Selects
         public SelectFrom<LUMHSNSetup>.View HSNSetupView;
@@ -20,6 +22,7 @@ namespace PX.Objects.CR
             base.Initialize();
 
             Base.actionsFolder.AddMenuAction(printQuoteMY, nameof(Base.PrintQuote), true);
+            Base.actionsFolder.AddMenuAction(printQuoteMY2, nameof(PrintQuoteMY), true);
         }
         #endregion
 
@@ -30,13 +33,20 @@ namespace PX.Objects.CR
         {
             var quote = Base.QuoteCurrent.Current;
 
-            if (HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance == true &&
-                quote?.ExpirationDate != null && Base.CurrentOpportunity.Select().TopFirst?.GetExtension<CROpportunityExt>().UsrValidityDate == null)
+            if (quote != null && HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance == true)
             {
-                PXUpdate<Set<CROpportunityExt.usrValidityDate, Required<CRQuote.expirationDate>>,
-                         CROpportunity,
-                         Where<CROpportunity.opportunityID, Equal<Required<CRQuote.opportunityID>>,
-                               And<CROpportunity.defQuoteID, Equal<Required<CRQuote.quoteID>>>>>.Update(Base, quote.ExpirationDate, quote.OpportunityID, quote.QuoteID);
+                if (quote.ExpirationDate != null && Base.CurrentOpportunity.Select().TopFirst?.GetExtension<CROpportunityExt>().UsrValidityDate == null)
+                {
+                    PXUpdate<Set<CROpportunityExt.usrValidityDate, Required<CRQuote.expirationDate>>,
+                             CROpportunity,
+                             Where<CROpportunity.opportunityID, Equal<Required<CRQuote.opportunityID>>,
+                                   And<CROpportunity.defQuoteID, Equal<Required<CRQuote.quoteID>>>>>.Update(Base, quote.ExpirationDate, quote.OpportunityID, quote.QuoteID);
+                }
+
+                if (TermsConditions.Select().Count <= 0)
+                {
+                    CopyRecordFromOpportunity();
+                }
             }
 
             baseMethod();
@@ -57,7 +67,24 @@ namespace PX.Objects.CR
                     [nameof(CRQuote.QuoteNbr)]      = Base.Quote.Current.QuoteNbr
                 };
 
-                throw new PXReportRequiredException(parameters, QuoteMyRptID, QuoteMyRptID) { Mode = PXBaseRedirectException.WindowMode.NewWindow };
+                throw new PXReportRequiredException(parameters, QuoteMYRptID, QuoteMYRptID) { Mode = PXBaseRedirectException.WindowMode.New };
+            }
+        }
+
+        public PXAction<CRQuote> printQuoteMY2;
+        [PXButton()]
+        [PXUIField(DisplayName = "Print Quote-MY 2", MapEnableRights = PXCacheRights.Select)]
+        protected virtual void PrintQuoteMY2()
+        {
+            if (Base.Quote.Current != null)
+            {
+                Dictionary<string, string> parameters = new Dictionary<string, string>
+                {
+                    [nameof(CRQuote.OpportunityID)] = Base.Quote.Current.OpportunityID,
+                    [nameof(CRQuote.QuoteNbr)] = Base.Quote.Current.QuoteNbr
+                };
+
+                throw new PXReportRequiredException(parameters, QuoteMY2RptID, QuoteMY2RptID) { Mode = PXBaseRedirectException.WindowMode.New };
             }
         }
         #endregion
@@ -70,16 +97,25 @@ namespace PX.Objects.CR
             TermsConditions.AllowSelect = HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance ?? false;
 
             printQuoteMY.SetEnabled(Base.printQuote.GetEnabled());
+            printQuoteMY2.SetEnabled(Base.printQuote.GetEnabled());
         }
+        #endregion
 
-        protected void _(Events.RowInserted<LUMOpprTermCond> e)
+        #region Methods
+        public virtual void CopyRecordFromOpportunity()
         {
-            /// Because LUMOppoTermCond is used between CROpportunity and CRQuote, it can only select one main DAC as the default value of the key field DB, 
-            /// and then use this event with the relevant field value when creating the sales quote form.
-            if (e.Row != null)
+            foreach (LUMOpprTermCond row in SelectFrom<LUMOpprTermCond>.Where<LUMOpprTermCond.opportunityID.IsEqual<@P.AsString>>.View.Select(Base, Base.Quote.Current.OpportunityID))
             {
-                e.Row.OpportunityID = Base.Quote.Current.OpportunityID;
-                e.Row.QuoteID = Base.Quote.Current.QuoteID;
+                LUMOpprTermCond termCond = new LUMOpprTermCond()
+                {
+                    SortOrder  = row.SortOrder,
+                    Title      = row.Title,
+                    Definition = row.Definition
+                };
+
+                termCond.OpportunityID = null;
+
+                TermsConditions.Insert(termCond);
             }
         }
         #endregion

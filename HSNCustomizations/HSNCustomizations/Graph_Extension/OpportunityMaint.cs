@@ -73,6 +73,8 @@ namespace PX.Objects.CR
                     Definition    = row.Definition
                 };
 
+                termCond.QuoteID = null;
+
                 TermsConditions.Insert(termCond);
             }
         }
