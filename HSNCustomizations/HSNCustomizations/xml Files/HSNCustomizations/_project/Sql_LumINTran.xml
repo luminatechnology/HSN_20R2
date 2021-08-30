@@ -19,6 +19,7 @@
   <col name="LastModifiedDateTime" type="DateTime" nullable="true" />
   <col name="ToSiteID" type="Int" nullable="true" />
   <col name="UsrAppointmentNbr" type="NVarChar(20)" nullable="true" />
+  <col name="UsrTrackingNbr" type="NVarChar(20)" nullable="true" />
   <index name="LumINTran_PK" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
     <col name="DocType" />

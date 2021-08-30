@@ -20,10 +20,18 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         </Filters>
         <MailSettings>
             <ActivitySource>INRegister.NoteID</ActivitySource>
-            <ParentSource>
-            </ParentSource>
-            <TemplateID>
-            </TemplateID>
+            <Bcc>
+            </Bcc>
+            <Body>
+            </Body>
+            <Cc>
+            </Cc>
+            <Format>
+            </Format>
+            <Subject>
+            </Subject>
+            <To>
+            </To>
         </MailSettings>
         <PageSettings>
             <Landscape>True</Landscape>
@@ -2947,6 +2955,79 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 </Fields>
                 <FullName>PX.Objects.AR.ARStatementPrint+ContactR</FullName>
             </ReportTable>
+            <ReportTable Name="LumINTran">
+                <Fields>
+                    <ReportField Name="DocType">
+                    </ReportField>
+                    <ReportField Name="InventoryID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="InvtMult">
+                        <DataType>Int16</DataType>
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_description">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_displayName">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_Username">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByScreenID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="LineNbr">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="LocationID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Qty">
+                        <DataType>Decimal</DataType>
+                    </ReportField>
+                    <ReportField Name="RefNbr">
+                    </ReportField>
+                    <ReportField Name="Siteid">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="ToLocationID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="Tositeid">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="TranDate">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="TranDate_Day">
+                    </ReportField>
+                    <ReportField Name="TranDate_Hour">
+                    </ReportField>
+                    <ReportField Name="TranDate_Month">
+                    </ReportField>
+                    <ReportField Name="TranDate_Quarter">
+                    </ReportField>
+                    <ReportField Name="TranDesc">
+                    </ReportField>
+                    <ReportField Name="TranType">
+                    </ReportField>
+                    <ReportField Name="Uom">
+                    </ReportField>
+                    <ReportField Name="UsrAppointmentNbr">
+                    </ReportField>
+                </Fields>
+                <FullName>HSNCustomizations.DAC.LumINTran</FullName>
+            </ReportTable>
             <ReportTable Name="INRegister">
                 <Fields>
                     <ReportField Name="BatchNbr">
@@ -3150,83 +3231,12 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                     </ReportField>
                     <ReportField Name="UsrSrvOrdType_FSSrvOrdType_descr">
                     </ReportField>
+                    <ReportField Name="UsrTrackingNbr">
+                    </ReportField>
                     <ReportField Name="UsrTransferPurp">
                     </ReportField>
                 </Fields>
                 <FullName>PX.Objects.IN.INRegister</FullName>
-            </ReportTable>
-            <ReportTable Name="LumINTran">
-                <Fields>
-                    <ReportField Name="DocType">
-                    </ReportField>
-                    <ReportField Name="InventoryID">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="InvtMult">
-                        <DataType>Int16</DataType>
-                    </ReportField>
-                    <ReportField Name="LastModifiedByID">
-                    </ReportField>
-                    <ReportField Name="LastModifiedByID_description">
-                    </ReportField>
-                    <ReportField Name="LastModifiedByID_Modifier_displayName">
-                    </ReportField>
-                    <ReportField Name="LastModifiedByID_Modifier_Username">
-                    </ReportField>
-                    <ReportField Name="LastModifiedByScreenID">
-                    </ReportField>
-                    <ReportField Name="LastModifiedDateTime">
-                        <DataType>DateTime</DataType>
-                    </ReportField>
-                    <ReportField Name="LastModifiedDateTime_Day">
-                    </ReportField>
-                    <ReportField Name="LastModifiedDateTime_Hour">
-                    </ReportField>
-                    <ReportField Name="LastModifiedDateTime_Month">
-                    </ReportField>
-                    <ReportField Name="LastModifiedDateTime_Quarter">
-                    </ReportField>
-                    <ReportField Name="LineNbr">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="LocationID">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="Qty">
-                        <DataType>Decimal</DataType>
-                    </ReportField>
-                    <ReportField Name="RefNbr">
-                    </ReportField>
-                    <ReportField Name="Siteid">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="ToLocationID">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="Tositeid">
-                        <DataType>Int32</DataType>
-                    </ReportField>
-                    <ReportField Name="TranDate">
-                        <DataType>DateTime</DataType>
-                    </ReportField>
-                    <ReportField Name="TranDate_Day">
-                    </ReportField>
-                    <ReportField Name="TranDate_Hour">
-                    </ReportField>
-                    <ReportField Name="TranDate_Month">
-                    </ReportField>
-                    <ReportField Name="TranDate_Quarter">
-                    </ReportField>
-                    <ReportField Name="TranDesc">
-                    </ReportField>
-                    <ReportField Name="TranType">
-                    </ReportField>
-                    <ReportField Name="Uom">
-                    </ReportField>
-                    <ReportField Name="UsrAppointmentNbr">
-                    </ReportField>
-                </Fields>
-                <FullName>HSNCustomizations.DAC.LumINTran</FullName>
             </ReportTable>
         </Tables>
         <ViewerFields>
@@ -3572,6 +3582,12 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                     </BorderWidth>
                                 </Style>
                                 <Items>
+                                    <TextBox Name="textBox3">
+                                        <Location>216px, 0px</Location>
+                                        <Size>88px, 15px</Size>
+                                        <StyleName>Heading 1</StyleName>
+                                        <Value>Tracking Nbr</Value>
+                                    </TextBox>
                                     <TextBox Name="textBox37">
                                         <Location>8px, 0px</Location>
                                         <Size>104px, 15px</Size>
@@ -3579,7 +3595,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <Value>Delivery Order Nbr</Value>
                                     </TextBox>
                                     <TextBox Name="textBox40">
-                                        <Location>312px, 0px</Location>
+                                        <Location>408px, 0px</Location>
                                         <Size>144px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>To Warehouse</Value>
@@ -3591,7 +3607,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <Value>Ship Date</Value>
                                     </TextBox>
                                     <TextBox Name="textBox5">
-                                        <Location>216px, 0px</Location>
+                                        <Location>312px, 0px</Location>
                                         <Size>88px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Warehouse</Value>
@@ -3600,10 +3616,17 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                             </Panel>
                             <TextBox Name="textBox14">
                                 <CanGrow>True</CanGrow>
-                                <Location>224px, 16px</Location>
+                                <Location>320px, 16px</Location>
                                 <Size>88px, 16px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[ShipFromSite.SiteCD]</Value>
+                            </TextBox>
+                            <TextBox Name="textBox23">
+                                <CanGrow>True</CanGrow>
+                                <Location>224px, 16px</Location>
+                                <Size>88px, 16px</Size>
+                                <StyleName>Normal</StyleName>
+                                <Value>=[INRegister.UsrTrackingNbr]</Value>
                             </TextBox>
                             <TextBox Name="textBox39">
                                 <CanGrow>True</CanGrow>
@@ -3614,7 +3637,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                             </TextBox>
                             <TextBox Name="textBox43">
                                 <CanGrow>True</CanGrow>
-                                <Location>320px, 16px</Location>
+                                <Location>416px, 16px</Location>
                                 <Size>144px, 16px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[ShipToSite.SiteCD]</Value>

@@ -129,5 +129,12 @@ namespace HSNCustomizations.DAC
         public virtual string UsrAppointmentNbr { get; set; }
         public abstract class usrAppointmentNbr : PX.Data.BQL.BqlString.Field<usrAppointmentNbr> { }
         #endregion
+
+        #region UsrTrackingNbr
+        [PXDBString(20, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Checking Number", Enabled = true)]
+        public virtual string UsrTrackingNbr { get; set; }
+        public abstract class usrTrackingNbr : PX.Data.BQL.BqlString.Field<usrTrackingNbr> { }
+        #endregion
     }
 }

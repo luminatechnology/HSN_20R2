@@ -88,5 +88,12 @@ namespace PX.Objects.IN
         public virtual string UsrDeliveryOrderNumber { get; set; }
         public abstract class usrDeliveryOrderNumber : PX.Data.BQL.BqlString.Field<usrDeliveryOrderNumber> { }
         #endregion
+
+        #region UsrTrackingNbr
+        [PXDBString(20, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Tracking Number", Enabled = false)]
+        public virtual string UsrTrackingNbr { get; set; }
+        public abstract class usrTrackingNbr : PX.Data.BQL.BqlString.Field<usrTrackingNbr> { }
+        #endregion
     }
 }
