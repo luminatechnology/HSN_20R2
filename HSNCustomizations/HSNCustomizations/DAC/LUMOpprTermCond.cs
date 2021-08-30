@@ -1,5 +1,6 @@
 using System;
 using PX.Data;
+using PX.Data.ReferentialIntegrity.Attributes;
 using PX.Objects.CR;
 
 namespace HSNCustomizations.DAC
@@ -8,6 +9,13 @@ namespace HSNCustomizations.DAC
     [PXCacheName("Opportunity Terms & Conditions")]
     public class LUMOpprTermCond : IBqlTable
     {
+        #region Keys
+        public class PK : PrimaryKeyOf<LUMOpprTermCond>.By<identityID>
+        {
+            public static LUMOpprTermCond Find(PXGraph graph, int? identityID) => FindBy(graph, identityID);
+        }
+        #endregion
+
         #region IdentityID
         [PXDBIdentity(IsKey = true)]
         public virtual int? IdentityID { get; set; }
