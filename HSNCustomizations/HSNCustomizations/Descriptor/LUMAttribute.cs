@@ -22,7 +22,8 @@ namespace HSNCustomizations.Descriptor
         AWSPARE07 = 9,
         FINISH01 = 10,
         COMPLETE01 = 11,
-        COMPLETE03 = 12
+        COMPLETE03 = 12,
+        INVOICE01 = 13
     }
     #endregion
 
@@ -51,7 +52,8 @@ namespace HSNCustomizations.Descriptor
             "Change to Under Repair Stage when 2-step transfer is received and released",
             "Change to Under Testing when Finished Check Box is ticked",
             "Change to Repair Complete when appointment is 'completed' by QC/ Engineer",
-            "Change to RTS when service order is 'completed' by"
+            "Change to RTS when service order is 'completed' by",
+            "Change to Closed when invoice is generated and released."
         };
 
         protected virtual IEnumerable GetRecords()
