@@ -10,7 +10,7 @@ namespace PX.Objects.CR
     {
         #region Selects
         public SelectFrom<LUMHSNSetup>.View HSNSetupView;
-        public SelectFrom<LUMOpprTermCond>.Where<LUMOpprTermCond.opportunityID.IsEqual<CROpportunity.opportunityID.FromCurrent>>.View TermsConditions;
+        public SelectFrom<LUMOpprTermCond>.Where<LUMOpprTermCond.opportunityID.IsEqual<CROpportunity.opportunityID.FromCurrent>>.OrderBy<LUMOpprTermCond.sortOrder.Asc>.View TermsConditions;
         #endregion
 
         #region Delegate Methods
