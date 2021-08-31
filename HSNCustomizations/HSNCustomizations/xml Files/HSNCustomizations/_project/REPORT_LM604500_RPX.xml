@@ -2336,7 +2336,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                         <Right>2px</Right>
                                         <Top>1px</Top>
                                     </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
@@ -2567,7 +2567,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                         <Bottom>1px</Bottom>
                                         <Right>2px</Right>
                                     </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
@@ -2586,7 +2586,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                         <Bottom>1px</Bottom>
                                         <Right>1px</Right>
                                     </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>

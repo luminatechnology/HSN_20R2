@@ -2326,7 +2326,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                         <Bottom>2px</Bottom>
                                         <Top>4px</Top>
                                     </BorderWidth>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                     <VerticalAlign>Middle</VerticalAlign>
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
@@ -2539,7 +2539,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Location>664px, 2px</Location>
                                 <Size>88px, 22px</Size>
                                 <Style>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.CuryExtPrice]</Value>
@@ -2548,7 +2548,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Location>608px, 2px</Location>
                                 <Size>56px, 22px</Size>
                                 <Style>
-                                    <TextAlign>Center</TextAlign>
+                                    <TextAlign>Right</TextAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.CuryUnitPrice]</Value>
