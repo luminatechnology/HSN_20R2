@@ -1,3 +1,4 @@
 ﻿<Table TableName="FSAppointmentDet">
     <Column TableName="FSAppointmentDet" ColumnName="UsrRMARequired" ColumnType="bool" AllowNull="True" MaxLength="25" DecimalPrecision="2" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="FSAppointmentDet" ColumnName="UsrIsDOA" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
 </Table>
