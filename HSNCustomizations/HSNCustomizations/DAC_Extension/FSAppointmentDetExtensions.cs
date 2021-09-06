@@ -6,7 +6,7 @@ namespace PX.Objects.FS
     {
         #region UsrDummyRMAReq
         [PXString]
-        [PXUIField(DisplayName = "", Enabled = false, Visible = false)]
+        [PXUIField(Enabled = false, Visible = false)]
         [PXUnboundDefault(typeof(Search2<CS.CSAnswers.value, InnerJoin<IN.InventoryItem, On<IN.InventoryItem.noteID, Equal<CS.CSAnswers.refNoteID>,
                                                                                             And<CS.CSAnswers.attributeID, Equal<AppointmentEntry_Extension.rMAReqAttrID>>>>,
                                                              Where<IN.InventoryItem.inventoryID, Equal<Current<FSAppointmentDet.inventoryID>>>>),
@@ -23,6 +23,14 @@ namespace PX.Objects.FS
         [PXFormula(typeof(Default<FSAppointmentDetExt.usrDummyRMAReq>))]
         public virtual bool? UsrRMARequired { get; set; }
         public abstract class usrRMARequired : PX.Data.BQL.BqlBool.Field<usrRMARequired> { }
+        #endregion
+
+        #region UsrIsDOA
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Dead On Arrival")]
+        [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
+        public virtual bool? UsrIsDOA { get; set; }
+        public abstract class usrIsDOA : PX.Data.BQL.BqlBool.Field<usrIsDOA> { }
         #endregion
     }
 }

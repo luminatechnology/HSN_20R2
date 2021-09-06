@@ -203,6 +203,7 @@ namespace PX.Objects.FS
 
             PXUIFieldAttribute.SetVisible<FSAppointmentExt.usrTransferToHQ>(e.Cache, e.Row, hSNSetup?.DisplayTransferToHQ ?? false);
             PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrRMARequired>(Base.AppointmentDetails.Cache, null, activeRMAProcess);
+            PXUIFieldAttribute.SetVisible<FSAppointmentDetExt.usrIsDOA>(Base.AppointmentDetails.Cache, null, activePartRequest);
 
             SettingStageButton();
         }
@@ -262,32 +263,24 @@ namespace PX.Objects.FS
         [PXButton]
         public virtual void OpenPartReceive()
         {
-            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.Released == true && x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.PartReq).Count() <= 0)
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.Released == true && 
+                                                                              x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.PartReq).Count() <= 0)
             {
                 throw new PXException(HSNMessages.PartReqNotRlsd);
             }
 
             string transferNbr = null;
 
-            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
-
-            foreach (INRegister row in INRegisterView.Select())
+            foreach (INRegister row in INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.Released == true && x.TransferType == INTransferType.TwoStep))
             {
-                switch (row.DocType)
-                {
-                    case INDocType.Receipt:
-                        if (row.Released == true) { goto BlankReceipt; }
-                        break;
-
-                    case INDocType.Transfer:
-                        transferNbr = row.Released == true && row.TransferType == INTransferType.TwoStep ? row.RefNbr : null;
-                        break;
-                }
+                transferNbr = row.RefNbr;
             }
+
+            INReceiptEntry receiptEntry = PXGraph.CreateInstance<INReceiptEntry>();
 
             InitReceiptEntry(ref receiptEntry, Base, transferNbr);
 
-            BlankReceipt:
+            //BlankReceipt:
             OpenNewForm(receiptEntry, ReceiptScr);
         }
 
@@ -368,7 +361,18 @@ namespace PX.Objects.FS
 
             foreach (FSAppointmentDet row in list)
             {
-                CreateINTran(transferEntry, row, false, isRMA == false);
+                if (row.Status != ID.Status_AppointmentDet.CANCELED &&
+                    (row.GetExtension<FSAppointmentDetExt>().UsrIsDOA == true ||
+                    SelectFrom<INRegister>.InnerJoin<INTran>.On<INTran.docType.IsEqual<INRegister.docType>
+                                                                .And<INTran.refNbr.IsEqual<INRegister.refNbr>>>
+                                          .Where<INRegister.docType.IsEqual<INDocType.transfer>
+                                                 .And<INRegisterExt.usrSrvOrdType.IsEqual<@P.AsString>
+                                                      .And<INRegisterExt.usrAppointmentNbr.IsEqual<@P.AsString>
+                                                           .And<INRegisterExt.usrTransferPurp.IsEqual<LUMTransferPurposeType.partReq>
+                                                                .And<INTran.inventoryID.IsEqual<@P.AsInt>>>>>>.View.Select(apptEntry, appointment.SrvOrdType, appointment.RefNbr, row.InventoryID).Count <= 0) )
+                {
+                    CreateINTran(transferEntry, row, false, isRMA == false);
+                }
             }
         }
 
@@ -381,15 +385,15 @@ namespace PX.Objects.FS
         {
             FSAppointment appointment = apptEntry.AppointmentSelected.Current;
 
-            INRegister register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegister    register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
             INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
 
-            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
+            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc          = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr = appointment.SORefNbr;
-            regisExt.UsrTransferPurp = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
+            regisExt.UsrSORefNbr       = appointment.SORefNbr;
+            regisExt.UsrTransferPurp   = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
 
             register = receiptEntry.CurrentDocument.Insert(register);
 
@@ -456,19 +460,8 @@ namespace PX.Objects.FS
         /// <param name="graph"></param>
         /// <param name="fromType"></param>
         /// <param name="toType"></param>
-        public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType)
-        {
-            //string note = PXNoteAttribute.GetNote(graph.Caches[fromType], graph.Caches[fromType].Current);
-
-            //if (!string.IsNullOrEmpty(note))
-            //{
-            //    PXNoteAttribute.SetNote(graph.Caches[toType], graph.Caches[toType].Current, note);
-            //    graph.Caches[toType].Update(graph.Caches[toType].Current);
-            //}
-            PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
-
-            //graph.Caches[toType].Update(graph.Caches[toType].Current);
-        }
+        public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType) => 
+        PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
 
         /// <summary>
         /// Get faulty warehouse by branch which only uses for RMA customization.
