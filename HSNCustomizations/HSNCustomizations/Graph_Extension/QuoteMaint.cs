@@ -37,7 +37,7 @@ namespace PX.Objects.CR
 
             if (quote != null && HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance == true)
             {
-                if (quote.ExpirationDate != null && Base.CurrentOpportunity.Select().TopFirst?.GetExtension<CROpportunityExt>().UsrValidityDate == null)
+                if (quote.ExpirationDate != null)// && Base.CurrentOpportunity.Select().TopFirst?.GetExtension<CROpportunityExt>().UsrValidityDate == null)
                 {
                     PXUpdate<Set<CROpportunityExt.usrValidityDate, Required<CRQuote.expirationDate>>,
                              CROpportunity,
