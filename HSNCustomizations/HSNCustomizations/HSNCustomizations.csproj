@@ -79,6 +79,7 @@
     <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
     <Compile Include="Graph\ProcessSCBPaymentMaint.cs" />
+    <Compile Include="Graph_Extension\APPaymentEntry.cs" />
     <Compile Include="Graph_Extension\ARPaymentEntry.cs" />
     <Compile Include="Graph_Extension\CADepositEntry.cs" />
     <Compile Include="Graph_Extension\CREmailActivityMaint.cs" />
