@@ -34,8 +34,9 @@ namespace HSNCustomizations.DAC
 		#region PayTypeID
 		public abstract class payTypeID : PX.Data.BQL.BqlString.Field<payTypeID> { }
 		[PXDBString(10, IsUnicode = true)]
-		[PXDefault(typeof(Search<Location.paymentMethodID,
-							Where<Location.bAccountID, Equal<Current<APPayment.vendorID>>, And<Location.locationID, Equal<Current<APPayment.vendorLocationID>>>>>), PersistingCheck = PXPersistingCheck.Nothing)]
+		[PXDefault("TT")]
+		//[PXDefault(typeof(Search<Location.paymentMethodID,
+		//					Where<Location.bAccountID, Equal<Current<APPayment.vendorID>>, And<Location.locationID, Equal<Current<APPayment.vendorLocationID>>>>>), PersistingCheck = PXPersistingCheck.Nothing)]
 		[PXUIField(DisplayName = "Payment Method", Visibility = PXUIVisibility.SelectorVisible)]
 		[PXSelector(typeof(Search<PaymentMethod.paymentMethodID,
 						  Where<PaymentMethod.useForAP, Equal<True>,
@@ -66,7 +67,8 @@ namespace HSNCustomizations.DAC
                                 And<PaymentMethodAccount.useForAP, Equal<True>,
                                     And<Where<CashAccount.clearingAccount, Equal<False>, Or<Current<APPayment.docType>, In3<APDocType.refund, APDocType.voidRefund>>>>>>>>),
             Visibility = PXUIVisibility.Visible, SuppressCurrencyValidation = true)]
-        public virtual Int32? PayAccountID
+		[PXDefault("SCB")]
+		public virtual Int32? PayAccountID
 		{
 			get
 			{
@@ -99,40 +101,12 @@ namespace HSNCustomizations.DAC
 		#endregion
 
 		#region CurySelTotal
-
 		public abstract class curySelTotal : PX.Data.BQL.BqlDecimal.Field<curySelTotal> { }
 		protected Decimal? _CurySelTotal;
+		[PXDBDecimal()]
 		[PXDefault(TypeCode.Decimal, "0.0")]
-		[PXDBCurrency(typeof(LumProcessSCBPaymentFile.curyInfoID), typeof(LumProcessSCBPaymentFile.selTotal), BaseCalc = false)]
-		[PXUIField(DisplayName = "Selection Total", Visibility = PXUIVisibility.SelectorVisible, Enabled = false)]
-		public virtual Decimal? CurySelTotal
-		{
-			get
-			{
-				return this._CurySelTotal;
-			}
-			set
-			{
-				this._CurySelTotal = value;
-			}
-		}
-		#endregion
-
-		#region SelTotal
-		public abstract class selTotal : PX.Data.BQL.BqlDecimal.Field<selTotal> { }
-		protected Decimal? _SelTotal;
-		[PXDBDecimal(4)]
-		public virtual Decimal? SelTotal
-		{
-			get
-			{
-				return this._SelTotal;
-			}
-			set
-			{
-				this._SelTotal = value;
-			}
-		}
+		[PXUIField(DisplayName = "Selection Total", Enabled = false)]
+		public virtual Decimal? CurySelTotal { get; set; }
 		#endregion
 
 		#region SelCount

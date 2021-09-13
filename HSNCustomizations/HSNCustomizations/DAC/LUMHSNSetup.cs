@@ -117,6 +117,13 @@ namespace HSNCustomizations.DAC
         public abstract class enableOpportunityEnhance : PX.Data.BQL.BqlBool.Field<enableOpportunityEnhance> { }
         #endregion
 
+        #region EnableSCBPaymentFile
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable SCB Payment File")]
+        public virtual bool? EnableSCBPaymentFile { get; set; }
+        public abstract class enableSCBPaymentFile : PX.Data.BQL.BqlBool.Field<enableSCBPaymentFile> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }

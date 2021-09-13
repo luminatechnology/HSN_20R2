@@ -5,8 +5,15 @@ namespace PX.Objects.AP
 {
     public class APPaymentExt : PXCacheExtension<APPayment>
     {
+        #region Selected
+        [PXBool()]
+        [PXUIField(DisplayName = "Selected")]
+        public virtual bool? Selected { get; set; }
+        public abstract class selected : PX.Data.BQL.BqlBool.Field<selected> { }
+        #endregion
+
         #region UsrSCBPaymentDateTime
-        [PXDBDate()]
+        [PXDBDate(PreserveTime = true, InputMask = "g")]
         [PXUIField(DisplayName = "SCB Payment DateTime", Enabled = false)]
         public virtual DateTime? UsrSCBPaymentDateTime { get; set; }
         public abstract class usrSCBPaymentDateTime : PX.Data.BQL.BqlDateTime.Field<usrSCBPaymentDateTime> { }

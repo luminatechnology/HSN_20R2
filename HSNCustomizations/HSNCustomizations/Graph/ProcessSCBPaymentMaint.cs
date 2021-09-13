@@ -16,6 +16,7 @@ using PX.Data.BQL;
 using static PX.Data.PXAccess;
 using BAccount = PX.Objects.CR.BAccount;
 using Branch = PX.Objects.GL.Branch;
+using System.Linq;
 
 namespace HSNCustomizations.Graph
 {
@@ -75,6 +76,35 @@ namespace HSNCustomizations.Graph
 			APPaymentList.SetProcessDelegate(list => DownlodAppayments(list));
 		}
 
+		#region Action
+		public PXAction<LumProcessSCBPaymentFile> PrintAPPaymentRegister;
+		[PXButton]
+		[PXUIField(DisplayName = "Print Payment Register", Enabled = true, MapEnableRights = PXCacheRights.Select)]
+		protected virtual IEnumerable printAPPaymentRegister(PXAdapter adapter)
+		{
+			var selectedAPPaymentList = this.Caches[typeof(APPayment)].Updated.Cast<APPayment>().Where(x => x.Selected ?? true).ToList();
+			this.Actions.PressSave();
+			PXReportRequiredException ex = null;
+			foreach (var aPPayment in selectedAPPaymentList)
+			{
+				Dictionary<string, string> parameters = new Dictionary<string, string>();
+				parameters["RefNbr"] = aPPayment.RefNbr;
+
+				if (ex == null)
+				{
+					ex = new PXReportRequiredException(parameters, "AP622500", "AP622500");
+				}
+				else
+				{
+					ex.AddSibling("AP622500", parameters, false);
+				}
+			}
+			if (ex != null) throw ex;
+
+			return adapter.Get();
+		}
+		#endregion
+
 		[PXMergeAttributes(Method = MergeMethod.Merge)]
 		[APDocType.List]
 		protected virtual void APPayment_DocType_CacheAttached(PXCache sender) { }
@@ -83,7 +113,6 @@ namespace HSNCustomizations.Graph
 		public override void Clear()
 		{
 			Filter.Current.CurySelTotal = 0m;
-			Filter.Current.SelTotal = 0m;
 			Filter.Current.SelCount = 0;
 			cleared = true;
 			base.Clear();
@@ -117,7 +146,22 @@ namespace HSNCustomizations.Graph
 				_copies.Add((APPayment)doc, PXCache<APPayment>.CreateCopy(doc));
 			}
 		}
-		
+		protected virtual void _(Events.FieldUpdated<APPayment.selected> e)
+        {
+			var curLumProcessSCBPaymentFile = this.Caches[typeof(LumProcessSCBPaymentFile)].Cached.RowCast<LumProcessSCBPaymentFile>().ToList();
+
+			var selectedAPPaymentList = this.Caches[typeof(APPayment)].Updated.Cast<APPayment>().Where(x => x.Selected ?? true).ToList();
+			if (selectedAPPaymentList.Count > 0)
+			{
+				curLumProcessSCBPaymentFile[0].SelCount = selectedAPPaymentList.Count;
+				curLumProcessSCBPaymentFile[0].CurySelTotal = selectedAPPaymentList.Select(x => x.CuryOrigDocAmt).Sum();
+			}
+            else
+            {
+				curLumProcessSCBPaymentFile[0].SelCount = 0;
+				curLumProcessSCBPaymentFile[0].CurySelTotal = selectedAPPaymentList.Select(x => x.CuryOrigDocAmt).Sum();
+			}
+		}
 		public void DownlodAppayments(IEnumerable<APPayment> aPPaymentLists)
 		{
 			try
