@@ -29,6 +29,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <Name>signature</Name>
             </EmbeddedImage>
         </EmbeddedImages>
+        <ExportFileName>=Format( 'Quote-{0}',[@OpportunityID])</ExportFileName>
         <Filters>
             <FilterExp>
                 <DataField>CRQuote.OpportunityID</DataField>
@@ -192,7 +193,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <ParentName>Contact</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>http://localhost/HSN</SchemaUrl>
+        <SchemaUrl>http://localhost/HSN_Malaysia</SchemaUrl>
         <StylesTemplate>TemplateForm.rpx</StylesTemplate>
         <Tables>
             <ReportTable Name="CRQuote">
