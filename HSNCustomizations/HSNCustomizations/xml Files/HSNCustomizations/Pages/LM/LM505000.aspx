@@ -17,15 +17,11 @@
             <px:PXLayoutRule runat="server" StartColumn="True" LabelsWidth="SM" ControlSize="M" ></px:PXLayoutRule>
             <px:PXSelector CommitChanges="True" ID="edPayTypeID" runat="server" DataField="PayTypeID" AutoRefresh="True" ></px:PXSelector>
             <px:PXSegmentMask CommitChanges="True" ID="edPayAccountID" runat="server" DataField="PayAccountID" AutoRefresh="True"></px:PXSegmentMask>
-            <px:PXSelector ID="edCuryID" runat="server" DataField="CuryID" ></px:PXSelector>
             <px:PXDateTimeEdit CommitChanges="True" ID="edAdjDate" runat="server" DataField="AdjDate" ></px:PXDateTimeEdit>
             <px:PXLayoutRule runat="server" StartColumn="True" LabelsWidth="SM" ControlSize="M" ></px:PXLayoutRule>
             <px:PXNumberEdit ID="edGLBalance" runat="server" DataField="GLBalance" Enabled="False" ></px:PXNumberEdit>
             <px:PXNumberEdit ID="edCashBalance" runat="server" DataField="CashBalance" Enabled="False" ></px:PXNumberEdit>
-            <px:PXNumberEdit ID="edCurySelTotal" runat="server" DataField="CurySelTotal" Enabled="False" ></px:PXNumberEdit>
-            <px:PXNumberEdit ID="edSelCount" runat="server" DataField="SelCount" Enabled="False" ></px:PXNumberEdit>
-           <%-- <px:PXSelector CommitChanges="True" ID="edPrinterName" runat="server" DataField="PrinterName" />--%>
-        </Template>
+            <px:PXSelector ID="edCuryID" runat="server" DataField="CuryID" ></px:PXSelector></Template>
     </px:PXFormView>
 </asp:Content>
 <asp:Content ID="cont3" ContentPlaceHolderID="phG" runat="Server">
@@ -34,11 +30,12 @@
         <Levels>
             <px:PXGridLevel DataMember="APPaymentList">
                 <Columns>
-                    <px:PXGridColumn DataField="Selected" TextAlign="Center" Type="CheckBox" AllowCheckAll="True" AllowSort="False" AllowMove="False" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="ExtRefNbr" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="RefNbr" LinkCommand="viewDocument" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="VendorID" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="VendorID_Vendor_acctName" ></px:PXGridColumn>
+	<px:PXGridColumn DataField="UsrBankSwiftAttributes" Width="280" />
+	<px:PXGridColumn DataField="UsrBankAccountNbr" Width="280" />
 	<px:PXGridColumn Type="CheckBox" DataField="UsrSCBPaymentExported" Width="60" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="CuryOrigDocAmt" TextAlign="Right" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="DocDate" ></px:PXGridColumn>

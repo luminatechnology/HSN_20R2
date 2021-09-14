@@ -7,7 +7,7 @@ namespace PX.Objects.AP
     {
         #region Selected
         [PXBool()]
-        [PXUIField(DisplayName = "Selected")]
+        [PXUIField(DisplayName = "Selected", Visible = false)]
         public virtual bool? Selected { get; set; }
         public abstract class selected : PX.Data.BQL.BqlBool.Field<selected> { }
         #endregion
@@ -25,6 +25,20 @@ namespace PX.Objects.AP
         [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
         public virtual bool? UsrSCBPaymentExported { get; set; }
         public abstract class usrSCBPaymentExported : PX.Data.BQL.BqlBool.Field<usrSCBPaymentExported> { }
+        #endregion
+
+        #region UsrBankSwiftAttributes
+        [PXString(255)]
+        [PXUIField(DisplayName = "Bank Swift Code", Enabled = false)]
+        public virtual string UsrBankSwiftAttributes { get; set; }
+        public abstract class usrBankSwiftAttributes : PX.Data.BQL.BqlString.Field<usrBankSwiftAttributes> { }
+        #endregion
+
+        #region UsrBankAccountNbrAttributes
+        [PXString(255)]
+        [PXUIField(DisplayName = "Bank Account Number", Enabled = false)]
+        public virtual string UsrBankAccountNbr { get; set; }
+        public abstract class usrBankAccountNbr : PX.Data.BQL.BqlString.Field<usrBankAccountNbr> { }
         #endregion
     }
 }
