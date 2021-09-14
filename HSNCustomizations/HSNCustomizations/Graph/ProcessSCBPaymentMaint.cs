@@ -89,6 +89,7 @@ namespace HSNCustomizations.Graph
 			parameters["AdjDate"] = ((DateTime)currentFiler[0].AdjDate).ToString("yyyy-MM-dd");
 			parameters["PayAccountID"] = SelectFrom<CashAccount>.Where<CashAccount.accountID.IsEqual<@P.AsInt>>.View.Select(this, currentFiler[0].PayAccountID).TopFirst?.CashAccountCD;
 			parameters["PayTypeID"] = currentFiler[0].PayTypeID;
+			parameters["CuryID"] = currentFiler[0].CuryID;
 			throw new PXReportRequiredException(parameters, "LM622500", "LM622500") { Mode = PXBaseRedirectException.WindowMode.New };
 
 			/* Old version
@@ -167,12 +168,14 @@ namespace HSNCustomizations.Graph
 				//var rrr = Caches[typeof(APPayment)].Cached;
 				//Caches[typeof(APPayment)].SetValueExt<APPayment.selected>(line, true);
 				//recalculateSelCountAndTotal();
-				yield return new PXResult<APPayment>(doc);
+				if (line.GetExtension<APPaymentExt>().UsrBankAccountNbr != null) yield return new PXResult<APPayment>(doc);
+				/*
 				if (_copies.ContainsKey((APPayment)doc))
 				{
 					_copies.Remove((APPayment)doc);
 				}
 				_copies.Add((APPayment)doc, PXCache<APPayment>.CreateCopy(doc));
+				*/
 			}
 			
 			
