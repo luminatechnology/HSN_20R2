@@ -17,11 +17,11 @@
             <px:PXLayoutRule runat="server" StartColumn="True" LabelsWidth="SM" ControlSize="M" ></px:PXLayoutRule>
             <px:PXSelector CommitChanges="True" ID="edPayTypeID" runat="server" DataField="PayTypeID" AutoRefresh="True" ></px:PXSelector>
             <px:PXSegmentMask CommitChanges="True" ID="edPayAccountID" runat="server" DataField="PayAccountID" AutoRefresh="True"></px:PXSegmentMask>
-            <px:PXSelector ID="edCuryID" runat="server" DataField="CuryID" ></px:PXSelector>
+            <px:PXDateTimeEdit CommitChanges="True" ID="edAdjDate" runat="server" DataField="AdjDate" ></px:PXDateTimeEdit>
             <px:PXLayoutRule runat="server" StartColumn="True" LabelsWidth="SM" ControlSize="M" ></px:PXLayoutRule>
             <px:PXNumberEdit ID="edGLBalance" runat="server" DataField="GLBalance" Enabled="False" ></px:PXNumberEdit>
             <px:PXNumberEdit ID="edCashBalance" runat="server" DataField="CashBalance" Enabled="False" ></px:PXNumberEdit>
-            <px:PXDateTimeEdit CommitChanges="True" ID="edAdjDate" runat="server" DataField="AdjDate" ></px:PXDateTimeEdit></Template>
+            <px:PXSelector ID="edCuryID" runat="server" DataField="CuryID" ></px:PXSelector></Template>
     </px:PXFormView>
 </asp:Content>
 <asp:Content ID="cont3" ContentPlaceHolderID="phG" runat="Server">
