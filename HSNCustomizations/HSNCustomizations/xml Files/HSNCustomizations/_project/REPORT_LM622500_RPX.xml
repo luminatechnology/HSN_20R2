@@ -25,6 +25,32 @@
                 <Condition>IsNull</Condition>
                 <DataField>@AdjDate</DataField>
             </FilterExp>
+            <FilterExp>
+                <DataField>APPayment.CashAccountID</DataField>
+                <OpenBraces>1</OpenBraces>
+                <Operator>Or</Operator>
+                <Value>@PayAccountID</Value>
+            </FilterExp>
+            <FilterExp>
+                <CloseBraces>1</CloseBraces>
+                <Condition>IsNull</Condition>
+                <DataField>@PayAccountID</DataField>
+            </FilterExp>
+            <FilterExp>
+                <DataField>APPayment.PaymentMethodID</DataField>
+                <OpenBraces>1</OpenBraces>
+                <Operator>Or</Operator>
+                <Value>@PayTypeID</Value>
+            </FilterExp>
+            <FilterExp>
+                <CloseBraces>1</CloseBraces>
+                <Condition>IsNull</Condition>
+                <DataField>@PayTypeID</DataField>
+            </FilterExp>
+            <FilterExp>
+                <DataField>APPayment.Released</DataField>
+                <Value>True</Value>
+            </FilterExp>
         </Filters>
         <GridSize>4px, 4px</GridSize>
         <PageSettings>
@@ -38,6 +64,20 @@
                 <Nullable>True</Nullable>
                 <Prompt>Payment Date</Prompt>
                 <Type>DateTime</Type>
+            </ReportParameter>
+            <ReportParameter>
+                <ColumnSpan>2</ColumnSpan>
+                <DefaultValue>SCB</DefaultValue>
+                <Name>PayAccountID</Name>
+                <Nullable>True</Nullable>
+                <Prompt>Cash Account</Prompt>
+            </ReportParameter>
+            <ReportParameter>
+                <ColumnSpan>2</ColumnSpan>
+                <DefaultValue>TT</DefaultValue>
+                <Name>PayTypeID</Name>
+                <Nullable>True</Nullable>
+                <Prompt>Payment Method</Prompt>
             </ReportParameter>
             <ReportParameter>
                 <ColumnSpan>2</ColumnSpan>

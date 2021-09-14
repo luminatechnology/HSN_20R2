@@ -39,8 +39,8 @@ namespace HSNCustomizations.Graph
 		[PXFilterable]
 		public PXFilteredProcessingJoin<APPayment, LumProcessSCBPaymentFile,
 			InnerJoin<Vendor, On<Vendor.bAccountID, Equal<APPayment.vendorID>>>,
-			Where<boolTrue, Equal<boolTrue>, And<APPayment.released, Equal<True>>>,
-			OrderBy<Desc<LumProcessSCBPaymentFile.adjDate, Desc<APPayment.refNbr>>>> APPaymentList;
+			Where<APPayment.released, Equal<True>>,
+			OrderBy<Desc<APPayment.refNbr>>> APPaymentList;
 
 		public PXSelect<CurrencyInfo> currencyinfo;
 		public PXSelect<CurrencyInfo, Where<CurrencyInfo.curyInfoID, Equal<Required<CurrencyInfo.curyInfoID>>>> CurrencyInfo_CuryInfoID;
@@ -87,6 +87,8 @@ namespace HSNCustomizations.Graph
 
 			Dictionary<string, string> parameters = new Dictionary<string, string>();
 			parameters["AdjDate"] = ((DateTime)currentFiler[0].AdjDate).ToString("yyyy-MM-dd");
+			parameters["PayAccountID"] = SelectFrom<CashAccount>.Where<CashAccount.accountID.IsEqual<@P.AsInt>>.View.Select(this, currentFiler[0].PayAccountID).TopFirst?.CashAccountCD;
+			parameters["PayTypeID"] = currentFiler[0].PayTypeID;
 			throw new PXReportRequiredException(parameters, "LM622500", "LM622500") { Mode = PXBaseRedirectException.WindowMode.New };
 
 			/* Old version
@@ -152,7 +154,15 @@ namespace HSNCustomizations.Graph
 			{
 				//curLumProcessSCBPaymentFile[0].SelCount += 1;
 				//curLumProcessSCBPaymentFile[0].CurySelTotal += ((APPayment)doc).CuryOrigDocAmt;
-				//APPayment line = (APPayment)doc;
+				APPayment line = (APPayment)doc;
+				line.GetExtension<APPaymentExt>().UsrBankSwiftAttributes = SelectFrom<CSAnswers>.
+																			LeftJoin<Vendor>.On<CSAnswers.refNoteID.IsEqual<Vendor.noteID>>.
+																			Where<Vendor.bAccountID.IsEqual<@P.AsInt>.And<CSAnswers.attributeID.IsEqual<_BankSwiftCodeAttr>>>.
+																			View.Select(this, line.VendorID).TopFirst?.Value;
+				line.GetExtension<APPaymentExt>().UsrBankAccountNbr = SelectFrom<CSAnswers>.
+																		LeftJoin<Vendor>.On<CSAnswers.refNoteID.IsEqual<Vendor.noteID>>.
+																		Where<Vendor.bAccountID.IsEqual<@P.AsInt>.And<CSAnswers.attributeID.IsEqual<_BankAccountNumberAttr>>>.
+																		View.Select(this, line.VendorID).TopFirst?.Value;
 				//line.Selected = true;
 				//var rrr = Caches[typeof(APPayment)].Cached;
 				//Caches[typeof(APPayment)].SetValueExt<APPayment.selected>(line, true);
