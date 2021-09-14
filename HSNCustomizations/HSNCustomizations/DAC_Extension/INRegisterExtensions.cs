@@ -16,6 +16,18 @@ namespace PX.Objects.IN
         [INTotalQtyVerification]
         public virtual decimal? TotalQty { get; set; }
         #endregion
+
+        #region NoteID
+        [PXSearchable(SM.SearchCategory.IN, "{0}: {1}", new Type[] { typeof(INRegister.docType), typeof(INRegister.refNbr) },
+                      new Type[] { typeof(INRegisterExt.usrSORefNbr), typeof(INRegisterExt.usrAppointmentNbr), typeof(INRegisterExt.usrTransferPurp), typeof(INRegister.tranDesc), typeof(INRegister.extRefNbr), typeof(INRegister.transferNbr) },
+                      NumberFields = new Type[] { typeof(INRegister.refNbr) },
+                      Line1Format = "{0}{1:d}{2}{3}{4}", Line1Fields = new Type[] { typeof(INRegister.extRefNbr), typeof(INRegister.tranDate), typeof(INRegister.transferType), typeof(INRegister.transferNbr), typeof(INRegister.status) },
+                      Line2Format = "{0}", Line2Fields = new Type[] { typeof(INRegister.tranDesc) },
+                      WhereConstraint = typeof(Where<INRegister.docType, NotEqual<INDocType.production>, And<INRegister.docType, NotEqual<INDocType.disassembly>>>)
+        )]
+        [PXNote(DescriptionField = typeof(INRegister.refNbr), Selector = typeof(INRegister.refNbr))]
+        public Guid? NoteID { get; set; }
+        #endregion
     }
 
     public class INRegisterExt : PXCacheExtension<PX.Objects.IN.INRegister>
