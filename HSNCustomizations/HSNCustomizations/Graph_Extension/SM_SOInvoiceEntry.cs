@@ -269,12 +269,14 @@ namespace PX.Objects.FS
                 var customerInfo = Customer.PK.Find(Base, fsServiceOrderRow.CustomerID);
                 if (fsAdjd != null && customerInfo != null)
                 {
-                    var newLine = Base.Transactions.Insert((ARTran)Base.Transactions.Cache.CreateInstance());
+                    var newLine = new ARTran();
                     newLine.TranDesc = fsAdjd.AdjgRefNbr;
                     newLine.Qty = 1;
                     newLine.CuryUnitPrice = fsServiceOrderRow?.SOPrepaymentRemaining * -1;
+                    newLine.CuryExtPrice = fsServiceOrderRow?.SOPrepaymentRemaining * -1;
                     newLine.AccountID = customerInfo.PrepaymentAcctID;
                     newLine.SubID = customerInfo.PrepaymentSubID;
+                    Base.InsertInvoiceDirectLine(newLine);
                 }
             }
         }
