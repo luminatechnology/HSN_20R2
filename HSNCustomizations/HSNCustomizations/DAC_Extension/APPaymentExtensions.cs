@@ -7,7 +7,7 @@ namespace PX.Objects.AP
     {
         #region Selected
         [PXBool()]
-        [PXUIField(DisplayName = "Selected")]
+        [PXUIField(DisplayName = "Selected", Visible = false)]
         public virtual bool? Selected { get; set; }
         public abstract class selected : PX.Data.BQL.BqlBool.Field<selected> { }
         #endregion
