@@ -7,17 +7,18 @@ using PX.Objects.AR;
 using PX.Objects.SO;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using PX.Data.BQL;
 
 namespace PX.Objects.FS
 {
     public class SM_SOInvoiceEntry_Extension : PXGraphExtension<SM_SOInvoiceEntry, SOInvoiceEntry>
     {
         #region Delegate Method
-        public delegate void CreateInvoiceDelegate(PXGraph graphProcess, List<DocLineExt> docLines, short invtMult, DateTime? invoiceDate, string invoiceFinPeriodID, 
+        public delegate void CreateInvoiceDelegate(PXGraph graphProcess, List<DocLineExt> docLines, short invtMult, DateTime? invoiceDate, string invoiceFinPeriodID,
                                                    OnDocumentHeaderInsertedDelegate onDocumentHeaderInserted, OnTransactionInsertedDelegate onTransactionInserted, PXQuickProcess.ActionFlow quickProcessFlow);
         [PXOverride]
-        public virtual void CreateInvoice(PXGraph graphProcess, List<DocLineExt> docLines, short invtMult, DateTime? invoiceDate, string invoiceFinPeriodID, 
-                                          OnDocumentHeaderInsertedDelegate onDocumentHeaderInserted, OnTransactionInsertedDelegate onTransactionInserted, PXQuickProcess.ActionFlow quickProcessFlow, 
+        public virtual void CreateInvoice(PXGraph graphProcess, List<DocLineExt> docLines, short invtMult, DateTime? invoiceDate, string invoiceFinPeriodID,
+                                          OnDocumentHeaderInsertedDelegate onDocumentHeaderInserted, OnTransactionInsertedDelegate onTransactionInserted, PXQuickProcess.ActionFlow quickProcessFlow,
                                           CreateInvoiceDelegate baseMethod)
         {
             if (docLines.Count == 0)
@@ -72,11 +73,11 @@ namespace PX.Objects.FS
             initialHold = arInvoiceRow.Hold;
             arInvoiceRow.NoteID = null;
             PXNoteAttribute.GetNoteIDNow(Base.Document.Cache, arInvoiceRow);
-            
+
             FSGraphHeler.SetValueExtIfDifferent<ARInvoice.hold>(Base.Document.Cache, arInvoiceRow, true);
             FSGraphHeler.SetValueExtIfDifferent<ARInvoice.customerID>(Base.Document.Cache, arInvoiceRow, fsServiceOrderRow.BillCustomerID);
             FSGraphHeler.SetValueExtIfDifferent<ARInvoice.customerLocationID>(Base.Document.Cache, arInvoiceRow, fsServiceOrderRow.BillLocationID);
-            FSGraphHeler.SetValueExtIfDifferent<ARInvoice.curyID>(Base.Document.Cache,arInvoiceRow, fsServiceOrderRow.CuryID);
+            FSGraphHeler.SetValueExtIfDifferent<ARInvoice.curyID>(Base.Document.Cache, arInvoiceRow, fsServiceOrderRow.CuryID);
 
             FSGraphHeler.SetValueExtIfDifferent<ARInvoice.taxZoneID>(Base.Document.Cache, arInvoiceRow, fsAppointmentRow != null ? fsAppointmentRow.TaxZoneID : fsServiceOrderRow.TaxZoneID);
             FSGraphHeler.SetValueExtIfDifferent<ARInvoice.taxCalcMode>(Base.Document.Cache, arInvoiceRow, fsAppointmentRow != null ? fsAppointmentRow.TaxCalcMode : fsServiceOrderRow.TaxCalcMode);
@@ -101,12 +102,12 @@ namespace PX.Objects.FS
             arInvoiceRow = Base.Document.Update(arInvoiceRow);
 
             if (hSNSetup?.EnableChgInvTypeOnBill ?? false)
-            { 
+            {
                 InvoicingFuncations2.SetContactAndAddressFromSOContact(Base, fsServiceOrderRow, arInvoiceRow.DocType == ARDocType.CashSale);
             }
             else
             {
-                InvoicingFunctions.SetContactAndAddress(Base, fsServiceOrderRow); 
+                InvoicingFunctions.SetContactAndAddress(Base, fsServiceOrderRow);
             }
 
             if (onDocumentHeaderInserted != null)
@@ -256,8 +257,59 @@ namespace PX.Objects.FS
             }
 
             arInvoiceRow = Base.Document.Update(arInvoiceRow);
+
+            // Add new Trans Row for Service order prepayment data
+            GetPrepaymentRemaining(fsServiceOrderRow);
+            if (fsServiceOrderRow != null && arInvoiceRow.DocType == "CSL" && fsServiceOrderRow?.SOPrepaymentRemaining > 0)
+            {
+                var fsAdjd = SelectFrom<FSAdjust>
+                            .Where<FSAdjust.adjdOrderType.IsEqual<P.AsString>
+                                  .And<FSAdjust.adjdOrderNbr.IsEqual<P.AsString>>>
+                            .View.Select(Base, fsServiceOrderRow.SrvOrdType, fsServiceOrderRow.RefNbr).RowCast<FSAdjust>().FirstOrDefault();
+                var customerInfo = Customer.PK.Find(Base, fsServiceOrderRow.CustomerID);
+                if (fsAdjd != null && customerInfo != null)
+                {
+                    var newLine = Base.Transactions.Insert((ARTran)Base.Transactions.Cache.CreateInstance());
+                    newLine.TranDesc = fsAdjd.AdjgRefNbr;
+                    newLine.Qty = 1;
+                    newLine.CuryUnitPrice = fsServiceOrderRow?.SOPrepaymentRemaining * -1;
+                    newLine.AccountID = customerInfo.PrepaymentAcctID;
+                    newLine.SubID = customerInfo.PrepaymentSubID;
+                }
+            }
         }
         #endregion
+
+        #region Method
+
+        public void GetPrepaymentRemaining(FSServiceOrder fsServiceOrderRow)
+        {
+            if(fsServiceOrderRow == null)
+                return;
+            PXResultset<ARPayment> resultSet = null;
+
+            resultSet = (PXResultset<ARPayment>)PXSelectJoin<ARPayment,
+                                                 InnerJoin<FSAdjust,
+                                                 On<
+                                                     ARPayment.docType, Equal<FSAdjust.adjgDocType>,
+                                                     And<ARPayment.refNbr, Equal<FSAdjust.adjgRefNbr>>>>,
+                                                 Where<
+                                                     FSAdjust.adjdOrderType, Equal<Required<FSServiceOrder.srvOrdType>>,
+                                                     And<FSAdjust.adjdOrderNbr, Equal<Required<FSServiceOrder.refNbr>>>>>
+                                                 .Select(new PXGraph(), fsServiceOrderRow.SrvOrdType, fsServiceOrderRow.RefNbr);
+
+            fsServiceOrderRow.SOCuryUnpaidBalanace = fsServiceOrderRow.CuryDocTotal;
+            fsServiceOrderRow.SOCuryBillableUnpaidBalanace = fsServiceOrderRow.SOCuryCompletedBillableTotal;
+            fsServiceOrderRow.SOPrepaymentRemaining = 0;
+            foreach (PXResult<ARPayment> row in resultSet)
+            {
+                ARPayment arPaymentRow = (ARPayment)row;
+                fsServiceOrderRow.SOPrepaymentRemaining += (arPaymentRow.CuryDocBal ?? 0m) - ((arPaymentRow.CuryApplAmt ?? 0) + (arPaymentRow.CurySOApplAmt ?? 0));
+            }
+        }
+
+        #endregion
+
     }
 
     #region Static Class & Methods

@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using PX.Objects.AR;
 
 namespace PX.Objects.FS
 {
@@ -59,7 +60,7 @@ namespace PX.Objects.FS
                 VerifyEquipmentIDMandatory();
 
             if (Base.AppointmentRecords.Current != null &&
-                Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED && 
+                Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED &&
                 HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
             {
                 SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
@@ -164,6 +165,18 @@ namespace PX.Objects.FS
 
             return baseMethod(adapter);
         }
+
+        [PXButton]
+        [PXUIField(DisplayName = "Run Appointment Billing", MapEnableRights = PXCacheRights.Select, MapViewRights = PXCacheRights.Select)]
+        public virtual IEnumerable invoiceAppointment(PXAdapter adapter)
+        {
+            var doc = Base.AppointmentRecords.Current;
+            var prepeymentInfo = Base.ServiceOrderRelated.Current;
+            var customerInfo = Customer.PK.Find(Base, doc.CustomerID);
+            if (prepeymentInfo?.SOPrepaymentRemaining > 0 && (customerInfo == null || !customerInfo.PrepaymentAcctID.HasValue || !customerInfo.PrepaymentSubID.HasValue))
+                throw new PXException("Please maintain the prepayment account for this customer");
+            return Base.InvoiceAppointment(adapter);
+        }
         #endregion
 
         #region Cache Attached
@@ -183,7 +196,7 @@ namespace PX.Objects.FS
             LUMHSNSetup hSNSetup = HSNSetupView.Select();
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
-            bool activeRMAProcess  = hSNSetup?.EnableRMAProcInAppt == true;
+            bool activeRMAProcess = hSNSetup?.EnableRMAProcInAppt == true;
             bool activeWFStageCtrl = hSNSetup?.EnableWFStageCtrlInAppt == true;
 
             openPartRequest.SetEnabled(activePartRequest);
@@ -228,7 +241,7 @@ namespace PX.Objects.FS
             if ((this.HSNSetupView.Select().TopFirst?.EnableAppointmentUpdateEndDate ?? false) && row != null)
             {
                 if ((bool)e.NewValue && !row.ActualDateTimeEnd.HasValue)
-                    Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row,PX.Common.PXTimeZoneInfo.Now);
+                    Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row, PX.Common.PXTimeZoneInfo.Now);
                 else if (!(bool)e.NewValue)
                     Base.AppointmentSelected.SetValueExt<FSAppointment.actualDateTimeEnd>(row, null);
             }
@@ -263,7 +276,7 @@ namespace PX.Objects.FS
         [PXButton]
         public virtual void OpenPartReceive()
         {
-            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.Released == true && 
+            if (this.INRegisterView.Select().RowCast<INRegister>().Where(x => x.DocType == INDocType.Transfer && x.Released == true &&
                                                                               x.GetExtension<INRegisterExt>().UsrTransferPurp == LUMTransferPurposeType.PartReq).Count() <= 0)
             {
                 throw new PXException(HSNMessages.PartReqNotRlsd);
@@ -329,20 +342,20 @@ namespace PX.Objects.FS
         /// <param name="apptEntry"></param>
         public static void InitTransferEntry(ref INTransferEntry transferEntry, AppointmentEntry apptEntry, string descrType = null)
         {
-            FSAppointment appointment   = apptEntry.AppointmentSelected.Current;
-            INRegister register         = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
-            INRegisterExt regisExt      = register.GetExtension<INRegisterExt>();
+            FSAppointment appointment = apptEntry.AppointmentSelected.Current;
+            INRegister register = transferEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
             LUMBranchWarehouse branchWH = LUMBranchWarehouse.PK.Find(apptEntry, apptEntry.Accessinfo.BranchID);
 
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
-            register.TransferType      = INTransferType.TwoStep;
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc          = descrType + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            register.TransferType = INTransferType.TwoStep;
+            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc = descrType + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr = appointment.SORefNbr;
+            regisExt.UsrTransferPurp = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -369,7 +382,7 @@ namespace PX.Objects.FS
                                                  .And<INRegisterExt.usrSrvOrdType.IsEqual<@P.AsString>
                                                       .And<INRegisterExt.usrAppointmentNbr.IsEqual<@P.AsString>
                                                            .And<INRegisterExt.usrTransferPurp.IsEqual<LUMTransferPurposeType.partReq>
-                                                                .And<INTran.inventoryID.IsEqual<@P.AsInt>>>>>>.View.Select(apptEntry, appointment.SrvOrdType, appointment.RefNbr, row.InventoryID).Count <= 0) )
+                                                                .And<INTran.inventoryID.IsEqual<@P.AsInt>>>>>>.View.Select(apptEntry, appointment.SrvOrdType, appointment.RefNbr, row.InventoryID).Count <= 0))
                 {
                     CreateINTran(transferEntry, row, false, isRMA == false);
                 }
@@ -385,15 +398,15 @@ namespace PX.Objects.FS
         {
             FSAppointment appointment = apptEntry.AppointmentSelected.Current;
 
-            INRegister    register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
+            INRegister register = receiptEntry.CurrentDocument.Cache.CreateInstance() as INRegister;
             INRegisterExt regisExt = register.GetExtension<INRegisterExt>();
 
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc          = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc = (!string.IsNullOrEmpty(transferNbr) ? HSNMessages.PartReceive : HSNMessages.RMAInitiated) + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
+            regisExt.UsrSORefNbr = appointment.SORefNbr;
+            regisExt.UsrTransferPurp = !string.IsNullOrEmpty(transferNbr) ? LUMTransferPurposeType.PartRcv : LUMTransferPurposeType.RMAInit;
 
             register = receiptEntry.CurrentDocument.Insert(register);
 
@@ -460,7 +473,7 @@ namespace PX.Objects.FS
         /// <param name="graph"></param>
         /// <param name="fromType"></param>
         /// <param name="toType"></param>
-        public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType) => 
+        public static void SyncNoteApptOrSrvOrd(PXGraph graph, System.Type fromType, System.Type toType) =>
         PXNoteAttribute.CopyNoteAndFiles(graph.Caches[fromType], graph.Caches[fromType].Current, graph.Caches[toType], graph.Caches[toType].Current, true, false);
 
         /// <summary>
@@ -575,7 +588,7 @@ namespace PX.Objects.FS
                 if (item.LineType == "SERVI" && !item.SMEquipmentID.HasValue)
                     throw new PXException("Target Equipment ID cannot be blank for service");
             }
-        }   
+        }
 
         #endregion
     }
