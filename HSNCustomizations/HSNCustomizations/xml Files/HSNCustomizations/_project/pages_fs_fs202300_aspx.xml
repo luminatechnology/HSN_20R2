@@ -110,6 +110,13 @@
                                                         <Prop Key="Width" Value="140" />
                                                     </PXGridColumn>
                                                 </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="AdminOnly" />
+                                                        <Prop Key="Width" Value="60" />
+                                                        <Prop Key="Type" Value="CheckBox" />
+                                                    </PXGridColumn>
+                                                </AddItem>
                                             </Children>
                                         </PXGridLevel>
                                     </AddItem>

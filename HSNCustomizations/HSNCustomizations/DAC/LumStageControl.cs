@@ -43,6 +43,14 @@ namespace HSNCustomizations.DAC
         public abstract class toStage : PX.Data.BQL.BqlInt.Field<toStage> { }
         #endregion
 
+        #region AdminOnly
+        [PXDBBool]
+        [PXUIField(DisplayName = "Admin Only")]
+        [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
+        public virtual bool? AdminOnly { get; set; }
+        public abstract class adminOnly : PX.Data.BQL.BqlBool.Field<adminOnly> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }

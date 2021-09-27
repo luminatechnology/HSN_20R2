@@ -4,6 +4,7 @@
   <col name="SrvOrdType" type="Char(4)" />
   <col name="CurrentStage" type="Int" />
   <col name="ToStage" type="Int" />
+  <col name="AdminOnly" type="Bit" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />
   <col name="CreatedDateTime" type="DateTime" />

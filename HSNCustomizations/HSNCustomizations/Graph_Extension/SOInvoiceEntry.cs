@@ -29,6 +29,24 @@ namespace PX.Objects.SO
                     UpdateAppointmentStageManual(item.GetExtension<FSxARTran>().AppointmentID, item.GetExtension<FSxARTran>().SOID);
             return releaseResult;
         }
+
+        public delegate IEnumerable PrintInvoiceDelegate(PXAdapter adapter);
+        [PXOverride]
+        public virtual IEnumerable PrintInvoice(PXAdapter adapter, PrintInvoiceDelegate baseMethod)
+        {
+            try
+            {
+                baseMethod(adapter);
+            }
+            catch (Exception ex)
+            {
+                var prepaymentPrice = Base.Transactions.Select().RowCast<ARTran>().ToList().Where(x => x.CuryUnitPrice < 0).Sum(x => x.CuryUnitPrice) ?? 0;
+               ((PXReportRequiredException)ex).Parameters.Add("PrepaymentPrice", prepaymentPrice.ToString());
+                throw ex;
+            }
+            return adapter.Get();
+        }
+
         #endregion
 
         #region Method
@@ -63,7 +81,7 @@ namespace PX.Objects.SO
             }
             else
                 return false;
-            
+
         }
         #endregion
 

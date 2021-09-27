@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
 using PX.Objects.AR;
+using PX.SM;
 
 namespace PX.Objects.FS
 {
@@ -560,6 +561,11 @@ namespace PX.Objects.FS
         /// <summary> Setting Stage Button Status </summary>
         public void SettingStageButton()
         {
+            var isAdmin = SelectFrom<UsersInRoles>
+                              .Where<UsersInRoles.rolename.IsEqual<P.AsString>
+                                    .And<UsersInRoles.username.IsEqual<P.AsString>>>
+                              .View.Select(Base, "Administrator", PXAccess.GetUserName())
+                              .Count > 0;
             var row = Base.AppointmentRecords.Current;
 
             if (row != null && !string.IsNullOrEmpty(row.SrvOrdType))
@@ -573,7 +579,7 @@ namespace PX.Objects.FS
                 {
                     foreach (ButtonMenu btnMenu in btn.Menus)
                     {
-                        this.lumStages.SetVisible(btnMenu.Command, lists.Exists(x => FSWorkflowStageHandler.GetStageName(x.GetItem<LumStageControl>().ToStage) == btnMenu.Command));
+                        this.lumStages.SetVisible(btnMenu.Command, lists.Exists(x => (!(x.GetItem<LumStageControl>().AdminOnly ?? false) || ((x.GetItem<LumStageControl>().AdminOnly ?? false) && isAdmin ? true : false)) && FSWorkflowStageHandler.GetStageName(x.GetItem<LumStageControl>().ToStage) == btnMenu.Command));
                     }
                 }
             }
