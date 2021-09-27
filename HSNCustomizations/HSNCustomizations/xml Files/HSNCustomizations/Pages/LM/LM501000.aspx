@@ -39,6 +39,8 @@
 				<px:PXGridColumn DataField="UsrTrackingNbr" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn Type="CheckBox" DataField="UsrDOIsPrinted" Width="60" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrDeliveryOrderNumber" Width="120" ></px:PXGridColumn>
+				<px:PXGridColumn DataField="LastModifiedDateTime" Width="90" />
+				<px:PXGridColumn DataField="LastModifiedByID_Modifier_Username" Width="70" />
 				<px:PXGridColumn DataField="SiteID" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="ToSiteID" Width="140" ></px:PXGridColumn>
 				<px:PXGridColumn DataField="UsrAppointmentNbr" Width="140" ></px:PXGridColumn>
