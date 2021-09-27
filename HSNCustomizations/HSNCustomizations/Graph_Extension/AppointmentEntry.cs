@@ -1,6 +1,8 @@
+using PX.Common;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
+using PX.Objects.AR;
 using PX.Objects.IN;
 using PX.Objects.CS;
 using PX.Objects.CR.Standalone;
@@ -267,7 +269,7 @@ namespace PX.Objects.FS
         {
             INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
 
-            InitTransferEntry(ref transferEntry, Base, HSNMessages.PartRequest);
+            InitTransferEntry(ref transferEntry, Base,HSNMessages.PartRequest);
 
             OpenNewForm(transferEntry, TransferScr);
         }
@@ -388,6 +390,8 @@ namespace PX.Objects.FS
                     CreateINTran(transferEntry, row, false, isRMA == false);
                 }
             }
+
+            if (transferEntry.transactions.Cache.Inserted.Count() <= 0) { throw new PXException(HSNMessages.NoPartRequest); }
         }
 
         /// <summary>
