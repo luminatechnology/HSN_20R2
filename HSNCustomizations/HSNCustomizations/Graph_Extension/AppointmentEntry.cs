@@ -11,7 +11,6 @@ using System.Collections;
 using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
-using PX.Objects.AR;
 using PX.SM;
 
 namespace PX.Objects.FS
