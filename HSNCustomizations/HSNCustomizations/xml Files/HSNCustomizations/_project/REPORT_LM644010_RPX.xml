@@ -3498,9 +3498,9 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                     <TextBox Name="textBox25">
                         <CanGrow>True</CanGrow>
                         <Location>152px, 0px</Location>
-                        <Size>192px, 16px</Size>
+                        <Size>184px, 16px</Size>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIF([LumINTran.TranDesc] &lt;&gt; Null, '-' + [LumINTran.TranDesc], '')</Value>
+                        <Value>=IIF([LumINTran.TranDesc] &lt;&gt; Null, ' - ' + [LumINTran.TranDesc], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox31">
                         <CanGrow>True</CanGrow>
@@ -3534,8 +3534,8 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Value>=IIf([InventoryItem.InventoryCD] &lt;&gt; Null, [InventoryItem.InventoryCD], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox50">
-                        <Location>352px, 0px</Location>
-                        <Size>48px, 16px</Size>
+                        <Location>344px, 0px</Location>
+                        <Size>56px, 16px</Size>
                         <StyleName>Normal</StyleName>
                         <Value>=[INLocation.LocationCD]</Value>
                     </TextBox>
@@ -3727,8 +3727,8 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <Value>Description</Value>
                                     </TextBox>
                                     <TextBox Name="textBox60">
-                                        <Location>336px, 0px</Location>
-                                        <Size>48px, 14px</Size>
+                                        <Location>328px, 0px</Location>
+                                        <Size>56px, 14px</Size>
                                         <StyleName>Heading 1</StyleName>
                                         <Value>Location</Value>
                                     </TextBox>

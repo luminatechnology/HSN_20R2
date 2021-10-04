@@ -3045,7 +3045,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Location>152px, 0px</Location>
                         <Size>192px, 16px</Size>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIF([LumINTran.TranDesc] &lt;&gt; Null, '-' + [LumINTran.TranDesc], '')</Value>
+                        <Value>=IIF([LumINTran.TranDesc] &lt;&gt; Null, ' - ' + [LumINTran.TranDesc], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox27">
                         <CanGrow>True</CanGrow>
