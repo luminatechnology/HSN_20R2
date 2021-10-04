@@ -3451,7 +3451,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 </Variables>
                 <Items>
                     <Line Name="line2">
-                        <LineStyle>Dashed</LineStyle>
+                        <LineStyle>Dotted</LineStyle>
                         <Location>0.16667in, 0.16667in</Location>
                         <Size>1000px, 0.08333in</Size>
                     </Line>
@@ -3495,13 +3495,6 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <StyleName>Normal</StyleName>
                         <Value>=[ToLocation.LocationCD]</Value>
                     </TextBox>
-                    <TextBox Name="textBox25">
-                        <CanGrow>True</CanGrow>
-                        <Location>152px, 0px</Location>
-                        <Size>184px, 16px</Size>
-                        <StyleName>Normal</StyleName>
-                        <Value>=IIF([LumINTran.TranDesc] &lt;&gt; Null, ' - ' + [LumINTran.TranDesc], '')</Value>
-                    </TextBox>
                     <TextBox Name="textBox31">
                         <CanGrow>True</CanGrow>
                         <Location>680px, 0px</Location>
@@ -3524,14 +3517,9 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                     <TextBox Name="textBox42">
                         <CanGrow>True</CanGrow>
                         <Location>64px, 0px</Location>
-                        <Size>88px, 16px</Size>
-                        <Style>
-                            <Font>
-                                <Style>Bold</Style>
-                            </Font>
-                        </Style>
+                        <Size>280px, 16px</Size>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf([InventoryItem.InventoryCD] &lt;&gt; Null, [InventoryItem.InventoryCD], '')</Value>
+                        <Value>=IIf([InventoryItem.InventoryCD] &lt;&gt; Null, [InventoryItem.InventoryCD], '')#010;+IIF([LumINTran.TranDesc] &lt;&gt; Null, ' - ' + [LumINTran.TranDesc], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox50">
                         <Location>344px, 0px</Location>
