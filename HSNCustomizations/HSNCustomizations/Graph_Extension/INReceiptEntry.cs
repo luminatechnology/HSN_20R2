@@ -7,6 +7,7 @@ using System.Collections;
 using System.Linq;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
+using System.Collections.Generic;
 
 namespace PX.Objects.IN
 {
@@ -17,6 +18,11 @@ namespace PX.Objects.IN
         [PXOverride]
         public virtual IEnumerable Release(PXAdapter adapter, ReleaseDelegate baseMethod)
         {
+            if (VerifySiteAndLocationFromAppt() == false)
+            {
+                throw new PXException(HSNMessages.WHLocDiffFromAppt);
+            }
+
             // Doing release
             baseMethod(adapter);
             // Process Appointment & Service Order Stage Change
@@ -92,8 +98,8 @@ namespace PX.Objects.IN
 
         #region Methods
         /// <summary>
-        /// When user release the Receipts and the Appointment Nbr is not blank, then if the INTRAN.InventoryID of the �Detail Ref Nbr?<> FSAppointmentDet.InventoryID of the �Detail Ref Nbr?then
-        /// Set Line Status =�Canceled?of FSAppointmentDet.InventoryID of the �Detail Ref Nbr?
+        /// When user release the Receipts and the Appointment Nbr is not blank, then if the INTRAN.InventoryID of the Detail Ref Nbr?<> FSAppointmentDet.InventoryID of the Detail Ref Nbr?then
+        /// Set Line Status = Canceled of FSAppointmentDet.InventoryID of the Detail Ref Nbr?
         /// Insert a new line into FSAppointmentDet with inventoryid = INTRAN.InventoryID of the �Detail Ref Nbr? The �Estimated Quantity?is the same as the canceled line.
         /// In other words, if the inventory ID received is different with the inventory id requested.System cancels the original line, and create a new line with new inventory ID.
         /// </summary>
@@ -197,6 +203,32 @@ namespace PX.Objects.IN
                 FSWorkflowStageHandler.UpdateTargetFormStage(nameof(ServiceOrderEntry), autoWFStage.NextStage, srvType, appNbr, soRef);
                 FSWorkflowStageHandler.InsertTargetFormHistory(nameof(ServiceOrderEntry), autoWFStage, srvType, appNbr, soRef);
             }
+            return true;
+        }
+
+        /// <summary>
+        /// When user release the Inventory Receipts and INRegister.UsrAppointmentNbr is not blank.
+        /// Compare the warehouse and warehouse location for the same inventory ID and Detail Ref.Nbr between the Receipts and Appointment Details.
+        /// If the warehouse or warehouse location is different, please throw error message
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool VerifySiteAndLocationFromAppt()
+        {
+            var regisExt = Base.CurrentDocument.Current?.GetExtension<INRegisterExt>();
+            
+            //bool activePartReq  = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnablePartReqInAppt?? true;
+            if (!string.IsNullOrEmpty(regisExt.UsrAppointmentNbr))
+            {
+                var list = SelectFrom<FSAppointmentDet>.Where<FSAppointmentDet.srvOrdType.IsEqual<@P.AsString>
+                                                              .And<FSAppointmentDet.refNbr.IsEqual<@P.AsString>>>.View.Select(Base, regisExt.UsrSrvOrdType, regisExt.UsrAppointmentNbr).RowCast<FSAppointmentDet>().ToList();
+
+                foreach (INTran row in Base.transactions.Cache.Cached)
+                {
+                    if (list.Exists(x => x.Status != ID.Status_AppointmentDet.CANCELED && x.InventoryID == row.InventoryID &&
+                                         x.LineRef == row.GetExtension<INTranExt>().UsrApptLineRef && x.SiteID == row.SiteID && x.LocationID == row.LocationID) == false) { return false; }
+                }
+            }
+
             return true;
         }
         #endregion
