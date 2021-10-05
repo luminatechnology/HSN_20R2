@@ -41,7 +41,9 @@ namespace PX.Objects.SO
             catch (Exception ex)
             {
                 var prepaymentPrice = Base.Transactions.Select().RowCast<ARTran>().ToList().Where(x => x.CuryUnitPrice < 0).Sum(x => x.CuryUnitPrice) ?? 0;
-               ((PXReportRequiredException)ex).Parameters.Add("PrepaymentPrice", prepaymentPrice.ToString());
+                var preference = SelectFrom<LUMHSNSetup>.View.Select(Base).RowCast<LUMHSNSetup>().ToList().FirstOrDefault();
+                if (preference != null && (preference?.EnableChgInvTypeOnBill ?? false))
+                    ((PXReportRequiredException)ex).Parameters.Add("PrepaymentPrice", prepaymentPrice.ToString());
                 throw ex;
             }
             return adapter.Get();
