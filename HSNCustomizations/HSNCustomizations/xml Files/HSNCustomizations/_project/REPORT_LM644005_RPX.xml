@@ -20,18 +20,10 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
         </Filters>
         <MailSettings>
             <ActivitySource>INRegister.NoteID</ActivitySource>
-            <Bcc>
-            </Bcc>
-            <Body>
-            </Body>
-            <Cc>
-            </Cc>
-            <Format>
-            </Format>
-            <Subject>
-            </Subject>
-            <To>
-            </To>
+            <ParentSource>
+            </ParentSource>
+            <TemplateID>
+            </TemplateID>
         </MailSettings>
         <PageSettings>
             <Landscape>True</Landscape>
@@ -3000,7 +2992,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                 </Items>
             </PageHeader>
             <Detail Name="detailSection1">
-                <Height>0.42328cm</Height>
+                <Height>0.63492cm</Height>
                 <Variables>
                     <ReportVariable>
                         <Name>LineNbr</Name>
@@ -3009,6 +3001,11 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                     </ReportVariable>
                 </Variables>
                 <Items>
+                    <Line Name="line2">
+                        <LineStyle>Dotted</LineStyle>
+                        <Location>0.16667in, 0.16667in</Location>
+                        <Size>1000px, 0.08333in</Size>
+                    </Line>
                     <TextBox Name="textBox12">
                         <Location>552px, 0px</Location>
                         <Size>96px, 16px</Size>
@@ -3064,7 +3061,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Location>64px, 0px</Location>
                         <Size>280px, 16px</Size>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf([InventoryItem.InventoryCD] &lt;&gt; Null, [InventoryItem.InventoryCD], '') + ' '#010;+IIF([LumINTran.TranDesc] &lt;&gt; Null, [LumINTran.TranDesc], '')</Value>
+                        <Value>=IIf([InventoryItem.InventoryCD] &lt;&gt; Null, [InventoryItem.InventoryCD], '')#010;+IIF([LumINTran.TranDesc] &lt;&gt; Null, ' - ' + [LumINTran.TranDesc], '')</Value>
                     </TextBox>
                     <TextBox Name="textBox50">
                         <Location>352px, 0px</Location>

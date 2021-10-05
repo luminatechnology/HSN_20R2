@@ -65,7 +65,14 @@ namespace PX.Objects.FS
                 Base.AppointmentRecords.Current.Status != FSAppointment.status.CLOSED &&
                 HSNSetupView.Select().TopFirst?.EnableHeaderNoteSync == true)
             {
-                SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
+                if (Base.AppointmentRecords.Current.AppointmentID < 0)
+                {
+                    SyncNoteApptOrSrvOrd(Base, typeof(FSServiceOrder), typeof(FSAppointment));
+                }
+                else
+                {
+                    SyncNoteApptOrSrvOrd(Base, typeof(FSAppointment), typeof(FSServiceOrder));
+                }
             }
 
             var isNewData = Base.AppointmentRecords.Cache.Inserted.RowCast<FSAppointment>().Count() > 0;
