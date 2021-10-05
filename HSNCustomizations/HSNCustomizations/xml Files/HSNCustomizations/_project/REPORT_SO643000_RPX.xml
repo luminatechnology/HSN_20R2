@@ -31,9 +31,17 @@
         <LayoutUnit>Inch</LayoutUnit>
         <MailSettings>
             <ActivitySource>ARInvoice.NoteID</ActivitySource>
+            <Bcc>
+            </Bcc>
             <Body>='Dear Customer,#010;#010;This is an automatic email to notify you that you have a new Invoice available on your account.  #010;You will find a copy of'+' '+[ARInvoice.PrintDocType]+' '+'#'+' '+[ARInvoice.RefNbr]+' '+'attached to this email.  #010;#010;If you have any questions, please don’t hesitate to contact us at Email.  #010;#010;Thank you for choosing'+' '+[CompanyContact.FullName]+'.'#010;</Body>
+            <Cc>
+            </Cc>
+            <Format>
+            </Format>
             <ParentSource>Customer.NoteID</ParentSource>
             <Subject>=[CompanyContact.FullName]+' '+[ARInvoice.PrintDocType]+' '+'#'+' '+[ARInvoice.RefNbr]</Subject>
+            <TemplateID>
+            </TemplateID>
             <To>=IsNull([BillingContact.EMail],'')</To>
         </MailSettings>
         <PageSettings>
@@ -4788,6 +4796,7 @@
                                         <Value>='Total (' + [ARInvoice.CuryID] + '):'</Value>
                                     </TextBox>
                                     <TextBox Name="textBox38">
+                                        <Format>='0.00'</Format>
                                         <Location>600px, 8px</Location>
                                         <ProcessOrder>WhilePrint</ProcessOrder>
                                         <Size>96px, 16px</Size>
@@ -4813,6 +4822,7 @@
                                         <VisibleExpr>=[InvoiceNote.NoteText] &lt;&gt; null and [InvoiceNote.NoteText] &lt;&gt; ''</VisibleExpr>
                                     </TextBox>
                                     <TextBox Name="textBox6">
+                                        <Format>='0.00'</Format>
                                         <Location>600px, 24px</Location>
                                         <Size>96px, 16px</Size>
                                         <Style>
@@ -4822,6 +4832,7 @@
                                         <Value>=[ARInvoice.CuryTaxTotal]</Value>
                                     </TextBox>
                                     <TextBox Name="textBox60">
+                                        <Format>='0.00'</Format>
                                         <Location>600px, 56px</Location>
                                         <ProcessOrder>WhilePrint</ProcessOrder>
                                         <Size>96px, 16px</Size>
@@ -4849,6 +4860,7 @@
                                         <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
                                     </TextBox>
                                     <TextBox Name="textBox64">
+                                        <Format>='0.00'</Format>
                                         <Location>600px, 72px</Location>
                                         <ProcessOrder>WhilePrint</ProcessOrder>
                                         <Size>96px, 16px</Size>
@@ -4860,6 +4872,7 @@
                                         <VisibleExpr>=([PageIndex]=[PageCount])</VisibleExpr>
                                     </TextBox>
                                     <TextBox Name="textBox8">
+                                        <Format>='0.00'</Format>
                                         <Location>600px, 40px</Location>
                                         <Size>96px, 16px</Size>
                                         <Style>
