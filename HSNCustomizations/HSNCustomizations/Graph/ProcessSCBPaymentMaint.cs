@@ -383,7 +383,11 @@ namespace HSNCustomizations.Graph
 								count++;
 							}
 							//14: Left(Companies.AccontName, 35)
-							if (CompanyInfo?.AcctName != null) line += CompanyInfo?.AcctName.Substring(0, 35).ToUpper() + "|";
+							if (CompanyInfo?.AcctName != null)
+							{
+								if (CompanyInfo?.AcctName.Length > 35) line += CompanyInfo?.AcctName.Substring(0, 35).ToUpper() + "|";
+								else line += CompanyInfo?.AcctName.ToUpper() + "|";
+							}
 							else line += "|";
 							count++;
 							//15: Left(CompaniesAddress.Addressline1,35)
@@ -409,9 +413,21 @@ namespace HSNCustomizations.Graph
 							else line += "|";
 							count++;
 							//17: Left(CompaniesAddress.City+・, ．+State,35)
-							if (CompanyAddress?.City != null && CompanyAddress?.State != null) line += (CompanyAddress?.City + ", " + CompanyAddress?.State).ToUpper() + "|";
-							else if (CompanyAddress?.City != null && CompanyAddress?.State == null) line += (CompanyAddress?.City).ToUpper() + "|";
-							else if (CompanyAddress?.City == null && CompanyAddress?.State != null) line += (CompanyAddress?.State).ToUpper() + "|";
+							if (CompanyAddress?.City != null && CompanyAddress?.State != null)
+							{
+								if ((CompanyAddress?.City + ", " + CompanyAddress?.State).Length > 35) line += (CompanyAddress?.City + ", " + CompanyAddress?.State).Substring(0, 35).ToUpper() + "|";
+								else line += (CompanyAddress?.City + ", " + CompanyAddress?.State).ToUpper() + "|";
+							}
+							else if (CompanyAddress?.City != null && CompanyAddress?.State == null)
+							{
+								if ((CompanyAddress?.City).Length > 35) line += (CompanyAddress?.City).Substring(0, 35).ToUpper() + "|";
+								else line += (CompanyAddress?.City).ToUpper() + "|";
+							}
+							else if (CompanyAddress?.City == null && CompanyAddress?.State != null)
+							{
+								if ((CompanyAddress?.State).Length > 35) line += (CompanyAddress?.State).Substring(0, 35).ToUpper() + "|";
+								else line += (CompanyAddress?.State).ToUpper() + "|";
+							} 
 							else line += "|";
 							count++;
 							//18: Null
@@ -421,7 +437,11 @@ namespace HSNCustomizations.Graph
 							line += "|";
 							count++;
 							//20: Left(Vendor attribute BANKACCNAM, 35)
-							if (VendorBankAccountNameAttr?.Value != null) line += VendorBankAccountNameAttr?.Value.ToUpper() + "|";
+							if (VendorBankAccountNameAttr?.Value != null)
+                            {
+								if (VendorBankAccountNameAttr?.Value.Length > 35) line += VendorBankAccountNameAttr?.Value.Substring(0, 35).ToUpper() + "|";
+								else line += VendorBankAccountNameAttr?.Value.ToUpper() + "|";
+							}
 							else line += "|";
 							count++;
 							//21: Left(APAddress.Addressline1,35)
@@ -434,22 +454,38 @@ namespace HSNCustomizations.Graph
 							count++;
 							//22: Left(APAddress.Addressline2 + ．, ・+ Postalcode,35)
 							if (APAddress?.AddressLine2 != null && APAddress?.PostalCode != null)
-                            {
+							{
 								if ((APAddress?.AddressLine2 + ", " + APAddress?.PostalCode).Length > 35) line += (APAddress?.AddressLine2 + ", " + APAddress?.PostalCode).Substring(0, 35).ToUpper() + "|";
 								else line += (APAddress?.AddressLine2 + ", " + APAddress?.PostalCode).ToUpper() + "|";
 							}
 							else if (APAddress?.AddressLine2 != null && APAddress?.PostalCode == null)
-                            {
-								if (APAddress?.AddressLine2.Length > 35) line += (APAddress?.AddressLine2 + "|").Substring(0, 35).ToUpper();
-								else line += (APAddress?.AddressLine2 + "|").ToUpper();
+							{
+								if (APAddress?.AddressLine2.Length > 35) line += (APAddress?.AddressLine2).Substring(0, 35).ToUpper() + "|";
+								else line += (APAddress?.AddressLine2).ToUpper() + "|";
 							}
-							else if (APAddress?.AddressLine2 == null && APAddress?.PostalCode != null) line += (APAddress?.PostalCode + "|").ToUpper();
+							else if (APAddress?.AddressLine2 == null && APAddress?.PostalCode != null)
+							{
+								if (APAddress?.PostalCode.Length > 35) line += (APAddress?.PostalCode).Substring(0, 35).ToUpper() + "|";
+								else line += (APAddress?.PostalCode).ToUpper() + "|";
+							}
 							else line += "|";
 							count++;
 							//23: Left(APAddress.City+・, ．+State,35)
-							if (APAddress?.City != null && APAddress?.State != null) line += (APAddress?.City + ", " + APAddress?.State).ToUpper() + "|";
-							else if (APAddress?.City != null && APAddress?.State == null) line += (APAddress?.City).ToUpper() + "|";
-							else if (APAddress?.City == null && APAddress?.State != null) line += (APAddress?.State).ToUpper() + "|";
+							if (APAddress?.City != null && APAddress?.State != null)
+                            {
+								if ((APAddress?.City + ", " + APAddress?.State).Length > 35) line += (APAddress?.City + ", " + APAddress?.State).ToUpper() + "|";
+								else line += (APAddress?.City + ", " + APAddress?.State).ToUpper() + "|";
+							}
+							else if (APAddress?.City != null && APAddress?.State == null)
+							{
+								if ((APAddress?.City).Length > 35) line += (APAddress?.City).ToUpper() + "|";
+								else line += (APAddress?.City).ToUpper() + "|";
+							}
+							else if (APAddress?.City == null && APAddress?.State != null)
+                            {
+								if ((APAddress?.State).Length > 35) line += (APAddress?.State).ToUpper() + "|";
+								else line += (APAddress?.State).ToUpper() + "|";
+							}
 							else line += "|";
 							count++;
 							//24: Null
