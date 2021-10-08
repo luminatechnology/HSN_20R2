@@ -217,7 +217,7 @@ namespace PX.Objects.IN
             var regisExt = Base.CurrentDocument.Current?.GetExtension<INRegisterExt>();
             
             //bool activePartReq  = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnablePartReqInAppt?? true;
-            if (!string.IsNullOrEmpty(regisExt.UsrAppointmentNbr))
+            if (!string.IsNullOrEmpty(regisExt.UsrAppointmentNbr) && regisExt.UsrTransferPurp == LUMTransferPurposeType.PartRcv)
             {
                 var list = SelectFrom<FSAppointmentDet>.Where<FSAppointmentDet.srvOrdType.IsEqual<@P.AsString>
                                                               .And<FSAppointmentDet.refNbr.IsEqual<@P.AsString>>>.View.Select(Base, regisExt.UsrSrvOrdType, regisExt.UsrAppointmentNbr).RowCast<FSAppointmentDet>().ToList();
