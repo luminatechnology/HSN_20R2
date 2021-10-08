@@ -274,7 +274,7 @@ namespace HSNCustomizations.Descriptor
                     assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.fromStage>(GetStageName(autoWFStage.CurrentStage)));
                     assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.toStage>(GetStageName(autoWFStage.NextStage)));
                     assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdByID>(PXAccess.GetUserID()));
-                    assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(DateTime.Now));
+                    assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.Now));
                     PXDatabase.Insert<LUMAppEventHistory>(assigns.ToArray());
                     break;
                 case nameof(ServiceOrderEntry):
@@ -287,7 +287,7 @@ namespace HSNCustomizations.Descriptor
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.fromStage>(GetStageName(autoWFStage.CurrentStage)));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.toStage>(GetStageName(autoWFStage.NextStage)));
                     srvAssigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdByID>(PXAccess.GetUserID()));
-                    srvAssigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(DateTime.Now));
+                    srvAssigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.Now));
                     PXDatabase.Insert<LUMSrvEventHistory>(srvAssigns.ToArray());
                     break;
             }
