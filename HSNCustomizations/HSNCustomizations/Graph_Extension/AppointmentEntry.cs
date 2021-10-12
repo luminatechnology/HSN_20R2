@@ -361,13 +361,13 @@ namespace PX.Objects.FS
 
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
-            register.TransferType = INTransferType.TwoStep;
-            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc = descrType + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
+            register.TransferType      = INTransferType.TwoStep;
+            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc          = descrType + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr = appointment.SORefNbr;
-            regisExt.UsrTransferPurp = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr       = appointment.SORefNbr;
+            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -380,7 +380,7 @@ namespace PX.Objects.FS
                 list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM && x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true);
             }
 
-            transferEntry.CurrentDocument.Current.SiteID = isRMA ? GetFaultyWFByBranch(transferEntry, transferEntry.Accessinfo.BranchID) : branchWH?.SiteID;
+            transferEntry.CurrentDocument.Current.SiteID   = isRMA ? GetFaultyWFByBranch(transferEntry, transferEntry.Accessinfo.BranchID) : branchWH?.SiteID;
             transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? branchWH?.FaultySiteID : list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
 
@@ -388,13 +388,14 @@ namespace PX.Objects.FS
             {
                 if (row.Status != ID.Status_AppointmentDet.CANCELED &&
                     (row.GetExtension<FSAppointmentDetExt>().UsrIsDOA == true ||
-                    SelectFrom<INRegister>.InnerJoin<INTran>.On<INTran.docType.IsEqual<INRegister.docType>
-                                                                .And<INTran.refNbr.IsEqual<INRegister.refNbr>>>
-                                          .Where<INRegister.docType.IsEqual<INDocType.transfer>
-                                                 .And<INRegisterExt.usrSrvOrdType.IsEqual<@P.AsString>
-                                                      .And<INRegisterExt.usrAppointmentNbr.IsEqual<@P.AsString>
-                                                           .And<INRegisterExt.usrTransferPurp.IsEqual<LUMTransferPurposeType.partReq>
-                                                                .And<INTran.inventoryID.IsEqual<@P.AsInt>>>>>>.View.Select(apptEntry, appointment.SrvOrdType, appointment.RefNbr, row.InventoryID).Count <= 0))
+                     isRMA == true ||
+                     SelectFrom<INRegister>.InnerJoin<INTran>.On<INTran.docType.IsEqual<INRegister.docType>
+                                                                 .And<INTran.refNbr.IsEqual<INRegister.refNbr>>>
+                                           .Where<INRegister.docType.IsEqual<INDocType.transfer>
+                                                  .And<INRegisterExt.usrSrvOrdType.IsEqual<@P.AsString>
+                                                       .And<INRegisterExt.usrAppointmentNbr.IsEqual<@P.AsString>
+                                                            .And<INRegisterExt.usrTransferPurp.IsEqual<LUMTransferPurposeType.partReq>
+                                                                 .And<INTran.inventoryID.IsEqual<@P.AsInt>>>>>>.View.Select(apptEntry, appointment.SrvOrdType, appointment.RefNbr, row.InventoryID).Count <= 0))
                 {
                     CreateINTran(transferEntry, row, false, isRMA == false);
                 }

@@ -196,6 +196,90 @@
             <PXTabItem Text="Totals" OriginalIndex="10" />
             <AddItem>
                 <PXTabItem TypeFullName="PX.Web.UI.PXTabItem">
+                    <Prop Key="Text" Value="Event History" />
+                    <Children Key="Template">
+                        <AddItem>
+                            <PXGrid TypeFullName="PX.Web.UI.PXGrid">
+                                <Prop Key="Virtual:ApplyStylesheetSkin" />
+                                <Prop Key="ID" Value="CstPXGrid100" />
+                                <Children Key="Levels">
+                                    <AddItem>
+                                        <PXGridLevel TypeFullName="PX.Web.UI.PXGridLevel">
+                                            <Prop Key="DataMember" Value="EventHistory" />
+                                            <Children Key="Columns">
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="SrvOrdType" />
+                                                        <Prop Key="Width" Value="70" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ApptRefNbr" />
+                                                        <Prop Key="Width" Value="140" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="SORefNbr" />
+                                                        <Prop Key="Width" Value="140" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="WFRule" />
+                                                        <Prop Key="Width" Value="140" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="FromStage" />
+                                                        <Prop Key="Width" Value="140" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="ToStage" />
+                                                        <Prop Key="Width" Value="140" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="Descr" />
+                                                        <Prop Key="Width" Value="280" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="CreatedByID" />
+                                                        <Prop Key="Width" Value="280" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                                <AddItem>
+                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                                                        <Prop Key="DataField" Value="CreatedDateTime" />
+                                                        <Prop Key="Width" Value="280" />
+                                                        <Prop Key="DisplayFormat" Value="g" />
+                                                    </PXGridColumn>
+                                                </AddItem>
+                                            </Children>
+                                        </PXGridLevel>
+                                    </AddItem>
+                                </Children>
+                                <Prop Key="SkinID" Value="Inquire" />
+                                <Prop Key="Width" Value="100%" />
+                                <Prop Key="DataSourceID" Value="ds" />
+                                <Prop Key="AutoSize.Enabled" Value="True" />
+                                <Prop Key="SyncPosition" Value="True" />
+                                <Prop Key="NoteIndicator" Value="False" />
+                                <Prop Key="FilesIndicator" Value="False" />
+                            </PXGrid>
+                        </AddItem>
+                    </Children>
+                </PXTabItem>
+            </AddItem>
+            <AddItem>
+                <PXTabItem TypeFullName="PX.Web.UI.PXTabItem">
                     <Prop Key="Text" Value="Inventory Trans" />
                     <Children Key="Template">
                         <AddItem>
@@ -288,89 +372,6 @@
                                 </Children>
                                 <Prop Key="FilesIndicator" Value="False" />
                                 <Prop Key="NoteIndicator" Value="False" />
-                            </PXGrid>
-                        </AddItem>
-                    </Children>
-                </PXTabItem>
-            </AddItem>
-            <AddItem>
-                <PXTabItem TypeFullName="PX.Web.UI.PXTabItem">
-                    <Prop Key="Text" Value="Event History" />
-                    <Children Key="Template">
-                        <AddItem>
-                            <PXGrid TypeFullName="PX.Web.UI.PXGrid">
-                                <Prop Key="Virtual:ApplyStylesheetSkin" />
-                                <Prop Key="ID" Value="CstPXGrid100" />
-                                <Children Key="Levels">
-                                    <AddItem>
-                                        <PXGridLevel TypeFullName="PX.Web.UI.PXGridLevel">
-                                            <Prop Key="DataMember" Value="EventHistory" />
-                                            <Children Key="Columns">
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="SrvOrdType" />
-                                                        <Prop Key="Width" Value="70" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="ApptRefNbr" />
-                                                        <Prop Key="Width" Value="140" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="SORefNbr" />
-                                                        <Prop Key="Width" Value="140" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="WFRule" />
-                                                        <Prop Key="Width" Value="140" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="FromStage" />
-                                                        <Prop Key="Width" Value="140" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="ToStage" />
-                                                        <Prop Key="Width" Value="140" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="Descr" />
-                                                        <Prop Key="Width" Value="280" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="CreatedByID" />
-                                                        <Prop Key="Width" Value="280" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="CreatedDateTime" />
-                                                        <Prop Key="Width" Value="280" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                            </Children>
-                                        </PXGridLevel>
-                                    </AddItem>
-                                </Children>
-                                <Prop Key="SkinID" Value="Inquire" />
-                                <Prop Key="Width" Value="100%" />
-                                <Prop Key="DataSourceID" Value="ds" />
-                                <Prop Key="AutoSize.Enabled" Value="True" />
-                                <Prop Key="SyncPosition" Value="True" />
-                                <Prop Key="NoteIndicator" Value="False" />
-                                <Prop Key="FilesIndicator" Value="False" />
                             </PXGrid>
                         </AddItem>
                     </Children>

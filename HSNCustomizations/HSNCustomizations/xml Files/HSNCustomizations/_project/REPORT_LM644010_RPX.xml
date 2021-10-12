@@ -3436,7 +3436,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Location>8px, 32px</Location>
                         <Size>248px, 19px</Size>
                         <StyleName>Report Name</StyleName>
-                        <Value>Delivery Note</Value>
+                        <Value>Delivery Order</Value>
                     </TextBox>
                 </Items>
             </PageHeader>

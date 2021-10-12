@@ -2987,7 +2987,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                         <Location>8px, 32px</Location>
                         <Size>248px, 19px</Size>
                         <StyleName>Report Name</StyleName>
-                        <Value>Pick List</Value>
+                        <Value>Picking List</Value>
                     </TextBox>
                 </Items>
             </PageHeader>
@@ -3125,7 +3125,7 @@ FDRsYA+GoJqbm5VALwV9zfT29pIWgV6wH8innPFGdil6lJvd3V3DL7kJoN4Q4wpx5dnFxUXSvg/Oh/b2
                                         <Location>8px, 0px</Location>
                                         <Size>88px, 15px</Size>
                                         <StyleName>Heading 1</StyleName>
-                                        <Value>Pick List Nbr</Value>
+                                        <Value>Picking List Nbr</Value>
                                     </TextBox>
                                     <TextBox Name="textBox40">
                                         <Location>200px, 0px</Location>
