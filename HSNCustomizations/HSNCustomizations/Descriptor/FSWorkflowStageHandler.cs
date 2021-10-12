@@ -289,8 +289,8 @@ namespace HSNCustomizations.Descriptor
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.descr>(autoWFStage.Descr));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.fromStage>(GetStageName(autoWFStage.CurrentStage)));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.toStage>(GetStageName(autoWFStage.NextStage)));
-                    srvAssigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdByID>(PXAccess.GetUserID()));
-                    srvAssigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.Now));
+                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.createdByID>(PXAccess.GetUserID()));
+                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.Now));
                     PXDatabase.Insert<LUMSrvEventHistory>(srvAssigns.ToArray());
                     break;
             }
