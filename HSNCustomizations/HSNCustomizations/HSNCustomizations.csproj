@@ -84,6 +84,8 @@
     <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
     <Compile Include="Graph\ClossPrepaymentProcess.cs" />
+    <Compile Include="Graph\PrintTransferDeliveryOrder.cs" />
+    <Compile Include="Graph\PrintTransferPickingList.cs" />
     <Compile Include="Graph\ProcessSCBPaymentMaint.cs" />
     <Compile Include="Graph_Extension\APPaymentEntry.cs" />
     <Compile Include="Graph_Extension\ARPaymentEntry.cs" />
