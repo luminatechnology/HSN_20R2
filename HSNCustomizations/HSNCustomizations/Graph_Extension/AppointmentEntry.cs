@@ -84,6 +84,9 @@ namespace PX.Objects.FS
             var newStaffRecords = Base.AppointmentServiceEmployees.Cache.Inserted.RowCast<FSAppointmentEmployee>().ToList();
             // IsNew Detail Record
             FSWorkflowStageHandler.IsNewDetailRecord = Base.AppointmentDetails.Cache.Inserted.RowCast<FSAppointmentDet>().Any(x => x.LineType == "SLPRO" || x.LineType == "SERVI");
+            // Set UsrLastSatusModDate if Stage is dirty
+            if (wfStageDirtyResult.IsDirty)
+                Base.AppointmentRecords.Current.GetExtension<FSAppointmentExt>().UsrLastSatusModDate = PXTimeZoneInfo.Now;
             baseMethod();
             try
             {
