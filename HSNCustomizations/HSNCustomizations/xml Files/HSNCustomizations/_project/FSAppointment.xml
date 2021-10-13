@@ -1,3 +1,4 @@
 ﻿<Table TableName="FSAppointment">
     <Column TableName="FSAppointment" ColumnName="UsrTransferToHQ" ColumnType="bool" AllowNull="True" MaxLength="25" DecimalPrecision="2" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="FSAppointment" ColumnName="UsrLastSatusModDate" ColumnType="date" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
 </Table>

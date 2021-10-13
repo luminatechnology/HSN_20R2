@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 using static PX.Objects.FS.ID;
+using PX.Common;
 
 namespace HSNCustomizations.Descriptor
 {
@@ -236,18 +237,20 @@ namespace HSNCustomizations.Descriptor
             switch (targetForm)
             {
                 case nameof(AppointmentEntry):
-                    PXUpdate<Set<FSAppointment.wFStageID, Required<FSAppointment.wFStageID>>,
+                    PXUpdate<Set<FSAppointment.wFStageID, Required<FSAppointment.wFStageID>,
+                             Set<FSAppointmentExt.usrLastSatusModDate, Required<FSAppointmentExt.usrLastSatusModDate>>>,
                           FSAppointment,
                           Where<FSAppointment.srvOrdType, Equal<Required<FSAppointment.srvOrdType>>
                                   , And<FSAppointment.refNbr, Equal<Required<FSAppointment.refNbr>>>
-                      >>.Update(new PXGraph(), nextStage, srvOrderType, refNbr);
+                      >>.Update(new PXGraph(), nextStage, PXTimeZoneInfo.Now, srvOrderType, refNbr);
                     break;
                 case nameof(ServiceOrderEntry):
-                    PXUpdate<Set<FSServiceOrder.wFStageID, Required<FSServiceOrder.wFStageID>>,
+                    PXUpdate<Set<FSServiceOrder.wFStageID, Required<FSServiceOrder.wFStageID>,
+                             Set<FSServiceOrderExt.usrLastSatusModDate, Required<FSServiceOrderExt.usrLastSatusModDate>>>,
                            FSServiceOrder,
                            Where<FSServiceOrder.srvOrdType, Equal<Required<FSServiceOrder.srvOrdType>>
                                    , And<FSServiceOrder.refNbr, Equal<Required<FSServiceOrder.refNbr>>>
-                       >>.Update(new PXGraph(), nextStage, srvOrderType, soRefNbr);
+                       >>.Update(new PXGraph(), nextStage, PXTimeZoneInfo.Now, srvOrderType, soRefNbr);
                     break;
             }
         }

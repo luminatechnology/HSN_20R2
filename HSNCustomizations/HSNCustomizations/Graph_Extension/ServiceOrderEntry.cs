@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
 using PX.SM;
+using PX.Common;
 
 namespace PX.Objects.FS
 {
@@ -54,6 +55,9 @@ namespace PX.Objects.FS
             var statusDirtyResult = CheckStatusIsDirty(Base.ServiceOrderRecords.Current);
             // Check Stage is Dirty
             var wfStageDirtyResult = CheckWFStageIsDirty(Base.ServiceOrderRecords.Current);
+            // Set UsrLastSatusModDate if Stage is dirty
+            if (wfStageDirtyResult.IsDirty)
+                Base.ServiceOrderRecords.Current.GetExtension<FSServiceOrderExt>().UsrLastSatusModDate = PXTimeZoneInfo.Now;
             baseMethod();
             try
             {

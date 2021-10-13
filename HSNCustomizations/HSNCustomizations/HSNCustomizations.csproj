@@ -52,6 +52,10 @@
     <Reference Include="PX.Objects.FS">
       <HintPath>..\..\..\..\Bin\PX.Objects.FS.dll</HintPath>
     </Reference>
+    <Reference Include="PX.Objects.PR, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\PX.Objects.PR.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -71,6 +75,7 @@
     <Compile Include="DAC_Extension\APPaymentExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityProductsExtensions.cs" />
+    <Compile Include="DAC_Extension\FSServiceOrderExtensions.cs" />
     <Compile Include="Descriptor\FSStageControlHandler.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />
@@ -78,6 +83,9 @@
     <Compile Include="Descriptor\LUMAttribute.cs" />
     <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
+    <Compile Include="Graph\ClossPrepaymentProcess.cs" />
+    <Compile Include="Graph\PrintTransferDeliveryOrder.cs" />
+    <Compile Include="Graph\PrintTransferPickingList.cs" />
     <Compile Include="Graph\ProcessSCBPaymentMaint.cs" />
     <Compile Include="Graph_Extension\APPaymentEntry.cs" />
     <Compile Include="Graph_Extension\ARPaymentEntry.cs" />
