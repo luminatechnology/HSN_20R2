@@ -7,7 +7,6 @@ using System.Collections;
 using System.Linq;
 using HSNCustomizations.DAC;
 using HSNCustomizations.Descriptor;
-using System.Collections.Generic;
 
 namespace PX.Objects.IN
 {
@@ -18,11 +17,6 @@ namespace PX.Objects.IN
         [PXOverride]
         public virtual IEnumerable Release(PXAdapter adapter, ReleaseDelegate baseMethod)
         {
-            if (VerifySiteAndLocationFromAppt() == false)
-            {
-                throw new PXException(HSNMessages.WHLocDiffFromAppt);
-            }
-
             // Doing release
             baseMethod(adapter);
             // Process Appointment & Service Order Stage Change
@@ -38,6 +32,11 @@ namespace PX.Objects.IN
             }
 
             AdjustRcptAndApptInventory();
+
+            if (VerifySiteAndLocationFromAppt() == false)
+            {
+                throw new PXException(HSNMessages.WHLocDiffFromAppt);
+            }
 
             return adapter.Get();
         }
@@ -56,7 +55,6 @@ namespace PX.Objects.IN
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
         }
-
 
         protected void _(Events.RowPersisting<INTran> e, PXRowPersisting baseHandler)
         {
@@ -78,7 +76,7 @@ namespace PX.Objects.IN
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
-            var row = e.Row as INRegister;
+            var row    = e.Row as INRegister;
             var rowExt = row.GetExtension<INRegisterExt>();
 
             INRegister transfer = SelectFrom<INRegister>.Where<INRegister.docType.IsEqual<INDocType.transfer>
@@ -132,19 +130,19 @@ namespace PX.Objects.IN
 
                                 FSAppointmentDet newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Insert(new FSAppointmentDet()));
 
-                                newLine.InventoryID   = row.InventoryID;
-                                newLine.EstimatedQty  = apptLine.EstimatedQty;
-                                newLine.Status        = apptLine.Status;
+                                newLine.InventoryID  = row.InventoryID;
+                                newLine.EstimatedQty = apptLine.EstimatedQty;
+                                newLine.Status       = apptLine.Status;
 
                                 newLine = PXCache<FSAppointmentDet>.CreateCopy(apptEntry.AppointmentDetails.Update(newLine));
 
-                                //PXCache<FSAppointmentDet>.RestoreCopy(newLine, PXCache<FSAppointmentDet>.CreateCopy(apptLine));
                                 newLine.EquipmentAction = apptLine.EquipmentAction;
-                                newLine.OrigLineNbr = apptLine.OrigLineNbr;
-                                newLine.CuryUnitPrice = apptLine.CuryUnitPrice;
+                                newLine.OrigLineNbr     = apptLine.OrigLineNbr;
+                                newLine.CuryUnitPrice   = apptLine.CuryUnitPrice;
                                 // Per YJ's request to include the following two fields
-                                newLine.SiteID = apptLine.SiteID;
-                                newLine.SiteLocationID = apptLine.SiteLocationID;
+                                newLine.SiteID          = apptLine.SiteID;
+                                newLine.SiteLocationID  = apptLine.SiteLocationID;
+                                newLine.LineRef         = row.GetExtension<INTranExt>().UsrApptLineRef;
 
                                 apptEntry.AppointmentDetails.Update(newLine);
 
@@ -153,7 +151,7 @@ namespace PX.Objects.IN
                             }
                         }
                         if (apptEntry.AppointmentRecords.Current != null) { apptEntry.Save.Press(); }
-                        
+
                         ts.Complete();
                     }
                 }
@@ -215,7 +213,7 @@ namespace PX.Objects.IN
         protected virtual bool VerifySiteAndLocationFromAppt()
         {
             var regisExt = Base.CurrentDocument.Current?.GetExtension<INRegisterExt>();
-            
+
             //bool activePartReq  = SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnablePartReqInAppt?? true;
             if (!string.IsNullOrEmpty(regisExt.UsrAppointmentNbr) && regisExt.UsrTransferPurp == LUMTransferPurposeType.PartRcv)
             {
