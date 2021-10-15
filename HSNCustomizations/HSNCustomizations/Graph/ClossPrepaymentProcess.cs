@@ -4,6 +4,7 @@ using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.AR;
 using PX.Objects.CM;
+using PX.Objects.CS;
 using PX.Objects.FS;
 using PX.Objects.PR;
 using System;
@@ -43,30 +44,10 @@ namespace HSNCustomizations.Graph
 
         #region Override DAC
 
-        //[PXUIField(DisplayName = "Available Balance", Visibility = PXUIVisibility.Visible, Enabled = false)]
-        //[PXMergeAttributes(Method = MergeMethod.Replace)]
-        //public virtual void _(Events.CacheAttached<ARPayment.curyUnappliedBal> e) { }
-
-        #endregion
-
-        #region Delegate
-
-        public IEnumerable prepaymentList()
-        {
-            PXView select = new PXView(this, true, PrepaymentList.View.BqlSelect);
-
-            Int32 totalrow = 0;
-            Int32 startrow = PXView.StartRow;
-            List<object> result = select.Select(PXView.Currents, PXView.Parameters, PXView.Searches,
-                PXView.SortColumns, PXView.Descendings, PXView.Filters, ref startrow, PXView.MaximumRows, ref totalrow);
-            PXView.StartRow = 0;
-            foreach (PXResult<ARPayment, FSAdjust> row in result)
-            {
-                ARPayment payment = (ARPayment)row;
-                payment.CuryUnappliedBal = (payment.CuryDocBal ?? 0) - (payment.CuryApplAmt ?? 0) - (payment.CurySOApplAmt ?? 0);
-            }
-            return result;
-        } 
+        [PXMergeAttributes(Method = MergeMethod.Merge)]
+        [PXFormula(typeof(Sub<ARPayment.curyDocBal, Add<IIf<Where<ARPayment.curyApplAmt, IsNull>, decimal0, ARPayment.curyApplAmt>,
+                                                        IIf<Where<ARPayment.curySOApplAmt, IsNull>, decimal0, ARPayment.curySOApplAmt>>>))]
+        public virtual void _(Events.CacheAttached<ARPayment.curyUnappliedBal> e) { }
 
         #endregion
 

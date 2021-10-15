@@ -242,7 +242,7 @@ namespace HSNCustomizations.Descriptor
                           FSAppointment,
                           Where<FSAppointment.srvOrdType, Equal<Required<FSAppointment.srvOrdType>>
                                   , And<FSAppointment.refNbr, Equal<Required<FSAppointment.refNbr>>>
-                      >>.Update(new PXGraph(), nextStage, PXTimeZoneInfo.Now, srvOrderType, refNbr);
+                      >>.Update(new PXGraph(), nextStage, PXTimeZoneInfo.UtcNow, srvOrderType, refNbr);
                     break;
                 case nameof(ServiceOrderEntry):
                     PXUpdate<Set<FSServiceOrder.wFStageID, Required<FSServiceOrder.wFStageID>,
@@ -250,7 +250,7 @@ namespace HSNCustomizations.Descriptor
                            FSServiceOrder,
                            Where<FSServiceOrder.srvOrdType, Equal<Required<FSServiceOrder.srvOrdType>>
                                    , And<FSServiceOrder.refNbr, Equal<Required<FSServiceOrder.refNbr>>>
-                       >>.Update(new PXGraph(), nextStage, PXTimeZoneInfo.Now, srvOrderType, soRefNbr);
+                       >>.Update(new PXGraph(), nextStage, PXTimeZoneInfo.UtcNow, srvOrderType, soRefNbr);
                     break;
             }
         }
@@ -277,7 +277,7 @@ namespace HSNCustomizations.Descriptor
                     assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.fromStage>(GetStageName(autoWFStage.CurrentStage)));
                     assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.toStage>(GetStageName(autoWFStage.NextStage)));
                     assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdByID>(PXAccess.GetUserID()));
-                    assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.Now));
+                    assigns.Add(new PXDataFieldAssign<LUMAppEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.UtcNow));
                     PXDatabase.Insert<LUMAppEventHistory>(assigns.ToArray());
                     break;
                 case nameof(ServiceOrderEntry):
@@ -290,7 +290,7 @@ namespace HSNCustomizations.Descriptor
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.fromStage>(GetStageName(autoWFStage.CurrentStage)));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.toStage>(GetStageName(autoWFStage.NextStage)));
                     srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.createdByID>(PXAccess.GetUserID()));
-                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.Now));
+                    srvAssigns.Add(new PXDataFieldAssign<LUMSrvEventHistory.createdDateTime>(PX.Common.PXTimeZoneInfo.UtcNow));
                     PXDatabase.Insert<LUMSrvEventHistory>(srvAssigns.ToArray());
                     break;
             }
