@@ -192,6 +192,8 @@ namespace HSNCustomizations.Graph
                     }
                 }
 
+                PrintTransferPickingList graphPrintTransferPickingList = PXGraph.CreateInstance<PrintTransferPickingList>();
+
                 foreach (var transfer in list)
                 {
                     PXResultset<INTran> rows = new PXResultset<INTran>();
@@ -218,26 +220,29 @@ namespace HSNCustomizations.Graph
                         INTran iNTranLine = row;
                         INRegister iNRegisterLine = row;
 
-                        lumINTran.DocType = iNTranLine.DocType;
-                        lumINTran.RefNbr = iNTranLine.RefNbr;
-                        lumINTran.LineNbr = iNTranLine.LineNbr;
-                        lumINTran.TranDate = iNTranLine.TranDate;
-                        lumINTran.TranType = iNTranLine.TranType;
-                        lumINTran.InventoryID = iNTranLine.InventoryID;
-                        lumINTran.Siteid = iNTranLine.SiteID;
-                        lumINTran.InvtMult = iNTranLine.InvtMult;
-                        lumINTran.LocationID = iNTranLine.LocationID;
-                        lumINTran.ToLocationID = iNTranLine.ToLocationID;
-                        lumINTran.Qty = iNTranLine.Qty;
-                        lumINTran.TranDesc = iNTranLine.TranDesc;
-                        lumINTran.Uom = iNTranLine.UOM;
-                        lumINTran.Tositeid = iNTranLine.ToSiteID;
-                        lumINTran.UsrAppointmentNbr = iNRegisterLine.GetExtension<INRegisterExt>().UsrPickingListNumber;
-                        lumINTran.UsrTrackingNbr = iNRegisterLine.GetExtension<INRegisterExt>().UsrTrackingNbr;
-                        this.Caches[typeof(LumINTran)].Update(lumINTran);
-                        
+                        //avoid updating LastModifiedDateTime
+                        graphPrintTransferPickingList.ProviderInsert<LumINTran>(
+                            new PXDataFieldAssign("DocType", iNTranLine.DocType),
+                            new PXDataFieldAssign("RefNbr", iNTranLine.RefNbr),
+                            new PXDataFieldAssign("LineNbr", iNTranLine.LineNbr),
+                            new PXDataFieldAssign("TranDate", iNTranLine.TranDate),
+                            new PXDataFieldAssign("TranType", iNTranLine.TranType),
+                            new PXDataFieldAssign("InventoryID", iNTranLine.InventoryID),
+                            new PXDataFieldAssign("Siteid", iNTranLine.SiteID),
+                            new PXDataFieldAssign("InvtMult", iNTranLine.InvtMult),
+                            new PXDataFieldAssign("LocationID", iNTranLine.LocationID),
+                            new PXDataFieldAssign("ToLocationID", iNTranLine.ToLocationID),
+                            new PXDataFieldAssign("Qty", iNTranLine.Qty),
+                            new PXDataFieldAssign("TranDesc", iNTranLine.TranDesc),
+                            new PXDataFieldAssign("Uom", iNTranLine.UOM),
+                            new PXDataFieldAssign("Tositeid", iNTranLine.ToSiteID),
+                            new PXDataFieldAssign("UsrAppointmentNbr", iNRegisterLine.GetExtension<INRegisterExt>().UsrPickingListNumber),
+                            new PXDataFieldAssign("UsrTrackingNbr", iNRegisterLine.GetExtension<INRegisterExt>().UsrTrackingNbr),
+                            new PXDataFieldAssign("LastModifiedByID", PXAccess.GetUserID()),
+                            new PXDataFieldAssign("LastModifiedByScreenID", "LM502010"),
+                            new PXDataFieldAssign("LastModifiedDateTime", DateTime.Now)
+                        );
                     }
-                    this.Actions.PressSave();
                 }
             }
             Dictionary<string, string> parameters = new Dictionary<string, string>();
