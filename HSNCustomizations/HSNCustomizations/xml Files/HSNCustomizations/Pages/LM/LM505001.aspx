@@ -9,13 +9,13 @@
     </px:PXDataSource>
 </asp:Content>
 <asp:Content ID="cont3" ContentPlaceHolderID="phG" runat="Server">
-    <px:PXGrid PreservePageIndex="True" SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" SkinID="PrimaryInquire" AllowAutoHide="false">
+    <px:PXGrid SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" SkinID="PrimaryInquire" AllowAutoHide="false">
         <Levels>
             <px:PXGridLevel DataMember="PrepaymentList">
                 <Columns>
-                    <px:PXGridColumn AllowCheckAll="True" DataField="Selected" Width="40" Type="CheckBox" TextAlign="Center" CommitChanges="True" ></px:PXGridColumn>
+                    <px:PXGridColumn AllowCheckAll="True" DataField="Selected" Width="40" Type="CheckBox" TextAlign="Center"></px:PXGridColumn>
                     <px:PXGridColumn DataField="Doctype" Width="70"></px:PXGridColumn>
-                    <px:PXGridColumn DataField="RefNbr" Width="80"></px:PXGridColumn>
+                    <px:PXGridColumn DataField="RefNbr" Width="100"></px:PXGridColumn>
                     <px:PXGridColumn DataField="Status" Width="70"></px:PXGridColumn>
                     <px:PXGridColumn DataField="CustomerID" Width="130"></px:PXGridColumn>
                     <px:PXGridColumn DataField="customerID_Customer_acctName" Width="130"></px:PXGridColumn>
@@ -23,7 +23,7 @@
                     <px:PXGridColumn DataField="PaymentMethodID" Width="100"></px:PXGridColumn>
                     <px:PXGridColumn DataField="CashAccountID" Width="100"></px:PXGridColumn>
                     <px:PXGridColumn DataField="CuryID" Width="90"></px:PXGridColumn>
-                    <px:PXGridColumn DataField="CuryUnappliedBal" Width="220"></px:PXGridColumn>
+                    <px:PXGridColumn DataField="CuryUnappliedBal" Width="220" ></px:PXGridColumn>
                 </Columns>
             </px:PXGridLevel>
         </Levels>
