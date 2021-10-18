@@ -191,6 +191,7 @@ namespace HSNCustomizations.Graph
                 }
 
                 PrintTransferPickingList graphPrintTransferPickingList = PXGraph.CreateInstance<PrintTransferPickingList>();
+                Dictionary<string, bool> dicInsertedPickingList = new Dictionary<string, bool>();
 
                 foreach (var transfer in list)
                 {
@@ -218,28 +219,32 @@ namespace HSNCustomizations.Graph
                         INTran iNTranLine = row;
                         INRegister iNRegisterLine = row;
 
-                        //avoid updating LastModifiedDateTime
-                        graphPrintTransferPickingList.ProviderInsert<LumINTran>(
-                            new PXDataFieldAssign("DocType", iNTranLine.DocType),
-                            new PXDataFieldAssign("RefNbr", iNTranLine.RefNbr),
-                            new PXDataFieldAssign("LineNbr", iNTranLine.LineNbr),
-                            new PXDataFieldAssign("TranDate", iNTranLine.TranDate),
-                            new PXDataFieldAssign("TranType", iNTranLine.TranType),
-                            new PXDataFieldAssign("InventoryID", iNTranLine.InventoryID),
-                            new PXDataFieldAssign("Siteid", iNTranLine.SiteID),
-                            new PXDataFieldAssign("InvtMult", iNTranLine.InvtMult),
-                            new PXDataFieldAssign("LocationID", iNTranLine.LocationID),
-                            new PXDataFieldAssign("ToLocationID", iNTranLine.ToLocationID),
-                            new PXDataFieldAssign("Qty", iNTranLine.Qty),
-                            new PXDataFieldAssign("TranDesc", iNTranLine.TranDesc),
-                            new PXDataFieldAssign("Uom", iNTranLine.UOM),
-                            new PXDataFieldAssign("Tositeid", iNTranLine.ToSiteID),
-                            new PXDataFieldAssign("UsrAppointmentNbr", iNRegisterLine.GetExtension<INRegisterExt>().UsrPickingListNumber),
-                            new PXDataFieldAssign("UsrTrackingNbr", iNRegisterLine.GetExtension<INRegisterExt>().UsrTrackingNbr),
-                            new PXDataFieldAssign("LastModifiedByID", PXAccess.GetUserID()),
-                            new PXDataFieldAssign("LastModifiedByScreenID", "LM502000"),
-                            new PXDataFieldAssign("LastModifiedDateTime", DateTime.Now)
-                        );
+                        if (!dicInsertedPickingList.ContainsKey($"{iNTranLine.RefNbr}-{iNTranLine.LineNbr}"))
+                        {
+                            //avoid updating LastModifiedDateTime
+                            graphPrintTransferPickingList.ProviderInsert<LumINTran>(
+                                new PXDataFieldAssign("DocType", iNTranLine.DocType),
+                                new PXDataFieldAssign("RefNbr", iNTranLine.RefNbr),
+                                new PXDataFieldAssign("LineNbr", iNTranLine.LineNbr),
+                                new PXDataFieldAssign("TranDate", iNTranLine.TranDate),
+                                new PXDataFieldAssign("TranType", iNTranLine.TranType),
+                                new PXDataFieldAssign("InventoryID", iNTranLine.InventoryID),
+                                new PXDataFieldAssign("Siteid", iNTranLine.SiteID),
+                                new PXDataFieldAssign("InvtMult", iNTranLine.InvtMult),
+                                new PXDataFieldAssign("LocationID", iNTranLine.LocationID),
+                                new PXDataFieldAssign("ToLocationID", iNTranLine.ToLocationID),
+                                new PXDataFieldAssign("Qty", iNTranLine.Qty),
+                                new PXDataFieldAssign("TranDesc", iNTranLine.TranDesc),
+                                new PXDataFieldAssign("Uom", iNTranLine.UOM),
+                                new PXDataFieldAssign("Tositeid", iNTranLine.ToSiteID),
+                                new PXDataFieldAssign("UsrAppointmentNbr", iNRegisterLine.GetExtension<INRegisterExt>().UsrPickingListNumber),
+                                new PXDataFieldAssign("UsrTrackingNbr", iNRegisterLine.GetExtension<INRegisterExt>().UsrTrackingNbr),
+                                new PXDataFieldAssign("LastModifiedByID", PXAccess.GetUserID()),
+                                new PXDataFieldAssign("LastModifiedByScreenID", "LM502000"),
+                                new PXDataFieldAssign("LastModifiedDateTime", DateTime.Now)
+                            );
+                            dicInsertedPickingList.Add($"{iNTranLine.RefNbr}-{iNTranLine.LineNbr}", true);
+                        }
                     }
                 }
             }
