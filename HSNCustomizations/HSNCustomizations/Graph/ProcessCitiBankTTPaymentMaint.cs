@@ -333,10 +333,10 @@ namespace HSNCustomizations.Graph
 								count++;
 							}
 
-							//58: PaymentMethodDetail.Chgindicat != null, or 'BEN', 30
+							//58: PaymentMethodDetail.Chgindicat != null, or 'BEN', 35
 							if (VendorCHGINDICAT?.DetailValue != null)
 							{
-								if (VendorCHGINDICAT.DetailValue.Length > 30) line += $"{VendorCHGINDICAT.DetailValue.Substring(0, 30).ToUpper()}@";
+								if (VendorCHGINDICAT.DetailValue.Length > 35) line += $"{VendorCHGINDICAT.DetailValue.Substring(0, 35).ToUpper()}@";
 								else line += $"{VendorCHGINDICAT.DetailValue}@";
 							}
 							else line += "BEN@";
