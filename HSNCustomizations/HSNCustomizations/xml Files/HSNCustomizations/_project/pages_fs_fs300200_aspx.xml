@@ -215,6 +215,13 @@
         <Children Key="Columns">
             <AddItem>
                 <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
+                    <Prop Key="DataField" Value="UsrEquipSerialNbr" />
+                    <Prop Key="Width" Value="220" />
+                </PXGridColumn>
+            </AddItem>
+            <PXGridColumn DataField="NewTargetEquipmentLineNbr" OriginalIndex="14" />
+            <AddItem>
+                <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                     <Prop Key="DataField" Value="UsrRMARequired" />
                     <Prop Key="Width" Value="60" />
                     <Prop Key="Type" Value="CheckBox" />
