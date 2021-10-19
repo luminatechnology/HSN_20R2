@@ -25,7 +25,7 @@
         </layout>
         <data>
             <SiteMap>
-                <row Position="5973" Title="Process Citi Bank Payment" Url="~/Pages/LM/LM505010.aspx" ScreenID="LM505010" NodeID="6631bd92-3c04-441c-ac6e-799159d01d91" ParentID="00000000-0000-0000-0000-000000000000">
+                <row Position="5973" Title="Process Citi Bank TT Payment" Url="~/Pages/LM/LM505010.aspx" ScreenID="LM505010" NodeID="6631bd92-3c04-441c-ac6e-799159d01d91" ParentID="00000000-0000-0000-0000-000000000000">
                     <MUIScreen IsPortal="0" WorkspaceID="c6f8a479-2339-4665-a20d-50f5bf38c228" Order="130" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" />
                 </row>
             </SiteMap>
