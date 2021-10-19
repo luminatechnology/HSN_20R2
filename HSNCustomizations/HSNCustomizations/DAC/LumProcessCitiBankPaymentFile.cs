@@ -122,7 +122,7 @@ namespace HSNCustomizations.DAC
 		protected String _CuryID;
 		[PXDBString(5, IsUnicode = true, InputMask = ">LLLLL")]
 		[PXUIField(DisplayName = "Currency", Visibility = PXUIVisibility.SelectorVisible, Enabled = false)]
-		[PXDefault(typeof(Search<CashAccount.curyID, Where<CashAccount.cashAccountID, Equal<Current<LumProcessSCBPaymentFile.payAccountID>>>>))]
+		[PXDefault(typeof(Search<CashAccount.curyID, Where<CashAccount.cashAccountID, Equal<Current<LumProcessCitiBankPaymentFile.payAccountID>>>>))]
 		[PXSelector(typeof(Currency.curyID))]
 		public virtual String CuryID
 		{
@@ -159,9 +159,9 @@ namespace HSNCustomizations.DAC
 		public abstract class cashBalance : PX.Data.BQL.BqlDecimal.Field<cashBalance> { }
 		protected Decimal? _CashBalance;
 		[PXDefault(TypeCode.Decimal, "0.0")]
-		[PXDBCury(typeof(LumProcessSCBPaymentFile.curyID))]
+		[PXDBCury(typeof(LumProcessCitiBankPaymentFile.curyID))]
 		[PXUIField(DisplayName = "Available Balance", Enabled = false)]
-		[CashBalance(typeof(LumProcessSCBPaymentFile.payAccountID))]
+		[CashBalance(typeof(LumProcessCitiBankPaymentFile.payAccountID))]
 		public virtual Decimal? CashBalance
 		{
 			get
