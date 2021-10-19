@@ -15,10 +15,13 @@ namespace PX.Objects.AP
 
             LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
 
-            bool activePartRequest = hSNSetup?.EnableSCBPaymentFile == true;
+            bool activePartRequest_SCB = hSNSetup?.EnableSCBPaymentFile == true;
+            PXUIFieldAttribute.SetVisible<APPaymentExt.usrSCBPaymentExported>(e.Cache, null, activePartRequest_SCB);
+            PXUIFieldAttribute.SetVisible<APPaymentExt.usrSCBPaymentDateTime>(e.Cache, null, activePartRequest_SCB);
 
-            PXUIFieldAttribute.SetVisible<APPaymentExt.usrSCBPaymentExported>(e.Cache, null, activePartRequest);
-            PXUIFieldAttribute.SetVisible<APPaymentExt.usrSCBPaymentDateTime>(e.Cache, null, activePartRequest);
+            bool activePartRequest_Citi = hSNSetup?.EnableCitiPaymentFile == true;
+            PXUIFieldAttribute.SetVisible<APPaymentExt.usrCitiPaymentExported>(e.Cache, null, activePartRequest_Citi);
+            PXUIFieldAttribute.SetVisible<APPaymentExt.usrCitiPaymentDateTime>(e.Cache, null, activePartRequest_Citi);
         }
         #endregion
     }
