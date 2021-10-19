@@ -4,6 +4,8 @@ namespace PX.Objects.FS
 {
     public class FSAppointmentDetExt : PXCacheExtension<PX.Objects.FS.FSAppointmentDet>
     {
+        #region Unbound Fields
+
         #region UsrDummyRMAReq
         [PXString]
         [PXUIField(Enabled = false, Visible = false)]
@@ -14,6 +16,16 @@ namespace PX.Objects.FS
         [PXFormula(typeof(Default<FSAppointmentDet.inventoryID>))]
         public virtual string UsrDummyRMAReq { get; set; }
         public abstract class usrDummyRMAReq : PX.Data.BQL.BqlString.Field<usrDummyRMAReq> { }
+        #endregion
+
+        #region UsrEquipSerialNbr
+        [PXString(60, IsUnicode = true)]
+        [PXUIField(DisplayName = "Target Serial Nbr.", Visible = false, Enabled = false)]
+        [PXDBScalar(typeof(Search<FSEquipment.serialNumber, Where<FSEquipment.SMequipmentID, Equal<FSAppointmentDet.SMequipmentID>>>))]
+        public virtual string UsrEquipSerialNbr { get; set; }
+        public abstract class usrEquipSerialNbr : PX.Data.BQL.BqlString.Field<usrEquipSerialNbr> { }
+        #endregion
+
         #endregion
 
         #region UsrRMARequired
