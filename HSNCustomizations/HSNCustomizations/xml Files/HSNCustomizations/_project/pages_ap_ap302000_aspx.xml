@@ -18,6 +18,23 @@
                     <Prop Key="Enabled" Value="False" />
                 </PXTextEdit>
             </AddItem>
+            <AddItem>
+                <PXCheckBox TypeFullName="PX.Web.UI.PXCheckBox">
+                    <Prop Key="Virtual:ApplyStylesheetSkin" />
+                    <Prop Key="AlignLeft" Value="True" />
+                    <Prop Key="Enabled" Value="False" />
+                    <Prop Key="DataField" Value="UsrCitiPaymentExported" />
+                    <Prop Key="ID" Value="CstPXCheckBox5" />
+                </PXCheckBox>
+            </AddItem>
+            <AddItem>
+                <PXTextEdit TypeFullName="PX.Web.UI.PXTextEdit">
+                    <Prop Key="Virtual:ApplyStylesheetSkin" />
+                    <Prop Key="DataField" Value="UsrCitiPaymentDateTime" />
+                    <Prop Key="Enabled" Value="False" />
+                    <Prop Key="ID" Value="CstPXTextEdit7" />
+                </PXTextEdit>
+            </AddItem>
         </Children>
     </PXTabItem>
 </Page>
