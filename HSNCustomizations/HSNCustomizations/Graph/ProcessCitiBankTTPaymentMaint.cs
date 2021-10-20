@@ -305,7 +305,7 @@ namespace HSNCustomizations.Graph
 							line += $"{((DateTime)aPPayment.AdjDate).ToString("yyyyMMdd")}@";
 							count++;
 							//8: APPayment.ExtRefNbr
-							line += $"{aPPayment.ExtRefNbr} @";
+							line += $"{aPPayment.ExtRefNbr}@";
 							count++;
 							//9-13: Null
 							for (int i = count; i <= 13; i++)
