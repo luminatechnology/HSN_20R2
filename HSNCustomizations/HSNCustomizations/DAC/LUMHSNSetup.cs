@@ -124,6 +124,13 @@ namespace HSNCustomizations.DAC
         public abstract class enableSCBPaymentFile : PX.Data.BQL.BqlBool.Field<enableSCBPaymentFile> { }
         #endregion
 
+        #region EnableCitiPaymentFile
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Citi Payment File")]
+        public virtual bool? EnableCitiPaymentFile { get; set; }
+        public abstract class enableCitiPaymentFile : PX.Data.BQL.BqlBool.Field<enableCitiPaymentFile> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }

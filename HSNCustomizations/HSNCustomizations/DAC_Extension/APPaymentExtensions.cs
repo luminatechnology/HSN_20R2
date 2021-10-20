@@ -55,5 +55,19 @@ namespace PX.Objects.AP
         public virtual string UsrBankAccountNbr { get; set; }
         public abstract class usrBankAccountNbr : PX.Data.BQL.BqlString.Field<usrBankAccountNbr> { }
         #endregion
+
+        #region UsrCitiBankNumber
+        [PXString(255)]
+        [PXUIField(DisplayName = "Bank Number", Enabled = false)]
+        public virtual string UsrCitiBankNumber { get; set; }
+        public abstract class usrCitiBankNumber : PX.Data.BQL.BqlString.Field<usrCitiBankNumber> { }
+        #endregion
+
+        #region UsrCitiBankAccountNbr
+        [PXString(255)]
+        [PXUIField(DisplayName = "Bank Account Number", Enabled = false)]
+        public virtual string UsrCitiBankAccountNbr { get; set; }
+        public abstract class usrCitiBankAccountNbr : PX.Data.BQL.BqlString.Field<usrCitiBankAccountNbr> { }
+        #endregion
     }
 }

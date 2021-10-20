@@ -34,8 +34,8 @@
                     <px:PXGridColumn DataField="RefNbr" LinkCommand="viewDocument" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="VendorID" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="VendorID_Vendor_acctName" ></px:PXGridColumn>
-	<px:PXGridColumn DataField="UsrBankSwiftAttributes" Width="280" ></px:PXGridColumn>
-	<px:PXGridColumn DataField="UsrBankAccountNbr" Width="280" ></px:PXGridColumn>
+	<px:PXGridColumn DataField="UsrCitiBankNumber" Width="280" ></px:PXGridColumn>
+	<px:PXGridColumn DataField="UsrCitiBankAccountNbr" Width="280" ></px:PXGridColumn>
        	<px:PXGridColumn Type="CheckBox" DataField="UsrCitiPaymentExported" Width="60" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="CuryOrigDocAmt" TextAlign="Right" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="DocDate" ></px:PXGridColumn>
