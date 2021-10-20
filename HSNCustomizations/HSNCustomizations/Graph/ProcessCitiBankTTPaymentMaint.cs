@@ -327,11 +327,11 @@ namespace HSNCustomizations.Graph
 								line += "@";
 								count++;
 							}
-							//20: Vendor Paymenr Detail: BANKACCT, 70
-							if (VendorBankAccountName?.DetailValue != null)
+							//20: Vendor Name, 70
+							if (VendorInfo?.AcctName != null)
 							{
-								if (VendorBankAccountName?.DetailValue.Length > 70) line += $"{VendorBankAccountName?.DetailValue.Substring(0, 70).ToUpper()}@";
-								else line += $"{VendorBankAccountName?.DetailValue.ToUpper()}@";
+								if (VendorInfo?.AcctName.Length > 70) line += $"{VendorInfo?.AcctName.Substring(0, 70).ToUpper()}@";
+								else line += $"{VendorInfo?.AcctName.ToUpper()}@";
 							}
 							else line += "@";
 							count++;
