@@ -3,4 +3,6 @@
     <Column TableName="APPayment" ColumnName="UsrSCBPaymentDateTime" ColumnType="date" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
     <Column TableName="APPayment" ColumnName="UsrCitiPaymentExported" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
     <Column TableName="APPayment" ColumnName="UsrCitiPaymentDateTime" ColumnType="date" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APPayment" ColumnName="UsrCitiReturnCheckExported" ColumnType="bool" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
+    <Column TableName="APPayment" ColumnName="UsrCitiReturnCheckDateTime" ColumnType="date" AllowNull="True" DecimalPrecision="0" DecimalLength="0" IsNewColumn="True" IsUnicode="True" />
 </Table>

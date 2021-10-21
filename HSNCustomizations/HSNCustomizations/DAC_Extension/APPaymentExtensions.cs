@@ -42,6 +42,21 @@ namespace PX.Objects.AP
         public abstract class usrCitiPaymentDateTime : PX.Data.BQL.BqlDateTime.Field<usrCitiPaymentDateTime> { }
         #endregion
 
+        #region UsrCitiReturnCheckExported
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Citi Return Check Exported", Enabled = false)]
+        [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
+        public virtual bool? UsrCitiReturnCheckExported { get; set; }
+        public abstract class usrCitiReturnCheckExported : PX.Data.BQL.BqlBool.Field<usrCitiReturnCheckExported> { }
+        #endregion
+
+        #region UsrCitiReturnCheckDateTime
+        [PXDBDate(PreserveTime = true, InputMask = "g")]
+        [PXUIField(DisplayName = "Citi Return Check DateTime", Enabled = false)]
+        public virtual DateTime? UsrCitiReturnCheckDateTime { get; set; }
+        public abstract class usrCitiReturnCheckDateTime : PX.Data.BQL.BqlDateTime.Field<usrCitiReturnCheckDateTime> { }
+        #endregion
+
         #region UsrBankSwiftAttributes
         [PXString(255)]
         [PXUIField(DisplayName = "Bank Swift Code", Enabled = false)]
