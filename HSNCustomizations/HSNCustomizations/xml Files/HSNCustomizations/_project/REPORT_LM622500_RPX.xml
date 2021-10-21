@@ -4244,18 +4244,6 @@
                             </ReportVariable>
                         </Variables>
                         <Items>
-                            <SubReport Name="subReport1">
-                                <Location>570px, 8px</Location>
-                                <Parameters>
-                                    <ExternalParameter>
-                                        <Name>NoteID</Name>
-                                        <ValueExpr>=[BAccount.NoteID]</ValueExpr>
-                                    </ExternalParameter>
-                                </Parameters>
-                                <ReportName>AP622501.rpx</ReportName>
-                                <Size>10px, 10px</Size>
-                                <Visible>False</Visible>
-                            </SubReport>
                             <TextBox Name="textBox110">
                                 <Excel>
                                     <column>4</column>
