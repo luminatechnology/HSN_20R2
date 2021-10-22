@@ -17,10 +17,17 @@ namespace PX.Objects.IN
         public void Persist(PersistDelegate baseMethod)
         {
             baseMethod();
-            using (PXTransactionScope ts = new PXTransactionScope())
+            var row = Base.transfer.Current;
+            var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
+            var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
+            var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
+            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
             {
-                if (UpdateAppointmentStageManual())
-                    ts.Complete();
+                using (PXTransactionScope ts = new PXTransactionScope())
+                {
+                    if (UpdateAppointmentStageManual())
+                        ts.Complete();
+                }
             }
         }
 
