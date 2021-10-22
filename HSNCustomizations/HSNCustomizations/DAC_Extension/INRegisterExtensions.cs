@@ -8,14 +8,14 @@ namespace PX.Objects.IN
     [PXNonInstantiatedExtension]
     public class INRegister_ExistingColumn : PXCacheExtension<PX.Objects.IN.INRegister>
     {
-        #region TotalQty
-        [PXMergeAttributes(Method = MergeMethod.Merge)]
-        //[PXDBQuantity()]
-        [PXDefault(TypeCode.Decimal, "0.0")]
-        [PXUIField(DisplayName = "Total Qty.", Visibility = PXUIVisibility.SelectorVisible, Enabled = false)]
-        [INTotalQtyVerification]
-        public virtual decimal? TotalQty { get; set; }
-        #endregion
+        //#region TotalQty
+        //[PXMergeAttributes(Method = MergeMethod.Merge)]
+        ////[PXDBQuantity()]
+        //[PXDefault(TypeCode.Decimal, "0.0")]
+        //[PXUIField(DisplayName = "Total Qty.", Visibility = PXUIVisibility.SelectorVisible, Enabled = false)]
+        //[INTotalQtyVerification]
+        //public virtual decimal? TotalQty { get; set; }
+        //#endregion
 
         #region NoteID
         [PXSearchable(SM.SearchCategory.IN, "{0}: {1}", new Type[] { typeof(INRegister.docType), typeof(INRegister.refNbr) },
