@@ -129,13 +129,13 @@ namespace HSNCustomizations.Descriptor
     {
         public override void RowPersisting(PXCache sender, PXRowPersistingEventArgs e)
         {
-            string  doType   = (string)sender.GetValue<INRegister.docType>(e.Row);
-            decimal totalQty = (decimal)sender.GetValue<INRegister.totalQty>(e.Row);
+            string  docType  = (string)sender.GetValue<INTran.docType>(e.Row);
+            decimal totalQty = (decimal)sender.GetValue<INTran.qty>(e.Row);
 
-            if (e.Operation != PXDBOperation.Delete && doType.IsIn(INDocType.Receipt, INDocType.Issue, INDocType.Transfer) && 
+            if (e.Operation != PXDBOperation.Delete && docType.IsIn(INDocType.Receipt, INDocType.Issue, INDocType.Transfer) && 
                 SelectFrom<LUMHSNSetup>.View.Select(sender.Graph).TopFirst?.EnablePartReqInAppt == true && totalQty <= 0)
             {
-                sender.RaiseExceptionHandling<INRegister.totalQty>(e.Row, totalQty, new PXSetPropertyException(HSNMessages.TotalQtyIsZero, PXErrorLevel.Error));
+                sender.RaiseExceptionHandling<INTran.qty>(e.Row, totalQty, new PXSetPropertyException(HSNMessages.TotalQtyIsZero, PXErrorLevel.Error));
             }
         }
     }
