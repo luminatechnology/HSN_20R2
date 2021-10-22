@@ -68,6 +68,7 @@
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
     <Compile Include="DAC\LumINTran.cs" />
     <Compile Include="DAC\LUMOpprTermCond.cs" />
+    <Compile Include="DAC\LumProcessCitiBankPaymentFile.cs" />
     <Compile Include="DAC\LumProcessSCBPaymentFile.cs" />
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
     <Compile Include="DAC\LumStageControl.cs" />
@@ -86,6 +87,8 @@
     <Compile Include="Graph\ClossPrepaymentProcess.cs" />
     <Compile Include="Graph\PrintTransferDeliveryOrder.cs" />
     <Compile Include="Graph\PrintTransferPickingList.cs" />
+    <Compile Include="Graph\ProcessCitiBankReturnCheckMaint.cs" />
+    <Compile Include="Graph\ProcessCitiBankTTPaymentMaint.cs" />
     <Compile Include="Graph\ProcessSCBPaymentMaint.cs" />
     <Compile Include="Graph_Extension\APPaymentEntry.cs" />
     <Compile Include="Graph_Extension\ARPaymentEntry.cs" />

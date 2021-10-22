@@ -4,6 +4,8 @@ namespace PX.Objects.FS
 {
     public class FSSODetExt : PXCacheExtension<PX.Objects.FS.FSSODet>
     {
+        #region Unbound Fields
+
         #region UsrDummyRMAReq
         [PXString]
         [PXUIField(DisplayName = "", Enabled = false, Visible = false)]
@@ -14,6 +16,16 @@ namespace PX.Objects.FS
         [PXFormula(typeof(Default<FSSODet.inventoryID>))]
         public virtual string UsrDummyRMAReq { get; set; }
         public abstract class usrDummyRMAReq : PX.Data.BQL.BqlString.Field<usrDummyRMAReq> { }
+        #endregion
+
+        #region UsrEquipSerialNbr
+        [PXString(60, IsUnicode = true)]
+        [PXUIField(DisplayName = "Target Serial Nbr.", Visible = false, Enabled = false)]
+        [PXDBScalar(typeof(Search<FSEquipment.serialNumber, Where<FSEquipment.SMequipmentID, Equal<FSSODet.SMequipmentID>>>))]
+        public virtual string UsrEquipSerialNbr { get; set; }
+        public abstract class usrEquipSerialNbr : PX.Data.BQL.BqlString.Field<usrEquipSerialNbr> { }
+        #endregion
+
         #endregion
 
         #region UsrRMARequired

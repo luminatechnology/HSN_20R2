@@ -193,6 +193,7 @@ namespace HSNCustomizations.Graph
                 }
 
                 PrintTransferPickingList graphPrintTransferPickingList = PXGraph.CreateInstance<PrintTransferPickingList>();
+                Dictionary<string, bool> dicInsertedDeliveryOrder = new Dictionary<string, bool>();
 
                 foreach (var transfer in list)
                 {
@@ -220,8 +221,11 @@ namespace HSNCustomizations.Graph
                         INTran iNTranLine = row;
                         INRegister iNRegisterLine = row;
 
-                        //avoid updating LastModifiedDateTime
-                        graphPrintTransferPickingList.ProviderInsert<LumINTran>(
+                        if (!dicInsertedDeliveryOrder.ContainsKey($"{iNTranLine.RefNbr}-{iNTranLine.LineNbr}"))
+                        {
+
+                            //avoid updating LastModifiedDateTime
+                            graphPrintTransferPickingList.ProviderInsert<LumINTran>(
                             new PXDataFieldAssign("DocType", iNTranLine.DocType),
                             new PXDataFieldAssign("RefNbr", iNTranLine.RefNbr),
                             new PXDataFieldAssign("LineNbr", iNTranLine.LineNbr),
@@ -241,7 +245,9 @@ namespace HSNCustomizations.Graph
                             new PXDataFieldAssign("LastModifiedByID", PXAccess.GetUserID()),
                             new PXDataFieldAssign("LastModifiedByScreenID", "LM502010"),
                             new PXDataFieldAssign("LastModifiedDateTime", DateTime.Now)
-                        );
+                            );
+                            dicInsertedDeliveryOrder.Add($"{iNTranLine.RefNbr}-{iNTranLine.LineNbr}", true);
+                        }
                     }
                 }
             }
