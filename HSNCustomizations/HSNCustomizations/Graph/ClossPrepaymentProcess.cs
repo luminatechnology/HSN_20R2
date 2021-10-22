@@ -34,7 +34,7 @@ namespace HSNCustomizations.Graph
                                                    And<FSAppointment.srvOrdType, Equal<FSAppointmentDet.srvOrdType>>>,
                                 InnerJoin<FSPostDet, On<FSAppointmentDet.postID, Equal<FSPostDet.postID>>,
                                 InnerJoin<ARInvoice, On<FSPostDet.sOInvRefNbr, Equal<ARInvoice.refNbr>,
-                                                   And<ARInvoice.released, Equal<True>>>>>>>>,
+                                                   And<ARInvoice.status, Equal<OpenAttr>>>>>>>>,
                                 Where<ARPayment.docType, Equal<ARPaymentType.prepayment>, And<ARPayment.status, Equal<OpenAttr>>>,
                                 OrderBy<Desc<ARPayment.adjDate>>> PrepaymentList;
 
