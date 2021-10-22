@@ -8,7 +8,7 @@ using HSNCustomizations.Descriptor;
 
 namespace PX.Objects.CR
 {
-    public class QuoteMaint_Extension : PXGraphExtension<QuoteMaint>
+    public class QuoteMaint_Extension : PXGraphExtension<QuoteMaintExt, QuoteMaint>
     {
         public const string QuoteMYRptID  = "LM604500";
         public const string QuoteMY2RptID = "LM604501";
@@ -96,7 +96,11 @@ namespace PX.Objects.CR
         {
             baseHandler?.Invoke(e.Cache, e.Args);
 
+            var row = e.Row;
+
             TermsConditions.AllowSelect = HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance ?? false;
+
+            Base.printQuote.SetEnabled((row?.Status == CRQuoteStatusAttribute.Approved || row?.Status == CRQuoteStatusAttribute.Sent || row?.Status == CRQuoteStatusAttribute.Draft) && !string.IsNullOrEmpty(row?.OpportunityID));
 
             printQuoteMY.SetEnabled(Base.printQuote.GetEnabled());
             printQuoteMY2.SetEnabled(Base.printQuote.GetEnabled());
