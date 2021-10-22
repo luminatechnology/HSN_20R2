@@ -27,11 +27,36 @@ namespace HSNCustomizations.Graph
         #region Data View
         public PXProcessingJoin<ARPayment,
                                 InnerJoin<FSAdjust, On<ARPayment.docType, Equal<FSAdjust.adjgDocType>,
-                                                  And<ARPayment.refNbr, Equal<FSAdjust.adjgRefNbr>>>>,
+                                                   And<ARPayment.refNbr, Equal<FSAdjust.adjgRefNbr>>>,
+                                InnerJoin<FSAppointment, On<FSAdjust.adjdOrderNbr, Equal<FSAppointment.soRefNbr>,
+                                                   And<FSAdjust.adjdOrderType, Equal<FSAppointment.srvOrdType>>>,
+                                InnerJoin<FSAppointmentDet, On<FSAppointment.refNbr, Equal<FSAppointmentDet.refNbr>,
+                                                   And<FSAppointment.srvOrdType, Equal<FSAppointmentDet.srvOrdType>>>,
+                                InnerJoin<FSPostDet, On<FSAppointmentDet.postID, Equal<FSPostDet.postID>>,
+                                InnerJoin<ARInvoice, On<FSPostDet.sOInvRefNbr, Equal<ARInvoice.refNbr>,
+                                                   And<ARInvoice.released, Equal<True>>>>>>>>,
                                 Where<ARPayment.docType, Equal<ARPaymentType.prepayment>, And<ARPayment.status, Equal<OpenAttr>>>,
                                 OrderBy<Desc<ARPayment.adjDate>>> PrepaymentList;
 
         #endregion
+
+        public IEnumerable prepaymentList()
+        {
+            PXView select = new PXView(this, true, PrepaymentList.View.BqlSelect.AggregateNew<
+                Aggregate<
+                   GroupBy<FSPostDet.batchID,
+                   GroupBy<FSPostDet.aRPosted,
+                   GroupBy<FSPostDet.aPPosted,
+                   GroupBy<FSPostDet.sOPosted,
+                   GroupBy<FSPostDet.pMPosted>>>>>>
+                >());
+            Int32 totalrow = 0;
+            Int32 startrow = PXView.StartRow;
+            List<object> result = select.Select(PXView.Currents, PXView.Parameters, PXView.Searches,
+                PXView.SortColumns, PXView.Descendings, PXView.Filters, ref startrow, PXView.MaximumRows, ref totalrow);
+            PXView.StartRow = 0;
+            return result;
+        }
 
         public ClossPrepaymentProcess()
         {

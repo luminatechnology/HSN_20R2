@@ -17,11 +17,7 @@ namespace PX.Objects.IN
         public void Persist(PersistDelegate baseMethod)
         {
             baseMethod();
-            var row = Base.transfer.Current;
-            var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
-            var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
-            var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
-            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
+            if (CheckRefInfo())
             {
                 using (PXTransactionScope ts = new PXTransactionScope())
                 {
@@ -37,11 +33,7 @@ namespace PX.Objects.IN
         {
             var baseResult = baseMethod(adapter);
             // Process Appointment & Service Order Stage Change
-            var row = Base.transfer.Current;
-            var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
-            var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
-            var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
-            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
+            if (CheckRefInfo())
             {
                 PXLongOperation.WaitCompletion(Base.UID);
                 using (PXTransactionScope ts = new PXTransactionScope())
@@ -136,6 +128,18 @@ namespace PX.Objects.IN
         #endregion
 
         #region Method
+
+        public bool CheckRefInfo()
+        {
+            var row = Base.transfer.Current;
+            var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
+            var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
+            var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
+            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
+                return true;
+            return false;
+        }
+
         public bool UpdateAppointmentStageManual()
         {
             var row = Base.transfer.Current;
@@ -174,6 +178,7 @@ namespace PX.Objects.IN
             }
             return true;
         }
+
         #endregion
     }
 }
