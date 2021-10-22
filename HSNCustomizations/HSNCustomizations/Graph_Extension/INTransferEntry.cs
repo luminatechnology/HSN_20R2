@@ -17,10 +17,17 @@ namespace PX.Objects.IN
         public void Persist(PersistDelegate baseMethod)
         {
             baseMethod();
-            using (PXTransactionScope ts = new PXTransactionScope())
+            var row = Base.transfer.Current;
+            var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
+            var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
+            var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
+            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
             {
-                if (UpdateAppointmentStageManual())
-                    ts.Complete();
+                using (PXTransactionScope ts = new PXTransactionScope())
+                {
+                    if (UpdateAppointmentStageManual())
+                        ts.Complete();
+                }
             }
         }
 
@@ -30,15 +37,21 @@ namespace PX.Objects.IN
         {
             var baseResult = baseMethod(adapter);
             // Process Appointment & Service Order Stage Change
-            PXLongOperation.WaitCompletion(Base.UID);
-            using (PXTransactionScope ts = new PXTransactionScope())
+            var row = Base.transfer.Current;
+            var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
+            var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
+            var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
+            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
             {
-                // Release Success
-                if (PXLongOperation.GetStatus(Base.UID) == PXLongRunStatus.Completed)
-                    if (UpdateAppointmentStageManual())
-                        ts.Complete();
+                PXLongOperation.WaitCompletion(Base.UID);
+                using (PXTransactionScope ts = new PXTransactionScope())
+                {
+                    // Release Success
+                    if (PXLongOperation.GetStatus(Base.UID) == PXLongRunStatus.Completed)
+                        if (UpdateAppointmentStageManual())
+                            ts.Complete();
+                }
             }
-
             return baseResult;
         }
         #endregion

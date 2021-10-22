@@ -67,7 +67,12 @@ namespace HSNCustomizations.DAC
                                 And<PaymentMethodAccount.useForAP, Equal<True>,
                                     And<Where<CashAccount.clearingAccount, Equal<False>, Or<Current<APPayment.docType>, In3<APDocType.refund, APDocType.voidRefund>>>>>>>>),
             Visibility = PXUIVisibility.Visible, SuppressCurrencyValidation = true)]
-		//[PXDefault("SCB")]
+		[PXDefault(typeof(Search2<PaymentMethodAccount.cashAccountID,
+							InnerJoin<CashAccount, On<CashAccount.cashAccountID, Equal<PaymentMethodAccount.cashAccountID>>>,
+										Where<PaymentMethodAccount.paymentMethodID, Equal<Current<LumProcessCitiBankPaymentFile.payTypeID>>,
+											And<PaymentMethodAccount.useForAP, Equal<True>,
+											And<PaymentMethodAccount.aPIsDefault, Equal<True>,
+											And<CashAccount.branchID, Equal<Current<AccessInfo.branchID>>>>>>>))]
 		public virtual Int32? PayAccountID
 		{
 			get

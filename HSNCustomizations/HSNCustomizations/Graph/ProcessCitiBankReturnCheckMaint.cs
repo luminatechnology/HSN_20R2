@@ -20,7 +20,7 @@ using System.Linq;
 
 namespace HSNCustomizations.Graph
 {
-	public class ProcessCitiBankTTPaymentMaint : PXGraph<ProcessCitiBankTTPaymentMaint>
+	public class ProcessCitiBankReturnCheckMaint : PXGraph<ProcessCitiBankReturnCheckMaint>
 	{
 		public PXFilter<LumProcessCitiBankPaymentFile> Filter;
 		public PXCancel<LumProcessCitiBankPaymentFile> Cancel;
@@ -46,36 +46,6 @@ namespace HSNCustomizations.Graph
 		public PXSelect<CurrencyInfo, Where<CurrencyInfo.curyInfoID, Equal<Required<CurrencyInfo.curyInfoID>>>> CurrencyInfo_CuryInfoID;
 
 		#region Vendor Payment Details
-		//Bank Swift Code
-		private const string PaymentBankSwiftCode = "SWIFT";
-		public class _PaymentBankSwiftCode : PX.Data.BQL.BqlString.Constant<_PaymentBankSwiftCode>
-		{
-			public _PaymentBankSwiftCode() : base(PaymentBankSwiftCode) { }
-		}
-		//Bank Number
-		private const string PaymentBankNumber = "BANKBNR";
-		public class _PaymentBankNumber : PX.Data.BQL.BqlString.Constant<_PaymentBankNumber>
-		{
-			public _PaymentBankNumber() : base(PaymentBankNumber) { }
-		}
-		//Bank Branch Number
-		private const string PaymentBankBranchNumber = "BANKBRCH";
-		public class _PaymentBankBranchNumber : PX.Data.BQL.BqlString.Constant<_PaymentBankBranchNumber>
-		{
-			public _PaymentBankBranchNumber() : base(PaymentBankBranchNumber) { }
-		}
-		//Bank Account Number
-		private const string PaymentBankAccountNumber = "ACCTNBR";
-		public class _PaymentBankAccountNumber : PX.Data.BQL.BqlString.Constant<_PaymentBankAccountNumber>
-		{
-			public _PaymentBankAccountNumber() : base(PaymentBankAccountNumber) { }
-		}
-		//Bank Account Name
-		private const string PaymentBankAccountName = "BANKACCT";
-		public class _PaymentBankAccountName : PX.Data.BQL.BqlString.Constant<_PaymentBankAccountName>
-		{
-			public _PaymentBankAccountName() : base(PaymentBankAccountName) { }
-		}
 		//Charge Indicator
 		private const string PaymentCHGINDICAT = "CHGINDICAT";
 		public class _PaymentCHGINDICAT : PX.Data.BQL.BqlString.Constant<_PaymentCHGINDICAT>
@@ -85,7 +55,7 @@ namespace HSNCustomizations.Graph
 		#endregion
 
 
-		public ProcessCitiBankTTPaymentMaint()
+		public ProcessCitiBankReturnCheckMaint()
 		{
 			//APSetup setup = APSetup.Current;
 			PXUIFieldAttribute.SetEnabled(APPaymentList.Cache, null, false);
@@ -151,36 +121,7 @@ namespace HSNCustomizations.Graph
 						And<APPayment.released, Equal<True>,
 						And<Match<Vendor, Current<AccessInfo.userName>>>>>>>>.Select(this))
 			{
-				APPayment line = (APPayment)doc;
-
-				var VendorBankNumber = SelectFrom<VendorPaymentMethodDetail>.
-											Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-											And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankNumber>>>>>.
-											View.Select(this, line.VendorID, line.VendorLocationID, line.PaymentMethodID).TopFirst?.DetailValue;
-				var VendorBankBranchNumber = SelectFrom<VendorPaymentMethodDetail>.
-												Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-												And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankBranchNumber>>>>>.
-												View.Select(this, line.VendorID, line.VendorLocationID, line.PaymentMethodID).TopFirst?.DetailValue;
-
-				if (VendorBankNumber != null && VendorBankBranchNumber != null)
-					line.GetExtension<APPaymentExt>().UsrCitiBankNumber = string.Concat(VendorBankNumber.Length > 3 ? VendorBankNumber.Substring(0, 3) : VendorBankNumber,
-																			VendorBankBranchNumber.Length > 4 ? VendorBankBranchNumber.Substring(0, 4) : VendorBankBranchNumber);
-				else line.GetExtension<APPaymentExt>().UsrCitiBankNumber = "";
-
-				line.GetExtension<APPaymentExt>().UsrCitiBankAccountNbr = SelectFrom<VendorPaymentMethodDetail>.
-																			Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
-																				And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-																				And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.
-																				And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankAccountNumber>>>>>.
-																			View.Select(this, line.VendorID, line.VendorLocationID, line.PaymentMethodID).TopFirst?.DetailValue;
-
-				//TT need this condition, otherwise, none
-				var curLumProcessCitiBankPaymentFile = this.Caches[typeof(LumProcessCitiBankPaymentFile)].Cached.RowCast<LumProcessCitiBankPaymentFile>().ToList();
-				if (curLumProcessCitiBankPaymentFile[0].PayTypeID == "TT")
-                {
-					if (line.GetExtension<APPaymentExt>().UsrCitiBankAccountNbr != null) yield return new PXResult<APPayment>(doc);
-				}					
-				else yield return new PXResult<APPayment>(doc);
+				yield return new PXResult<APPayment>(doc);
 			}
 		}
 		protected virtual void _(Events.FieldUpdated<APPayment.selected> e)
@@ -207,7 +148,7 @@ namespace HSNCustomizations.Graph
 				{
 					using (StreamWriter sw = new StreamWriter(stream, Encoding.ASCII))
 					{
-						string fileName = DateTime.Now.ToString("yyyyMMddHHmm") + "-CitiTT.txt";
+						string fileName = DateTime.Now.ToString("yyyyMMddHHmm") + "-CitiRETCHK.txt";
 
 						foreach (APPayment aPPayment in aPPaymentLists)
 						{
@@ -232,45 +173,7 @@ namespace HSNCustomizations.Graph
 													Where<Contact.bAccountID.IsEqual<@P.AsInt>>.
 													View.Select(this, VendorInfo.BAccountID).TopFirst;
 
-							//21-23: APAddress
-							//var APAddress = SelectFrom<APAddress>.Where<APAddress.addressID.IsEqual<@P.AsInt>>.View.Select(this, aPPayment.RemitAddressID).TopFirst;
-							//Vendor Payment Details
-							/*
-							var VendorBankSwiftCode = SelectFrom<VendorPaymentMethodDetail>.
-														Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
-														And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-														And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.
-														And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankSwiftCode>>>>>.
-														View.Select(this, aPPayment.VendorID, aPPayment.VendorLocationID, aPPayment.PaymentMethodID).TopFirst;
-							*/
-							var VendorBankNumber = SelectFrom<VendorPaymentMethodDetail>.
-													Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
-													And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-													And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.
-													And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankNumber>>>>>.
-													View.Select(this, aPPayment.VendorID, aPPayment.VendorLocationID, aPPayment.PaymentMethodID).TopFirst;
-
-							var VendorBankBranchNumber = SelectFrom<VendorPaymentMethodDetail>.
-															Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
-															And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-															And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.
-															And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankBranchNumber>>>>>.
-															View.Select(this, aPPayment.VendorID, aPPayment.VendorLocationID, aPPayment.PaymentMethodID).TopFirst;
-
-							var VendorBankAccountNumber = SelectFrom<VendorPaymentMethodDetail>.
-															Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
-															And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-															And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.
-															And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankAccountNumber>>>>>.
-															View.Select(this, aPPayment.VendorID, aPPayment.VendorLocationID, aPPayment.PaymentMethodID).TopFirst;
-
-							var VendorBankAccountName = SelectFrom<VendorPaymentMethodDetail>.
-															Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
-															And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
-															And<VendorPaymentMethodDetail.paymentMethodID.IsEqual<@P.AsString>.
-															And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentBankAccountName>>>>>.
-															View.Select(this, aPPayment.VendorID, aPPayment.VendorLocationID, aPPayment.PaymentMethodID).TopFirst;
-
+							//58
 							var VendorCHGINDICAT = SelectFrom<VendorPaymentMethodDetail>.
 													Where<VendorPaymentMethodDetail.bAccountID.IsEqual<@P.AsInt>.
 													And<VendorPaymentMethodDetail.locationID.IsEqual<@P.AsInt>.
@@ -278,8 +181,8 @@ namespace HSNCustomizations.Graph
 													And<VendorPaymentMethodDetail.detailID.IsEqual<_PaymentCHGINDICAT>>>>>.
 													View.Select(this, aPPayment.VendorID, aPPayment.VendorLocationID, aPPayment.PaymentMethodID).TopFirst;
 
-							//1: PTA
-							line = "PTA@";
+							//1: PLC
+							line = "PLC@";
 							count++;
 							//2: Companyaddress.CountryID
 							line += $"{CompanyAddress.CountryID}@";
@@ -315,7 +218,7 @@ namespace HSNCustomizations.Graph
 							}
 							//14: CHGINDICAT = null or 'OUR', AcctName, otherwise LegalName. *Left(Companies.AccontName, 35)
 							if (VendorCHGINDICAT?.DetailValue == null || VendorCHGINDICAT?.DetailValue == "OUR")
-                            {
+							{
 								if (CompanyInfo?.AcctName != null)
 								{
 									if (CompanyInfo?.AcctName.Length > 35) line += $"{CompanyInfo?.AcctName.Substring(0, 35).ToUpper()}@";
@@ -324,7 +227,7 @@ namespace HSNCustomizations.Graph
 								else line += "@";
 							}
 							else //if (VendorCHGINDICAT?.DetailValue == "BEN")
-                            {
+							{
 								if (CompanyInfo?.LegalName != null)
 								{
 									if (CompanyInfo?.LegalName.Length > 35) line += $"{CompanyInfo?.LegalName.Substring(0, 35).ToUpper()}@";
@@ -347,42 +250,13 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "@";
 							count++;
-							//21-24: Null
-							for (int i = count; i <= 24; i++)
-							{
-								line += "@";
-								count++;
-							}
-							//25: Vendor Payment Detail: BANKACCNBR, 15
-							if (VendorBankAccountNumber?.DetailValue != null)
-							{
-								if (VendorBankAccountNumber?.DetailValue.Length > 15) line += $"{VendorBankAccountNumber?.DetailValue.Substring(0, 15).ToUpper()}@";
-								else line += $"{VendorBankAccountNumber?.DetailValue.ToUpper()}@";
-							}
-							else line += "@";
-							count++;
-							//26-31: Null
-							for (int i = count; i <= 31; i++)
-							{
-								line += "@";
-								count++;
-							}
-							//32: Vendor Payment Detail: Bank Number + Bank Branch Number, 7
-							if (VendorBankNumber?.DetailValue != null && VendorBankBranchNumber?.DetailValue != null)
-							{
-								if ((VendorBankNumber?.DetailValue.Length + VendorBankBranchNumber?.DetailValue.Length) > 7) line += $"{VendorBankNumber?.DetailValue.Substring(0, 3).ToUpper()}{VendorBankBranchNumber?.DetailValue.Substring(0, 4).ToUpper()}@";
-								else line += $"{VendorBankNumber?.DetailValue.ToUpper()}{VendorBankBranchNumber?.DetailValue.ToUpper()}@";
-							}
-							else line += "@";
-							count++;
-							//33-57: Null
+							//21-57: Null
 							for (int i = count; i <= 57; i++)
 							{
 								line += "@";
 								count++;
 							}
-
-							//58: PaymentMethodDetail.Chgindicat != null, or 'OUR', 35
+							//58: PaymentMethodDetail.Chgindicat != null, or 'BEN', 35
 							if (VendorCHGINDICAT?.DetailValue != null)
 							{
 								if (VendorCHGINDICAT.DetailValue.Length > 35) line += $"{VendorCHGINDICAT.DetailValue.Substring(0, 35).ToUpper()}@";
@@ -390,37 +264,26 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "OUR@";
 							count++;
-							//59-75: Null
-							for (int i = count; i <= 75; i++)
+							//59-90: Null
+							for (int i = count; i <= 90; i++)
 							{
 								line += "@";
 								count++;
 							}
-							//76: VendorContact.EMail, 50
-							if (VendorContact?.EMail != null)
-							{
-								if (VendorContact?.EMail.Length > 50) line += $"{VendorContact?.EMail.Substring(0, 50).ToUpper()}@";
-								else line += $"{VendorContact?.EMail.ToUpper()}@";
-							}
-							else line += "@";
+							//91: = 'RET'
+							line += "RET@";
 							count++;
-							//77: Null
-							line += "@";
+							//92: = 'THA'
+							line += "THA@";
 							count++;
-							//78: ='04'
-							line += "04@";
-							count++;
-							//79-95: Null
-							for (int i = count; i <= 95; i++)
+							//93-96: Null
+							for (int i = count; i <= 96; i++)
 							{
 								line += "@";
 								count++;
 							}
-							//96: APPayment.curyOrigDocAmt *2 decimal places, no thousand separator, 14
+							//97: APPayment.curyOrigDocAmt *2 decimal places, no thousand separator, 14
 							line += $"{Math.Round((Decimal)aPPayment.CuryOrigDocAmt, 2)}@";
-							count++;
-							//97: 0
-							line += "0@";
 							count++;
 							//98: 0
 							line += "0@";
@@ -428,7 +291,10 @@ namespace HSNCustomizations.Graph
 							//99: 0
 							line += "0@";
 							count++;
-							//100-130: Null
+							//100: 0
+							line += "0@";
+							count++;
+							//101-130: Null
 							for (int i = count; i < 130; i++)
 							{
 								line += "@";
@@ -438,8 +304,8 @@ namespace HSNCustomizations.Graph
 							line += "\n";
 							sw.Write(line);
 
-							aPPayment.GetExtension<APPaymentExt>().UsrCitiPaymentExported = true;
-							aPPayment.GetExtension<APPaymentExt>().UsrCitiPaymentDateTime = DateTime.Now;
+							aPPayment.GetExtension<APPaymentExt>().UsrCitiReturnCheckExported = true;
+							aPPayment.GetExtension<APPaymentExt>().UsrCitiReturnCheckDateTime = DateTime.Now;
 							
 							this.Caches[typeof(APPayment)].Update(aPPayment);
 						}

@@ -1,9 +1,9 @@
-<%@ Page Language="C#" MasterPageFile="~/MasterPages/FormDetail.master" AutoEventWireup="true" ValidateRequest="false" CodeFile="LM505010.aspx.cs" Inherits="Page_LM505010" Title="Untitled Page" %>
+<%@ Page Language="C#" MasterPageFile="~/MasterPages/FormDetail.master" AutoEventWireup="true" ValidateRequest="false" CodeFile="LM505020.aspx.cs" Inherits="Page_LM505020" Title="Untitled Page" %>
 <%@ MasterType VirtualPath="~/MasterPages/FormDetail.master" %>
 
 <asp:Content ID="cont1" ContentPlaceHolderID="phDS" Runat="Server">
 	<px:PXDataSource ID="ds" runat="server" Visible="True" Width="100%"
-        TypeName="HSNCustomizations.Graph.ProcessCitiBankTTPaymentMaint"
+        TypeName="HSNCustomizations.Graph.ProcessCitiBankReturnCheckMaint"
         PrimaryView="Filter"
         >
 		<CallbackCommands>
@@ -34,9 +34,7 @@
                     <px:PXGridColumn DataField="RefNbr" LinkCommand="viewDocument" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="VendorID" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="VendorID_Vendor_acctName" ></px:PXGridColumn>
-	<px:PXGridColumn DataField="UsrCitiBankNumber" Width="280" ></px:PXGridColumn>
-	<px:PXGridColumn DataField="UsrCitiBankAccountNbr" Width="280" ></px:PXGridColumn>
-       	<px:PXGridColumn Type="CheckBox" DataField="UsrCitiPaymentExported" Width="60" ></px:PXGridColumn>
+       	<px:PXGridColumn Type="CheckBox" DataField="UsrCitiReturnCheckExported" Width="60" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="CuryOrigDocAmt" TextAlign="Right" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="DocDate" ></px:PXGridColumn>
                     <px:PXGridColumn DataField="DocType" ></px:PXGridColumn></Columns>
