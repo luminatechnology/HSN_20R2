@@ -25,6 +25,7 @@
   <col name="EnableSCBPaymentFile" type="Bit" nullable="true" />
   <col name="EnableCitiPaymentFile" type="Bit" nullable="true" />
   <col name="EnableCitiReturnCheckFile" type="Bit" nullable="true" />
+  <col name="EnableCitiOutSourceCheckFile" type="Bit" nullable="true" />
   <index name="PK_LUMHSNSetup" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
   </index>
