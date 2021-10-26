@@ -62,10 +62,6 @@
                 <DataField>APPayment.Released</DataField>
                 <Value>True</Value>
             </FilterExp>
-            <FilterExp>
-                <Condition>IsNotNull</Condition>
-                <DataField>VendorR.BANKACCNBR_Attributes</DataField>
-            </FilterExp>
         </Filters>
         <GridSize>4px, 4px</GridSize>
         <PageSettings>
@@ -150,6 +146,16 @@
                 <DefaultValue>AP</DefaultValue>
                 <Name>moduleAP</Name>
                 <Nullable>True</Nullable>
+                <Visible>False</Visible>
+            </ReportParameter>
+            <ReportParameter>
+                <DefaultValue>BANKNAME</DefaultValue>
+                <Name>BankName</Name>
+                <Visible>False</Visible>
+            </ReportParameter>
+            <ReportParameter>
+                <DefaultValue>BANKBNR</DefaultValue>
+                <Name>BankNumber</Name>
                 <Visible>False</Visible>
             </ReportParameter>
         </Parameters>
@@ -274,6 +280,52 @@
                     <RelationRow>
                         <ChildField>BAccountID</ChildField>
                         <ParentField>VendorID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>APPayment</ParentName>
+            </ReportRelation>
+            <ReportRelation>
+                <ChildAlias>VendorDetail_BankName</ChildAlias>
+                <ChildName>VendorPaymentMethodDetail</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>BAccountID</ChildField>
+                        <ParentField>VendorID</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>LocationID</ChildField>
+                        <ParentField>VendorLocationID</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>PaymentMethodID</ChildField>
+                        <ParentField>PaymentMethodID</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>@BankName</ChildField>
+                        <ParentField>VendorDetail_BankName.DetailID</ParentField>
+                    </RelationRow>
+                </Links>
+                <ParentName>APPayment</ParentName>
+            </ReportRelation>
+            <ReportRelation>
+                <ChildAlias>VendorDetail_BankNumber</ChildAlias>
+                <ChildName>VendorPaymentMethodDetail</ChildName>
+                <Links>
+                    <RelationRow>
+                        <ChildField>BAccountID</ChildField>
+                        <ParentField>VendorID</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>LocationID</ChildField>
+                        <ParentField>VendorLocationID</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>PaymentMethodID</ChildField>
+                        <ParentField>PaymentMethodID</ParentField>
+                    </RelationRow>
+                    <RelationRow>
+                        <ChildField>@BankNumber</ChildField>
+                        <ParentField>VendorDetail_BankNumber.DetailID</ParentField>
                     </RelationRow>
                 </Links>
                 <ParentName>APPayment</ParentName>
@@ -3185,6 +3237,71 @@
                 </Fields>
                 <FullName>PX.Objects.AP.VendorR</FullName>
             </ReportTable>
+            <ReportTable Name="VendorPaymentMethodDetail">
+                <Fields>
+                    <ReportField Name="BAccountID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="CreatedByID">
+                    </ReportField>
+                    <ReportField Name="CreatedByID_Creator_displayName">
+                    </ReportField>
+                    <ReportField Name="CreatedByID_Creator_Username">
+                    </ReportField>
+                    <ReportField Name="CreatedByID_description">
+                    </ReportField>
+                    <ReportField Name="CreatedByScreenID">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="CreatedDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="DetailID">
+                    </ReportField>
+                    <ReportField Name="DetailValue">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_description">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_displayName">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByID_Modifier_Username">
+                    </ReportField>
+                    <ReportField Name="LastModifiedByScreenID">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime">
+                        <DataType>DateTime</DataType>
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Day">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Hour">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Month">
+                    </ReportField>
+                    <ReportField Name="LastModifiedDateTime_Quarter">
+                    </ReportField>
+                    <ReportField Name="LocationID">
+                        <DataType>Int32</DataType>
+                    </ReportField>
+                    <ReportField Name="PaymentMethodID">
+                    </ReportField>
+                    <ReportField Name="PaymentMethodID_description">
+                    </ReportField>
+                    <ReportField Name="PaymentMethodID_PaymentMethod_descr">
+                    </ReportField>
+                    <ReportField Name="tstamp">
+                    </ReportField>
+                </Fields>
+                <FullName>PX.Objects.AP.VendorPaymentMethodDetail</FullName>
+            </ReportTable>
         </Tables>
         <ViewerFields>
             <ViewerField Name="BAccount.BAccountID">
@@ -4266,7 +4383,7 @@
                                     </Font>
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
-                                <Value>=IIf(CStr($subReport1_idx1value) &lt;&gt; '0', $subReport1_idx1value, '')</Value>
+                                <Value>=[VendorDetail_BankName.DetailValue]</Value>
                             </TextBox>
                             <TextBox Name="textBox26">
                                 <Excel>
@@ -4313,7 +4430,7 @@
                                     <TextAlign>Right</TextAlign>
                                 </Style>
                                 <StyleName>Normal</StyleName>
-                                <Value>=IIf(CStr($subReport1_idx2value) &lt;&gt; '0', $subReport1_idx2value, '')</Value>
+                                <Value>=[VendorDetail_BankNumber.DetailValue]</Value>
                             </TextBox>
                             <TextBox Name="textBox49">
                                 <Excel>
