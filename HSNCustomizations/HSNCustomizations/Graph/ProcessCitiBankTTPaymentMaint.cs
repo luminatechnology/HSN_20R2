@@ -112,7 +112,7 @@ namespace HSNCustomizations.Graph
 			parameters["PayAccountID"] = SelectFrom<CashAccount>.Where<CashAccount.accountID.IsEqual<@P.AsInt>>.View.Select(this, currentFiler[0].PayAccountID).TopFirst?.CashAccountCD;
 			parameters["PayTypeID"] = currentFiler[0].PayTypeID;
 			parameters["CuryID"] = currentFiler[0].CuryID;
-			throw new PXReportRequiredException(parameters, "LM622500", "LM622500") { Mode = PXBaseRedirectException.WindowMode.New };
+			throw new PXReportRequiredException(parameters, "LM622505", "LM622505") { Mode = PXBaseRedirectException.WindowMode.New };
 		}
 		#endregion
 
@@ -316,21 +316,27 @@ namespace HSNCustomizations.Graph
 							//14: CHGINDICAT = null or 'OUR', AcctName, otherwise LegalName. *Left(Companies.AccontName, 35)
 							if (VendorCHGINDICAT?.DetailValue == null || VendorCHGINDICAT?.DetailValue == "OUR")
                             {
+								line += "HIGHPOINT SERVICE NETWORK - (THA@";
+								/*
 								if (CompanyInfo?.AcctName != null)
 								{
 									if (CompanyInfo?.AcctName.Length > 35) line += $"{CompanyInfo?.AcctName.Substring(0, 35).ToUpper()}@";
 									else line += $"{CompanyInfo?.AcctName.ToUpper()}@";
 								}
 								else line += "@";
+								*/
 							}
 							else //if (VendorCHGINDICAT?.DetailValue == "BEN")
                             {
+								line += "HIGHPOINT SERVICE NETWORK - BEN@";
+								/*
 								if (CompanyInfo?.LegalName != null)
 								{
 									if (CompanyInfo?.LegalName.Length > 35) line += $"{CompanyInfo?.LegalName.Substring(0, 35).ToUpper()}@";
 									else line += $"{CompanyInfo?.LegalName.ToUpper()}@";
 								}
 								else line += "@";
+								*/
 							}
 							count++;
 							//15-19: Null

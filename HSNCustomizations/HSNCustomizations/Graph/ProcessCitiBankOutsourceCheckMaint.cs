@@ -219,30 +219,28 @@ namespace HSNCustomizations.Graph
 								count++;
 							}
 							//14: CHGINDICAT = null or 'OUR', AcctName, otherwise LegalName. *Left(Companies.AccontName, 35)
+							line += "HIGHPOINT SERViCE (TH) - PLC@";
+							/*
 							if (VendorCHGINDICAT?.DetailValue == null || VendorCHGINDICAT?.DetailValue == "OUR")
 							{
-								line += "HIGHPOINT SERVICE NETWORK - (THA@";
-								/*
 								if (CompanyInfo?.AcctName != null)
 								{
 									if (CompanyInfo?.AcctName.Length > 35) line += $"{CompanyInfo?.AcctName.Substring(0, 35).ToUpper()}@";
 									else line += $"{CompanyInfo?.AcctName.ToUpper()}@";
 								}
 								else line += "@";
-								*/
+								
 							}
 							else //if (VendorCHGINDICAT?.DetailValue == "BEN")
 							{
-								line += "HIGHPOINT SERVICE NETWORK ¡V BEN@";
-								/*
 								if (CompanyInfo?.LegalName != null)
 								{
 									if (CompanyInfo?.LegalName.Length > 35) line += $"{CompanyInfo?.LegalName.Substring(0, 35).ToUpper()}@";
 									else line += $"{CompanyInfo?.LegalName.ToUpper()}@";
 								}
 								else line += "@";
-								*/
 							}
+							*/
 							count++;
 							//15-19: Null
 							for (int i = count; i <= 19; i++)
@@ -351,8 +349,8 @@ namespace HSNCustomizations.Graph
 										And<APAdjust.adjgRefNbr, Equal<@P.AsString>,
 										And<APAdjust.released, Equal<True>>>>>.Select(this, aPPayment.DocType, aPPayment.RefNbr))
                             {
-								line += $"INV@{(applicationLine.ToString()).PadLeft(3, '0')} {((APInvoice)application)?.RefNbr} {aPPayment.CuryID} ";
-								if (((APAdjust)application)?.AdjdDocType == "ADR") line += ((APAdjust)application)?.CuryAdjdAmt == null ? "" : $"{Math.Round((Decimal)((APAdjust)application)?.CuryAdjdAmt, 2)} "; //ADR
+								line += $"INV@{(applicationLine.ToString()).PadLeft(3, '0')} {((APInvoice)application)?.InvoiceNbr} {aPPayment.CuryID} ";
+								if (((APAdjust)application)?.AdjdDocType != "ADR") line += ((APAdjust)application)?.CuryAdjdAmt == null ? "" : $"{Math.Round((Decimal)((APAdjust)application)?.CuryAdjdAmt, 2)} "; //ADR
 								else line += ((APAdjust)application)?.CuryAdjdAmt == null ? "" : $"-{Math.Round((Decimal)((APAdjust)application)?.CuryAdjdAmt, 2)} ";
 
 								//User-defined Field attribute.REMITMSG
