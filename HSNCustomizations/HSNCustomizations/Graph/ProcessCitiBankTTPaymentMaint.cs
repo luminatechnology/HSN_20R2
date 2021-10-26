@@ -434,8 +434,8 @@ namespace HSNCustomizations.Graph
 							//99: 0
 							line += "0@";
 							count++;
-							//100-130: Null
-							for (int i = count; i < 130; i++)
+							//100-112: Null
+							for (int i = count; i < 112; i++)
 							{
 								line += "@";
 								count++;

@@ -279,16 +279,7 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "OUR@";
 							count++;
-							//59-78: Null
-							for (int i = count; i <= 78; i++)
-							{
-								line += "@";
-								count++;
-							}
-							//79 = '04'
-							line += "04@";
-							count++;
-							//80-90: Null
+							//59-90: Null
 							for (int i = count; i <= 90; i++)
 							{
 								line += "@";
@@ -318,8 +309,8 @@ namespace HSNCustomizations.Graph
 							//100: 0
 							line += "0@";
 							count++;
-							//101-130: Null
-							for (int i = count; i < 130; i++)
+							//101-112: Null
+							for (int i = count; i < 112; i++)
 							{
 								line += "@";
 								count++;
@@ -337,10 +328,10 @@ namespace HSNCustomizations.Graph
 
 							//INV@001 IV64/08-00054 THB 8228.3 R
 							int applicationLine = 1;
+
 							//attribute.REMITMSG
-							v_APRegisterUDFAttir APRegisterUDFAttir_REMITMSG =
-									SelectFrom<v_APRegisterUDFAttir>.Where<v_APRegisterUDFAttir.refNbr.IsEqual<@P.AsString>.And<v_APRegisterUDFAttir.fieldName.IsEqual<@P.AsString>>>.
-									View.Select(this, aPPayment.RefNbr, "AttributeREMITMSG");
+							var APRegisterUDFAttir_REMITMSG = SelectFrom<v_APRegisterUDFAttir>.Where<v_APRegisterUDFAttir.fieldName.IsEqual<@P.AsString>>.View.Select(this, "AttributeREMITMSG").RowCast<v_APRegisterUDFAttir>().ToList();
+
 							//Application History
 							foreach (PXResult<APAdjust, APInvoice> application in PXSelectJoin<APAdjust,
 									LeftJoin<APInvoice, On<APInvoice.docType, Equal<APAdjust.adjdDocType>, And<APInvoice.refNbr, Equal<APAdjust.adjdRefNbr>>>,
@@ -354,7 +345,7 @@ namespace HSNCustomizations.Graph
 								else line += ((APAdjust)application)?.CuryAdjdAmt == null ? "" : $"-{Math.Round((Decimal)((APAdjust)application)?.CuryAdjdAmt, 2)} ";
 
 								//User-defined Field attribute.REMITMSG
-								if (APRegisterUDFAttir_REMITMSG?.ValueString != null) line += $"{APRegisterUDFAttir_REMITMSG?.ValueString}\n";
+								if (APRegisterUDFAttir_REMITMSG.FirstOrDefault(x => x.RefNbr == ((APInvoice)application)?.RefNbr)?.ValueString != null) line += $"{APRegisterUDFAttir_REMITMSG.FirstOrDefault(x => x.RefNbr == ((APInvoice)application)?.RefNbr)?.ValueString}\n";
 								else line += "N/A\n";
 
 								applicationLine++;

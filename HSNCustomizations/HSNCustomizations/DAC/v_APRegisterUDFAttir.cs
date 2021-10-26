@@ -8,14 +8,14 @@ namespace HSNCustomizations
     public class v_APRegisterUDFAttir : IBqlTable
     {
         #region DocType
-        [PXDBString(3, IsFixed = true, InputMask = "")]
+        [PXDBString(3, IsFixed = true, InputMask = "", IsKey = true)]
         [PXUIField(DisplayName = "Doc Type")]
         public virtual string DocType { get; set; }
         public abstract class docType : PX.Data.BQL.BqlString.Field<docType> { }
         #endregion
 
         #region RefNbr
-        [PXDBString(15, IsUnicode = true, InputMask = "")]
+        [PXDBString(15, IsUnicode = true, InputMask = "", IsKey = true)]
         [PXUIField(DisplayName = "Ref Nbr")]
         public virtual string RefNbr { get; set; }
         public abstract class refNbr : PX.Data.BQL.BqlString.Field<refNbr> { }
