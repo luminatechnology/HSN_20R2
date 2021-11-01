@@ -26,7 +26,6 @@
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox6" DataField="EnableRMAProcInAppt" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox10" DataField="EnableHeaderNoteSync" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox11" DataField="EnableChgInvTypeOnBill" ></px:PXCheckBox>
-								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox16" DataField="EnableEquipmentMandatory" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox15" DataField="EnableAppointmentUpdateEndDate" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox12" DataField="DisplayTransferToHQ" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox13" DataField="DispApptActiviteInSrvOrd" ></px:PXCheckBox>

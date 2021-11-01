@@ -96,13 +96,6 @@ namespace HSNCustomizations.DAC
         public abstract class dispApptActiviteInSrvOrd : PX.Data.BQL.BqlBool.Field<dispApptActiviteInSrvOrd> { }
         #endregion
 
-        #region EnableEquipmentMandatory
-        [PXDBBool()]
-        [PXUIField(DisplayName = "Target Equipment ID is mandatory")]
-        public virtual bool? EnableEquipmentMandatory { get; set; }
-        public abstract class enableEquipmentMandatory : PX.Data.BQL.BqlBool.Field<enableEquipmentMandatory> { }
-        #endregion
-
         #region EnableAppointmentUpdateEndDate
         [PXDBBool()]
         [PXUIField(DisplayName = "Finish Appointment to update End Date")]
