@@ -410,13 +410,7 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "@";
 							count++;
-							//77: Null
-							line += "@";
-							count++;
-							//78: ='04'
-							line += "04@";
-							count++;
-							//79-95: Null
+							//77-95: Null
 							for (int i = count; i <= 95; i++)
 							{
 								line += "@";
