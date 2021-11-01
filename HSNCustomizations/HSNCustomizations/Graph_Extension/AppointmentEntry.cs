@@ -58,7 +58,8 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
-            if (HSNSetupView.Select().TopFirst?.EnableEquipmentMandatory ?? false)
+            if (Base.AppointmentRecords.Current != null &&
+               (SelectFrom<FSSrvOrdType>.Where<FSSrvOrdType.srvOrdType.IsEqual<P.AsString>>.View.Select(Base, Base.AppointmentRecords.Current.SrvOrdType).TopFirst?.GetExtension<FSSrvOrdTypeExtensions>().UsrEnableEquipmentMandatory ?? false))
                 VerifyEquipmentIDMandatory();
 
             if (Base.AppointmentRecords.Current != null &&
@@ -278,7 +279,7 @@ namespace PX.Objects.FS
         {
             INTransferEntry transferEntry = PXGraph.CreateInstance<INTransferEntry>();
 
-            InitTransferEntry(ref transferEntry, Base,HSNMessages.PartRequest);
+            InitTransferEntry(ref transferEntry, Base, HSNMessages.PartRequest);
 
             OpenNewForm(transferEntry, TransferScr);
         }
@@ -361,13 +362,13 @@ namespace PX.Objects.FS
 
             bool isRMA = descrType == HSNMessages.RMAReturned;
 
-            register.TransferType      = INTransferType.TwoStep;
-            register.ExtRefNbr         = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
-            register.TranDesc          = descrType + " | " + appointment.DocDesc;
-            regisExt.UsrSrvOrdType     = appointment.SrvOrdType;
+            register.TransferType = INTransferType.TwoStep;
+            register.ExtRefNbr = appointment.SrvOrdType + " | " + apptEntry.ServiceOrderRelated.Current?.CustWorkOrderRefNbr;
+            register.TranDesc = descrType + " | " + appointment.DocDesc;
+            regisExt.UsrSrvOrdType = appointment.SrvOrdType;
             regisExt.UsrAppointmentNbr = appointment.RefNbr;
-            regisExt.UsrSORefNbr       = appointment.SORefNbr;
-            regisExt.UsrTransferPurp   = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
+            regisExt.UsrSORefNbr = appointment.SORefNbr;
+            regisExt.UsrTransferPurp = isRMA ? LUMTransferPurposeType.RMARetu : LUMTransferPurposeType.PartReq;
 
             transferEntry.CurrentDocument.Insert(register);
 
@@ -380,7 +381,7 @@ namespace PX.Objects.FS
                 list = view.SelectMulti().RowCast<FSAppointmentDet>().Where(x => x.LineType == ID.LineType_ALL.INVENTORY_ITEM && x.GetExtension<FSAppointmentDetExt>().UsrRMARequired == true);
             }
 
-            transferEntry.CurrentDocument.Current.SiteID   = isRMA ? GetFaultyWFByBranch(transferEntry, transferEntry.Accessinfo.BranchID) : branchWH?.SiteID;
+            transferEntry.CurrentDocument.Current.SiteID = isRMA ? GetFaultyWFByBranch(transferEntry, transferEntry.Accessinfo.BranchID) : branchWH?.SiteID;
             transferEntry.CurrentDocument.Current.ToSiteID = isRMA ? branchWH?.FaultySiteID : list.FirstOrDefault<FSAppointmentDet>()?.SiteID;
             transferEntry.CurrentDocument.UpdateCurrent();
 

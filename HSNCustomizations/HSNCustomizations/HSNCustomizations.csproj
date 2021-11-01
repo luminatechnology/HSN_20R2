@@ -77,6 +77,7 @@
     <Compile Include="DAC_Extension\CROpportunityExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityProductsExtensions.cs" />
     <Compile Include="DAC_Extension\FSServiceOrderExtensions.cs" />
+    <Compile Include="DAC_Extension\FSSrvOrdTypeExtensions.cs" />
     <Compile Include="Descriptor\FSStageControlHandler.cs" />
     <Compile Include="Descriptor\FSWorkflowStageHandler.cs" />
     <Compile Include="Descriptor\HSNMessages.cs" />

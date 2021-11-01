@@ -40,7 +40,8 @@ namespace PX.Objects.FS
         [PXOverride]
         public void Persist(PersistDelegate baseMethod)
         {
-            if (SelectFrom<LUMHSNSetup>.View.Select(Base).TopFirst?.EnableEquipmentMandatory ?? false)
+            if(Base.ServiceOrderRecords.Current != null &&
+               (SelectFrom<FSSrvOrdType>.Where<FSSrvOrdType.srvOrdType.IsEqual<P.AsString>>.View.Select(Base, Base.ServiceOrderRecords.Current.SrvOrdType).TopFirst?.GetExtension<FSSrvOrdTypeExtensions>().UsrEnableEquipmentMandatory ?? false))
                 VerifyEquipmentIDMandatory();
 
             if (Base.ServiceOrderRecords.Current != null &&
