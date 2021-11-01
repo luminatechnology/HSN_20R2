@@ -20,7 +20,7 @@ using System.Linq;
 
 namespace HSNCustomizations.Graph
 {
-	public class ProcessCitiBankReturnCheckMaint : PXGraph<ProcessCitiBankReturnCheckMaint>
+	public class ProcessCitiBankOutsourceCheckMaint : PXGraph<ProcessCitiBankOutsourceCheckMaint>
 	{
 		public PXFilter<LumProcessCitiBankPaymentFile> Filter;
 		public PXCancel<LumProcessCitiBankPaymentFile> Cancel;
@@ -42,6 +42,8 @@ namespace HSNCustomizations.Graph
 			Where<APPayment.released, Equal<True>>,
 			OrderBy<Desc<APPayment.refNbr>>> APPaymentList;
 
+		public PXSelectJoin<APRegister, LeftJoin<APPayment, On<APPayment.refNbr, Equal<APRegister.refNbr>>>, Where<APRegister.refNbr, Equal<Current<APPayment.refNbr>>>> aPRegisterInfo;
+
 		public PXSelect<CurrencyInfo> currencyinfo;
 		public PXSelect<CurrencyInfo, Where<CurrencyInfo.curyInfoID, Equal<Required<CurrencyInfo.curyInfoID>>>> CurrencyInfo_CuryInfoID;
 
@@ -55,7 +57,7 @@ namespace HSNCustomizations.Graph
 		#endregion
 
 
-		public ProcessCitiBankReturnCheckMaint()
+		public ProcessCitiBankOutsourceCheckMaint()
 		{
 			//APSetup setup = APSetup.Current;
 			PXUIFieldAttribute.SetEnabled(APPaymentList.Cache, null, false);
@@ -148,7 +150,7 @@ namespace HSNCustomizations.Graph
 				{
 					using (StreamWriter sw = new StreamWriter(stream, Encoding.ASCII))
 					{
-						string fileName = DateTime.Now.ToString("yyyyMMddHHmm") + "-CitiRETCHK.txt";
+						string fileName = DateTime.Now.ToString("yyyyMMddHHmm") + "-CitiOUTCHK.txt";
 
 						foreach (APPayment aPPayment in aPPaymentLists)
 						{
@@ -227,6 +229,7 @@ namespace HSNCustomizations.Graph
 									else line += $"{CompanyInfo?.AcctName.ToUpper()}@";
 								}
 								else line += "@";
+								
 							}
 							else //if (VendorCHGINDICAT?.DetailValue == "BEN")
 							{
@@ -253,7 +256,16 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "@";
 							count++;
-							//21-57: Null
+							//21-35: Null
+							for (int i = count; i <= 35; i++)
+							{
+								line += "@";
+								count++;
+							}
+							//36: SEE INV LINES FOR DOC REQUIREMENT.
+							line += "SEE INV LINES FOR DOC REQUIREMENT.@";
+							count++;
+							//37-57: Null
 							for (int i = count; i <= 57; i++)
 							{
 								line += "@";
@@ -273,8 +285,8 @@ namespace HSNCustomizations.Graph
 								line += "@";
 								count++;
 							}
-							//91: = 'RET'
-							line += "RET@";
+							//91: = 'C/R'
+							line += "C/R@";
 							count++;
 							//92: = 'THA'
 							line += "THA@";
@@ -306,9 +318,43 @@ namespace HSNCustomizations.Graph
 
 							line += "\n";
 							sw.Write(line);
+							line = "";
 
-							aPPayment.GetExtension<APPaymentExt>().UsrCitiReturnCheckExported = true;
-							aPPayment.GetExtension<APPaymentExt>().UsrCitiReturnCheckDateTime = DateTime.Now;
+							//HEADER LINE 2 ¡V fixed value
+							line += "INV@SNO      INVOICE NO        CUR   INV PAID AMT  D.C\n";
+
+							//HEADER LINE 3 ¡V fixed value
+							line += "INV@=== ===================== ========== ========= === =============== ===\n";
+
+							//INV@001 IV64/08-00054 THB 8228.3 R
+							int applicationLine = 1;
+
+							//attribute.REMITMSG
+							var APRegisterUDFAttir_REMITMSG = SelectFrom<v_APRegisterUDFAttir>.Where<v_APRegisterUDFAttir.fieldName.IsEqual<@P.AsString>>.View.Select(this, "AttributeREMITMSG").RowCast<v_APRegisterUDFAttir>().ToList();
+
+							//Application History
+							foreach (PXResult<APAdjust, APInvoice> application in PXSelectJoin<APAdjust,
+									LeftJoin<APInvoice, On<APInvoice.docType, Equal<APAdjust.adjdDocType>, And<APInvoice.refNbr, Equal<APAdjust.adjdRefNbr>>>,
+									LeftJoin<APTran, On<APInvoice.paymentsByLinesAllowed, Equal<True>, And<APTran.tranType, Equal<APInvoice.docType>, And<APTran.refNbr, Equal<APInvoice.refNbr>, And<APTran.lineNbr, Equal<APAdjust.adjdLineNbr>>>>>>>,
+									Where<APAdjust.adjgDocType, Equal<@P.AsString>,
+										And<APAdjust.adjgRefNbr, Equal<@P.AsString>,
+										And<APAdjust.released, Equal<True>>>>>.Select(this, aPPayment.DocType, aPPayment.RefNbr))
+                            {
+								line += $"INV@{(applicationLine.ToString()).PadLeft(3, '0')} {((APInvoice)application)?.InvoiceNbr} {aPPayment.CuryID} ";
+								if (((APAdjust)application)?.AdjdDocType != "ADR") line += ((APAdjust)application)?.CuryAdjdAmt == null ? "" : $"{Math.Round((Decimal)((APAdjust)application)?.CuryAdjdAmt, 2)} "; //ADR
+								else line += ((APAdjust)application)?.CuryAdjdAmt == null ? "" : $"-{Math.Round((Decimal)((APAdjust)application)?.CuryAdjdAmt, 2)} ";
+
+								//User-defined Field attribute.REMITMSG
+								if (APRegisterUDFAttir_REMITMSG.FirstOrDefault(x => x.RefNbr == ((APInvoice)application)?.RefNbr)?.ValueString != null) line += $"{APRegisterUDFAttir_REMITMSG.FirstOrDefault(x => x.RefNbr == ((APInvoice)application)?.RefNbr)?.ValueString}\n";
+								else line += "N/A\n";
+
+								applicationLine++;
+                            }
+
+							sw.Write(line);
+
+							aPPayment.GetExtension<APPaymentExt>().UsrCitiOutSourceCheckExported = true;
+							aPPayment.GetExtension<APPaymentExt>().UsrCitiOutSourceCheckDateTime = DateTime.Now;
 							
 							this.Caches[typeof(APPayment)].Update(aPPayment);
 						}

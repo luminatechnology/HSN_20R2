@@ -1,0 +1,20 @@
+﻿<Sql TableName="v_APRegisterUDFAttir" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM SYS.views
+	WHERE name = 'v_APRegisterUDFAttir' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP VIEW [dbo].[v_APRegisterUDFAttir]	
+GO
+CREATE VIEW v_APRegisterUDFAttir AS
+SELECT 
+	APRegister.CompanyID,
+	APRegister.DocType,
+	APRegister.RefNbr,
+	APRegisterKvExt.FieldName,
+	APRegisterKvExt.ValueString,
+	APRegisterKvExt.ValueText
+FROM APRegister
+LEFT JOIN APRegisterKvExt on APRegisterKvExt.CompanyID = APRegister.CompanyID and APRegisterKvExt.RecordID = APRegister.NoteID]]></CDATA>
+</Sql>

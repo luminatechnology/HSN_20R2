@@ -52,6 +52,23 @@
                     <Prop Key="DataField" Value="UsrCitiReturnCheckDateTime" />
                 </PXTextEdit>
             </AddItem>
+            <AddItem>
+                <PXCheckBox TypeFullName="PX.Web.UI.PXCheckBox">
+                    <Prop Key="Virtual:ApplyStylesheetSkin" />
+                    <Prop Key="AlignLeft" Value="True" />
+                    <Prop Key="Enabled" Value="False" />
+                    <Prop Key="DataField" Value="UsrCitiOutSourceCheckExported" />
+                    <Prop Key="ID" Value="CstPXCheckBox10" />
+                </PXCheckBox>
+            </AddItem>
+            <AddItem>
+                <PXTextEdit TypeFullName="PX.Web.UI.PXTextEdit">
+                    <Prop Key="Virtual:ApplyStylesheetSkin" />
+                    <Prop Key="Enabled" Value="False" />
+                    <Prop Key="DataField" Value="UsrCitiOutSourceCheckDateTime" />
+                    <Prop Key="ID" Value="CstPXTextEdit11" />
+                </PXTextEdit>
+            </AddItem>
         </Children>
     </PXTabItem>
 </Page>

@@ -73,6 +73,7 @@
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
     <Compile Include="DAC\LumStageControl.cs" />
     <Compile Include="DAC\LUMTermsConditions.cs" />
+    <Compile Include="DAC\v_APRegisterUDFAttir.cs" />
     <Compile Include="DAC_Extension\APPaymentExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityProductsExtensions.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Graph\ClossPrepaymentProcess.cs" />
     <Compile Include="Graph\PrintTransferDeliveryOrder.cs" />
     <Compile Include="Graph\PrintTransferPickingList.cs" />
+    <Compile Include="Graph\ProcessCitiBankOutsourceCheckMaint.cs" />
     <Compile Include="Graph\ProcessCitiBankReturnCheckMaint.cs" />
     <Compile Include="Graph\ProcessCitiBankTTPaymentMaint.cs" />
     <Compile Include="Graph\ProcessSCBPaymentMaint.cs" />
