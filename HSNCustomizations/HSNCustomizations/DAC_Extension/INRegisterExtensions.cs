@@ -63,7 +63,7 @@ namespace PX.Objects.IN
 
         #region UsrTransferPurp
         [PXDBString(3, IsFixed = true, IsUnicode = true)]
-        [PXUIField(DisplayName = "Transfer Purpose", IsReadOnly = true)]
+        [PXUIField(DisplayName = "Transfer Purpose", IsReadOnly = true, Visibility = PXUIVisibility.SelectorVisible)]
         [LUMTransferPurposeType()]
         [PXDefault(typeof(IIf<Where<INRegister.docType, Equal<INDocType.receipt>>, LUMTransferPurposeType.receipt, IIf<Where<INRegister.docType, Equal<INDocType.transfer>>, LUMTransferPurposeType.transfer, Null>>), 
                    PersistingCheck = PXPersistingCheck.Nothing)]

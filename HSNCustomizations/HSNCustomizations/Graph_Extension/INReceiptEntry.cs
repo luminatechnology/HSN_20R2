@@ -42,6 +42,12 @@ namespace PX.Objects.IN
         }
         #endregion
 
+        #region Cache Attached
+        [PXMergeAttributes(Method = MergeMethod.Merge)]
+        [IN.ToSite(DisplayName = "To Warehouse ID", DescriptionField = typeof(INSite.descr), Visibility = PXUIVisibility.SelectorVisible)]
+        protected void _(Events.CacheAttached<INRegister.toSiteID> e) { }
+        #endregion
+
         #region Event Handlers
         protected void _(Events.RowSelected<INRegister> e, PXRowSelected baseHandler)
         {
