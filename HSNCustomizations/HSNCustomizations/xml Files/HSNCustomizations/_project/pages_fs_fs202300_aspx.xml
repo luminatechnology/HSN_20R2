@@ -144,7 +144,7 @@
                 <PXCheckBox TypeFullName="PX.Web.UI.PXCheckBox">
                     <Prop Key="Virtual:ApplyStylesheetSkin" />
                     <Prop Key="ID" Value="CstPXCheckBox5" />
-                    <Prop Key="DataField" Value=".UsrEnableEquipmentMandatory" />
+                    <Prop Key="DataField" Value="UsrEnableEquipmentMandatory" />
                 </PXCheckBox>
             </AddItem>
         </Children>
