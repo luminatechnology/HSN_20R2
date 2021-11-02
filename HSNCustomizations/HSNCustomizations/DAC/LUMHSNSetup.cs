@@ -131,6 +131,13 @@ namespace HSNCustomizations.DAC
         public abstract class enableCitiReturnCheckFile : PX.Data.BQL.BqlBool.Field<enableCitiReturnCheckFile> { }
         #endregion
 
+        #region EnableCitiOutSourceCheckFile
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Citi Return Check File")]
+        public virtual bool? EnableCitiOutSourceCheckFile { get; set; }
+        public abstract class enableCitiOutSourceCheckFile : PX.Data.BQL.BqlBool.Field<enableCitiOutSourceCheckFile> { }
+        #endregion
+
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }
