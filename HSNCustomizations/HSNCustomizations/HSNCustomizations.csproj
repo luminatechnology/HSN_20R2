@@ -52,9 +52,13 @@
     <Reference Include="PX.Objects.FS">
       <HintPath>..\..\..\..\Bin\PX.Objects.FS.dll</HintPath>
     </Reference>
-    <Reference Include="PX.Objects.PR, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="PX.SiteMap, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3b136cac2f602b8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Bin\PX.Objects.PR.dll</HintPath>
+      <HintPath>..\..\..\..\Bin\PX.SiteMap.dll</HintPath>
+    </Reference>
+    <Reference Include="PX.Web.UI.Frameset, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3b136cac2f602b8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\PX.Web.UI.Frameset.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -65,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAC\v_APRegisterUDFAttir.cs" />
     <Compile Include="DAC\LUMAutoWorkflowStage.cs" />
     <Compile Include="DAC\LumINTran.cs" />
     <Compile Include="DAC\LUMOpprTermCond.cs" />
@@ -73,7 +78,6 @@
     <Compile Include="DAC\LUMSrvEventHistory.cs" />
     <Compile Include="DAC\LumStageControl.cs" />
     <Compile Include="DAC\LUMTermsConditions.cs" />
-    <Compile Include="DAC\v_APRegisterUDFAttir.cs" />
     <Compile Include="DAC_Extension\APPaymentExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityExtensions.cs" />
     <Compile Include="DAC_Extension\CROpportunityProductsExtensions.cs" />
@@ -87,8 +91,8 @@
     <Compile Include="Descriptor\LUMGetAvailablePaymentsAttribute.cs" />
     <Compile Include="Descriptor\LUMTransferPurposeType.cs" />
     <Compile Include="Graph\ClossPrepaymentProcess.cs" />
-    <Compile Include="Graph\PrintTransferDeliveryOrder.cs" />
     <Compile Include="Graph\PrintTransferPickingList.cs" />
+    <Compile Include="Graph\PrintTransferDeliveryOrder.cs" />
     <Compile Include="Graph\ProcessCitiBankOutsourceCheckMaint.cs" />
     <Compile Include="Graph\ProcessCitiBankReturnCheckMaint.cs" />
     <Compile Include="Graph\ProcessCitiBankTTPaymentMaint.cs" />
