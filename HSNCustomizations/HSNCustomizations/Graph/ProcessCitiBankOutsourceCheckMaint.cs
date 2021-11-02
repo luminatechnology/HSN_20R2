@@ -291,14 +291,17 @@ namespace HSNCustomizations.Graph
 							//92: = 'THA'
 							line += "THA@";
 							count++;
-							//93-96: Null
-							for (int i = count; i <= 96; i++)
+							//93-95: Null
+							for (int i = count; i <= 95; i++)
 							{
 								line += "@";
 								count++;
 							}
-							//97: APPayment.curyOrigDocAmt *2 decimal places, no thousand separator, 14
+							//96: APPayment.curyOrigDocAmt *2 decimal places, no thousand separator, 14
 							line += $"{Math.Round((Decimal)aPPayment.CuryOrigDocAmt, 2)}@";
+							count++;
+							//97: 0
+							line += "0@";
 							count++;
 							//98: 0
 							line += "0@";
@@ -306,11 +309,8 @@ namespace HSNCustomizations.Graph
 							//99: 0
 							line += "0@";
 							count++;
-							//100: 0
-							line += "0@";
-							count++;
-							//101-114: Null
-							for (int i = count; i < 114; i++)
+							//100-114: Null cause ilne 100 contains one @
+							for (int i = count; i < 113; i++)
 							{
 								line += "@";
 								count++;

@@ -316,7 +316,7 @@ namespace HSNCustomizations.Graph
 							//14: CHGINDICAT = null or 'OUR', AcctName, otherwise LegalName. *Left(Companies.AccontName, 35)
 							if (VendorCHGINDICAT?.DetailValue == null || VendorCHGINDICAT?.DetailValue == "OUR")
                             {
-								line += "HIGHPOINT SERVICE NETWORK - (THA@";
+								line += "HIGHPOINT SERViCE NETWORK (TH) - PTA@";
 								/*
 								if (CompanyInfo?.AcctName != null)
 								{
@@ -328,7 +328,7 @@ namespace HSNCustomizations.Graph
 							}
 							else //if (VendorCHGINDICAT?.DetailValue == "BEN")
                             {
-								line += "HIGHPOINT SERVICE NETWORK - BEN@";
+								line += "HIGHPOINT SERViCE NETWORK - BEN@";
 								/*
 								if (CompanyInfo?.LegalName != null)
 								{
@@ -410,7 +410,13 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "@";
 							count++;
-							//77-95: Null
+							//77: Null
+							line += "@";
+							count++;
+							//78: ='04'
+							line += "04@";
+							count++;
+							//79-95: Null
 							for (int i = count; i <= 95; i++)
 							{
 								line += "@";
@@ -428,8 +434,8 @@ namespace HSNCustomizations.Graph
 							//99: 0
 							line += "0@";
 							count++;
-							//100-114: Null
-							for (int i = count; i < 114; i++)
+							//100-114: Null cause ilne 100 contains one @
+							for (int i = count; i < 113; i++)
 							{
 								line += "@";
 								count++;

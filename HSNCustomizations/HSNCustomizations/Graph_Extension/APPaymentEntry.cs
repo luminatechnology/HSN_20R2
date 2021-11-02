@@ -26,6 +26,10 @@ namespace PX.Objects.AP
             bool activePartRequest_Citi_ReturnCheck = hSNSetup?.EnableCitiReturnCheckFile == true;
             PXUIFieldAttribute.SetVisible<APPaymentExt.usrCitiReturnCheckExported>(e.Cache, null, activePartRequest_Citi_ReturnCheck);
             PXUIFieldAttribute.SetVisible<APPaymentExt.usrCitiReturnCheckDateTime>(e.Cache, null, activePartRequest_Citi_ReturnCheck);
+
+            bool activePartRequest_Citi_OutSourceCheck = hSNSetup?.EnableCitiOutSourceCheckFile == true;
+            PXUIFieldAttribute.SetVisible<APPaymentExt.usrCitiOutSourceCheckExported>(e.Cache, null, activePartRequest_Citi_OutSourceCheck);
+            PXUIFieldAttribute.SetVisible<APPaymentExt.usrCitiOutSourceCheckDateTime>(e.Cache, null, activePartRequest_Citi_OutSourceCheck);
         }
         #endregion
     }
