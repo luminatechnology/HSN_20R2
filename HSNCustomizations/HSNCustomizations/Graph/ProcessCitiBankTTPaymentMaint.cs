@@ -410,7 +410,13 @@ namespace HSNCustomizations.Graph
 							}
 							else line += "@";
 							count++;
-							//77-95: Null
+							//77: Null
+							line += "@";
+							count++;
+							//78: ='04'
+							line += "04@";
+							count++;
+							//79-95: Null
 							for (int i = count; i <= 95; i++)
 							{
 								line += "@";
@@ -428,8 +434,8 @@ namespace HSNCustomizations.Graph
 							//99: 0
 							line += "0@";
 							count++;
-							//100-114: Null
-							for (int i = count; i < 114; i++)
+							//100-114: Null cause ilne 100 contains one @
+							for (int i = count; i < 113; i++)
 							{
 								line += "@";
 								count++;

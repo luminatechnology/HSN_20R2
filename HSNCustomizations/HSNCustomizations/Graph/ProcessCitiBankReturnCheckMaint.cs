@@ -297,8 +297,8 @@ namespace HSNCustomizations.Graph
 							//100: 0
 							line += "0@";
 							count++;
-							//101-114: Null
-							for (int i = count; i < 114; i++)
+							//101-114: Null cause ilne 100 contains one @
+							for (int i = count; i < 113; i++)
 							{
 								line += "@";
 								count++;
