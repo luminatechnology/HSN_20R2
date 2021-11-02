@@ -135,7 +135,7 @@ namespace PX.Objects.IN
             var srvType = row?.GetExtension<INRegisterExt>()?.UsrSrvOrdType;
             var appNbr = row?.GetExtension<INRegisterExt>()?.UsrAppointmentNbr;
             var soRef = row?.GetExtension<INRegisterExt>()?.UsrSORefNbr;
-            if (!string.IsNullOrEmpty(soRef) && string.IsNullOrEmpty(appNbr) && string.IsNullOrEmpty(srvType))
+            if (!string.IsNullOrEmpty(soRef) && !string.IsNullOrEmpty(appNbr) && !string.IsNullOrEmpty(srvType))
                 return true;
             return false;
         }
