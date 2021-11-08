@@ -276,9 +276,9 @@ namespace HSNCustomizations.Graph
 							//91: = 'RET'
 							line += "RET@";
 							count++;
-							//92: = 'THA'
+							//92: = 'THA' THA@@@@@Amt: 5*@
 							line += "THA@";
-							count++;
+							//count++;
 							//93-95: Null
 							for (int i = count; i <= 95; i++)
 							{
