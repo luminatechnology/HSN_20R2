@@ -1,5 +1,5 @@
 ﻿<Report Name="lm604501.rpx">
-    <Report Name="report1" version="20200826">
+    <Report version="20200826" Name="report1">
         <CommonSettings>
             <ViewPdf>True</ViewPdf>
         </CommonSettings>
@@ -193,7 +193,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <ParentName>Contact</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>http://localhost/HSN_Malaysia</SchemaUrl>
+        <SchemaUrl>https://hsnerp.hsnservice.com/HSN/</SchemaUrl>
         <StylesTemplate>TemplateForm.rpx</StylesTemplate>
         <Tables>
             <ReportTable Name="CRQuote">
@@ -2648,6 +2648,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <FullName>PX.Objects.EP.EPEmployee</FullName>
             </ReportTable>
         </Tables>
+        <Version>20200826</Version>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
                 <Height>0px</Height>
@@ -2924,7 +2925,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox8">
                                 <Location>0px, 144px</Location>
-                                <Size>352px, 16px</Size>
+                                <Size>752px, 16px</Size>
                                 <Style>
                                     <Font>
                                         <Style>Bold</Style>
@@ -2934,6 +2935,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>=[CRContact.FullName]</Value>
                             </TextBox>
                             <TextBox Name="textBox9">
+                                <CanGrow>True</CanGrow>
+                                <CanSplit>True</CanSplit>
                                 <Location>0px, 162px</Location>
                                 <Size>352px, 48px</Size>
                                 <StyleName>Normal</StyleName>
@@ -3153,7 +3156,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                         <DataField>=CStr([CROpportunityProducts.QuoteID])</DataField>
                     </GroupExp>
                     <GroupExp>
-                        <DataField>=[CROpportunityProducts.LineNbr]</DataField>
+                        <DataField>=[CROpportunityProducts.SortOrder]</DataField>
                     </GroupExp>
                 </Grouping>
                 <Headers>
