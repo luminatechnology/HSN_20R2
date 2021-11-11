@@ -2755,7 +2755,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox13">
                                 <Location>24px, 280px</Location>
-                                <Size>80px, 40px</Size>
+                                <Size>100px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -2834,8 +2834,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>Qty</Value>
                             </TextBox>
                             <TextBox Name="textBox17">
-                                <Location>104px, 280px</Location>
-                                <Size>464px, 40px</Size>
+                                <Location>124px, 280px</Location>
+                                <Size>444px, 40px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -3026,8 +3026,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <StyleName>Heading 1</StyleName>
                             </TextBox>
                             <TextBox Name="textBox33">
-                                <Location>104px, 0px</Location>
-                                <Size>464px, 16px</Size>
+                                <Location>124px, 0px</Location>
+                                <Size>444px, 16px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -3047,7 +3047,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox34">
                                 <Location>24px, 0px</Location>
-                                <Size>80px, 16px</Size>
+                                <Size>100px, 16px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -3256,8 +3256,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox47">
                                 <CanGrow>True</CanGrow>
-                                <Location>104px, 0px</Location>
-                                <Size>464px, 40px</Size>
+                                <Location>124px, 0px</Location>
+                                <Size>444px, 40px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
@@ -3276,7 +3276,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             <TextBox Name="textBox48">
                                 <CanGrow>True</CanGrow>
                                 <Location>24px, 0px</Location>
-                                <Size>80px, 40px</Size>
+                                <Size>100px, 40px</Size>
                                 <Style>
                                     <BorderStyle>
                                         <Bottom>Solid</Bottom>
