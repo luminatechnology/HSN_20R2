@@ -193,7 +193,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                 <ParentName>Contact</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>https://hsnerp.hsnservice.com/HSN/</SchemaUrl>
+        <SchemaUrl>http://localhost/HSN</SchemaUrl>
         <StylesTemplate>TemplateForm.rpx</StylesTemplate>
         <Tables>
             <ReportTable Name="CRQuote">
@@ -2746,7 +2746,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox13">
                                 <Location>24px, 280px</Location>
-                                <Size>100px, 32px</Size>
+                                <Size>120px, 32px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -2820,8 +2820,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <Value>Qty</Value>
                             </TextBox>
                             <TextBox Name="textBox17">
-                                <Location>124px, 280px</Location>
-                                <Size>444px, 32px</Size>
+                                <Location>144px, 280px</Location>
+                                <Size>424px, 32px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -3007,8 +3007,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <StyleName>Heading 1</StyleName>
                             </TextBox>
                             <TextBox Name="textBox33">
-                                <Location>124px, 0px</Location>
-                                <Size>444px, 16px</Size>
+                                <Location>144px, 0px</Location>
+                                <Size>424px, 16px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -3027,7 +3027,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             </TextBox>
                             <TextBox Name="textBox34">
                                 <Location>24px, 0px</Location>
-                                <Size>100px, 16px</Size>
+                                <Size>120px, 16px</Size>
                                 <Style>
                                     <BackColor>Silver</BackColor>
                                     <BorderStyle>
@@ -3201,8 +3201,8 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                             <TextBox Name="textBox47">
                                 <CanGrow>True</CanGrow>
                                 <CanSplit>True</CanSplit>
-                                <Location>124px, 2px</Location>
-                                <Size>444px, 22px</Size>
+                                <Location>144px, 2px</Location>
+                                <Size>424px, 22px</Size>
                                 <StyleName>Normal</StyleName>
                                 <Value>=[CROpportunityProducts.Descr]#010;+IsNull('{br}' + [CROpportunityProducts.NoteText], '')</Value>
                             </TextBox>
@@ -3210,7 +3210,7 @@ ooDZQGZloD/weCc1Xzo5IPugAAAABJRU5ErkJggg==</ImageData>
                                 <CanGrow>True</CanGrow>
                                 <CanSplit>True</CanSplit>
                                 <Location>24px, 2px</Location>
-                                <Size>100px, 22px</Size>
+                                <Size>120px, 22px</Size>
                                 <Style>
                                     <TextAlign>Center</TextAlign>
                                 </Style>
