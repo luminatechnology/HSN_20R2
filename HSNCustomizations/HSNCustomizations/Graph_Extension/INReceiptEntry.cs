@@ -46,6 +46,10 @@ namespace PX.Objects.IN
         [PXMergeAttributes(Method = MergeMethod.Merge)]
         [IN.ToSite(DisplayName = "To Warehouse ID", DescriptionField = typeof(INSite.descr), Visibility = PXUIVisibility.SelectorVisible)]
         protected void _(Events.CacheAttached<INRegister.toSiteID> e) { }
+
+        [PXMergeAttributes(Method = MergeMethod.Merge)]
+        [IN.Site(DisplayName = "Warehouse ID", DescriptionField = typeof(INSite.descr), Visibility = PXUIVisibility.SelectorVisible)]
+        protected void _(Events.CacheAttached<INRegister.siteID> e) { }
         #endregion
 
         #region Event Handlers

@@ -42,7 +42,7 @@ namespace PX.Objects.IN
 
         #region UsrAppointmentNbr
         [PXDBString(20, IsUnicode = true, InputMask = "CCCCCCCCCCCCCCCCCCCC")]
-        [PXUIField(DisplayName = "Appointment Nbr.", IsReadOnly = true)]
+        [PXUIField(DisplayName = "Appointment Nbr.", IsReadOnly = true, Visibility = PXUIVisibility.SelectorVisible)]
         [PXSelector(typeof(Search<FSAppointment.refNbr, Where<FSAppointment.srvOrdType, Equal<Optional<INRegisterExt.usrSrvOrdType>>>>),
                     new Type[] {
                                 typeof(FSAppointment.refNbr),
