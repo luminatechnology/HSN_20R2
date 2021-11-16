@@ -112,6 +112,7 @@ namespace PX.Objects.IN
             LUMHSNSetup hSNSetup = SelectFrom<LUMHSNSetup>.View.Select(Base);
 
             bool activePartRequest = hSNSetup?.EnablePartReqInAppt == true;
+            bool activePrintTransferProcess = hSNSetup?.EnablePrintTransferProcess == true;
 
             copyItemFromAppt.SetEnabled(Base.transactions.Select().Count == 0);
             copyItemFromAppt.SetVisible(activePartRequest);
@@ -119,11 +120,12 @@ namespace PX.Objects.IN
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrAppointmentNbr>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INRegisterExt.usrTransferPurp>(e.Cache, null, activePartRequest);
             PXUIFieldAttribute.SetVisible<INTranExt.usrApptLineRef>(Base.transactions.Cache, null, activePartRequest);
-            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPLIsPrinted>(e.Cache, null, activePartRequest);
-            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDOIsPrinted>(e.Cache, null, activePartRequest);
-            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPickingListNumber>(e.Cache, null, activePartRequest);
-            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDeliveryOrderNumber>(e.Cache, null, activePartRequest);
-            PXUIFieldAttribute.SetVisible<INRegisterExt.usrTrackingNbr>(e.Cache, null, activePartRequest);
+
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPLIsPrinted>(e.Cache, null, activePrintTransferProcess);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDOIsPrinted>(e.Cache, null, activePrintTransferProcess);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrPickingListNumber>(e.Cache, null, activePrintTransferProcess);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrDeliveryOrderNumber>(e.Cache, null, activePrintTransferProcess);
+            PXUIFieldAttribute.SetVisible<INRegisterExt.usrTrackingNbr>(e.Cache, null, activePrintTransferProcess);
         }
         #endregion
 

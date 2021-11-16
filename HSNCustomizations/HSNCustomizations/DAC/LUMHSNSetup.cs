@@ -110,6 +110,13 @@ namespace HSNCustomizations.DAC
         public abstract class enableOpportunityEnhance : PX.Data.BQL.BqlBool.Field<enableOpportunityEnhance> { }
         #endregion
 
+        #region EnablePrintTransferProcess
+        [PXDBBool()]
+        [PXUIField(DisplayName = "Enable Print Transfer Process")]
+        public virtual bool? EnablePrintTransferProcess { get; set; }
+        public abstract class enablePrintTransferProcess : PX.Data.BQL.BqlBool.Field<enablePrintTransferProcess> { }
+        #endregion
+
         #region EnableSCBPaymentFile
         [PXDBBool()]
         [PXUIField(DisplayName = "Enable SCB Payment File")]
