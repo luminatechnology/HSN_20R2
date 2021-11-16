@@ -29,5 +29,6 @@ namespace HSNCustomizations.Descriptor
         public const string SortOrdMustGreater = "The Sort Order Must Be Greater Than The Last One.";
         public const string NoPartRequest      = "All Parts Requested Have Been Submitted.";
         public const string WHLocDiffFromAppt  = "The Warehouse / Warehouse Location Is Different Between The Receipts And Appointment Details.";
+        public const string StartApptNoStaff   = "You Cannot Start Appointment Without Staff Assigned";
     }
 }
