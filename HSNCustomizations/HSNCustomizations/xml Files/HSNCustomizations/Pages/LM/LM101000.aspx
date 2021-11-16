@@ -30,6 +30,7 @@
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox12" DataField="DisplayTransferToHQ" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox13" DataField="DispApptActiviteInSrvOrd" ></px:PXCheckBox>
 								<px:PXCheckBox runat="server" ID="CstPXCheckBox17" DataField="EnableOpportunityEnhance" AlignLeft="True" ></px:PXCheckBox>
+								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox30" DataField="EnablePrintTransferProcess" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox20" DataField="EnableSCBPaymentFile" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox21" DataField="EnableCitiPaymentFile" ></px:PXCheckBox>
 								<px:PXCheckBox AlignLeft="True" runat="server" ID="CstPXCheckBox22" DataField="EnableCitiReturnCheckFile" ></px:PXCheckBox>

@@ -26,20 +26,9 @@
         <data>
             <SiteMap>
                 <row Position="5975" Title="Process Citi Bank Outsource Check" Url="~/Pages/LM/LM505030.aspx" ScreenID="LM505030" NodeID="92fb332a-fb94-4f44-9fea-9581280c90a4" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="c6f8a479-2339-4665-a20d-50f5bf38c228" Order="150" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" />
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="150" SubcategoryID="00000000-0000-0000-0000-000000000000" />
                 </row>
             </SiteMap>
-            <MUIWorkspace>
-                <row IsPortal="0" WorkspaceID="c6f8a479-2339-4665-a20d-50f5bf38c228" Order="146" Title="Payables" Icon="remove_circle" AreaID="338edf81-5456-4735-8601-b213458e93fe" ScreenID="WSAP0000" IsSystem="0">
-                    <MUIFavoriteWorkspace IsPortal="0" Username="" IsFavorite="1" />
-                </row>
-            </MUIWorkspace>
-            <MUISubcategory>
-                <row IsPortal="0" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" Order="820" Name="Processes" Icon="" IsSystem="0" />
-            </MUISubcategory>
-            <MUIArea>
-                <row IsPortal="0" AreaID="338edf81-5456-4735-8601-b213458e93fe" Order="10" Name="Financials" />
-            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>
