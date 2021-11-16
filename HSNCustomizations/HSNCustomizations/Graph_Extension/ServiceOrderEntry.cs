@@ -41,8 +41,10 @@ namespace PX.Objects.FS
         public void Persist(PersistDelegate baseMethod)
         {
             if(Base.ServiceOrderRecords.Current != null &&
-               (SelectFrom<FSSrvOrdType>.Where<FSSrvOrdType.srvOrdType.IsEqual<P.AsString>>.View.Select(Base, Base.ServiceOrderRecords.Current.SrvOrdType).TopFirst?.GetExtension<FSSrvOrdTypeExtensions>().UsrEnableEquipmentMandatory ?? false))
+               (SelectFrom<FSSrvOrdType>.Where<FSSrvOrdType.srvOrdType.IsEqual<P.AsString>>.View.Select(Base, Base.ServiceOrderRecords.Current.SrvOrdType).TopFirst?.GetExtension<FSSrvOrdTypeExt>().UsrEnableEquipmentMandatory ?? false))
+            {
                 VerifyEquipmentIDMandatory();
+            }
 
             if (Base.ServiceOrderRecords.Current != null &&
                 Base.ServiceOrderRecords.Current.Status != FSAppointment.status.CLOSED && 
