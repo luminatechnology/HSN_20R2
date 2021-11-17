@@ -140,7 +140,7 @@ namespace HSNCustomizations.DAC
 
         #region EnableCitiOutSourceCheckFile
         [PXDBBool()]
-        [PXUIField(DisplayName = "Enable Citi Return Check File")]
+        [PXUIField(DisplayName = "Enable Citi Out Source Check File")]
         public virtual bool? EnableCitiOutSourceCheckFile { get; set; }
         public abstract class enableCitiOutSourceCheckFile : PX.Data.BQL.BqlBool.Field<enableCitiOutSourceCheckFile> { }
         #endregion
