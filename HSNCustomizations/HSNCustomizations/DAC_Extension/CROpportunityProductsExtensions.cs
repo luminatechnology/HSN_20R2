@@ -8,8 +8,8 @@ namespace PX.Objects.CR
         #region UsrMargin
         [PXDecimal]
         [PXUIField(DisplayName = "Margin", Enabled = false)]
-        [PXFormula(typeof(Sub<CROpportunityProducts.curyAmount, Mult<CROpportunityProducts.quantity, CROpportunityProducts.curyUnitCost>>))]
-        [PXUnboundFormula(typeof(Sub<CROpportunityProducts.curyAmount, Mult<CROpportunityProducts.quantity, CROpportunityProducts.curyUnitCost>>), typeof(SumCalc<CROpportunityExt.usrTotalMargin>))]
+        [PXFormula(typeof(Sub<CROpportunityProducts.curyAmount, CROpportunityProducts.curyExtCost/*Mult<CROpportunityProducts.quantity, CROpportunityProducts.curyUnitCost>*/>))]
+        [PXUnboundFormula(typeof(Sub<CROpportunityProducts.curyAmount, CROpportunityProducts.curyExtCost>), typeof(SumCalc<CROpportunityExt.usrTotalMargin>), ForceAggregateRecalculation = true)]
         public virtual decimal? UsrMargin { get; set; }
         public abstract class usrMargin : PX.Data.BQL.BqlDecimal.Field<usrMargin> { }
         #endregion
