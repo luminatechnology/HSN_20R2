@@ -316,7 +316,7 @@ namespace HSNCustomizations.Graph
 							//14: CHGINDICAT = null or 'OUR', AcctName, otherwise LegalName. *Left(Companies.AccontName, 35)
 							if (VendorCHGINDICAT?.DetailValue == null || VendorCHGINDICAT?.DetailValue == "OUR")
                             {
-								line += "HIGHPOINT SERViCE NETWORK (TH) - PTA@";
+								line += "HIGHPOINT SERViCE (TH) - PTA@";
 								/*
 								if (CompanyInfo?.AcctName != null)
 								{
