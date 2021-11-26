@@ -1,0 +1,22 @@
+﻿<Sql TableName="LumCustomerPINCode" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LumCustomerPINCode">
+  <col name="CompanyID" type="Int" default="Zero" />
+  <col name="BAccountID" type="Int" />
+  <col name="PIN" type="NVarChar(100)" />
+  <col name="StartDate" type="DateTime" />
+  <col name="EndDate" type="DateTime" />
+  <col name="NoteID" type="UniqueIdentifier" nullable="true" />
+  <col name="CreatedByID" type="UniqueIdentifier" />
+  <col name="CreatedByScreenID" type="Char(8)" />
+  <col name="CreatedDateTime" type="DateTime" />
+  <col name="LastModifiedByID" type="UniqueIdentifier" />
+  <col name="LastModifiedByScreenID" type="Char(8)" />
+  <col name="LastModifiedDateTime" type="DateTime" />
+  <col name="tstamp" type="Timestamp" />
+  <index name="PK_LumCustomerPINCode" clustered="true" primary="true" unique="true">
+    <col name="CompanyID" />
+    <col name="BAccountID" />
+    <col name="PIN" />
+  </index>
+</table>]]></CDATA>
+</Sql>
