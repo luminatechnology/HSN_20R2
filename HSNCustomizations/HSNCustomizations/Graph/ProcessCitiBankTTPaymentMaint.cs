@@ -39,7 +39,7 @@ namespace HSNCustomizations.Graph
 		[PXFilterable]
 		public PXFilteredProcessingJoin<APPayment, LumProcessCitiBankPaymentFile,
 			InnerJoin<Vendor, On<Vendor.bAccountID, Equal<APPayment.vendorID>>>,
-			Where<APPayment.released, Equal<True>>,
+			Where<APPayment.released, Equal<True>, And<APPayment.docType, Equal<APDocType.check>, And<APPayment.status, Equal<APDocStatus.closed>>>>,
 			OrderBy<Desc<APPayment.refNbr>>> APPaymentList;
 
 		public PXSelect<CurrencyInfo> currencyinfo;
@@ -149,7 +149,9 @@ namespace HSNCustomizations.Graph
 						And<APPayment.paymentMethodID, Equal<Current<LumProcessCitiBankPaymentFile.payTypeID>>,
 						And<APPayment.adjDate, Equal<Current<LumProcessCitiBankPaymentFile.adjDate>>,
 						And<APPayment.released, Equal<True>,
-						And<Match<Vendor, Current<AccessInfo.userName>>>>>>>>.Select(this))
+						And<APPayment.docType, Equal<APDocType.check>,
+						And<APPayment.status, Equal<APDocStatus.closed>,
+						And<Match<Vendor, Current<AccessInfo.userName>>>>>>>>>>.Select(this))
 			{
 				APPayment line = (APPayment)doc;
 
@@ -231,6 +233,9 @@ namespace HSNCustomizations.Graph
 							var VendorContact = SelectFrom<Contact>.
 													Where<Contact.bAccountID.IsEqual<@P.AsInt>>.
 													View.Select(this, VendorInfo.BAccountID).TopFirst;
+							var RemitContact = SelectFrom<APContact>.
+													Where<APContact.contactID.IsEqual<@P.AsInt>>.
+													View.Select(this, aPPayment.RemitContactID).TopFirst;
 
 							//21-23: APAddress
 							//var APAddress = SelectFrom<APAddress>.Where<APAddress.addressID.IsEqual<@P.AsInt>>.View.Select(this, aPPayment.RemitAddressID).TopFirst;
@@ -403,11 +408,16 @@ namespace HSNCustomizations.Graph
 								count++;
 							}
 							//76: VendorContact.EMail, 50
-							if (VendorContact?.EMail != null)
+							if (RemitContact?.Email != null)
 							{
-								if (VendorContact?.EMail.Length > 50) line += $"{VendorContact?.EMail.Substring(0, 50).ToUpper()}@";
-								else line += $"{VendorContact?.EMail.ToUpper()}@";
+								if (RemitContact?.Email.Length > 50) line += $"{RemitContact?.Email.Substring(0, 50).ToUpper()}@";
+								else line += $"{RemitContact?.Email.ToUpper()}@";
 							}
+							//if (VendorContact?.EMail != null)
+							//{
+							//	if (VendorContact?.EMail.Length > 50) line += $"{VendorContact?.EMail.Substring(0, 50).ToUpper()}@";
+							//	else line += $"{VendorContact?.EMail.ToUpper()}@";
+							//}
 							else line += "@";
 							count++;
 							//77: Null
