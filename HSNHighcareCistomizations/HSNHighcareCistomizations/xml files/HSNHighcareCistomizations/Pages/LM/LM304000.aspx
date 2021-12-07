@@ -26,6 +26,7 @@
                     <px:PXGridColumn DataField="InventoryID" Width="200px" />
                     <px:PXGridColumn DataField="DiscountPrecent" Width="200px" />
                     <px:PXGridColumn DataField="LimitedCount" Width="200px" />
+                    <px:PXGridColumn DataField="Description" Width="200px" />
                 </Columns>
             </px:PXGridLevel>
         </Levels>

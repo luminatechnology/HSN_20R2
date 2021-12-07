@@ -8,6 +8,7 @@
   <col name="InventoryID" type="Int" nullable="true" />
   <col name="DiscountPrecent" type="Decimal(10,4)" nullable="true" />
   <col name="LimitedCount" type="Int" nullable="true" />
+  <col name="Description" type="NVarChar(100)" nullable="true" />
   <col name="NoteID" type="UniqueIdentifier" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />
