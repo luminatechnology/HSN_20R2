@@ -6,6 +6,7 @@ using PX.Data.Licensing;
 using PX.Data.ReferentialIntegrity.Attributes;
 using PX.Objects.AR;
 using PX.Objects.CR;
+using PX.Objects.DR;
 using static PX.Data.PXAccess.BAccount;
 
 namespace HSNHighcareCistomizations.DAC
@@ -33,6 +34,35 @@ namespace HSNHighcareCistomizations.DAC
         [PXUIField(DisplayName = "Pin")]
         public virtual string Pin { get; set; }
         public abstract class pin : PX.Data.BQL.BqlString.Field<pin> { }
+        #endregion
+
+        #region CPriceClassID
+        [PXDefault]
+        [PXDBString(10, IsUnicode = true)]
+        [PXSelector(typeof(PX.Objects.AR.ARPriceClass.priceClassID))]
+        [PXUIField(DisplayName = "Price Class", Visibility = PXUIVisibility.Visible)]
+        public virtual String CPriceClassID { get; set; }
+        public abstract class cPriceClassID : PX.Data.BQL.BqlString.Field<cPriceClassID> { }
+        #endregion
+
+        #region ScheduleNbr
+        [PXDBString(15, IsUnicode = true, InputMask = ">CCCCCCCCCCCCCCC")]
+        [PXUIField(DisplayName = "Deferred Schedule No.")]
+        [PXSelector(
+            typeof(DRSchedule.scheduleNbr),
+            typeof(DRSchedule.scheduleNbr),
+            typeof(DRSchedule.documentTypeEx),
+            typeof(DRSchedule.refNbr),
+            typeof(DRSchedule.bAccountID))]
+        public virtual string ScheduleNbr { get; set; }
+        public abstract class scheduleNbr : PX.Data.BQL.BqlString.Field<scheduleNbr> { }
+        #endregion
+
+        #region IsActive
+        [PXBool]
+        [PXUIField(DisplayName = "Active", Enabled = false)]
+        public virtual bool? IsActive { get; set; }
+        public abstract class isActive : PX.Data.BQL.BqlBool.Field<isActive> { }
         #endregion
 
         #region StartDate

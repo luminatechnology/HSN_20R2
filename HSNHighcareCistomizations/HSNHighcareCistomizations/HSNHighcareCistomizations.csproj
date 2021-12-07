@@ -49,6 +49,10 @@
       <HintPath>..\..\..\..\Bin\PX.Objects.DLL</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PX.Objects.FS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\PX.Objects.FS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -56,9 +60,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Examples.cs" />
     <Compile Include="DAC\LumCustomerPINCode.cs" />
     <Compile Include="Graph\CustomerPINCodeMaint.cs" />
+    <Compile Include="DAC\LUMServiceScope.cs" />
+    <Compile Include="Graph\ServiceScopeMaint.cs" />
+    <Compile Include="Graph_Extension\AppointmentEntry.cs" />
+    <Compile Include="Graph_Extension\ServiceOrderEntry.cs" />
+    <Compile Include="DAC\v_HighcareServiceHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

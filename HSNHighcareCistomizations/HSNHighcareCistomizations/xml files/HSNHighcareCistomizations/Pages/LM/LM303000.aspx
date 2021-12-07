@@ -11,7 +11,7 @@
     <px:PXFormView ID="BAccount" runat="server" Width="100%" Caption="Customer Summary" DataMember="Document" NoteIndicator="True" FilesIndicator="True" ActivityIndicator="false" ActivityField="NoteActivity" LinkIndicator="true" BPEventsIndicator="true" DefaultControlID="edAcctCD">
         <Template>
             <px:PXLayoutRule runat="server" StartColumn="True" ControlSize="XM" LabelsWidth="SM" />
-            <px:PXSelector ID="edAcctCD" runat="server" DataField="AcctCD" FilterByAllFields="True" />
+            <px:PXSelector ID="edAcctCD" runat="server" DataField="AcctCD" FilterByAllFields="True" CommitChanges="True" />
         </Template>
     </px:PXFormView>
 </asp:Content>
@@ -19,8 +19,15 @@
     <px:PXGrid ID="grid" runat="server" Style="z-index: 100;" Width="100%" Caption="Customer PIN Code" SkinID="Details" Height="300px">
         <Levels>
             <px:PXGridLevel DataMember="Transaction">
+                <RowTemplate>
+                    <px:PXSelector ID="edCPriceClassID" runat="server" DataField="CPriceClassID"></px:PXSelector>
+                    <px:PXSelector ID="edScheduleNbr" runat="server" DataField="ScheduleNbr"></px:PXSelector>
+                </RowTemplate>
                 <Columns>
+                    <px:PXGridColumn DataField="IsActive" Type="CheckBox"/>
                     <px:PXGridColumn DataField="Pin" AllowNull="False" />
+                    <px:PXGridColumn DataField="CPriceClassID" AllowNull="False" />
+                    <px:PXGridColumn DataField="ScheduleNbr" AllowNull="False" />
                     <px:PXGridColumn DataField="StartDate" Width="200px" />
                     <px:PXGridColumn DataField="EndDate" Width="200px" />
                 </Columns>

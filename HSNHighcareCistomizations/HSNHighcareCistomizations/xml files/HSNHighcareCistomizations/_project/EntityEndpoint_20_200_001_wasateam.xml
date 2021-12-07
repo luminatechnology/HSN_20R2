@@ -1,0 +1,277 @@
+﻿<EntityEndpoint>
+    <Endpoint xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="wasateam" version="20.200.001" systemContractVersion="4" xmlns="http://www.acumatica.com/entity/maintenance/5.31">
+        <TopLevelEntity name="Customer" screen="AR303000">
+            <Fields>
+                <Field name="CustomerClass" type="StringValue" />
+                <Field name="CustomerID" type="StringValue" />
+                <Field name="CustomerName" type="StringValue" />
+                <Field name="PriceClass" type="StringValue" />
+                <Field name="PrimayContact" type="Contact" />
+                <Field name="Status" type="StringValue" />
+            </Fields>
+            <Mappings>
+                <Mapping field="CustomerID">
+                    <To object="BAccount" field="AcctCD" />
+                </Mapping>
+                <Mapping field="CustomerClass">
+                    <To object="BAccount" field="CustomerClassID" />
+                </Mapping>
+                <Mapping field="Status">
+                    <To object="BAccount" field="Status" />
+                </Mapping>
+                <Mapping field="PriceClass">
+                    <To object="DefLocation: 2" field="CPriceClassID%PriceClassID" />
+                </Mapping>
+                <Mapping field="CustomerName">
+                    <To object="CurrentCustomer" field="AcctName" />
+                </Mapping>
+                <Mapping field="PrimayContact">
+                    <Mapping field="Email">
+                        <To object="PrimaryContactCurrent" field="EMail" />
+                    </Mapping>
+                    <Mapping field="LastName">
+                        <To object="PrimaryContactCurrent" field="LastName" />
+                    </Mapping>
+                    <Mapping field="DateOfBirth">
+                        <To object="PrimaryContactCurrent" field="DateOfBirth" />
+                    </Mapping>
+                </Mapping>
+            </Mappings>
+            <Actions>
+                <Action name="ChangeID" mappedTo="ChangeID">
+                    <Fields>
+                        <Field name="CustomerID" type="StringValue" />
+                    </Fields>
+                    <Mappings>
+                        <Mapping field="CustomerID">
+                            <To object="ChangeIDDialog" field="CD" />
+                        </Mapping>
+                    </Mappings>
+                </Action>
+            </Actions>
+        </TopLevelEntity>
+        <TopLevelEntity name="Contact" screen="CR302000">
+            <Fields>
+                <Field name="DateOfBirth" type="DateTimeValue" />
+                <Field name="Email" type="StringValue" />
+                <Field name="LastName" type="StringValue" />
+            </Fields>
+            <Mappings>
+                <Mapping field="Email">
+                    <To object="ContactCurrent: 6" field="EMail" />
+                </Mapping>
+                <Mapping field="LastName">
+                    <To object="Contact" field="LastName" />
+                </Mapping>
+                <Mapping field="DateOfBirth">
+                    <To object="ContactCurrent: 5" field="DateOfBirth" />
+                </Mapping>
+            </Mappings>
+        </TopLevelEntity>
+        <TopLevelEntity name="FSEquipment" screen="FS205000">
+            <Fields>
+                <Field name="Attributes" type="Attributes[]" />
+                <Field name="CustomerCustomerID" type="StringValue" />
+                <Field name="CustomerOwnerID" type="StringValue" />
+                <Field name="Description" type="StringValue" />
+                <Field name="EquipmentNbr" type="StringValue" />
+                <Field name="EquipmentType" type="StringValue" />
+                <Field name="General" type="Manuf" />
+                <Field name="Location" type="StringValue" />
+                <Field name="LocationType" type="StringValue" />
+                <Field name="OwnerType" type="StringValue" />
+                <Field name="PurchaseInfo" type="PurhcaseInfo" />
+                <Field name="ResourceEquipment" type="BooleanValue" />
+                <Field name="SerialNbr" type="StringValue" />
+                <Field name="Status" type="StringValue" />
+                <Field name="TargetEquipment" type="BooleanValue" />
+                <Field name="Vehicle" type="BooleanValue" />
+            </Fields>
+            <Mappings>
+                <Mapping field="CustomerCustomerID">
+                    <To object="EquipmentRecords" field="CustomerID" />
+                </Mapping>
+                <Mapping field="TargetEquipment">
+                    <To object="EquipmentRecords" field="RequireMaintenance" />
+                </Mapping>
+                <Mapping field="ResourceEquipment">
+                    <To object="EquipmentRecords" field="ResourceEquipment" />
+                </Mapping>
+                <Mapping field="SerialNbr">
+                    <To object="EquipmentRecords" field="SerialNumber" />
+                </Mapping>
+                <Mapping field="Status">
+                    <To object="EquipmentRecords" field="Status" />
+                </Mapping>
+                <Mapping field="General">
+                    <Mapping field="Manufacturer">
+                        <To object="EquipmentSelected: 3" field="ManufacturerID" />
+                    </Mapping>
+                </Mapping>
+                <Mapping field="PurchaseInfo">
+                    <Mapping field="PurchaseDate">
+                        <To object="EquipmentSelected: 7" field="PurchDate" />
+                    </Mapping>
+                </Mapping>
+                <Mapping field="Attributes">
+                    <Mapping field="Required">
+                        <To object="Answers" field="isRequired" />
+                    </Mapping>
+                    <Mapping field="RefNoteID">
+                        <To object="Answers" field="RefNoteID" />
+                    </Mapping>
+                    <Mapping field="Value">
+                        <To object="Answers" field="Value" />
+                    </Mapping>
+                    <Mapping field="Attribute">
+                        <To object="Answers" field="AttributeID" />
+                    </Mapping>
+                </Mapping>
+                <Mapping field="Location">
+                    <To object="EquipmentRecords" field="CustomerLocationID" />
+                </Mapping>
+                <Mapping field="Description">
+                    <To object="EquipmentRecords" field="Descr" />
+                </Mapping>
+                <Mapping field="EquipmentType">
+                    <To object="EquipmentRecords" field="EquipmentTypeID" />
+                </Mapping>
+                <Mapping field="Vehicle">
+                    <To object="EquipmentRecords" field="IsVehicle" />
+                </Mapping>
+                <Mapping field="LocationType">
+                    <To object="EquipmentRecords" field="LocationType" />
+                </Mapping>
+                <Mapping field="CustomerOwnerID">
+                    <To object="EquipmentRecords" field="OwnerID" />
+                </Mapping>
+                <Mapping field="OwnerType">
+                    <To object="EquipmentRecords" field="OwnerType" />
+                </Mapping>
+                <Mapping field="EquipmentNbr">
+                    <To object="EquipmentRecords" field="RefNbr" />
+                </Mapping>
+            </Mappings>
+        </TopLevelEntity>
+        <LinkedEntity name="Manuf">
+            <Fields>
+                <Field name="Manufacturer" type="StringValue" />
+            </Fields>
+        </LinkedEntity>
+        <LinkedEntity name="PurhcaseInfo">
+            <Fields>
+                <Field name="PurchaseDate" type="DateTimeValue" />
+            </Fields>
+        </LinkedEntity>
+        <Detail name="Attributes">
+            <Fields>
+                <Field name="Attribute" type="StringValue" />
+                <Field name="RefNoteID" type="GuidValue" />
+                <Field name="Required" type="BooleanValue" />
+                <Field name="Value" type="StringValue" />
+            </Fields>
+        </Detail>
+        <TopLevelEntity name="FSEquipmentTypes" screen="FS200800">
+            <Fields>
+                <Field name="Attributes" type="AttributeValue" />
+                <Field name="Description" type="StringValue" />
+                <Field name="EquipmentType" type="StringValue" />
+                <Field name="RequireBranchLocation" type="BooleanValue" />
+            </Fields>
+            <Mappings>
+                <Mapping field="Description">
+                    <To object="EquipmentTypeRecords" field="Descr" />
+                </Mapping>
+                <Mapping field="EquipmentType">
+                    <To object="EquipmentTypeRecords" field="EquipmentTypeCD" />
+                </Mapping>
+                <Mapping field="RequireBranchLocation">
+                    <To object="EquipmentTypeRecords" field="RequireBranchLocation" />
+                </Mapping>
+                <Mapping field="Attributes">
+                    <Mapping field="AttributeID">
+                        <To object="Mapping" field="AttributeID" />
+                    </Mapping>
+                    <Mapping field="SortOrder">
+                        <To object="Mapping" field="SortOrder" />
+                    </Mapping>
+                    <Mapping field="ControlType">
+                        <To object="Mapping" field="ControlType" />
+                    </Mapping>
+                    <Mapping field="Internal">
+                        <To object="Mapping" field="CSAttribute__IsInternal" />
+                    </Mapping>
+                    <Mapping field="DefaultValue">
+                        <To object="Mapping" field="DefaultValue" />
+                    </Mapping>
+                    <Mapping field="Description">
+                        <To object="Mapping" field="Description" />
+                    </Mapping>
+                    <Mapping field="EntityClassID">
+                        <To object="Mapping" field="EntityClassID" />
+                    </Mapping>
+                    <Mapping field="Type">
+                        <To object="Mapping" field="EntityType" />
+                    </Mapping>
+                    <Mapping field="Active">
+                        <To object="Mapping" field="IsActive" />
+                    </Mapping>
+                    <Mapping field="Required">
+                        <To object="Mapping" field="Required" />
+                    </Mapping>
+                </Mapping>
+            </Mappings>
+        </TopLevelEntity>
+        <LinkedEntity name="AttributeValue">
+            <Fields>
+                <Field name="Active" type="BooleanValue" />
+                <Field name="AttributeID" type="StringValue" />
+                <Field name="ControlType" type="StringValue" />
+                <Field name="DefaultValue" type="StringValue" />
+                <Field name="Description" type="StringValue" />
+                <Field name="EntityClassID" type="StringValue" />
+                <Field name="Internal" type="BooleanValue" />
+                <Field name="Required" type="BooleanValue" />
+                <Field name="SortOrder" type="ShortValue" />
+                <Field name="Type" type="StringValue" />
+            </Fields>
+        </LinkedEntity>
+        <TopLevelEntity name="CustomerPINCode" screen="LM303000">
+            <Fields>
+                <Field name="CustomerID" type="StringValue" />
+                <Field name="Details" type="Details[]" />
+            </Fields>
+            <Mappings>
+                <Mapping field="CustomerID">
+                    <To object="Document" field="AcctCD" />
+                </Mapping>
+                <Mapping field="Details">
+                    <Mapping field="PriceClass">
+                        <To object="Transaction" field="CPriceClassID" />
+                    </Mapping>
+                    <Mapping field="EndDate">
+                        <To object="Transaction" field="EndDate" />
+                    </Mapping>
+                    <Mapping field="Active">
+                        <To object="Transaction" field="IsActive" />
+                    </Mapping>
+                    <Mapping field="Pin">
+                        <To object="Transaction" field="Pin" />
+                    </Mapping>
+                    <Mapping field="StartDate">
+                        <To object="Transaction" field="StartDate" />
+                    </Mapping>
+                </Mapping>
+            </Mappings>
+        </TopLevelEntity>
+        <Detail name="Details">
+            <Fields>
+                <Field name="Active" type="BooleanValue" />
+                <Field name="EndDate" type="DateTimeValue" />
+                <Field name="Pin" type="StringValue" />
+                <Field name="PriceClass" type="StringValue" />
+                <Field name="StartDate" type="DateTimeValue" />
+            </Fields>
+        </Detail>
+    </Endpoint>
+</EntityEndpoint>

@@ -17,7 +17,6 @@ namespace HSNHighcareCistomizations.Graph
         public PXSave<Customer> Save;
         public PXCancel<Customer> Cancel;
 
-        //public SelectFrom<Customer>.View Document;
         public PXSelect<
                 Customer,
             Where2<
@@ -27,6 +26,12 @@ namespace HSNHighcareCistomizations.Graph
 
         public SelectFrom<LumCustomerPINCode>
                .Where<LumCustomerPINCode.bAccountID.IsEqual<Customer.bAccountID.FromCurrent>>.View Transaction;
+
+        public virtual void _(Events.RowSelected<LumCustomerPINCode> e)
+        {
+            if (e.Row != null)
+                this.Transaction.Cache.SetValueExt<LumCustomerPINCode.isActive>(e.Row, DateTime.Now.Date >= e.Row.StartDate?.Date && DateTime.Now.Date <= e.Row.EndDate?.Date);
+        }
 
         public virtual void _(Events.RowPersisting<LumCustomerPINCode> e)
         {
