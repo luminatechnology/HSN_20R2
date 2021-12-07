@@ -273,5 +273,27 @@
                 <Field name="StartDate" type="DateTimeValue" />
             </Fields>
         </Detail>
+        <TopLevelEntity name="ServiceOrder" screen="FS300100">
+            <Fields>
+                <Field name="ServiceOrderNbr" type="StringValue" />
+                <Field name="ServiceOrderType" type="StringValue" />
+                <Field name="Status" type="StringValue" />
+                <Field name="WorkflowStage" type="StringValue" />
+            </Fields>
+            <Mappings>
+                <Mapping field="ServiceOrderNbr">
+                    <To object="ServiceOrderRecords" field="RefNbr" />
+                </Mapping>
+                <Mapping field="ServiceOrderType">
+                    <To object="ServiceOrderRecords" field="SrvOrdType" />
+                </Mapping>
+                <Mapping field="Status">
+                    <To object="ServiceOrderRecords" field="Status" />
+                </Mapping>
+                <Mapping field="WorkflowStage">
+                    <To object="ServiceOrderRecords" field="WFStageID" />
+                </Mapping>
+            </Mappings>
+        </TopLevelEntity>
     </Endpoint>
 </EntityEndpoint>

@@ -61,7 +61,7 @@ namespace HSNHighcareCistomizations.DAC
         #region DiscountPrecent
         [PXDBDecimal()]
         [PXDefault(TypeCode.Decimal, "0.00")]
-        [PXUIField(DisplayName = "Discount Precent")]
+        [PXUIField(DisplayName = "Discount Percent")]
         public virtual Decimal? DiscountPrecent { get; set; }
         public abstract class discountPrecent : PX.Data.BQL.BqlDecimal.Field<discountPrecent> { }
         #endregion
@@ -72,6 +72,13 @@ namespace HSNHighcareCistomizations.DAC
         [PXUIField(DisplayName = " Limited Count")]
         public virtual int? LimitedCount { get; set; }
         public abstract class limitedCount : PX.Data.BQL.BqlInt.Field<limitedCount> { }
+        #endregion
+
+        #region Description
+        [PXDBString(100, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Description")]
+        public virtual string Description { get; set; }
+        public abstract class description : PX.Data.BQL.BqlString.Field<description> { }
         #endregion
 
         #region NoteID

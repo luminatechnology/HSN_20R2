@@ -18,21 +18,21 @@ namespace HSNHighcareCistomizations.DAC
 
         #region SrvOrdType
         [PXDBString(4, IsFixed = true, InputMask = "", IsKey = true)]
-        [PXUIField(DisplayName = "Srv Ord Type")]
+        [PXUIField(DisplayName = "Service Order Type")]
         public virtual string SrvOrdType { get; set; }
         public abstract class srvOrdType : PX.Data.BQL.BqlString.Field<srvOrdType> { }
         #endregion
 
         #region SoRefNbr
         [PXDBString(15, IsUnicode = true, InputMask = "", IsKey = true)]
-        [PXUIField(DisplayName = "So Ref Nbr")]
+        [PXUIField(DisplayName = "Service Order Nbr")]
         public virtual string SoRefNbr { get; set; }
         public abstract class soRefNbr : PX.Data.BQL.BqlString.Field<soRefNbr> { }
         #endregion
 
         #region AptRefNbr
         [PXDBString(20, IsUnicode = true, InputMask = "", IsKey = true)]
-        [PXUIField(DisplayName = "Apt Ref Nbr")]
+        [PXUIField(DisplayName = "Appointment Nbr")]
         public virtual string AptRefNbr { get; set; }
         public abstract class aptRefNbr : PX.Data.BQL.BqlString.Field<aptRefNbr> { }
         #endregion
@@ -109,7 +109,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region Pincode
         [PXDBString(20, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Pincode")]
+        [PXUIField(DisplayName = "Pin Code")]
         public virtual string Pincode { get; set; }
         public abstract class pincode : PX.Data.BQL.BqlString.Field<pincode> { }
         #endregion
