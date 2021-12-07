@@ -26,18 +26,9 @@
         <data>
             <SiteMap>
                 <row Title="Quote-MY 2" Url="~/Frames/ReportLauncher.aspx?ID=LM604501.rpx" ScreenID="LM604501" NodeID="5ff029b3-e707-412f-aa47-1863fb5127f6" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="bb6406ab-8be6-432f-8830-8565e3b56897" Order="30" SubcategoryID="b731b346-4d68-4796-b797-3e035ef3497c" />
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="30" SubcategoryID="00000000-0000-0000-0000-000000000000" />
                 </row>
             </SiteMap>
-            <MUIWorkspace>
-                <row IsPortal="0" WorkspaceID="bb6406ab-8be6-432f-8830-8565e3b56897" Order="324" Title="Opportunities" Icon="local_offer" AreaID="62cfd5dc-8eb9-4e92-bbcd-e0a99eb5e5df" ScreenID="WSSO0000" IsSystem="0" />
-            </MUIWorkspace>
-            <MUISubcategory>
-                <row IsPortal="0" SubcategoryID="b731b346-4d68-4796-b797-3e035ef3497c" Order="960" Name="Printed Forms" Icon="" IsSystem="0" />
-            </MUISubcategory>
-            <MUIArea>
-                <row IsPortal="0" AreaID="62cfd5dc-8eb9-4e92-bbcd-e0a99eb5e5df" Order="20" Name="Operations" />
-            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>

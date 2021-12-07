@@ -39,7 +39,7 @@ namespace HSNCustomizations.Graph
 		[PXFilterable]
 		public PXFilteredProcessingJoin<APPayment, LumProcessCitiBankPaymentFile,
 			InnerJoin<Vendor, On<Vendor.bAccountID, Equal<APPayment.vendorID>>>,
-			Where<APPayment.released, Equal<True>>,
+			Where<APPayment.released, Equal<True>, And<APPayment.docType, Equal<APDocType.check>, And<APPayment.status, Equal<APDocStatus.closed>>>>,
 			OrderBy<Desc<APPayment.refNbr>>> APPaymentList;
 
 		public PXSelect<CurrencyInfo> currencyinfo;
@@ -119,7 +119,9 @@ namespace HSNCustomizations.Graph
 						And<APPayment.paymentMethodID, Equal<Current<LumProcessCitiBankPaymentFile.payTypeID>>,
 						And<APPayment.adjDate, Equal<Current<LumProcessCitiBankPaymentFile.adjDate>>,
 						And<APPayment.released, Equal<True>,
-						And<Match<Vendor, Current<AccessInfo.userName>>>>>>>>.Select(this))
+						And<APPayment.docType, Equal<APDocType.check>,
+						And<APPayment.status, Equal<APDocStatus.closed>,
+						And<Match<Vendor, Current<AccessInfo.userName>>>>>>>>>>.Select(this))
 			{
 				yield return new PXResult<APPayment>(doc);
 			}
@@ -276,9 +278,9 @@ namespace HSNCustomizations.Graph
 							//91: = 'RET'
 							line += "RET@";
 							count++;
-							//92: = 'THA'
+							//92: = 'THA' THA@@@@@Amt: 5*@
 							line += "THA@";
-							count++;
+							//count++;
 							//93-95: Null
 							for (int i = count; i <= 95; i++)
 							{

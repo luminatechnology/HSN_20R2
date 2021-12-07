@@ -26,20 +26,9 @@
         <data>
             <SiteMap>
                 <row Position="5972" Title="Print Transfer Delivery Order" Url="~/Pages/LM/LM502010.aspx" ScreenID="LM502010" NodeID="15a0d69f-5de9-435f-895d-6a04c62a660d" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="6557c1c6-747e-45bb-9072-54f096598d61" Order="90" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" />
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="90" SubcategoryID="00000000-0000-0000-0000-000000000000" />
                 </row>
             </SiteMap>
-            <MUIWorkspace>
-                <row IsPortal="0" WorkspaceID="6557c1c6-747e-45bb-9072-54f096598d61" Order="284" Title="Inventory" Icon="local_shipping" AreaID="62cfd5dc-8eb9-4e92-bbcd-e0a99eb5e5df" ScreenID="WSIN0000" IsSystem="0">
-                    <MUIFavoriteWorkspace IsPortal="0" Username="" IsFavorite="1" />
-                </row>
-            </MUIWorkspace>
-            <MUISubcategory>
-                <row IsPortal="0" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" Order="820" Name="Processes" Icon="" IsSystem="0" />
-            </MUISubcategory>
-            <MUIArea>
-                <row IsPortal="0" AreaID="62cfd5dc-8eb9-4e92-bbcd-e0a99eb5e5df" Order="20" Name="Operations" />
-            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>

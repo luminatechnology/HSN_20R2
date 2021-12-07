@@ -142,8 +142,6 @@ namespace HSNCustomizations.Graph
 				}
 			}
 
-			
-			//var curLumProcessSCBPaymentFile = this.Caches[typeof(LumProcessSCBPaymentFile)].Cached.RowCast<LumProcessSCBPaymentFile>().ToList();
 			foreach (PXResult<APPayment> doc in PXSelectJoin<APPayment,
 					LeftJoin<Vendor, On<Vendor.bAccountID, Equal<APPayment.vendorID>>,
 					LeftJoin<PaymentMethod, On<PaymentMethod.paymentMethodID, Equal<APPayment.paymentMethodID>>>>,
@@ -153,8 +151,6 @@ namespace HSNCustomizations.Graph
 						And<APPayment.released, Equal<True>,
 						And<Match<Vendor, Current<AccessInfo.userName>>>>>>>>.Select(this))
 			{
-				//curLumProcessSCBPaymentFile[0].SelCount += 1;
-				//curLumProcessSCBPaymentFile[0].CurySelTotal += ((APPayment)doc).CuryOrigDocAmt;
 				APPayment line = (APPayment)doc;
 				line.GetExtension<APPaymentExt>().UsrBankSwiftAttributes = SelectFrom<CSAnswers>.
 																			LeftJoin<Vendor>.On<CSAnswers.refNoteID.IsEqual<Vendor.noteID>>.
@@ -164,31 +160,8 @@ namespace HSNCustomizations.Graph
 																		LeftJoin<Vendor>.On<CSAnswers.refNoteID.IsEqual<Vendor.noteID>>.
 																		Where<Vendor.bAccountID.IsEqual<@P.AsInt>.And<CSAnswers.attributeID.IsEqual<_BankAccountNumberAttr>>>.
 																		View.Select(this, line.VendorID).TopFirst?.Value;
-				//line.Selected = true;
-				//var rrr = Caches[typeof(APPayment)].Cached;
-				//Caches[typeof(APPayment)].SetValueExt<APPayment.selected>(line, true);
-				//recalculateSelCountAndTotal();
 				if (line.GetExtension<APPaymentExt>().UsrBankAccountNbr != null) yield return new PXResult<APPayment>(doc);
-				/*
-				if (_copies.ContainsKey((APPayment)doc))
-				{
-					_copies.Remove((APPayment)doc);
-				}
-				_copies.Add((APPayment)doc, PXCache<APPayment>.CreateCopy(doc));
-				*/
 			}
-			
-			
-			/* Method II
-			var result = SelectFrom<APPayment>.
-					LeftJoin<Vendor>.On<Vendor.bAccountID.IsEqual<APPayment.vendorID>>.
-					LeftJoin<PaymentMethod>.On<PaymentMethod.paymentMethodID.IsEqual<APPayment.paymentMethodID>>.
-						Where<APPayment.cashAccountID.IsEqual<LumProcessSCBPaymentFile.payAccountID.FromCurrent>.
-						And<APPayment.paymentMethodID.IsEqual<LumProcessSCBPaymentFile.payTypeID.FromCurrent>.
-						And<APPayment.adjDate.IsEqual<LumProcessSCBPaymentFile.adjDate.FromCurrent>.
-						And<APPayment.released.IsEqual<True>>>>>.View.Select(this);
-			return result;
-			*/
 		}
 		protected virtual void _(Events.FieldUpdated<APPayment.selected> e)
         {
@@ -207,109 +180,6 @@ namespace HSNCustomizations.Graph
 			}
 		}
 
-		/* Tried Part
-        #region Tried Part
-        protected virtual void LumProcessSCBPaymentFile_SelCount_FieldDefaulting(PXCache sender, PXFieldDefaultingEventArgs e)
-		{
-			var result = SelectFrom<APPayment>.
-					LeftJoin<Vendor>.On<Vendor.bAccountID.IsEqual<APPayment.vendorID>>.
-					LeftJoin<PaymentMethod>.On<PaymentMethod.paymentMethodID.IsEqual<APPayment.paymentMethodID>>.
-						Where<APPayment.cashAccountID.IsEqual<LumProcessSCBPaymentFile.payAccountID.FromCurrent>.
-						And<APPayment.paymentMethodID.IsEqual<LumProcessSCBPaymentFile.payTypeID.FromCurrent>.
-						And<APPayment.adjDate.IsEqual<LumProcessSCBPaymentFile.adjDate.FromCurrent>.
-						And<APPayment.released.IsEqual<True>>>>>.View.Select(this);
-
-			e.NewValue = result.Count();		
-		}
-
-		protected virtual void LumProcessSCBPaymentFile_CurySelTotal_FieldDefaulting(PXCache sender, PXFieldDefaultingEventArgs e)
-		{
-			var result = SelectFrom<APPayment>.
-					LeftJoin<Vendor>.On<Vendor.bAccountID.IsEqual<APPayment.vendorID>>.
-					LeftJoin<PaymentMethod>.On<PaymentMethod.paymentMethodID.IsEqual<APPayment.paymentMethodID>>.
-						Where<APPayment.cashAccountID.IsEqual<LumProcessSCBPaymentFile.payAccountID.FromCurrent>.
-						And<APPayment.paymentMethodID.IsEqual<LumProcessSCBPaymentFile.payTypeID.FromCurrent>.
-						And<APPayment.adjDate.IsEqual<LumProcessSCBPaymentFile.adjDate.FromCurrent>.
-						And<APPayment.released.IsEqual<True>>>>>.View.Select(this);
-
-			e.NewValue = result.RowCast<APPayment>().Select(x => x.CuryOrigDocAmt).Sum();
-		}
-
-		
-		protected virtual void _(Events.RowPersisted<APPayment> e)
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			return;
-		}
-
-		protected virtual void _(Events.RowPersisting<APPayment> e)
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			return;
-		}
-
-		protected virtual void _(Events.RowInserted<APPayment> e)
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			return;
-		}
-
-		protected virtual void _(Events.RowInserting<APPayment> e)
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			return;
-		}
-
-		protected virtual void _(Events.RowUpdating<APPayment> e)
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			return;
-		}
-		
-		protected virtual void _(Events.RowUpdated<APPayment> e)
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			return;
-        }
-		
-		protected void recalculateSelCountAndTotal()
-		{
-			var ttt = this.Caches[typeof(APPayment)];
-			var curLumProcessSCBPaymentFile = this.Caches[typeof(LumProcessSCBPaymentFile)].Cached.RowCast<LumProcessSCBPaymentFile>().ToList();
-			var selectedAPPaymentList = this.Caches[typeof(APPayment)].Cached.Cast<APPayment>().ToList();
-			curLumProcessSCBPaymentFile[0].SelCount = selectedAPPaymentList.Count;
-			curLumProcessSCBPaymentFile[0].CurySelTotal = selectedAPPaymentList.Select(x => x.CuryOrigDocAmt).Sum();
-		}
-
-		protected void recalculateSelCountAndTotal1()
-		{
-			var result = SelectFrom<APPayment>.
-					LeftJoin<Vendor>.On<Vendor.bAccountID.IsEqual<APPayment.vendorID>>.
-					LeftJoin<PaymentMethod>.On<PaymentMethod.paymentMethodID.IsEqual<APPayment.paymentMethodID>>.
-						Where<APPayment.cashAccountID.IsEqual<LumProcessSCBPaymentFile.payAccountID.FromCurrent>.
-						And<APPayment.paymentMethodID.IsEqual<LumProcessSCBPaymentFile.payTypeID.FromCurrent>.
-						And<APPayment.adjDate.IsEqual<LumProcessSCBPaymentFile.adjDate.FromCurrent>.
-						And<APPayment.released.IsEqual<True>>>>>.View.Select(this);
-
-			var curLumProcessSCBPaymentFile = this.Caches[typeof(LumProcessSCBPaymentFile)].Cached.RowCast<LumProcessSCBPaymentFile>().ToList();
-			var selectedAPPaymentList = this.Caches[typeof(APPayment)].Cached.Cast<APPayment>().ToList();
-
-			if (curLumProcessSCBPaymentFile != null)
-            {
-				if (result.Count > 0)
-				{
-					curLumProcessSCBPaymentFile[0].SelCount = result.Count;
-					curLumProcessSCBPaymentFile[0].CurySelTotal = result.RowCast<APPayment>().Select(x => x.CuryOrigDocAmt).Sum();
-				}
-				else
-				{
-					curLumProcessSCBPaymentFile[0].SelCount = 0;
-					curLumProcessSCBPaymentFile[0].CurySelTotal = 0m;
-				}
-			}
-		}
-        #endregion
-		*/
 		public void DownlodAppayments(IEnumerable<APPayment> aPPaymentLists)
 		{
 			try

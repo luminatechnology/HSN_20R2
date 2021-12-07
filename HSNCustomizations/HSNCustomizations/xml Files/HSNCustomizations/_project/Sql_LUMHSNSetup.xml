@@ -1,4 +1,4 @@
-﻿<Sql TableName="LUMHSNSetup" TableSchemaXml="#CDATA">
+<Sql TableName="LUMHSNSetup" TableSchemaXml="#CDATA">
     <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMHSNSetup">
   <col name="CompanyID" type="Int" default="Zero" />
   <col name="CPrepaymentNumberingID" type="NVarChar(10)" nullable="true" />
@@ -26,6 +26,7 @@
   <col name="EnableCitiPaymentFile" type="Bit" nullable="true" />
   <col name="EnableCitiReturnCheckFile" type="Bit" nullable="true" />
   <col name="EnableCitiOutSourceCheckFile" type="Bit" nullable="true" />
+  <col name="EnablePrintTransferProcess" type="Bit" nullable="true" />
   <index name="PK_LUMHSNSetup" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
   </index>
