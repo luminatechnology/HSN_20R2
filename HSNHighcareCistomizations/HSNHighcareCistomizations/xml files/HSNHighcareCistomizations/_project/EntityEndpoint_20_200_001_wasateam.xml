@@ -80,6 +80,7 @@
                 <Field name="Location" type="StringValue" />
                 <Field name="LocationType" type="StringValue" />
                 <Field name="OwnerType" type="StringValue" />
+                <Field name="PINCode" type="StringValue" />
                 <Field name="PurchaseInfo" type="PurhcaseInfo" />
                 <Field name="ResourceEquipment" type="BooleanValue" />
                 <Field name="SerialNbr" type="StringValue" />
@@ -126,6 +127,9 @@
                     <Mapping field="Attribute">
                         <To object="Answers" field="AttributeID" />
                     </Mapping>
+                </Mapping>
+                <Mapping field="PINCode">
+                    <To object="EquipmentSelected" field="UsrPINCode" />
                 </Mapping>
                 <Mapping field="Location">
                     <To object="EquipmentRecords" field="CustomerLocationID" />

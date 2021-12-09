@@ -1,8 +1,10 @@
-﻿using HSNHighcareCistomizations.DAC;
+﻿using HSNCustomizations.DAC;
+using HSNHighcareCistomizations.DAC;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.AR;
+using PX.Objects.EP;
 using PX.Objects.IN;
 using System;
 using System.Collections;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PX.Objects.FS.FSSODet;
 
 namespace PX.Objects.FS
 {
@@ -20,12 +23,27 @@ namespace PX.Objects.FS
                .Where<v_HighcareServiceHistory.soRefNbr.IsNotEqual<FSServiceOrder.refNbr.FromCurrent>>
                .View HighcareSrvHistory;
 
+        public SelectFrom<LUMServiceScope>
+               .InnerJoin<PX.Objects.CR.Location>.On<LUMServiceScope.cPriceClassID.IsEqual<PX.Objects.CR.Location.cPriceClassID>>
+               .InnerJoin<Customer>.On<PX.Objects.CR.Location.locationID.IsEqual<Customer.defLocationID>>
+               .Where<Customer.bAccountID.IsEqual<FSServiceOrder.customerID.FromCurrent>>
+               .View SrvScope;
+
+        [PXHidden]
+        public SelectFrom<LUMHSNSetup>.View hsnSetup;
 
         #region Override Method
         public override void Initialize()
         {
             base.Initialize();
+
+            var hsnSetup = SelectFrom<LUMHSNSetup>.View.Select(Base).RowCast<LUMHSNSetup>().FirstOrDefault();
+
             this.HighcareSrvHistory.AllowDelete = this.HighcareSrvHistory.AllowInsert = this.HighcareSrvHistory.AllowUpdate = false;
+            this.HighcareSrvHistory.AllowSelect = hsnSetup?.EnableHighcareFunction ?? false;
+
+            this.SrvScope.AllowDelete = this.SrvScope.AllowInsert = this.SrvScope.AllowUpdate = false;
+            this.SrvScope.AllowSelect = hsnSetup?.EnableHighcareFunction ?? false;
         }
         #endregion
 
@@ -34,8 +52,8 @@ namespace PX.Objects.FS
         public virtual void _(Events.FieldUpdated<FSSODet.SMequipmentID> e, PXFieldUpdated baseMethod)
         {
             baseMethod?.Invoke(e.Cache, e.Args);
-
-            GetHighcareDiscount(e);
+            if (this.hsnSetup.Current?.EnableHighcareFunction ?? false)
+                GetHighcareDiscount(e);
         }
 
         #endregion
@@ -53,7 +71,7 @@ namespace PX.Objects.FS
                 var customerInfo = Customer.PK.Find(Base, doc.CustomerID);
                 if (customerInfo.ClassID != "HIGHCARE")
                     return;
-                var currentPINCode = FSEquipment.PK.Find(Base, (int)e.NewValue)?.TagNbr;
+                var currentPINCode = FSEquipment.PK.Find(Base, (int)e.NewValue).GetExtension<FSEquipmentExtension>()?.UsrPINCode;
                 if (string.IsNullOrEmpty(currentPINCode))
                     return;
                 var pinCodeInfo = SelectFrom<LumCustomerPINCode>
@@ -67,7 +85,7 @@ namespace PX.Objects.FS
                 var scopeInfo = SelectFrom<LUMServiceScope>
                                 .Where<LUMServiceScope.cPriceClassID.IsEqual<P.AsString>
                                   .And<LUMServiceScope.itemClassID.IsEqual<P.AsInt>.Or<LUMServiceScope.inventoryID.IsEqual<P.AsInt>>>>
-                                .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo.ItemClassID, row.InventoryID)
+                                .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo?.ItemClassID, row.InventoryID)
                                 .RowCast<LUMServiceScope>().FirstOrDefault();
                 if (scopeInfo == null)
                     return;

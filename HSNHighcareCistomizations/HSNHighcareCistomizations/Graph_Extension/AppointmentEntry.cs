@@ -1,4 +1,5 @@
-﻿using HSNHighcareCistomizations.DAC;
+﻿using HSNCustomizations.DAC;
+using HSNHighcareCistomizations.DAC;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
@@ -15,15 +16,31 @@ namespace PX.Objects.FS
     public class AppointmentEntryExt : PXGraphExtension<AppointmentEntry>
     {
         public SelectFrom<v_HighcareServiceHistory>
-       .Where<v_HighcareServiceHistory.aptRefNbr.IsNotEqual<FSAppointment.refNbr.FromCurrent>>
-       .View HighcareSrvHistory;
+               .Where<v_HighcareServiceHistory.aptRefNbr.IsNotEqual<FSAppointment.refNbr.FromCurrent>>
+               .View HighcareSrvHistory;
+
+        public SelectFrom<LUMServiceScope>
+               .InnerJoin<PX.Objects.CR.Location>.On<LUMServiceScope.cPriceClassID.IsEqual<PX.Objects.CR.Location.cPriceClassID>>
+               .InnerJoin<Customer>.On<PX.Objects.CR.Location.locationID.IsEqual<Customer.defLocationID>>
+               .Where<Customer.bAccountID.IsEqual<FSAppointment.customerID.FromCurrent>>
+               .View SrvScope;
+
+        [PXHidden]
+        public SelectFrom<LUMHSNSetup>.View hsnSetup;
 
 
         #region Override Method
         public override void Initialize()
         {
             base.Initialize();
+
+            var hsnSetup = SelectFrom<LUMHSNSetup>.View.Select(Base).RowCast<LUMHSNSetup>().FirstOrDefault();
+
             this.HighcareSrvHistory.AllowDelete = this.HighcareSrvHistory.AllowInsert = this.HighcareSrvHistory.AllowUpdate = false;
+            this.HighcareSrvHistory.AllowSelect = hsnSetup?.EnableHighcareFunction ?? false;
+
+            this.SrvScope.AllowDelete = SrvScope.AllowInsert = this.SrvScope.AllowUpdate = false;
+            this.SrvScope.AllowSelect = hsnSetup?.EnableHighcareFunction ?? false;
         }
         #endregion
 
@@ -32,7 +49,8 @@ namespace PX.Objects.FS
         public virtual void _(Events.FieldUpdated<FSAppointmentDet.SMequipmentID> e, PXFieldUpdated baseMethod)
         {
             baseMethod?.Invoke(e.Cache, e.Args);
-            GetHighcareDiscount(e);
+            if (this.hsnSetup.Current?.EnableHighcareFunction ?? false)
+                GetHighcareDiscount(e);
         }
 
         #endregion
@@ -41,7 +59,7 @@ namespace PX.Objects.FS
 
         public void GetHighcareDiscount(Events.FieldUpdated<FSAppointmentDet.SMequipmentID> e)
         {
-            var doc = Base.AppointmentRecords.Current; 
+            var doc = Base.AppointmentRecords.Current;
             if (e.Row is FSAppointmentDet row && row != null && row.SMEquipmentID.HasValue && doc != null)
             {
                 var itemClassInfo = SelectFrom<INItemClass>
@@ -51,7 +69,7 @@ namespace PX.Objects.FS
                 var customerInfo = Customer.PK.Find(Base, doc.CustomerID);
                 if (customerInfo.ClassID != "HIGHCARE")
                     return;
-                var currentPINCode = FSEquipment.PK.Find(Base, (int)e.NewValue)?.TagNbr;
+                var currentPINCode = FSEquipment.PK.Find(Base, (int)e.NewValue)?.GetExtension<FSEquipmentExtension>()?.UsrPINCode;
                 if (string.IsNullOrEmpty(currentPINCode))
                     return;
                 var pinCodeInfo = SelectFrom<LumCustomerPINCode>
@@ -65,7 +83,7 @@ namespace PX.Objects.FS
                 var scopeInfo = SelectFrom<LUMServiceScope>
                                 .Where<LUMServiceScope.cPriceClassID.IsEqual<P.AsString>
                                   .And<LUMServiceScope.itemClassID.IsEqual<P.AsInt>.Or<LUMServiceScope.inventoryID.IsEqual<P.AsInt>>>>
-                                .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo.ItemClassID, row.InventoryID)
+                                .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo?.ItemClassID, row.InventoryID)
                                 .RowCast<LUMServiceScope>().FirstOrDefault();
                 if (scopeInfo == null)
                     return;

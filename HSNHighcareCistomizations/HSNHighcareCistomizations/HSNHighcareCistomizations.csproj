@@ -53,21 +53,37 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Bin\PX.Objects.FS.dll</HintPath>
     </Reference>
+    <Reference Include="PX.Web.UI.Frameset, Version=1.0.0.0, Culture=neutral, PublicKeyToken=3b136cac2f602b8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Bin\PX.Web.UI.Frameset.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAC\LumCustomerPINCode.cs" />
+    <Compile Include="DAC_Extension\FSAppointmentDetExtension.cs" />
+    <Compile Include="DAC_Extension\FSEquipmentExtension.cs" />
+    <Compile Include="DAC_Extension\FSSODetExtension.cs" />
     <Compile Include="Graph\CustomerPINCodeMaint.cs" />
     <Compile Include="DAC\LUMServiceScope.cs" />
     <Compile Include="Graph\ServiceScopeMaint.cs" />
     <Compile Include="Graph_Extension\AppointmentEntry.cs" />
+    <Compile Include="Graph_Extension\CustomerMaint.cs" />
+    <Compile Include="Graph_Extension\LUMHSNSetupMain.cs" />
     <Compile Include="Graph_Extension\ServiceOrderEntry.cs" />
     <Compile Include="DAC\v_HighcareServiceHistory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HSNCustomizations\HSNCustomizations\HSNCustomizations.csproj">
+      <Project>{9bc6d61a-5d4b-4d57-bc6b-5e3f9d04377e}</Project>
+      <Name>HSNCustomizations</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -26,20 +26,9 @@
         <data>
             <SiteMap>
                 <row Title="Service Scope" Url="~/Pages/LM/LM304000.aspx" ScreenID="LM304000" NodeID="f4d0ae51-c987-4259-ab4f-86848ebabbb9" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="f0cf4498-99c4-48f3-8dd8-bde9ed67f9d3" Order="110" SubcategoryID="8a93637d-b507-4667-a739-adaf6fb5f7ea" />
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="680" SubcategoryID="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" />
                 </row>
             </SiteMap>
-            <MUIWorkspace>
-                <row IsPortal="0" WorkspaceID="f0cf4498-99c4-48f3-8dd8-bde9ed67f9d3" Order="805" Title="Services" Icon="work" AreaID="62cfd5dc-8eb9-4e92-bbcd-e0a99eb5e5df" ScreenID="WSSV0000" IsSystem="0">
-                    <MUIFavoriteWorkspace IsPortal="0" Username="" IsFavorite="1" />
-                </row>
-            </MUIWorkspace>
-            <MUISubcategory>
-                <row IsPortal="0" SubcategoryID="8a93637d-b507-4667-a739-adaf6fb5f7ea" Order="1391.813" Name="Preferences" Icon="" IsSystem="0" />
-            </MUISubcategory>
-            <MUIArea>
-                <row IsPortal="0" AreaID="62cfd5dc-8eb9-4e92-bbcd-e0a99eb5e5df" Order="20" Name="Operations" />
-            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>

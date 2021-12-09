@@ -25,21 +25,10 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title="Customer PIN Code" Url="~/Pages/LM/LM303000.aspx" ScreenID="LM303000" NodeID="6c4aef22-253b-43c7-ba97-ee4fef874e33" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="d5cbc4c3-5f8b-40da-80c9-49897f1f74b8" Order="80" SubcategoryID="6d40b0b6-18f4-4139-adac-8ec8cb2a17ea" />
+                <row Title="Customer PIN Code" Url="~/Pages/LM/LM303000.aspx" ScreenID="LM303000" NodeID="fa975f54-ecfd-48d9-afa0-32e399b8454a" ParentID="00000000-0000-0000-0000-000000000000">
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="670" SubcategoryID="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" />
                 </row>
             </SiteMap>
-            <MUIWorkspace>
-                <row IsPortal="0" WorkspaceID="d5cbc4c3-5f8b-40da-80c9-49897f1f74b8" Order="147" Title="Receivables" Icon="add_circle" AreaID="338edf81-5456-4735-8601-b213458e93fe" ScreenID="WSAR0000" IsSystem="0">
-                    <MUIFavoriteWorkspace IsPortal="0" Username="" IsFavorite="1" />
-                </row>
-            </MUIWorkspace>
-            <MUISubcategory>
-                <row IsPortal="0" SubcategoryID="6d40b0b6-18f4-4139-adac-8ec8cb2a17ea" Order="128" Name="Profiles" Icon="" IsSystem="0" />
-            </MUISubcategory>
-            <MUIArea>
-                <row IsPortal="0" AreaID="338edf81-5456-4735-8601-b213458e93fe" Order="10" Name="Financials" />
-            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>
