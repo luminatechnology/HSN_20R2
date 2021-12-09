@@ -46,6 +46,9 @@
     <Reference Include="PX.Objects">
       <HintPath>..\..\..\..\Bin\PX.Objects.dll</HintPath>
     </Reference>
+    <Reference Include="PX.Objects.FS">
+      <HintPath>..\..\..\..\Bin\PX.Objects.FS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -55,12 +58,19 @@
   <ItemGroup>
     <Compile Include="DAC\LSLedgerSettlement.cs" />
     <Compile Include="DAC\LSSettlementAccount.cs" />
+    <Compile Include="DAC_Extensions\CATranExtensions.cs" />
     <Compile Include="DAC_Extensions\GLTranExtensions.cs" />
+    <Compile Include="Graph_Extensions\APInvoiceEntry.cs" />
+    <Compile Include="Graph_Extensions\CATranEnq.cs" />
     <Compile Include="LSLedgerStlmtEntry.cs" />
     <Compile Include="LSLedgerStlmtInq.cs" />
     <Compile Include="LSStlmtAccountMaint.cs" />
+    <Compile Include="DAC\LUMHyperionAcctMapping.cs" />
+    <Compile Include="LUMHyperionAcctMapMaint.cs" />
+    <Compile Include="DAC_Extensions\APRegisterExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
