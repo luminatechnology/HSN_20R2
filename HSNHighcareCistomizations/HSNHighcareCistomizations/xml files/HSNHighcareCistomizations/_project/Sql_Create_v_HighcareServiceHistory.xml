@@ -1,0 +1,44 @@
+﻿<Sql TableName="Create_v_HighcareServiceHistory" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM SYS.views
+	WHERE name = 'v_HighcareServiceHistory' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP VIEW [dbo].[v_HighcareServiceHistory]	
+GO
+CREATE VIEW v_HighcareServiceHistory AS
+select t.CompanyID,
+	   d.LineNbr,
+	   t.SrvOrdType,
+	   t.RefNbr as soRefNbr,
+	   a.RefNbr as aptRefNbr,
+	   t.CustomerID,
+	   d.InventoryID,
+	   i.InventoryCD,
+	   i.Descr,
+	   i.StkItem,
+	   c.ItemClassID,
+	   c.ItemClassCD,
+	   d.UOM,
+	   t.OrderDate,
+	   equip.UsrPINCode as PINCode,
+	   pin.CPriceClassID as priceClassID
+from FSServiceOrder t
+inner join FSAppointment a on t.CompanyID = a.CompanyID and t.SOID = a.SOID
+inner join FSSODet d on t.CompanyID = d.CompanyID
+					and t.SrvOrdType = d.SrvOrdType
+					and t.RefNbr = d.RefNbr
+inner join InventoryItem i on t.CompanyID = i.CompanyID
+						  and d.InventoryID = i.InventoryID
+inner join INItemClass c on t.CompanyID = c.CompanyID
+						and i.ItemClassID = c.ItemClassID
+inner join FSEquipment equip on t.CompanyID = equip.CompanyID
+							and d.SMEquipmentID = equip.SMEquipmentID
+inner join LumCustomerPinCode pin on t.CompanyID = pin.CompanyID
+								 and t.CustomerID = pin.BAccountID
+								 and equip.UsrPINCode = pin.PIN
+inner join LUMServiceScope sc on t.CompanyID = sc.CompanyID
+							 and pin.CPriceClassID = sc.CPriceClassID
+							 and (i.ItemClassID = sc.itemClassID OR d.InventoryID = sc.InventoryID)]]></CDATA>
+</Sql>
