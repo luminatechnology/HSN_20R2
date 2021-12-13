@@ -71,12 +71,14 @@
     <Compile Include="DAC_Extension\FSSODetExtension.cs" />
     <Compile Include="Graph\CustomerPINCodeMaint.cs" />
     <Compile Include="DAC\LUMServiceScope.cs" />
+    <Compile Include="Graph\PINCodeDeferredScheduleProc.cs" />
     <Compile Include="Graph\ServiceScopeMaint.cs" />
     <Compile Include="Graph_Extension\AppointmentEntry.cs" />
     <Compile Include="Graph_Extension\CustomerMaint.cs" />
     <Compile Include="Graph_Extension\LUMHSNSetupMain.cs" />
     <Compile Include="Graph_Extension\ServiceOrderEntry.cs" />
     <Compile Include="DAC\v_HighcareServiceHistory.cs" />
+    <Compile Include="DAC\LumServiceScopeHeader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

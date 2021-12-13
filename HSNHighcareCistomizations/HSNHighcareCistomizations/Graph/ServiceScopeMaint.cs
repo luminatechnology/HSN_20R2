@@ -11,32 +11,21 @@ namespace HSNHighcareCistomizations.Graph
 {
     public class ServiceScopeMaint : PXGraph<ServiceScopeMaint>
     {
-        public PXSave<ServicScopeFilter> Save;
-        public PXCancel<ServicScopeFilter> Cancel;
-        public PXFilter<ServicScopeFilter> Filter;
+        public PXSave<LumServiceScopeHeader> Save;
+        public PXCancel<LumServiceScopeHeader> Cancel;
 
-        [PXFilterable]
+        public SelectFrom<LumServiceScopeHeader>.View Document;
+
         public SelectFrom<LUMServiceScope>
-               .Where<LUMServiceScope.cPriceClassID.IsEqual<ServicScopeFilter.cPriceClassID.FromCurrent>>
+               .Where<LUMServiceScope.cPriceClassID.IsEqual<LumServiceScopeHeader.cPriceClassID.FromCurrent>>
                .View ScopeList;
 
         public virtual void _(Events.RowInserting<LUMServiceScope> e)
         {
-            if (this.Filter.Current.CPriceClassID == null)
+            if (this.Document.Current.CPriceClassID == null)
                 throw new PXException("Please Select Price Class!!");
-            if (e.Row is LUMServiceScope && e.Row != null && !string.IsNullOrEmpty(this.Filter.Current.CPriceClassID))
-                this.ScopeList.Cache.SetValueExt<LUMServiceScope.cPriceClassID>(e.Row, this.Filter.Current.CPriceClassID);
+            if (e.Row is LUMServiceScope && e.Row != null && !string.IsNullOrEmpty(this.Document.Current.CPriceClassID))
+                this.ScopeList.Cache.SetValueExt<LUMServiceScope.cPriceClassID>(e.Row, this.Document.Current.CPriceClassID);
         }
-    }
-
-    public class ServicScopeFilter : IBqlTable
-    {
-        #region CPriceClassID
-        [PXString(10, IsUnicode = true, InputMask = "")]
-        [PXSelector(typeof(PX.Objects.AR.ARPriceClass.priceClassID))]
-        [PXUIField(DisplayName = "Price Class ID")]
-        public virtual string CPriceClassID { get; set; }
-        public abstract class cPriceClassID : PX.Data.BQL.BqlString.Field<cPriceClassID> { }
-        #endregion
     }
 }

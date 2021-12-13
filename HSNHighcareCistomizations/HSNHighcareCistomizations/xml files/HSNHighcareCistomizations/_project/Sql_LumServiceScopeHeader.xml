@@ -1,0 +1,21 @@
+﻿<Sql TableName="LumServiceScopeHeader" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LumServiceScopeHeader">
+  <col name="CompanyID" type="Int" default="Zero" />
+  <col name="CPriceClassID" type="NVarChar(10)" />
+  <col name="InventoryID" type="Int" nullable="true" />
+  <col name="DefCode" type="NVarChar(10)" />
+  <col name="TotalAmt" type="Decimal(10,4)" nullable="true" />
+  <col name="NoteID" type="UniqueIdentifier" nullable="true" />
+  <col name="CreatedByID" type="UniqueIdentifier" />
+  <col name="CreatedByScreenID" type="Char(8)" />
+  <col name="CreatedDateTime" type="DateTime" />
+  <col name="LastModifiedByID" type="UniqueIdentifier" />
+  <col name="LastModifiedByScreenID" type="Char(8)" />
+  <col name="LastModifiedDateTime" type="DateTime" />
+  <col name="tstamp" type="Timestamp" />
+  <index name="PK_LumServiceScopeHeader" clustered="true" primary="true" unique="true">
+    <col name="CompanyID" />
+    <col name="CPriceClassID" />
+  </index>
+</table>]]></CDATA>
+</Sql>

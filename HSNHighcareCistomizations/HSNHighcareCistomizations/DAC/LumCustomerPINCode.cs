@@ -21,6 +21,12 @@ namespace HSNHighcareCistomizations.DAC
             public class Customer : PX.Objects.AR.Customer.PK.ForeignKeyOf<LumCustomerPINCode>.By<bAccountID> { }
         }
 
+        #region Selected
+        [PXBool]
+        public virtual bool? Selected { get; set; }
+        public abstract class selected : PX.Data.BQL.BqlBool.Field<selected> { }
+        #endregion
+
         #region BAccountID
         [PXDBInt(IsKey = true)]
         [PXParent(typeof(FK.Customer))]
@@ -47,7 +53,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region ScheduleNbr
         [PXDBString(15, IsUnicode = true, InputMask = ">CCCCCCCCCCCCCCC")]
-        [PXUIField(DisplayName = "Deferred Schedule No.")]
+        [PXUIField(DisplayName = "Deferred Schedule No.", Enabled = false)]
         [PXSelector(
             typeof(DRSchedule.scheduleNbr),
             typeof(DRSchedule.scheduleNbr),

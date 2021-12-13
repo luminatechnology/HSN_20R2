@@ -20,7 +20,7 @@
                     <To object="BAccount" field="Status" />
                 </Mapping>
                 <Mapping field="PriceClass">
-                    <To object="DefLocation: 2" field="CPriceClassID%PriceClassID" />
+                    <To object="DefLocation: 2" field="CPriceClassID" />
                 </Mapping>
                 <Mapping field="CustomerName">
                     <To object="CurrentCustomer" field="AcctName" />

@@ -2,16 +2,19 @@
 
 <%@ MasterType VirtualPath="~/MasterPages/FormTab.master" %>
 <asp:Content ID="cont1" ContentPlaceHolderID="phDS" runat="Server">
-    <px:PXDataSource ID="ds" runat="server" Visible="True" EnableAttributes="true" Width="100%" TypeName="HSNHighcareCistomizations.Graph.ServiceScopeMaint" PrimaryView="Filter">
+    <px:PXDataSource ID="ds" runat="server" Visible="True" EnableAttributes="true" Width="100%" TypeName="HSNHighcareCistomizations.Graph.ServiceScopeMaint" PrimaryView="Document">
         <CallbackCommands>
         </CallbackCommands>
     </px:PXDataSource>
 </asp:Content>
 <asp:Content ID="cont2" ContentPlaceHolderID="phF" runat="Server">
-    <px:PXFormView ID="formFilter" runat="server" Width="100%" Caption="Service Scope" DataMember="Filter" NoteIndicator="True" FilesIndicator="True" ActivityIndicator="false" ActivityField="NoteActivity" LinkIndicator="true" BPEventsIndicator="true" DefaultControlID="CPriceClassID">
+    <px:PXFormView ID="formFilter" runat="server" Width="100%" Caption="Service Scope" DataMember="Document" NoteIndicator="True" FilesIndicator="True" ActivityIndicator="false" ActivityField="NoteActivity" LinkIndicator="true" BPEventsIndicator="true" DefaultControlID="CPriceClassID">
         <Template>
             <px:PXLayoutRule runat="server" StartColumn="True" ControlSize="XM" LabelsWidth="SM" />
             <px:PXSelector ID="edScopeList" runat="server" DataField="CPriceClassID" FilterByAllFields="True" CommitChanges="True" />
+            <px:PXSelector ID="edInventoryID" runat="server" DataField="InventoryID" FilterByAllFields="True" />
+            <px:PXSelector ID="edDefCode" runat="server" DataField="DefCode" FilterByAllFields="True" />
+            <px:PXNumberEdit ID="edTotalAmt" runat="server" DataField="TotalAmt" />
         </Template>
     </px:PXFormView>
 </asp:Content>
@@ -20,8 +23,8 @@
         <Levels>
             <px:PXGridLevel DataMember="ScopeList">
                 <Columns>
-                    <px:PXGridColumn DataField="CPriceClassID"/>
-                    <px:PXGridColumn DataField="ScopeType" Type="DropDownList"/>
+                    <px:PXGridColumn DataField="CPriceClassID" />
+                    <px:PXGridColumn DataField="ScopeType" Type="DropDownList" />
                     <px:PXGridColumn DataField="ItemClassID" Width="200px" />
                     <px:PXGridColumn DataField="InventoryID" Width="200px" />
                     <px:PXGridColumn DataField="DiscountPrecent" Width="200px" />
