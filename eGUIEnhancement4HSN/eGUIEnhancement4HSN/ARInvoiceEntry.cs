@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using PX.Data;
 using PX.Objects.CS;
 
@@ -18,6 +18,12 @@ namespace PX.Objects.AR
         {
             public PrnPaymentAttr() : base(PrnPaytName) { }
         }
+
+        public const string GUISummary = "GUISUMMARY";
+        public class GUISmryAttr : PX.Data.BQL.BqlString.Constant<GUISmryAttr>
+        {
+            public GUISmryAttr() : base(GUISummary) { }
+        }
         #endregion
 
         #region Event Handlers
@@ -27,12 +33,32 @@ namespace PX.Objects.AR
 
             bool statusClosed = e.Row.Status.Equals(ARDocStatus.Open) || e.Row.Status.Equals(ARDocStatus.Closed);
 
-            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrGUITitle>   (e.Cache, null, Base1.activateGUI);
-            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrPrnGUITitle>(e.Cache, null, Base1.activateGUI);
-            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrPrnPayment> (e.Cache, null, Base1.activateGUI);
-            PXUIFieldAttribute.SetVisible<ARInvoiceExt.usrPaymMethodID> (e.Cache, null, Base1.activateGUI);
+            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrGUITitle>    (e.Cache, null, Base1.activateGUI);
+            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrPrnGUITitle> (e.Cache, null, Base1.activateGUI);
+            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrPrnPayment>  (e.Cache, null, Base1.activateGUI);
+            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrSummaryPrint>(e.Cache, null, Base1.activateGUI);
+            PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrGUISummary>  (e.Cache, null, Base1.activateGUI);
+            PXUIFieldAttribute.SetVisible<ARInvoiceExt.usrPaymMethodID>  (e.Cache, null, Base1.activateGUI);
 
             PXUIFieldAttribute.SetEnabled<ARRegisterExt2.usrGUITitle>(e.Cache, e.Row, !statusClosed && !string.IsNullOrEmpty(PXCacheEx.GetExtension<ARRegisterExt>(e.Row).UsrTaxNbr));
+            PXUIFieldAttribute.SetEnabled<ARRegisterExt2.usrGUISummary>(e.Cache, e.Row, e.Row?.GetExtension<ARRegisterExt2>().UsrSummaryPrint == true);
+        }
+
+        protected void _(Events.RowPersisting<ARInvoice> e, PXRowPersisting baseHandler)
+        {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            if (e.Row != null)
+            {
+                ARRegisterExt2 regisExt2 = e.Row.GetExtension<ARRegisterExt2>();
+
+                if (regisExt2.UsrSummaryPrint == true && string.IsNullOrEmpty(regisExt2.UsrGUISummary))
+                {
+                    string errorMsg = "發票內容不可空白 !";
+
+                    e.Cache.RaiseExceptionHandling<ARRegisterExt2.usrGUISummary>(e.Row, null, new PXSetPropertyException(errorMsg));
+                }
+            }
         }
 
         protected void _(Events.FieldUpdated<ARInvoice, ARInvoice.customerID> e, PXFieldUpdated InvokeBaseHandler)

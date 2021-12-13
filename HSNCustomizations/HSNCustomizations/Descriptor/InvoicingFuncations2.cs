@@ -35,7 +35,7 @@ namespace HSNCustomizations.Descriptor
                         contactRow = FSContact.PK.Find(graph, fsServiceOrderRow.ServiceOrderContactID);
                         addressRow = FSAddress.PK.Find(graph, fsServiceOrderRow.ServiceOrderAddressID);
                         ///<remarks> Per user's request to do the following customization.</remarks>
-                        if (contactRow != null)
+                        if (contactRow != null && fsServiceOrderRow.ContactID != null)
                         {
                             contactRow.FullName = Contact.PK.Find(graph, fsServiceOrderRow.ContactID).DisplayName;
                         }

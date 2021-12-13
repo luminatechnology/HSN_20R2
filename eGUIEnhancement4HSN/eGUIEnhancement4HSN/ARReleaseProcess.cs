@@ -1,7 +1,8 @@
-using System;
+ï»¿using System;
 using System.Text;
 using System.Collections.Generic;
 using PX.SM;
+using PX.Common;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
@@ -15,7 +16,6 @@ using eGUICustomization4HSN.Descriptor;
 using eGUICustomization4HSN.Graph;
 using eGUICustomization4HSN.StringList;
 using eGUICustomization4HSN.Graph_Release;
-using PX.Common;
 
 namespace PX.Objects.AR
 {
@@ -143,7 +143,7 @@ namespace PX.Objects.AR
 
                         ts.Complete(Base);
 
-                        if (doc.DocType == ARDocType.Invoice && !string.IsNullOrEmpty(docExt.UsrGUINo) && rp.ViewGUITrans.Current.GUIStatus.Equals(TWNGUIStatus.Used))
+                        if (doc.DocType == ARDocType.Invoice && !string.IsNullOrEmpty(docExt.UsrGUINo) && rp.ViewGUITrans.Current.GUIStatus == TWNGUIStatus.Used && docExt.UsrB2CType == TWNB2CType.DEF)
                         {
                             Base.ARTran_TranType_RefNbr.WhereAnd<Where<ARTran.curyExtPrice, Greater<CS.decimal0>>>();
                             PXGraph.CreateInstance<eGUIInquiry2>().PrintReport(Base.ARTran_TranType_RefNbr.Select(doc.DocType, doc.RefNbr), rp.ViewGUITrans.Current, false);
@@ -207,15 +207,15 @@ namespace PX.Objects.AR
                         GetCompanyName(),
                         // #12
                         GetVATTransl(),
-                        // #13 ³Æµù = ARTrans.ApporintmentID(The alternative is to write ARTrans.ApporintmentID to GUITrans.Remark, so ³Æµù = GUITrans.Remark)
+                        // #13 Â³Ã†ÂµÃ¹ = ARTrans.ApporintmentID(The alternative is to write ARTrans.ApporintmentID to GUITrans.Remark, so Â³Ã†ÂµÃ¹ = GUITrans.Remark)
                         ViewGUITrans.Current.Remark + GetNoteInfo(),
-                        // #14 If the ARTran.CuryExtPrice = 0, then don¡¦t print out this line.
+                        // #14 If the ARTran.CuryExtPrice = 0, then donÂ¡Â¦t print out this line.
                         GetCustOrdNbr(),
                         // #15 
                         GetDefBranchLoc(aRTrans),
                         // #16 
                         GetPaymMethod(),
-                        // #17 If GUITrans.TaxNbr is blank / null(¤GÁp¦¡) then don¡¦t print µo²¼©ïÀY else µo²¼©ïÀY = GUITrnas.GUITitle
+                        // #17 If GUITrans.TaxNbr is blank / null(Â¤GÃpÂ¦Â¡) then donÂ¡Â¦t print ÂµoÂ²Â¼Â©Ã¯Ã€Y else ÂµoÂ²Â¼Â©Ã¯Ã€Y = GUITrnas.GUITitle
                         ViewGUITrans.Current.GUITitle
                     },
                         aRTrans,
@@ -248,7 +248,7 @@ namespace PX.Objects.AR
                                                          header[6], header[7], header[8], rePrint, header[9], header[10]);
 
 
-                    eSCPOS.SendTo("°h³f¾Ì¹q¤lµo²¼ÃÒ©úÁp¥¿¥»¿ì²z\n");
+                    eSCPOS.SendTo("é€€æ¬¾æ†‘é›»å­ç™¼ç¥¨è­‰æ˜è¯æ­£æœ¬è¾¦ç†\n");
                     eSCPOS.SendTo("----------------------------\n");
 
                     if (string.IsNullOrEmpty(header[9]))
@@ -259,30 +259,31 @@ namespace PX.Objects.AR
 
                 //eSCPOS.SelectCharSize((byte)15);
                 // Print details
-                eSCPOS.SendTo("¾P°â©ú²Óªí\n");
+                eSCPOS.SendTo("éŠ·å”®æ˜ç´°è¡¨\n");
                 eSCPOS.Align(0);
-                eSCPOS.SendTo(string.Format("¦WºÙ: {0}\n", header[11]));
-                eSCPOS.SendTo(string.Format("µo²¼¸¹½X: {0}\n", header[4].Trim(new char[] { '-' })));
-                eSCPOS.SendTo("«~¦W/¼Æ¶q   ³æ»ù         ª÷ÃB\n");
+                eSCPOS.SendTo(string.Format("åç¨±: {0}\n", header[11]));
+                eSCPOS.SendTo(string.Format("ç™¼ç¥¨è™Ÿç¢¼: {0}\n", header[4].Trim(new char[] { '-' })));
+                eSCPOS.SendTo("å“å/æ•¸é‡   å–®åƒ¹         é‡‘é¡\n");
                 eSCPOS.Align(0);
 
                 decimal netAmt = 0;
-                string qty = string.Empty;
-                string uPr = string.Empty;
-                string ePr = string.Empty;
-                string dAm = string.Empty;
-                ARRegister register = new ARRegister();
+                string qty, uPr, ePr, dAm;
+
+                ARRegister     register  = new ARRegister();
+                ARRegisterExt2 regisExt2 = new ARRegisterExt2();
 
                 foreach (ARTran aRTran in result)
                 {
-                    register = SelectFrom<ARRegister>.Where<ARRegister.docType.IsEqual<@P.AsString>
-                                                           .And<ARRegister.refNbr.IsEqual<@P.AsString>>>.View.ReadOnly.Select(new PXGraph(), aRTran.TranType, aRTran.RefNbr);
+                    register  = ARRegister.PK.Find(new PXGraph(), aRTran.TranType, aRTran.RefNbr);
+                    regisExt2 = register.GetExtension<ARRegisterExt2>();
 
-                    eSCPOS.SendTo(string.Format("{0}\n", aRTran.TranDesc));
+                    bool hasSummary = regisExt2.UsrSummaryPrint == true && !string.IsNullOrEmpty(regisExt2.UsrGUISummary);
 
-                    qty = string.Format("{0:N0}", aRTran.Qty);
+                    eSCPOS.SendTo(string.Format("{0}\n", hasSummary == false ? aRTran.TranDesc : regisExt2.UsrGUISummary));
 
-                    if (register.TaxCalcMode.Equals(TX.TaxCalculationMode.Gross))
+                    qty = hasSummary == false ? string.Format("{0:N0}", aRTran.Qty) : "1";
+
+                    if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
                     {
                         uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.UnitPrice : aRTran.CuryTaxableAmt);
                         ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.CuryExtPrice : aRTran.CuryTaxableAmt);
@@ -291,6 +292,11 @@ namespace PX.Objects.AR
                     {
                         uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.UnitPrice.Value, (decimal)1.05) : aRTran.UnitPrice);
                         ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05) : aRTran.CuryExtPrice);
+                    }
+
+                    if (hasSummary == true)
+                    {
+                        uPr = ePr = string.Format("{0:N2", register.CuryDocBal);
                     }
 
                     // One row has position of 30 bytes.
@@ -304,16 +310,15 @@ namespace PX.Objects.AR
 
                     if (!aRTran.CuryDiscAmt.Equals(decimal.Zero))
                     {
-                        eSCPOS.SendTo("§é¦©" + new string(' ', 30 - dAm.Length - 4) + dAm + '\n');
+                        eSCPOS.SendTo("æŠ˜æ‰£" + new string(' ', 30 - dAm.Length - 4) + dAm + '\n');
                     }                   
                 }
 
-                eSCPOS.SendTo(string.Format("¦@ {0} ¶µ\n", result.Count));
+                eSCPOS.SendTo(string.Format("å…± {0} é …\n", result.Count));
 
                 if (string.IsNullOrEmpty(header[9]) == false)
                 {
-                    string net = string.Empty;
-                    string tax = string.Empty;
+                    string net, tax;
 
                     if (register.TaxCalcMode.Equals(TX.TaxCalculationMode.Gross))
                     {
@@ -326,36 +331,36 @@ namespace PX.Objects.AR
                         tax = string.Format("{0:N0}", decimal.Parse(header[6]) - netAmt);
                     }
 
-                    eSCPOS.SendTo("¾P°âÃB:" + new string(' ', (30 - net.Length - 7)) + net + '\n');  // 7 -> ¾P°âÃB:, a traditional Chinese word has two bytes.
-                    eSCPOS.SendTo(string.Format("µ|  ÃB:" + new string(' ', (30 - tax.Length - 7)) + tax + '\n'));
+                    eSCPOS.SendTo("éŠ·å”®é¡:" + new string(' ', (30 - net.Length - 7)) + net + '\n');  // 7 -> éŠ·å”®é¡ is a traditional Chinese word has two bytes.
+                    eSCPOS.SendTo(string.Format("ç¨  é¡:" + new string(' ', (30 - tax.Length - 7)) + tax + '\n'));
                 }
 
                 string total = string.Format("{0:N0}", header[6]);
 
-                eSCPOS.SendTo("Á`  ­p:" + new string(' ', (30 - total.Length - 7)) + total + '\n');
-                eSCPOS.SendTo(string.Format("½Òµ|§O:{0}\n", header[12]));
-                eSCPOS.SendTo(string.Format("³Æ  µù:{0}\n", header[13]));
+                eSCPOS.SendTo("ç¸½  Â­è¨ˆ:" + new string(' ', (30 - total.Length - 7)) + total + '\n');
+                eSCPOS.SendTo(string.Format("èª²ç¨…åˆ¥:{0}\n", header[12]));
+                eSCPOS.SendTo(string.Format("å‚™  è¨»:{0}\n", header[13]));
 
                 if (string.IsNullOrEmpty(header[9]).Equals(false))
                 {
-                    eSCPOS.SendTo(string.Format("±ÄÁÊ¸¹½X:{0}\n", header[14]));
+                    eSCPOS.SendTo(string.Format("æ¡è³¼è™Ÿç¢¼:{0}\n", header[14]));
                 }
 
-                eSCPOS.SendTo(string.Format("µo²¼¶}¥ß³¡ªù:{0}\n", header[15]));
+                eSCPOS.SendTo(string.Format("é–‹ç«‹ç™¼ç¥¨éƒ¨é–€:{0}\n", header[15]));
 
-                if (PXCacheEx.GetExtension<ARRegisterExt2>(register).UsrPrnPayment.Equals(true))
+                if (regisExt2.UsrPrnPayment == true)
                 {
-                    eSCPOS.SendTo(string.Format("¥I´Ú¤è¦¡:{0}\n", header[16]));
+                    eSCPOS.SendTo(string.Format("ä»˜æ¬¾æ–¹å¼:{0}\n", header[16]));
                 }
 
-                if (string.IsNullOrEmpty(header[9]).Equals(false) && PXCacheEx.GetExtension<ARRegisterExt2>(register).UsrPrnGUITitle.Equals(true))
+                if (!string.IsNullOrEmpty(header[9]) && regisExt2.UsrPrnGUITitle == true)
                 {
-                    eSCPOS.SendTo(string.Format("µo²¼©ïÀY:{0}\n", header[17]));
+                    eSCPOS.SendTo(string.Format("ç™¼ç¥¨æŠ¬é ­:{0}\n", header[17]));
                 }
 
-                if (PXCacheEx.GetExtension<ARRegisterExt>(register).UsrB2CType.Equals(TWNB2CType.MC))
+                if (register.GetExtension<ARRegisterExt>().UsrB2CType.Equals(TWNB2CType.MC))
                 {
-                    eSCPOS.SendTo(string.Format("¸ü¨ã¸¹½X:{0}\n", PXCacheEx.GetExtension<ARRegisterExt>(register).UsrCarrierID));
+                    eSCPOS.SendTo(string.Format("æ‰‹æ©Ÿè¼‰å…·:{0}\n", register.GetExtension<ARRegisterExt>().UsrCarrierID));
                 }
 
                 eSCPOS.CutPaper(0x42, 0x00);

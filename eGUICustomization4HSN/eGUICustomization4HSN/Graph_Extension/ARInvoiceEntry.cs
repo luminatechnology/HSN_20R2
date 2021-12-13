@@ -137,8 +137,12 @@ namespace PX.Objects.AR
             }
         }
 
-        protected void _(Events.RowSelected<ARInvoice> e)
+        protected void _(Events.RowSelected<ARInvoice> e, PXRowSelected baseHandler)
         {
+            baseHandler?.Invoke(e.Cache, e.Args);
+
+            if (e.Row == null) { return; }
+
             ARRegisterExt registerExt = PXCache<ARRegister>.GetExtension<ARRegisterExt>(e.Row);
 
             bool taxNbrBlank  = string.IsNullOrEmpty(registerExt.UsrTaxNbr);

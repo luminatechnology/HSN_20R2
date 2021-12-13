@@ -25,6 +25,24 @@ namespace PX.Objects.AR
         [PXUIField(DisplayName = "Print Payment")]
         public bool? UsrPrnPayment { get; set; }
         public abstract class usrPrnPayment : PX.Data.BQL.BqlBool.Field<usrPrnPayment> { }
-		#endregion
-	}
+        #endregion
+
+        #region UsrSummaryPrint
+        [PXDBBool()]
+        [PXDefault(false, PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXUIField(DisplayName = "Summary Printing")]
+        public bool? UsrSummaryPrint { get; set; }
+        public abstract class usrSummaryPrint : PX.Data.BQL.BqlBool.Field<usrSummaryPrint> { }
+        #endregion
+
+        #region UsrGUISummary
+        [PXDBString(10, IsUnicode = true)]
+        [PXUIField(DisplayName = "Invoice Summary")]
+        [PXSelector(typeof(Search<CS.CSAttributeDetail.valueID, Where<CS.CSAttributeDetail.attributeID, Equal<ARInvoiceEntry_Extension2.GUISmryAttr>>>),
+                    typeof(CS.CSAttributeDetail.valueID),
+                    DescriptionField = typeof(CS.CSAttributeDetail.description))]
+        public string UsrGUISummary { get; set; }
+        public abstract class usrGUISummary : PX.Data.BQL.BqlString.Field<usrGUISummary> { }
+        #endregion
+    }
 }

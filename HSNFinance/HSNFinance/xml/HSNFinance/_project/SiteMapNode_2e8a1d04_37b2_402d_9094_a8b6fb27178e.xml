@@ -25,8 +25,21 @@
         </layout>
         <data>
             <SiteMap>
-                <row Position="5970" Title="Settle Ledger Transactions" Url="~/Pages/LS/LS301000.aspx" ScreenID="LS301000" NodeID="359cd193-bac7-4da0-b266-0d262ca49477" ParentID="00000000-0000-0000-0000-000000000000" />
+                <row Title="Hyperion Trial Balance Detailed" Url="~/Frames/ReportLauncher.aspx?ID=LM632500.rpx" ScreenID="LM632500" NodeID="2e8a1d04-37b2-402d-9094-a8b6fb27178e" ParentID="00000000-0000-0000-0000-000000000000">
+                    <MUIScreen IsPortal="0" WorkspaceID="b5ec7b62-d2e5-4234-999d-0c92a0b0b74d" Order="140" SubcategoryID="0b491e12-c58d-4e47-8a0d-96dd3a8ab395" />
+                </row>
             </SiteMap>
+            <MUIWorkspace>
+                <row IsPortal="0" WorkspaceID="b5ec7b62-d2e5-4234-999d-0c92a0b0b74d" Order="128" Title="Finance" Icon="balance-scale" AreaID="338edf81-5456-4735-8601-b213458e93fe" ScreenID="WSGL0000" IsSystem="0">
+                    <MUIFavoriteWorkspace IsPortal="0" Username="" IsFavorite="1" />
+                </row>
+            </MUIWorkspace>
+            <MUISubcategory>
+                <row IsPortal="0" SubcategoryID="0b491e12-c58d-4e47-8a0d-96dd3a8ab395" Order="1024" Name="Reports" Icon="" IsSystem="0" />
+            </MUISubcategory>
+            <MUIArea>
+                <row IsPortal="0" AreaID="338edf81-5456-4735-8601-b213458e93fe" Order="10" Name="Financials" />
+            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>
