@@ -24,7 +24,6 @@
             <px:PXGridLevel DataMember="ScopeList">
                 <Columns>
                     <px:PXGridColumn DataField="CPriceClassID" />
-                    <px:PXGridColumn DataField="ScopeType" Type="DropDownList" />
                     <px:PXGridColumn DataField="ItemClassID" Width="200px" />
                     <px:PXGridColumn DataField="InventoryID" Width="200px" />
                     <px:PXGridColumn DataField="DiscountPrecent" Width="200px" />
