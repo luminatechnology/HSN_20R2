@@ -24,14 +24,6 @@ namespace HSNHighcareCistomizations.DAC
         public abstract class lineNbr : PX.Data.BQL.BqlInt.Field<lineNbr> { }
         #endregion
 
-        #region ScopeType
-        [PXDBString(10, IsUnicode = true, InputMask = "")]
-        [PXStringList(new string[] { "Discount", "Count" }, new string[] { "Discount", "Count" })]
-        [PXUIField(DisplayName = "Scope Type")]
-        public virtual string ScopeType { get; set; }
-        public abstract class scopeType : PX.Data.BQL.BqlString.Field<scopeType> { }
-        #endregion
-
         #region ItemClassID
         [PXDBInt()]
         [PXUIField(DisplayName = "Item Class ID")]

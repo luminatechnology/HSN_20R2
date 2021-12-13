@@ -92,13 +92,13 @@ namespace PX.Objects.FS
                                        .Where(x => x.ItemClassID == scopeInfo.ItemClassID || x.InventoryID == scopeInfo.InventoryID)
                                        .Count();
                 // 不限次數，直接給折扣
-                if (scopeInfo.ScopeType == "Discount" && scopeInfo.LimitedCount == 0)
+                if (scopeInfo.LimitedCount == 0)
                     Base.AppointmentDetails.Cache.SetValueExt<FSAppointmentDet.discPct>(row, (scopeInfo?.DiscountPrecent ?? 0));
                 // 限制次數，給予折扣
-                else if (scopeInfo.ScopeType == "Discount" && scopeInfo.LimitedCount - usedServiceCount > 0)
+                else if (scopeInfo.LimitedCount - usedServiceCount > 0)
                     Base.AppointmentDetails.Cache.SetValueExt<FSAppointmentDet.discPct>(row, (scopeInfo?.DiscountPrecent ?? 0));
-                // 限制次數，跳出警示
-                else if (scopeInfo.ScopeType == "Count" && scopeInfo.LimitedCount - usedServiceCount <= 0)
+                // 次數不夠，跳出警示
+                else
                     e.Cache.RaiseExceptionHandling<FSAppointmentDet.SMequipmentID>(
                         row,
                         e.NewValue,

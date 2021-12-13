@@ -25,7 +25,7 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title="Customer PIN Code Deferred Schedule Process" Url="~/Pages/LM/LM505040.aspx" ScreenID="LM505040" NodeID="3c94f576-f356-4325-ae91-ea9f08cf4202" ParentID="00000000-0000-0000-0000-000000000000">
+                <row Title=" Deferred Revenue for PinCode Activation Process" Url="~/Pages/LM/LM505040.aspx" ScreenID="LM505040" NodeID="3c94f576-f356-4325-ae91-ea9f08cf4202" ParentID="00000000-0000-0000-0000-000000000000">
                     <MUIScreen IsPortal="0" WorkspaceID="ac7e0b27-825d-42e9-ba99-7a5aaddec2c9" Order="40" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" />
                 </row>
             </SiteMap>

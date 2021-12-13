@@ -64,6 +64,7 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.componentID>(component, scope.InventoryID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.defCode>(component, scope.DefCode);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, scope.TotalAmt);
+                        graph.Components.Cache.SetValueExt<DRScheduleDetail.branchID>(component, PXAccess.GetBranchID());
                         // Generate Transactions
                         graph.generateTransactions.Press();
                         graph.Save.Press();
