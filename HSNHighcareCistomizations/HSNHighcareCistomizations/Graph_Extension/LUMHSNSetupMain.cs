@@ -1,5 +1,6 @@
 ﻿using HSNCustomizations;
 using HSNCustomizations.DAC;
+using HSNHighcareCistomizations.DAC;
 using PX.Data;
 using PX.Data.BQL.Fluent;
 using PX.SM;
@@ -16,6 +17,14 @@ namespace HSNHighcareCistomizations.Graph_Extension
     {
         public const string clenGUID = "00000000-0000-0000-0000-000000000000";
 
+        public delegate void PersistDelegate();
+        [PXOverride]
+        public void Persist(PersistDelegate baseMethod)
+        {
+            baseMethod?.Invoke();
+            PXGraph.CreateInstance<UpdateMaint>().ResetCachesCommand.Press();
+        }
+
         protected void _(Events.RowUpdated<LUMHSNSetup> e, PXRowUpdated rowUpdated)
         {
             rowUpdated?.Invoke(e.Cache, e.Args);
@@ -23,7 +32,7 @@ namespace HSNHighcareCistomizations.Graph_Extension
             {
                 var MUIWorkspaceDatas = SelectFrom<MUIWorkspace>.View.Select(Base).RowCast<MUIWorkspace>().ToList();
                 var MUISubcategoryDatas = SelectFrom<MUISubcategory>.View.Select(Base).RowCast<MUISubcategory>().ToList();
-                if (row?.EnableHighcareFunction ?? false)
+                if (row.GetExtension<LUMHSNSetupExtension>()?.EnableHighcareFunction ?? false)
                 {
                     updateSiteMapManual(
                         MUIWorkspaceDatas.FirstOrDefault(x => x.Title == "Receivables")?.WorkspaceID,
@@ -33,14 +42,19 @@ namespace HSNHighcareCistomizations.Graph_Extension
                         MUIWorkspaceDatas.FirstOrDefault(x => x.Title == "Services")?.WorkspaceID,
                         MUISubcategoryDatas.FirstOrDefault(x => x.Name == "Preferences")?.SubcategoryID,
                         "LM304000");
+                    updateSiteMapManual(
+                        MUIWorkspaceDatas.FirstOrDefault(x => x.Title == "Deferred Revenue")?.WorkspaceID,
+                        MUISubcategoryDatas.FirstOrDefault(x => x.Name == "Processes")?.SubcategoryID,
+                        "LM505040");
                 }
                 else
                 {
                     updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM303000");
                     updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM304000");
+                    updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM505040");
                 }
             }
-            Redirector.Refresh(System.Web.HttpContext.Current);
+
         }
 
         public virtual void updateSiteMapManual(Guid? guidWorkspaceID, Guid? guidSubcategoryID, string screenID)

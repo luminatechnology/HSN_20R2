@@ -9,6 +9,10 @@ using HSNHighcareCistomizations.DAC;
 using PX.Data.BQL.Fluent;
 using PX.Objects.AR;
 using PX.Data.EP;
+using PX.Objects.DR;
+using PX.Data.BQL;
+using PX.Objects.IN;
+using System.Collections;
 
 namespace HSNHighcareCistomizations.Graph
 {
@@ -27,6 +31,20 @@ namespace HSNHighcareCistomizations.Graph
         public SelectFrom<LumCustomerPINCode>
                .Where<LumCustomerPINCode.bAccountID.IsEqual<Customer.bAccountID.FromCurrent>>.View Transaction;
 
+        public PXAction<LumCustomerPINCode> viewDefSchedule;
+        [PXButton]
+        [PXUIField(Visible = false)]
+        public virtual IEnumerable ViewDefSchedule(PXAdapter adapter)
+        {
+            var row = this.Transaction.Current;
+            var graph = PXGraph.CreateInstance<DraftScheduleMaint>();
+            graph.Schedule.Current = SelectFrom<DRSchedule>
+                                     .Where<DRSchedule.scheduleNbr.IsEqual<P.AsString>>
+                                     .View.Select(this, row.ScheduleNbr);
+            PXRedirectHelper.TryRedirect(graph, PXRedirectHelper.WindowMode.NewWindow);
+            return adapter.Get();
+        }
+
         public virtual void _(Events.RowSelected<LumCustomerPINCode> e)
         {
             if (e.Row != null)
@@ -39,7 +57,7 @@ namespace HSNHighcareCistomizations.Graph
             {
                 row.BAccountID = this.Document.Current.BAccountID;
                 row.StartDate = DateTime.Now;
-                row.EndDate = DateTime.Now.AddDays(364);
+                row.EndDate = DateTime.Now.AddYears(1).AddDays(-1);
             }
         }
     }

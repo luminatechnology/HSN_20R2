@@ -25,8 +25,8 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title="Service Scope" Url="~/Pages/LM/LM304000.aspx" ScreenID="LM304000" NodeID="f4d0ae51-c987-4259-ab4f-86848ebabbb9" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="680" SubcategoryID="00000000-0000-0000-0000-000000000000" />
+                <row Title="Customer PIN Code" Url="~/Pages/LM/LM303000.aspx" ScreenID="LM303000" NodeID="ccfb25a6-ff9d-4869-8373-4fe47c6fa5e3" ParentID="00000000-0000-0000-0000-000000000000">
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="90" SubcategoryID="00000000-0000-0000-0000-000000000000" />
                 </row>
             </SiteMap>
         </data>

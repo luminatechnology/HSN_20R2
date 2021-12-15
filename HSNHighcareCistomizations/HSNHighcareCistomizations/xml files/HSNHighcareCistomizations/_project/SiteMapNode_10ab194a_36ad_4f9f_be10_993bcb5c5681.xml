@@ -25,8 +25,8 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title="Customer PIN Code" Url="~/Pages/LM/LM303000.aspx" ScreenID="LM303000" NodeID="fa975f54-ecfd-48d9-afa0-32e399b8454a" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="670" SubcategoryID="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" />
+                <row Title="Process Deferred Revenue for PinCode" Url="~/Pages/LM/LM505040.aspx" ScreenID="LM505040" NodeID="10ab194a-36ad-4f9f-be10-993bcb5c5681" ParentID="00000000-0000-0000-0000-000000000000">
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="40" SubcategoryID="00000000-0000-0000-0000-000000000000" />
                 </row>
             </SiteMap>
         </data>

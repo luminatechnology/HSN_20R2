@@ -1,4 +1,5 @@
 ﻿using HSNCustomizations.DAC;
+using HSNHighcareCistomizations.DAC;
 using PX.Data;
 using PX.Data.BQL.Fluent;
 using PX.Objects.EP;
@@ -16,7 +17,7 @@ namespace PX.Objects.FS
     {
         public static bool IsActive()
         {
-            return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.EnableHighcareFunction ?? false);
+            return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.GetExtension<LUMHSNSetupExtension>().EnableHighcareFunction ?? false);
         }
 
         #region SMEquipmentID
@@ -40,7 +41,7 @@ namespace PX.Objects.FS
             SubstituteKey = typeof(FSEquipment.refNbr))]
         [PXRestrictor(typeof(Where<FSEquipment.status, Equal<EPEquipmentStatus.EquipmentStatusActive>>),
                        TX.Messages.EQUIPMENT_IS_INSTATUS, typeof(FSEquipment.status))]
-        public virtual int? SMEquipmentID { get; set; } 
+        public virtual int? SMEquipmentID { get; set; }
         #endregion
 
     }

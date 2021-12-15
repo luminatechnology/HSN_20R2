@@ -1,5 +1,6 @@
 ﻿using HSNCustomizations.DAC;
 using HSNHighcareCistomizations.DAC;
+using HSNHighcareCistomizations.Descriptor;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
@@ -40,10 +41,11 @@ namespace PX.Objects.FS
             var hsnSetup = SelectFrom<LUMHSNSetup>.View.Select(Base).RowCast<LUMHSNSetup>().FirstOrDefault();
 
             this.HighcareSrvHistory.AllowDelete = this.HighcareSrvHistory.AllowInsert = this.HighcareSrvHistory.AllowUpdate = false;
-            this.HighcareSrvHistory.AllowSelect = hsnSetup?.EnableHighcareFunction ?? false;
+            this.HighcareSrvHistory.AllowSelect = hsnSetup.GetExtension<LUMHSNSetupExtension>()?.EnableHighcareFunction ?? false;
+
 
             this.SrvScope.AllowDelete = this.SrvScope.AllowInsert = this.SrvScope.AllowUpdate = false;
-            this.SrvScope.AllowSelect = hsnSetup?.EnableHighcareFunction ?? false;
+            this.SrvScope.AllowSelect = hsnSetup.GetExtension<LUMHSNSetupExtension>()?.EnableHighcareFunction ?? false;
         }
         #endregion
 
@@ -52,7 +54,7 @@ namespace PX.Objects.FS
         public virtual void _(Events.FieldUpdated<FSSODet.SMequipmentID> e, PXFieldUpdated baseMethod)
         {
             baseMethod?.Invoke(e.Cache, e.Args);
-            if (this.hsnSetup.Current?.EnableHighcareFunction ?? false)
+            if (this.hsnSetup.Current.GetExtension<LUMHSNSetupExtension>()?.EnableHighcareFunction ?? false)
                 GetHighcareDiscount(e);
         }
 
@@ -64,14 +66,12 @@ namespace PX.Objects.FS
         {
             var doc = Base.ServiceOrderRecords.Current; if (e.Row is FSSODet row && row != null && row.SMEquipmentID.HasValue && doc != null)
             {
-                var itemClassInfo = SelectFrom<INItemClass>
-                                       .InnerJoin<InventoryItem>.On<INItemClass.itemClassID.IsEqual<InventoryItem.itemClassID>>
-                                       .Where<InventoryItem.inventoryID.IsEqual<P.AsInt>>
-                                       .View.Select(Base, row.InventoryID).RowCast<INItemClass>().FirstOrDefault();
+                HighcareHelper helper = new HighcareHelper();
+                var itemClassInfo = helper.GetItemclass(row.InventoryID);
                 var customerInfo = Customer.PK.Find(Base, doc.CustomerID);
                 if (customerInfo.ClassID != "HIGHCARE")
                     return;
-                var currentPINCode = FSEquipment.PK.Find(Base, (int)e.NewValue).GetExtension<FSEquipmentExtension>()?.UsrPINCode;
+                var currentPINCode = helper.GetEquipmentPINCode((int)e.NewValue);
                 if (string.IsNullOrEmpty(currentPINCode))
                     return;
                 var pinCodeInfo = SelectFrom<LumCustomerPINCode>
@@ -82,31 +82,38 @@ namespace PX.Objects.FS
                                   .Where(x => DateTime.Now.Date >= x.StartDate?.Date && DateTime.Now.Date <= x.EndDate?.Date).FirstOrDefault();
                 if (pinCodeInfo == null)
                     return;
-                var scopeInfo = SelectFrom<LUMServiceScope>
-                                .Where<LUMServiceScope.cPriceClassID.IsEqual<P.AsString>
-                                  .And<LUMServiceScope.itemClassID.IsEqual<P.AsInt>.Or<LUMServiceScope.inventoryID.IsEqual<P.AsInt>>>>
-                                .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo?.ItemClassID, row.InventoryID)
-                                .RowCast<LUMServiceScope>().FirstOrDefault();
-                if (scopeInfo == null)
+                var servicescopeInfo = SelectFrom<LUMServiceScope>
+                                       .Where<LUMServiceScope.cPriceClassID.IsEqual<P.AsString>
+                                         .And<LUMServiceScope.itemClassID.IsEqual<P.AsInt>.Or<LUMServiceScope.inventoryID.IsEqual<P.AsInt>>>>
+                                       .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo?.ItemClassID, row.InventoryID)
+                                       .RowCast<LUMServiceScope>().FirstOrDefault();
+                if (servicescopeInfo == null)
                     return;
-                var usedServiceCount = this.HighcareSrvHistory.Select()
+                // Service History
+                var usedServiceCountHist = this.HighcareSrvHistory.Select()
                                        .RowCast<v_HighcareServiceHistory>()
-                                       .Where(x => x.ItemClassID == scopeInfo.ItemClassID || x.InventoryID == scopeInfo.InventoryID)
+                                       .Where(x => (x?.ItemClassID == servicescopeInfo?.ItemClassID || x?.InventoryID == servicescopeInfo?.InventoryID) && x.Pincode == currentPINCode)
                                        .Count();
+                // Detail Cache
+                var usedServiceCountCache = Base.ServiceOrderDetails
+                                            .Select().RowCast<FSSODet>()
+                                            .Where(x => x != row && x?.InventoryID == row?.InventoryID && helper.GetEquipmentPINCode(x?.SMEquipmentID) == currentPINCode).Count();
                 // 不限次數，直接給折扣
-                if (scopeInfo.ScopeType == "Discount" && scopeInfo.LimitedCount == 0)
-                    Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(row, (scopeInfo?.DiscountPrecent ?? 0));
+                if (servicescopeInfo.LimitedCount == 0)
+                    Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(row, (servicescopeInfo?.DiscountPrecent ?? 0));
                 // 限制次數，給予折扣
-                else if (scopeInfo.ScopeType == "Discount" && scopeInfo.LimitedCount - usedServiceCount > 0)
-                    Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(row, (scopeInfo?.DiscountPrecent ?? 0));
-                // 限制次數，跳出警示
-                else if (scopeInfo.ScopeType == "Count" && scopeInfo.LimitedCount - usedServiceCount <= 0)
+                else if (servicescopeInfo.LimitedCount - usedServiceCountHist - usedServiceCountCache > 0)
+                    Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(row, (servicescopeInfo?.DiscountPrecent ?? 0));
+                // 次數不夠，跳出警示
+                else
                     e.Cache.RaiseExceptionHandling<FSSODet.SMequipmentID>(
                         row,
                         e.NewValue,
                         new PXSetPropertyException<FSSODet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.RowWarning));
             }
         }
+
+
 
         #endregion
     }

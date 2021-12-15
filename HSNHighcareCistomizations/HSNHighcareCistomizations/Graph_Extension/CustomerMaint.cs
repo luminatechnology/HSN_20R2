@@ -22,7 +22,7 @@ namespace PX.Objects.AR
             base.Initialize();
             var hsnSetup = SelectFrom<LUMHSNSetup>.View.Select(Base).RowCast<LUMHSNSetup>().FirstOrDefault();
             this.CustomerPINCode.AllowDelete = this.CustomerPINCode.AllowInsert = this.CustomerPINCode.AllowUpdate = false;
-            this.CustomerPINCode.AllowSelect = (hsnSetup?.EnableHighcareFunction ?? false);
+            this.CustomerPINCode.AllowSelect = (hsnSetup.GetExtension<LUMHSNSetupExtension>()?.EnableHighcareFunction ?? false);
         }
         #endregion
 

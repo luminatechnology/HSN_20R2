@@ -145,13 +145,6 @@ namespace HSNCustomizations.DAC
         public abstract class enableCitiOutSourceCheckFile : PX.Data.BQL.BqlBool.Field<enableCitiOutSourceCheckFile> { }
         #endregion
 
-        #region EnableHighcareFunction
-        [PXDBBool()]
-        [PXUIField(DisplayName = "Enable Highcare Function")]
-        public virtual bool? EnableHighcareFunction { get; set; }
-        public abstract class enableHighcareFunction : PX.Data.BQL.BqlBool.Field<enableHighcareFunction> { }
-        #endregion
-
         #region CreatedByID
         [PXDBCreatedByID()]
         public virtual Guid? CreatedByID { get; set; }

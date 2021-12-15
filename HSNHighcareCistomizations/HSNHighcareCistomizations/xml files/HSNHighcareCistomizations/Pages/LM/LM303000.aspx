@@ -4,6 +4,7 @@
 <asp:Content ID="cont1" ContentPlaceHolderID="phDS" runat="Server">
     <px:PXDataSource ID="ds" runat="server" Visible="True" UDFTypeField="CustomerClassID" EnableAttributes="true" Width="100%" TypeName="HSNHighcareCistomizations.Graph.CustomerPINCodeMaint" PrimaryView="Document">
         <CallbackCommands>
+            <px:PXDSCallbackCommand Name="viewDefSchedule" Visible="false" DependOnGrid="grid"></px:PXDSCallbackCommand>
         </CallbackCommands>
     </px:PXDataSource>
 </asp:Content>
@@ -24,10 +25,10 @@
                     <px:PXSelector ID="edScheduleNbr" runat="server" DataField="ScheduleNbr"></px:PXSelector>
                 </RowTemplate>
                 <Columns>
-                    <px:PXGridColumn DataField="IsActive" Type="CheckBox"/>
+                    <px:PXGridColumn DataField="IsActive" Type="CheckBox" />
                     <px:PXGridColumn DataField="Pin" AllowNull="False" />
                     <px:PXGridColumn DataField="CPriceClassID" AllowNull="False" />
-                    <px:PXGridColumn DataField="ScheduleNbr" AllowNull="False" />
+                    <px:PXGridColumn DataField="ScheduleNbr" AllowNull="False" LinkCommand="viewDefSchedule" />
                     <px:PXGridColumn DataField="StartDate" Width="200px" />
                     <px:PXGridColumn DataField="EndDate" Width="200px" />
                 </Columns>
