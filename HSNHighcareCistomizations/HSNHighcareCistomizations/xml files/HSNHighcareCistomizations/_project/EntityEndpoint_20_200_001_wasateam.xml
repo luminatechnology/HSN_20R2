@@ -333,9 +333,6 @@
                     <Mapping field="Description">
                         <To object="Results" field="t_inventoryID_description" />
                     </Mapping>
-                    <Mapping field="Description_2">
-                        <To object="Results" field="t_descr" />
-                    </Mapping>
                     <Mapping field="UOM">
                         <To object="Results" field="t_uom" />
                     </Mapping>
@@ -349,7 +346,6 @@
             <Fields>
                 <Field name="AppointmentNbr" type="StringValue" />
                 <Field name="Description" type="StringValue" />
-                <Field name="Description_2" type="StringValue" />
                 <Field name="EquipmentNbr" type="StringValue" />
                 <Field name="InventoryID" type="StringValue" />
                 <Field name="OrderDate" type="DateTimeValue" />

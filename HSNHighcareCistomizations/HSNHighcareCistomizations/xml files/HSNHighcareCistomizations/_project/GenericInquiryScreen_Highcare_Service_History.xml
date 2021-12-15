@@ -146,24 +146,25 @@
                         <GIRelation LineNbr="1" ChildTable="cust" IsActive="1" JoinType="I">
                             <GIOn LineNbr="1" ParentField="t.CustomerID" Condition="E " ChildField="cust.BAccountID" Operation="A" />
                         </GIRelation>
-                        <GIResult LineNbr="17" SortOrder="7" IsActive="1" Field="uom" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="6e6ad380-8333-4732-ba8d-c92fca427b8d" />
+                        <GIResult LineNbr="17" SortOrder="6" IsActive="1" Field="uom" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="6e6ad380-8333-4732-ba8d-c92fca427b8d" />
                         <GIResult LineNbr="15" SortOrder="1" IsActive="1" Field="srvOrdType" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="1e064cab-241a-4529-affe-bf7dcf62911e" />
                         <GIResult LineNbr="14" SortOrder="2" IsActive="1" Field="soRefNbr" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="a8bac79f-bf9d-4408-a727-a42e7c14671c" />
-                        <GIResult LineNbr="13" SortOrder="10" IsActive="1" Field="priceClassID" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="b14d01ed-9b9f-4264-b5e0-a4bf0417723d" />
-                        <GIResult LineNbr="12" SortOrder="9" IsActive="1" Field="pincode" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="3207914c-86a0-4d5e-8d9a-4d0aee49bc9b" />
-                        <GIResult LineNbr="11" SortOrder="8" IsActive="1" Field="orderDate" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="0" RowID="3d847e3d-fc06-473b-bf36-8d4de9f3bd23" />
+                        <GIResult LineNbr="13" SortOrder="9" IsActive="1" Field="priceClassID" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="b14d01ed-9b9f-4264-b5e0-a4bf0417723d" />
+                        <GIResult LineNbr="12" SortOrder="8" IsActive="1" Field="pincode" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="3207914c-86a0-4d5e-8d9a-4d0aee49bc9b" />
+                        <GIResult LineNbr="11" SortOrder="7" IsActive="1" Field="orderDate" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="0" RowID="3d847e3d-fc06-473b-bf36-8d4de9f3bd23" />
                         <GIResult LineNbr="7" SortOrder="5" IsActive="1" Field="inventoryID_description" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="d1ba71af-5630-4956-b7de-72351e8a8919" />
                         <GIResult LineNbr="5" SortOrder="4" IsActive="1" Field="inventoryCD" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="abd487d5-5d7d-4942-9830-e66eecd6da32" />
-                        <GIResult LineNbr="4" SortOrder="6" IsActive="1" Field="descr" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="965fd649-fa3d-43bf-871f-84868b19d7eb" />
                         <GIResult LineNbr="2" SortOrder="3" IsActive="1" Field="aptRefNbr" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="1d2deca6-80fd-4868-9e5c-f245507a26fe" />
                     </GITable>
                     <GITable Alias="equip" Name="PX.Objects.FS.FSEquipment">
-                        <GIResult LineNbr="18" SortOrder="11" IsActive="1" Field="refNbr" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="f31a2963-8a31-4514-88f0-8f9f1f7d980d" />
+                        <GIResult LineNbr="18" SortOrder="10" IsActive="1" Field="refNbr" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="f31a2963-8a31-4514-88f0-8f9f1f7d980d" />
                     </GITable>
                     <GITable Alias="cust" Name="PX.Objects.AR.Customer" />
                     <GIWhere LineNbr="1" IsActive="1" DataFieldName="cust.acctCD" Condition="E " IsExpression="0" Value1="[CustomerID]" Operation="A" />
                     <SiteMap linkname="toDesignById">
-                        <row Title="Highcare Service History" Url="~/GenericInquiry/GenericInquiry.aspx?id=4c2d09d9-f4d1-45d5-b008-d5001b82e3fd" ScreenID="GI650036" NodeID="89c632af-9109-42c2-a98b-a0b8fd4135c5" ParentID="00000000-0000-0000-0000-000000000000" />
+                        <row Title="Highcare Service History" Url="~/GenericInquiry/GenericInquiry.aspx?id=4c2d09d9-f4d1-45d5-b008-d5001b82e3fd" ScreenID="GI650036" NodeID="89c632af-9109-42c2-a98b-a0b8fd4135c5" ParentID="00000000-0000-0000-0000-000000000000">
+                            <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="700" SubcategoryID="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" />
+                        </row>
                     </SiteMap>
                 </row>
             </GIDesign>
