@@ -12,11 +12,17 @@ using PX.Data.BQL;
 using PX.Objects.CS;
 using PX.Objects.DR;
 using PX.Objects.CR;
+using PX.Objects.GL.FinPeriods;
+using PX.Objects.GL.FinPeriods.TableDefinition;
 
 namespace HSNHighcareCistomizations.Graph
 {
     public class PINCodeDeferredScheduleProc : PXGraph<PINCodeDeferredScheduleProc>
     {
+
+        [InjectDependency]
+        public IFinPeriodRepository FinPeriodRepository { get; set; }
+
         public PXCancel<LumCustomerPINCode> Cancel;
         public PXProcessingJoin<LumCustomerPINCode,
                                 InnerJoin<Customer, On<LumCustomerPINCode.bAccountID, Equal<Customer.bAccountID>>>,
@@ -42,6 +48,7 @@ namespace HSNHighcareCistomizations.Graph
                 {
                     try
                     {
+                        FinPeriod finPeriod = FinPeriodRepository.GetFinPeriodByDate(DateTime.Now, PXAccess.GetParentOrganizationID(PXAccess.GetBranchID()));
                         var scope = SelectFrom<LumServiceScopeHeader>
                                     .Where<LumServiceScopeHeader.cPriceClassID.IsEqual<P.AsString>>
                                     .View.Select(this, item.CPriceClassID).RowCast<LumServiceScopeHeader>().FirstOrDefault();
@@ -65,10 +72,11 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.defCode>(component, scope.DefCode);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, scope.TotalAmt);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.branchID>(component, PXAccess.GetBranchID());
+                        component.FinPeriodID = finPeriod.FinPeriodID;
                         // Generate Transactions
                         graph.generateTransactions.Press();
                         graph.Save.Press();
-
+                        graph.release.Press();
                         // setting CustomerPIN Code DeferralSchedule
                         PXUpdate<Set<LumCustomerPINCode.scheduleNbr, Required<LumCustomerPINCode.scheduleNbr>>,
                                 LumCustomerPINCode,

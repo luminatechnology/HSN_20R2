@@ -25,19 +25,10 @@
         </layout>
         <data>
             <SiteMap>
-                <row Title=" Deferred Revenue for PinCode Activation Process" Url="~/Pages/LM/LM505040.aspx" ScreenID="LM505040" NodeID="3c94f576-f356-4325-ae91-ea9f08cf4202" ParentID="00000000-0000-0000-0000-000000000000">
-                    <MUIScreen IsPortal="0" WorkspaceID="ac7e0b27-825d-42e9-ba99-7a5aaddec2c9" Order="40" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" />
+                <row Title="Process Deferred Revenue for PinCode" Url="~/Pages/LM/LM505040.aspx" ScreenID="LM505040" NodeID="10ab194a-36ad-4f9f-be10-993bcb5c5681" ParentID="00000000-0000-0000-0000-000000000000">
+                    <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="40" SubcategoryID="00000000-0000-0000-0000-000000000000" />
                 </row>
             </SiteMap>
-            <MUIWorkspace>
-                <row IsPortal="0" WorkspaceID="ac7e0b27-825d-42e9-ba99-7a5aaddec2c9" Order="149.75" Title="Deferred Revenue" Icon="event" AreaID="338edf81-5456-4735-8601-b213458e93fe" ScreenID="WSDR0000" IsSystem="0" />
-            </MUIWorkspace>
-            <MUISubcategory>
-                <row IsPortal="0" SubcategoryID="32130442-2305-4394-9389-cf915b191d2a" Order="820" Name="Processes" Icon="" IsSystem="0" />
-            </MUISubcategory>
-            <MUIArea>
-                <row IsPortal="0" AreaID="338edf81-5456-4735-8601-b213458e93fe" Order="10" Name="Financials" />
-            </MUIArea>
         </data>
     </data-set>
 </SiteMapNode>

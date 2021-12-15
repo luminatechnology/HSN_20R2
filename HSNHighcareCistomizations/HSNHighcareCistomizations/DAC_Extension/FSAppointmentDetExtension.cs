@@ -1,4 +1,5 @@
 ﻿using HSNCustomizations.DAC;
+using HSNHighcareCistomizations.DAC;
 using PX.Data;
 using PX.Data.BQL.Fluent;
 using PX.Objects.EP;
@@ -11,12 +12,11 @@ using static PX.Objects.FS.FSAppointmentDet;
 
 namespace PX.Objects.FS
 {
-    [PXTable(IsOptional = true)]
     public class FSAppointmentDetExtension : PXCacheExtension<FSAppointmentDet>
     {
         public static bool IsActive()
         {
-            return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.EnableHighcareFunction ?? false);
+            return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.GetExtension<LUMHSNSetupExtension>().EnableHighcareFunction ?? false);
         }
 
         #region SMEquipmentID

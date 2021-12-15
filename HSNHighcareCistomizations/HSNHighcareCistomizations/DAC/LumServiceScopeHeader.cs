@@ -39,7 +39,7 @@ namespace HSNHighcareCistomizations
 
         #region TotalAmt
         [PXDBDecimal()]
-        [PXUIField(DisplayName = "Total Amt")]
+        [PXUIField(DisplayName = "Total Amount")]
         public virtual Decimal? TotalAmt { get; set; }
         public abstract class totalAmt : PX.Data.BQL.BqlDecimal.Field<totalAmt> { }
         #endregion

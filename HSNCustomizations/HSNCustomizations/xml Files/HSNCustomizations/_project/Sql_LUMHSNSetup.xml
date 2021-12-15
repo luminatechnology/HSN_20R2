@@ -27,7 +27,6 @@
   <col name="EnableCitiReturnCheckFile" type="Bit" nullable="true" />
   <col name="EnableCitiOutSourceCheckFile" type="Bit" nullable="true" />
   <col name="EnablePrintTransferProcess" type="Bit" nullable="true" />
-  <col name="EnableHighcareFunction" type="Bit" nullable="true" />
   <index name="PK_LUMHSNSetup" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
   </index>
