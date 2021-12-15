@@ -1,4 +1,5 @@
 ﻿using System;
+using PX.Common;
 using PX.Data;
 using PX.Objects.CS;
 
@@ -31,7 +32,9 @@ namespace PX.Objects.AR
         {
             InvokeBaseHandler?.Invoke(e.Cache, e.Args);
 
-            bool statusClosed = e.Row.Status.Equals(ARDocStatus.Open) || e.Row.Status.Equals(ARDocStatus.Closed);
+            if (e.Row == null) { return; }
+
+            bool statusClosed = e.Row.Status.IsIn(ARDocStatus.Open, ARDocStatus.Closed);
 
             PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrGUITitle>    (e.Cache, null, Base1.activateGUI);
             PXUIFieldAttribute.SetVisible<ARRegisterExt2.usrPrnGUITitle> (e.Cache, null, Base1.activateGUI);

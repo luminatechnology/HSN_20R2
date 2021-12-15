@@ -102,7 +102,7 @@ namespace PX.Objects.AR
                 regisExt.UsrVATOutCode = string.Empty;
             }
 
-            if (string.IsNullOrEmpty(regisExt.UsrGUINo) && (regisExt.UsrVATOutCode == TWGUIFormatCode.vATOutCode31 ||
+            if (!string.IsNullOrEmpty(regisExt.UsrGUINo) && (regisExt.UsrVATOutCode == TWGUIFormatCode.vATOutCode31 ||
                                                             regisExt.UsrVATOutCode == TWGUIFormatCode.vATOutCode32 ||
                                                             regisExt.UsrVATOutCode == TWGUIFormatCode.vATOutCode35)
                )
