@@ -67,7 +67,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region Descr
         [PXDBString(256, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Descr")]
+        [PXUIField(DisplayName = "Description")]
         public virtual string Descr { get; set; }
         public abstract class descr : PX.Data.BQL.BqlString.Field<descr> { }
         #endregion
@@ -95,7 +95,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region Uom
         [PXDBString(6, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Uom")]
+        [PXUIField(DisplayName = "UOM")]
         public virtual string Uom { get; set; }
         public abstract class uom : PX.Data.BQL.BqlString.Field<uom> { }
         #endregion
@@ -119,6 +119,13 @@ namespace HSNHighcareCistomizations.DAC
         [PXUIField(DisplayName = "Price Class ID")]
         public virtual string PriceClassID { get; set; }
         public abstract class priceClassID : PX.Data.BQL.BqlString.Field<priceClassID> { }
+        #endregion
+
+        #region SMEquipmentID
+        [PXDBInt]
+        [PXUIField(DisplayName = "Equipment ID")]
+        public virtual int? SMEquipmentID { get; set; }
+        public abstract class sMEquipmentID : PX.Data.BQL.BqlInt.Field<sMEquipmentID> { }
         #endregion
     }
 }

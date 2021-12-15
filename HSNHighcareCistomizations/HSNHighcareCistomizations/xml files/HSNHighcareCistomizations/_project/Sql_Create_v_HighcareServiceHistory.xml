@@ -22,6 +22,7 @@ select t.CompanyID,
 	   c.ItemClassCD,
 	   d.UOM,
 	   t.OrderDate,
+	   equip.SMEquipmentID as SMEquipmentID,
 	   equip.UsrPINCode as PINCode,
 	   pin.CPriceClassID as priceClassID
 from FSServiceOrder t
