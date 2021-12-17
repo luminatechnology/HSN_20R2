@@ -9,7 +9,7 @@
 	</px:PXDataSource>
 </asp:Content>
 <asp:Content ID="cont2" ContentPlaceHolderID="phL" runat="Server">
-	<px:PXGrid SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" SkinID="Primary" AllowAutoHide="false">
+	<px:PXGrid SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" SkinID="Primary" AllowAutoHide="false" AllowPaging="True">
 		<Levels>
 			<px:PXGridLevel DataMember="HyperionAcctMapping">
 			    <Columns>
@@ -25,7 +25,6 @@
 			</px:PXGridLevel>
 		</Levels>
 		<AutoSize Container="Window" Enabled="True" ></AutoSize>
-		<ActionBar >
-		</ActionBar>
+		<ActionBar PagerVisible="Bottom"><PagerSettings Mode="NumericCompact" /></ActionBar>
 		<Mode AllowUpload="True" /></px:PXGrid>
 </asp:Content>

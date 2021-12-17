@@ -25,14 +25,14 @@
 </asp:Content>
 <asp:Content ID="cont3" ContentPlaceHolderID="phG" Runat="Server">
 	<px:PXSplitContainer runat="server" Orientation="Horizontal" SplitterPosition="400" ID="splitConditions">
-		<AutoSize Enabled="true" ></AutoSize>
+		<AutoSize Container="Window" Enabled="true" ></AutoSize>
 		<Template1>
-			<px:PXGrid ScrollBars="Always" AllowPaging="True" Caption="Ledger Source" CaptionVisible="True" runat="server" SyncPosition="True" Height="300px" SkinID="Primary" TabIndex="700" Width="100%" ID="grdScanMaster" DataSourceID="ds" AdjustPageSize="Auto">
+			<px:PXGrid ScrollBars="Always" AllowPaging="True" Caption="Ledger Source" CaptionVisible="True" runat="server" SyncPosition="True" Height="300px" SkinID="Primary" TabIndex="700" Width="100%" ID="grdScanMaster" DataSourceID="ds" AdjustPageSize="Auto" NoteIndicator="false" FilesIndicator="false">
 				<AutoSize Enabled="True" ></AutoSize>
 				<Levels>
 					<px:PXGridLevel DataMember="GLTranDebit">
 						<Columns >
-							<px:PXGridColumn TextAlign="Center" CommitChanges="True" Type="CheckBox" AllowCheckAll="True" DataField="Selected" Width="40" ></px:PXGridColumn>
+							<px:PXGridColumn DataField="Selected" TextAlign="Center" CommitChanges="True" Type="CheckBox" AllowCheckAll="True" Width="40" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="BatchNbr" Width="140" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="LineNbr" Width="70" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="BranchID" Width="140" ></px:PXGridColumn>
@@ -43,8 +43,8 @@
 							<px:PXGridColumn DataField="CuryCreditAmt" Width="100" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="UsrRmngDebitAmt" Width="100" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="UsrRmngCreditAmt" Width="100" ></px:PXGridColumn>
-							<px:PXGridColumn CommitChanges="True" DataField="UsrSetldDebitAmt" Width="100" ></px:PXGridColumn>
-							<px:PXGridColumn CommitChanges="True" DataField="UsrSetldCreditAmt" Width="100" ></px:PXGridColumn>
+							<px:PXGridColumn DataField="UsrSetldDebitAmt" Width="100" CommitChanges="True" ></px:PXGridColumn>
+							<px:PXGridColumn DataField="UsrSetldCreditAmt" Width="100" CommitChanges="True" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="TranDesc" Width="280" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="InventoryID" Width="70" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="ReferenceID" Width="140" ></px:PXGridColumn>
@@ -54,12 +54,12 @@
 				<%--<Mode AllowAddNew="False" InitNewRow="True" ></Mode>--%>
 				<ActionBar PagerVisible="Bottom"><PagerSettings Mode="NumericCompact" /></ActionBar></px:PXGrid></Template1>
 		<Template2>
-			<px:PXGrid ScrollBars="Always" AllowPaging="True" SyncPosition="True" CaptionVisible="True" Caption="Ledge Settlement" runat="server" SkinID="Primary" Width="100%" ID="grdScanDetail" DataSourceID="ds" AdjustPageSize="Auto">
+			<px:PXGrid ScrollBars="Always" AllowPaging="True" SyncPosition="True" CaptionVisible="True" Caption="Ledge Settlement" runat="server" SkinID="Primary" Width="100%" ID="grdScanDetail" DataSourceID="ds" AdjustPageSize="Auto" NoteIndicator="false" FilesIndicator="false">
 				<AutoSize Enabled="True" ></AutoSize>
 				<Levels>
 					<px:PXGridLevel DataMember="GLTranCredit">
 						<Columns >
-							<px:PXGridColumn TextAlign="Center" CommitChanges="True" Type="CheckBox" AllowCheckAll="True" DataField="Selected" Width="40" ></px:PXGridColumn>
+							<px:PXGridColumn DataField="Selected" TextAlign="Center" CommitChanges="True" Type="CheckBox" AllowCheckAll="True" Width="40" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="BatchNbr" Width="140" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="LineNbr" Width="70" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="BranchID" Width="140" ></px:PXGridColumn>
@@ -70,8 +70,8 @@
 							<px:PXGridColumn DataField="CuryCreditAmt" Width="100" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="UsrRmngDebitAmt" Width="100" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="UsrRmngCreditAmt" Width="100" ></px:PXGridColumn>
-							<px:PXGridColumn CommitChanges="True" DataField="UsrSetldDebitAmt" Width="100" ></px:PXGridColumn>
-							<px:PXGridColumn CommitChanges="True" DataField="UsrSetldCreditAmt" Width="100" ></px:PXGridColumn>
+							<px:PXGridColumn DataField="UsrSetldDebitAmt" Width="100" CommitChanges="True" ></px:PXGridColumn>
+							<px:PXGridColumn DataField="UsrSetldCreditAmt" Width="100" CommitChanges="True" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="TranDesc" Width="280" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="InventoryID" Width="70" ></px:PXGridColumn>
 							<px:PXGridColumn DataField="ReferenceID" Width="140" ></px:PXGridColumn>
