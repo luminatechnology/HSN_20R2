@@ -16,7 +16,7 @@ namespace HSNFinance.DAC
         #endregion
     
         #region SubID
-        [SubAccount(typeof(LUMHyperionAcctMapping.accountID))]
+        [SubAccount(typeof(LUMHyperionAcctMapping.accountID), IsKey = true)]
         [PXDefault()]
         public virtual int? SubID { get; set; }
         public abstract class subID : PX.Data.BQL.BqlInt.Field<subID> { }

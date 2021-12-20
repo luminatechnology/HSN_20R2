@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
 using PX.Objects.GL;
 using HSNFinance.DAC;
-using System.Linq;
 
 namespace HSNFinance
 {
@@ -33,143 +33,39 @@ namespace HSNFinance
         public PXCancel<LedgerTranFilter> Cancel;  
         public PXFilter<LedgerTranFilter> Filter;
         public SelectFrom<LSLedgerSettlement>.View LedgerStlmt;
-        [PXCopyPasteHiddenView]
         public SelectFrom<GLTran>.InnerJoin<Ledger>.On<Ledger.ledgerID.IsEqual<GLTran.ledgerID>
                                                        .And<Ledger.balanceType.IsEqual<LedgerBalanceType.actual>>>
-                                 .Where</*NotExists<Select<LSLedgerSettlement,
-                                                     Where<LSLedgerSettlement.branchID.IsEqual<GLTran.branchID>
-                                                           .And<LSLedgerSettlement.lineNbr.IsEqual<GLTran.lineNbr>
-                                                                .And<LSLedgerSettlement.module.IsEqual<GLTran.module>
-                                                                     .And<LSLedgerSettlement.batchNbr.IsEqual<GLTran.batchNbr>>>>>>>
-                                        .And<GLTran.curyDebitAmt.IsGreater<PX.Objects.CS.decimal0>*/
-                                        GLTran.accountID.IsEqual<LedgerTranFilter.stlmtAcctID.FromCurrent>
-                                                  //.And<GLTran.branchID.IsEqual<LedgerTranFilter.branchID.FromCurrent>>
-                                                       .And<GLTran.released.IsEqual<True>>
-                                                            .And<GLTran.posted.IsEqual<True>
-                                                                 .And<Where<GLTran.uOM.IsNotEqual<ZZUOM>.Or<GLTran.uOM.IsNull>>>>>.View GLTranDebit;
-        [PXCopyPasteHiddenView]
+                                 .Where<GLTran.accountID.IsEqual<LedgerTranFilter.stlmtAcctID.FromCurrent>
+                                        .And<GLTran.released.IsEqual<True>>
+                                            .And<GLTran.posted.IsEqual<True>
+                                                 .And<Where<GLTran.uOM.IsNotEqual<ZZUOM>.Or<GLTran.uOM.IsNull>>>
+                                                      .And<Where2<Where<Current<LedgerTranFilter.stlmtAcctType>, Equal<AccountType.asset>,
+                                                                        And<GLTran.curyDebitAmt, Greater<PX.Objects.CS.decimal0>>>,
+                                                                  Or<Current<LedgerTranFilter.stlmtAcctType>, Equal<AccountType.liability>,
+                                                                     And<GLTran.curyCreditAmt, Greater<PX.Objects.CS.decimal0>>>>>>>.View GLTranDebit;
+        //public SelectFrom<GLTran>.InnerJoin<Ledger>.On<Ledger.ledgerID.IsEqual<GLTran.ledgerID>
+        //                                               .And<Ledger.balanceType.IsEqual<LedgerBalanceType.actual>>>
+        //                         .Where</*NotExists<Select<LSLedgerSettlement,
+        //                                             Where<LSLedgerSettlement.branchID.IsEqual<GLTran.branchID>
+        //                                                   .And<LSLedgerSettlement.lineNbr.IsEqual<GLTran.lineNbr>
+        //                                                        .And<LSLedgerSettlement.module.IsEqual<GLTran.module>
+        //                                                             .And<LSLedgerSettlement.batchNbr.IsEqual<GLTran.batchNbr>>>>>>>
+        //                                .And<GLTran.curyDebitAmt.IsGreater<PX.Objects.CS.decimal0>*/
+        //                                GLTran.accountID.IsEqual<LedgerTranFilter.stlmtAcctID.FromCurrent>
+        //                                          //.And<GLTran.branchID.IsEqual<LedgerTranFilter.branchID.FromCurrent>>
+        //                                               .And<GLTran.released.IsEqual<True>>
+        //                                                    .And<GLTran.posted.IsEqual<True>
+        //                                                         .And<Where<GLTran.uOM.IsNotEqual<ZZUOM>.Or<GLTran.uOM.IsNull>>>>>.View GLTranDebit;
         public SelectFrom<GLTran>.InnerJoin<Ledger>.On<Ledger.ledgerID.IsEqual<GLTran.ledgerID>
                                                        .And<Ledger.balanceType.IsEqual<LedgerBalanceType.actual>>>
-                                 .Where</*NotExists<Select<LSLedgerSettlement,
-                                                         Where<LSLedgerSettlement.branchID.IsEqual<GLTran.branchID>
-                                                               .And<LSLedgerSettlement.lineNbr.IsEqual<GLTran.lineNbr>
-                                                                    .And<LSLedgerSettlement.module.IsEqual<GLTran.module>
-                                                                         .And<LSLedgerSettlement.batchNbr.IsEqual<GLTran.batchNbr>>>>>>>
-                                       .And<GLTran.curyCreditAmt.IsGreater<PX.Objects.CS.decimal0>*/
-                                       GLTran.accountID.IsEqual<LedgerTranFilter.stlmtAcctID.FromCurrent>
-                                                  //.And<GLTran.branchID.IsEqual<LedgerTranFilter.branchID.FromCurrent>>
-                                                       .And<GLTran.released.IsEqual<True>>
-                                                            .And<GLTran.posted.IsEqual<True>
-                                                                 .And<Where<GLTran.uOM.IsNotEqual<ZZUOM>.Or<GLTran.uOM.IsNull>>>>>.View GLTranCredit;
-        #endregion
-
-        #region Delegate Data View
-        protected virtual IEnumerable gLTranDebit()
-        {
-            LedgerTranFilter filter = Filter.Current;
-
-            PXView debitView = new PXView(this, false, GLTranDebit.View.BqlSelect);
-
-            List<object> lists = debitView.SelectMulti().ToList();
-
-            if (filter.StlmtAcctID != null)
-            {
-                switch (filter.StlmtAcctType)
-                {
-                    case AccountType.Asset:
-                        debitView.WhereAnd<Where<GLTran.curyDebitAmt, Greater<PX.Objects.CS.decimal0>>>();
-                        break;
-                    case AccountType.Liability:
-                        debitView.WhereAnd<Where<GLTran.curyCreditAmt, Greater<PX.Objects.CS.decimal0>>>();
-                        break;
-                }
-
-                for (int i = 0; i < lists.Count; i++)
-                {
-                    PXResult<GLTran, Ledger> result = lists[i] as PXResult<GLTran, Ledger>;
-                    GLTran tran = result;
-                    GLTranExt tranExt = tran.GetExtension<GLTranExt>();
-
-                    LSLedgerSettlement settlement = SelectSumStldTran(this, tran.Module, tran.BatchNbr, tran.LineNbr);
-
-                    tranExt.UsrRmngDebitAmt = tran.CuryDebitAmt - settlement?.SettledDebitAmt;
-                    tranExt.UsrRmngCreditAmt = tran.CuryCreditAmt - settlement?.SettledCreditAmt;
-                    tranExt.UsrSetldCreditAmt = (tranExt.UsrRmngCreditAmt ?? 0m) == 0m ? tran.CuryCreditAmt : tranExt.UsrRmngCreditAmt;
-
-                    Filter.Cache.SetValue<LedgerTranFilter.balanceAmt>(filter, (filter.BalanceAmt ?? 0m) + tranExt.UsrSetldCreditAmt);
-                }
-
-                //int totalrow = 0;
-                //int startrow = PXView.StartRow;
-
-                //foreach (PXResult<GLTran, Ledger> result in debitView.Select(PXView.Currents, PXView.Parameters, PXView.Searches, PXView.SortColumns, PXView.Descendings, PXView.Filters, ref startrow, PXView.MaximumRows, ref totalrow))
-                //{
-                //    GLTran tran = result;
-                //    GLTranExt tranExt = tran.GetExtension<GLTranExt>();
-
-                //    LSLedgerSettlement settlement = SelectSumStldTran(this, tran.Module, tran.BatchNbr, tran.LineNbr);
-
-                //    tranExt.UsrRmngDebitAmt = tran.CuryDebitAmt - settlement?.SettledDebitAmt;
-                //    tranExt.UsrRmngCreditAmt = tran.CuryCreditAmt - settlement?.SettledCreditAmt;
-                //    tranExt.UsrSetldCreditAmt = (tranExt.UsrRmngCreditAmt ?? 0m) == 0m ? tran.CuryCreditAmt : tranExt.UsrRmngCreditAmt;
-
-                //    Filter.Cache.SetValue<LedgerTranFilter.balanceAmt>(filter, (filter.BalanceAmt ?? 0m) + tranExt.UsrSetldCreditAmt);
-
-                //    yield return tran;
-                //}
-
-                //PXView.StartRow = 0;
-            }
-
-            return lists;
-        }
-
-        protected virtual IEnumerable gLTranCredit()
-        {
-            LedgerTranFilter filter = Filter.Current;
-
-            PXView creditView = new PXView(this, false, GLTranCredit.View.BqlSelect);
-
-            if (filter.StlmtAcctID != null)
-            {
-                switch (filter.StlmtAcctType)
-                {
-                    case AccountType.Asset:
-                        creditView.WhereAnd<Where<GLTran.curyCreditAmt, Greater<PX.Objects.CS.decimal0>>>();
-                        break;
-                    case AccountType.Liability:
-                        creditView.WhereAnd<Where<GLTran.curyDebitAmt, Greater<PX.Objects.CS.decimal0>>>();
-                        break;
-                }
-
-                //int totalrow = 0;
-                //int startrow = PXView.StartRow;
-
-                //foreach (PXResult<GLTran, Ledger> result in creditView.Select(PXView.Currents, PXView.Parameters, PXView.Searches, PXView.SortColumns, PXView.Descendings, PXView.Filters, ref startrow, PXView.MaximumRows, ref totalrow))
-                //{
-                //    GLTran tran = result;
-                //    GLTranExt tranExt = tran.GetExtension<GLTranExt>();
-
-                //    LSLedgerSettlement settlement = SelectSumStldTran(this, tran.Module, tran.BatchNbr, tran.LineNbr);
-
-                //    creditView.Cache.SetValue<GLTranExt.usrRmngDebitAmt>(tran, tran.CuryDebitAmt - settlement?.SettledDebitAmt);
-                //    creditView.Cache.SetValue<GLTranExt.usrRmngCreditAmt>(tran, tran.CuryCreditAmt - settlement?.SettledCreditAmt);
-
-                //    if (tran.Selected == true)
-                //    {
-                //        GLTranDebit.Cache.SetValue<GLTranExt.usrSetldCreditAmt>(tran, (tranExt.UsrRmngCreditAmt ?? 0m) == 0m ? tran.CuryCreditAmt : tranExt.UsrRmngCreditAmt);
-
-                //        Filter.Cache.SetValue<LedgerTranFilter.balanceAmt>(filter, filter.BalanceAmt - settlement?.SettledCreditAmt);
-                //    }
-
-                //    yield return tran;
-                //}
-
-                //PXView.StartRow = 0;
-            }
-
-            return creditView.SelectMulti();
-        }
+                                 .Where<GLTran.accountID.IsEqual<LedgerTranFilter.stlmtAcctID.FromCurrent>
+                                        .And<GLTran.released.IsEqual<True>>
+                                            .And<GLTran.posted.IsEqual<True>
+                                                 .And<Where<GLTran.uOM.IsNotEqual<ZZUOM>.Or<GLTran.uOM.IsNull>>>
+                                                      .And<Where2<Where<Current<LedgerTranFilter.stlmtAcctType>, Equal<AccountType.asset>,
+                                                                        And<GLTran.curyCreditAmt, Greater<PX.Objects.CS.decimal0>>>,
+                                                                  Or<Current<LedgerTranFilter.stlmtAcctType>, Equal<AccountType.liability>,
+                                                                     And<GLTran.curyDebitAmt, Greater<PX.Objects.CS.decimal0>>>>>>>.View GLTranCredit;
         #endregion
 
         #region Actions
@@ -239,43 +135,69 @@ namespace HSNFinance
             }
         }
 
-        //protected void _(Events.FieldUpdated<GLTran.selected> e)
-        //{
-        //    var row = e.Row as GLTran;
-
-        //    if (row != null)
-        //    {
-        //        GLTranExt tranExt = PXCacheEx.GetExtension<GLTranExt>(row);
-
-        //        decimal debit  = tranExt.UsrRmngDebitAmt ?? 0m;
-        //        decimal credit = tranExt.UsrRmngCreditAmt ?? 0m;
-
-        //        GLTranDebit.Cache.SetValue<GLTranExt.usrSetldDebitAmt>  (row, (bool)e.NewValue == true ? (debit == 0m  ? row.CuryDebitAmt  : debit)  : 0m);
-        //        GLTranCredit.Cache.SetValue<GLTranExt.usrSetldCreditAmt>(row, (bool)e.NewValue == true ? (credit == 0m ? row.CuryCreditAmt : credit) : 0m);
-        //    }
-        //}
-
-        protected void _(Events.FieldVerifying<GLTranExt.usrSetldDebitAmt> e)
+        protected void _(Events.FieldUpdated<GLTran.selected> e)
         {
             var row = e.Row as GLTran;
 
-            GLTranExt tranExt = PXCacheEx.GetExtension<GLTranExt>(row);
-
-            if (e.NewValue != null && tranExt.UsrRmngDebitAmt != 0m && (decimal)e.NewValue > tranExt.UsrRmngDebitAmt)
+            if (row != null)
             {
-                throw new PXSetPropertyException<GLTranExt.usrSetldDebitAmt>(steldAmtExceedRmngAmt);
+                GLTranExt tranExt = PXCacheEx.GetExtension<GLTranExt>(row);
+
+                if ((bool)e.NewValue == true)
+                {
+                    LSLedgerSettlement settlement = SelectFrom<LSLedgerSettlement>.Where<LSLedgerSettlement.module.IsEqual<@P.AsString>
+                                                                                         .And<LSLedgerSettlement.batchNbr.IsEqual<@P.AsString>
+                                                                                              .And<LSLedgerSettlement.lineNbr.IsEqual<@P.AsInt>>>>
+                                                                                  .AggregateTo<Sum<LSLedgerSettlement.settledCreditAmt,
+                                                                                                   Sum<LSLedgerSettlement.settledDebitAmt>>>.View.Select(this, row.Module, row.BatchNbr, row.LineNbr);
+
+                    tranExt.UsrRmngDebitAmt   = row.CuryDebitAmt - (settlement?.SettledDebitAmt ?? 0m);
+                    tranExt.UsrRmngCreditAmt  = row.CuryCreditAmt - (settlement?.SettledCreditAmt ?? 0m);
+                    tranExt.UsrSetldDebitAmt  = tranExt.UsrRmngDebitAmt  == 0m ? row.CuryDebitAmt : tranExt.UsrRmngDebitAmt;
+                    tranExt.UsrSetldCreditAmt = tranExt.UsrRmngCreditAmt == 0m ? row.CuryCreditAmt : tranExt.UsrRmngCreditAmt;
+
+                    Filter.Current.BalanceAmt = (Filter.Current.BalanceAmt ?? 0m) + tranExt.UsrSetldDebitAmt - tranExt.UsrSetldCreditAmt;
+                }
+                else
+                {
+                    Filter.Current.BalanceAmt = (Filter.Current.BalanceAmt ?? 0m) - tranExt.UsrSetldDebitAmt + tranExt.UsrSetldCreditAmt;
+
+                    tranExt.UsrRmngDebitAmt = tranExt.UsrRmngCreditAmt = tranExt.UsrSetldDebitAmt = tranExt.UsrSetldCreditAmt = 0m;
+                }
             }
         }
 
-        protected void _(Events.FieldVerifying<GLTranExt.usrSetldCreditAmt> e)
+        protected void _(Events.FieldUpdated<GLTranExt.usrSetldDebitAmt> e)
         {
             var row = e.Row as GLTran;
 
-            GLTranExt tranExt = PXCacheEx.GetExtension<GLTranExt>(row);
+            decimal? rmngDebitAmt = PXCacheEx.GetExtension<GLTranExt>(row).UsrRmngDebitAmt;
 
-            if (e.NewValue != null && tranExt.UsrRmngCreditAmt != 0m && (decimal)e.NewValue > tranExt.UsrRmngCreditAmt)
+            ///<remarks> Because we need to update the unbound fields and check this field and then add verification in this event. </remarks>
+            if (e.NewValue != null && rmngDebitAmt != 0m && (decimal)e.NewValue > rmngDebitAmt)
+            {
+                throw new PXSetPropertyException<GLTranExt.usrSetldDebitAmt>(steldAmtExceedRmngAmt);
+            }
+            else
+            {
+                Filter.Current.BalanceAmt = rmngDebitAmt > (decimal)e.NewValue ? (decimal)e.NewValue : rmngDebitAmt;
+            }
+        }
+
+        protected void _(Events.FieldUpdated<GLTranExt.usrSetldCreditAmt> e)
+        {
+            var row = e.Row as GLTran;
+
+            decimal? rmngCreditAmt = PXCacheEx.GetExtension<GLTranExt>(row).UsrRmngCreditAmt;
+
+            ///<remarks> Because we need to update the unbound fields and check this field and then add verification in this event. </remarks>
+            if (e.NewValue != null && rmngCreditAmt != 0m && (decimal)e.NewValue > rmngCreditAmt)
             {
                 throw new PXSetPropertyException<GLTranExt.usrSetldCreditAmt>(steldAmtExceedRmngAmt);
+            }
+            else
+            {
+                Filter.Current.BalanceAmt = rmngCreditAmt > (decimal)e.NewValue ? (decimal)e.NewValue : rmngCreditAmt;
             }
         }
         #endregion
@@ -349,25 +271,6 @@ namespace HSNFinance
             cache.SetValue<GLTran.uOM>(cache.Current, uOM);
 
             cache.Update(cache.Current);
-        }
-
-        /// <summary>
-        /// Summarize settled credit & debit amount by parameters with different object types.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <param name="objects"></param>
-        /// <returns></returns>
-        public static LSLedgerSettlement SelectSumStldTran(PXGraph graph, params object[] objects)
-        {
-            string module   = (string)objects[0];
-            string batchNbr = (string)objects[1];
-            int    lineNbr  = (int)objects[2];
-
-            return SelectFrom<LSLedgerSettlement>.Where<LSLedgerSettlement.module.IsEqual<@P.AsString>
-                                                        .And<LSLedgerSettlement.batchNbr.IsEqual<@P.AsString>
-                                                             .And<LSLedgerSettlement.lineNbr.IsEqual<@P.AsInt>>>>
-                                                 .AggregateTo<Sum<LSLedgerSettlement.settledCreditAmt,
-                                                                  Sum<LSLedgerSettlement.settledDebitAmt>>>.View.SelectSingleBound(graph, null, module, batchNbr, lineNbr);
         }
         #endregion
     }
