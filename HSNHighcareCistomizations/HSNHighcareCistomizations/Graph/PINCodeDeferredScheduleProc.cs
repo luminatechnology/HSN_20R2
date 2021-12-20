@@ -14,6 +14,7 @@ using PX.Objects.DR;
 using PX.Objects.CR;
 using PX.Objects.GL.FinPeriods;
 using PX.Objects.GL.FinPeriods.TableDefinition;
+using PX.Objects.SO;
 
 namespace HSNHighcareCistomizations.Graph
 {
@@ -23,22 +24,22 @@ namespace HSNHighcareCistomizations.Graph
         [InjectDependency]
         public IFinPeriodRepository FinPeriodRepository { get; set; }
 
-        public PXCancel<LumCustomerPINCode> Cancel;
-        public PXProcessingJoin<LumCustomerPINCode,
-                                InnerJoin<Customer, On<LumCustomerPINCode.bAccountID, Equal<Customer.bAccountID>>>,
-                                Where<LumCustomerPINCode.scheduleNbr.IsNull>> ProcessList;
+        public PXCancel<LUMCustomerPINCode> Cancel;
+        public PXProcessingJoin<LUMCustomerPINCode,
+                                InnerJoin<Customer, On<LUMCustomerPINCode.bAccountID, Equal<Customer.bAccountID>>>,
+                                Where<LUMCustomerPINCode.scheduleNbr.IsNull>> ProcessList;
 
         public PINCodeDeferredScheduleProc()
             => ProcessList.SetProcessDelegate(GoProcess);
 
         #region Static Method
 
-        public static void GoProcess(List<LumCustomerPINCode> list)
+        public static void GoProcess(List<LUMCustomerPINCode> list)
             => PXGraph.CreateInstance<PINCodeDeferredScheduleProc>().CreateDeferralSchedule(list);
         #endregion
 
         #region Method
-        public virtual void CreateDeferralSchedule(List<LumCustomerPINCode> list)
+        public virtual void CreateDeferralSchedule(List<LUMCustomerPINCode> list)
         {
             if (list.Count <= 0)
                 return;
@@ -49,9 +50,24 @@ namespace HSNHighcareCistomizations.Graph
                     try
                     {
                         FinPeriod finPeriod = FinPeriodRepository.GetFinPeriodByDate(DateTime.Now, PXAccess.GetParentOrganizationID(PXAccess.GetBranchID()));
-                        var scope = SelectFrom<LumServiceScopeHeader>
-                                    .Where<LumServiceScopeHeader.cPriceClassID.IsEqual<P.AsString>>
-                                    .View.Select(this, item.CPriceClassID).RowCast<LumServiceScopeHeader>().FirstOrDefault();
+                        // Find PIN Code Serial Nbr.
+                        var serialNbr = LUMPINCodeMapping.PK.Find(this, item.Pin)?.SerialNbr;
+                        if(string.IsNullOrEmpty(serialNbr))
+                            throw new PXException("can not find serial Nbr.");
+                        // Find SOShipment by Serial Nbr.
+                        var soshipLine = SelectFrom<SOShipLine>
+                                         .Where< SOShipLine.lotSerialNbr.IsEqual<P.AsString>>
+                                         .View.Select(this, serialNbr).TopFirst;
+                        if(soshipLine ==null)
+                            throw new PXException("can not find SOShipment!!");
+                        // Find SOLine by SOShipment
+                        var soline = SOLine.PK.Find(this,soshipLine?.OrigOrderType,soshipLine?.OrigOrderNbr,soshipLine?.OrigLineNbr);
+                        if(soline == null)
+                            throw new PXException("can not find SOLine!!");
+
+                        var scope = SelectFrom<LUMServiceScopeHeader>
+                                    .Where<LUMServiceScopeHeader.cPriceClassID.IsEqual<P.AsString>>
+                                    .View.Select(this, item.CPriceClassID).RowCast<LUMServiceScopeHeader>().FirstOrDefault();
                         var acctInfo = BAccount2.PK.Find(this, item.BAccountID.Value);
                         var itemInfo = InventoryItem.PK.Find(this, scope.InventoryID);
                         if (scope == null)
@@ -70,7 +86,7 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.subID>(component, itemInfo.SalesSubID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.componentID>(component, scope.InventoryID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.defCode>(component, scope.DefCode);
-                        graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, scope.TotalAmt);
+                        graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, soline?.CuryLineAmt);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.branchID>(component, PXAccess.GetBranchID());
                         component.FinPeriodID = finPeriod.FinPeriodID;
                         // Generate Transactions
@@ -78,16 +94,16 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Save.Press();
                         graph.release.Press();
                         // setting CustomerPIN Code DeferralSchedule
-                        PXUpdate<Set<LumCustomerPINCode.scheduleNbr, Required<LumCustomerPINCode.scheduleNbr>>,
-                                LumCustomerPINCode,
-                                Where<LumCustomerPINCode.bAccountID, Equal<P.AsInt>,
-                                  And<LumCustomerPINCode.pin, Equal<P.AsString>,
-                                  And<LumCustomerPINCode.cPriceClassID, Equal<P.AsString>>>>>.Update(this, graph.Schedule.Current.ScheduleNbr, item.BAccountID, item.Pin, item.CPriceClassID);
+                        PXUpdate<Set<LUMCustomerPINCode.scheduleNbr, Required<LUMCustomerPINCode.scheduleNbr>>,
+                                LUMCustomerPINCode,
+                                Where<LUMCustomerPINCode.bAccountID, Equal<P.AsInt>,
+                                  And<LUMCustomerPINCode.pin, Equal<P.AsString>,
+                                  And<LUMCustomerPINCode.cPriceClassID, Equal<P.AsString>>>>>.Update(this, graph.Schedule.Current.ScheduleNbr, item.BAccountID, item.Pin, item.CPriceClassID);
                         this.Actions.PressSave();
                     }
                     catch (Exception ex)
                     {
-                        PXProcessing.SetError<LumCustomerPINCode>(ex.Message);
+                        PXProcessing.SetError<LUMCustomerPINCode>(ex.Message);
                     }
                 }
             });

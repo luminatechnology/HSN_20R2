@@ -1,47 +1,31 @@
 using System;
 using PX.Data;
 using PX.Data.ReferentialIntegrity.Attributes;
-using PX.Objects.DR;
-using PX.Objects.IN;
 
-namespace HSNHighcareCistomizations
+namespace HSNHighcareCistomizations.DAC
 {
     [Serializable]
-    [PXCacheName("LUMServiceScopeHeader")]
-    public class LUMServiceScopeHeader : IBqlTable
+    [PXCacheName("LUMPINCodeMapping")]
+    public class LUMPINCodeMapping : IBqlTable
     {
-        #region CPriceClassID
-        [PXDBString(10, IsKey = true, IsUnicode = true, InputMask = "")]
-        [PXSelector(typeof(PX.Objects.AR.ARPriceClass.priceClassID))]
-        [PXUIField(DisplayName = "Price Class ID")]
-        public virtual string CPriceClassID { get; set; }
-        public abstract class cPriceClassID : PX.Data.BQL.BqlString.Field<cPriceClassID> { }
+        public class PK : PrimaryKeyOf<LUMPINCodeMapping>.By<pin>
+        {
+            public static LUMPINCodeMapping Find(PXGraph graph, string pin) => FindBy(graph, pin);
+        }
+
+        #region Pin
+        [PXDBString(100, IsKey = true, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Pin")]
+        public virtual string Pin { get; set; }
+        public abstract class pin : PX.Data.BQL.BqlString.Field<pin> { }
         #endregion
 
-        #region InventoryID
-        [PXDBInt()]
+        #region SerialNbr
         [PXDefault]
-        [PXUIField(DisplayName = "Component ID")]
-        [DRComponentSelector(SubstituteKey = typeof(InventoryItem.inventoryCD), DescriptionField = typeof(InventoryItem.descr))]
-        public virtual int? InventoryID { get; set; }
-        public abstract class inventoryID : PX.Data.BQL.BqlInt.Field<inventoryID> { }
-        #endregion
-
-        #region DefCode
-        [PXSelector(typeof(Search<DRDeferredCode.deferredCodeID, Where<DRDeferredCode.accountType, Equal<Current<DRScheduleDetail.defCodeType>>>>))]
-        [PXRestrictor(typeof(Where<DRDeferredCode.active, Equal<True>>), PX.Objects.DR.Messages.InactiveDeferralCode, typeof(DRDeferredCode.deferredCodeID))]
-        [PXDBString(10, IsUnicode = true)]
-        [PXDefault]
-        [PXUIField(DisplayName = "Deferral Code", Visibility = PXUIVisibility.SelectorVisible)]
-        public virtual string DefCode { get; set; }
-        public abstract class defCode : PX.Data.BQL.BqlString.Field<defCode> { }
-        #endregion
-
-        #region TotalAmt
-        [PXDBDecimal()]
-        [PXUIField(DisplayName = "Total Amount", Visible = false)]
-        public virtual Decimal? TotalAmt { get; set; }
-        public abstract class totalAmt : PX.Data.BQL.BqlDecimal.Field<totalAmt> { }
+        [PXDBString(50, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Serial Nbr")]
+        public virtual string SerialNbr { get; set; }
+        public abstract class serialNbr : PX.Data.BQL.BqlString.Field<serialNbr> { }
         #endregion
 
         #region Noteid

@@ -46,12 +46,17 @@ namespace HSNHighcareCistomizations.Graph_Extension
                         MUIWorkspaceDatas.FirstOrDefault(x => x.Title == "Deferred Revenue")?.WorkspaceID,
                         MUISubcategoryDatas.FirstOrDefault(x => x.Name == "Processes")?.SubcategoryID,
                         "LM505040");
+                    updateSiteMapManual(
+                       MUIWorkspaceDatas.FirstOrDefault(x => x.Title == "Receivables")?.WorkspaceID,
+                       MUISubcategoryDatas.FirstOrDefault(x => x.Name == "Profiles")?.SubcategoryID,
+                       "LM505050");
                 }
                 else
                 {
                     updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM303000");
                     updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM304000");
                     updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM505040");
+                    updateSiteMapManual(new Guid(clenGUID), new Guid(clenGUID), "LM505050");
                 }
             }
 

@@ -18,13 +18,12 @@ select t.CompanyID,
 	   i.InventoryCD,
 	   i.Descr,
 	   i.StkItem,
-	   c.ItemClassID,
-	   c.ItemClassCD,
+	   i.PriceClassID,
 	   d.UOM,
 	   t.OrderDate,
 	   equip.SMEquipmentID as SMEquipmentID,
 	   equip.UsrPINCode as PINCode,
-	   pin.CPriceClassID as priceClassID
+	   pin.CPriceClassID as CustomerpriceClassID
 from FSServiceOrder t
 inner join FSAppointment a on t.CompanyID = a.CompanyID and t.SOID = a.SOID
 inner join FSSODet d on t.CompanyID = d.CompanyID
@@ -41,5 +40,5 @@ inner join LumCustomerPinCode pin on t.CompanyID = pin.CompanyID
 								 and equip.UsrPINCode = pin.PIN
 inner join LUMServiceScope sc on t.CompanyID = sc.CompanyID
 							 and pin.CPriceClassID = sc.CPriceClassID
-							 and (i.ItemClassID = sc.itemClassID OR d.InventoryID = sc.InventoryID)]]></CDATA>
+							 and (i.PriceClassID = sc.PriceClassID OR d.InventoryID = sc.InventoryID)]]></CDATA>
 </Sql>

@@ -27,6 +27,7 @@
                 <Columns>
                     <px:PXGridColumn DataField="IsActive" Type="CheckBox" />
                     <px:PXGridColumn DataField="Pin" AllowNull="False" />
+                    <px:PXGridColumn DataField="SerialNbr" AllowNull="False" />
                     <px:PXGridColumn DataField="CPriceClassID" AllowNull="False" />
                     <px:PXGridColumn DataField="ScheduleNbr" AllowNull="False" LinkCommand="viewDefSchedule" />
                     <px:PXGridColumn DataField="StartDate" Width="200px" />

@@ -12,13 +12,13 @@ using static PX.Data.PXAccess.BAccount;
 namespace HSNHighcareCistomizations.DAC
 {
     [Serializable]
-    [PXCacheName("LumCustomerPINCode")]
-    public class LumCustomerPINCode : IBqlTable
+    [PXCacheName("LUMCustomerPINCode")]
+    public class LUMCustomerPINCode : IBqlTable
     {
 
         public static class FK
         {
-            public class Customer : PX.Objects.AR.Customer.PK.ForeignKeyOf<LumCustomerPINCode>.By<bAccountID> { }
+            public class Customer : PX.Objects.AR.Customer.PK.ForeignKeyOf<LUMCustomerPINCode>.By<bAccountID> { }
         }
 
         #region Selected
@@ -40,6 +40,13 @@ namespace HSNHighcareCistomizations.DAC
         [PXUIField(DisplayName = "Pin")]
         public virtual string Pin { get; set; }
         public abstract class pin : PX.Data.BQL.BqlString.Field<pin> { }
+        #endregion
+
+        #region SerialNbr
+        [PXString(50, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Serial Number", Enabled = false)]
+        public virtual string SerialNbr { get; set; }
+        public abstract class serialNbr : PX.Data.BQL.BqlString.Field<serialNbr> { }
         #endregion
 
         #region CPriceClassID

@@ -1,9 +1,9 @@
 ﻿<Sql TableName="LumServiceScope" TableSchemaXml="#CDATA">
-    <CDATA name="TableSchemaXml"><![CDATA[<table name="LumServiceScope">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMServiceScope">
   <col name="CompanyID" type="Int" default="Zero" />
   <col name="CPriceClassID" type="NVarChar(10)" />
   <col name="LineNbr" type="Int" identity="true" />
-  <col name="ItemClassID" type="Int" nullable="true" />
+  <col name="PriceClassID" type="NVarChar(10)" nullable="true" />
   <col name="InventoryID" type="Int" nullable="true" />
   <col name="DiscountPrecent" type="Decimal(10,4)" nullable="true" />
   <col name="LimitedCount" type="Int" nullable="true" />

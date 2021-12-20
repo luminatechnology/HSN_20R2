@@ -28,10 +28,10 @@ namespace HSNHighcareCistomizations.Graph
                 And<Where<BAccount.type, Equal<BAccountType.customerType>,
                     Or<BAccount.type, Equal<BAccountType.combinedType>>>>>> Document;
 
-        public SelectFrom<LumCustomerPINCode>
-               .Where<LumCustomerPINCode.bAccountID.IsEqual<Customer.bAccountID.FromCurrent>>.View Transaction;
+        public SelectFrom<LUMCustomerPINCode>
+               .Where<LUMCustomerPINCode.bAccountID.IsEqual<Customer.bAccountID.FromCurrent>>.View Transaction;
 
-        public PXAction<LumCustomerPINCode> viewDefSchedule;
+        public PXAction<LUMCustomerPINCode> viewDefSchedule;
         [PXButton]
         [PXUIField(Visible = false)]
         public virtual IEnumerable ViewDefSchedule(PXAdapter adapter)
@@ -45,15 +45,18 @@ namespace HSNHighcareCistomizations.Graph
             return adapter.Get();
         }
 
-        public virtual void _(Events.RowSelected<LumCustomerPINCode> e)
+        public virtual void _(Events.RowSelected<LUMCustomerPINCode> e)
         {
             if (e.Row != null)
-                this.Transaction.Cache.SetValueExt<LumCustomerPINCode.isActive>(e.Row, DateTime.Now.Date >= e.Row.StartDate?.Date && DateTime.Now.Date <= e.Row.EndDate?.Date);
+            {
+                this.Transaction.Cache.SetValueExt<LUMCustomerPINCode.isActive>(e.Row, DateTime.Now.Date >= e.Row.StartDate?.Date && DateTime.Now.Date <= e.Row.EndDate?.Date);
+                this.Transaction.Cache.SetValueExt<LUMCustomerPINCode.serialNbr>(e.Row, LUMPINCodeMapping.PK.Find(this, e.Row.Pin)?.SerialNbr);
+            }
         }
 
-        public virtual void _(Events.RowPersisting<LumCustomerPINCode> e)
+        public virtual void _(Events.RowPersisting<LUMCustomerPINCode> e)
         {
-            if (e.Row is LumCustomerPINCode row && row != null && this.Document.Current != null)
+            if (e.Row is LUMCustomerPINCode row && row != null && this.Document.Current != null)
             {
                 row.BAccountID = this.Document.Current.BAccountID;
                 row.StartDate = DateTime.Now;
