@@ -15,7 +15,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region Pin
         [PXDBString(100, IsKey = true, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Pin")]
+        [PXUIField(DisplayName = "PIN Code")]
         public virtual string Pin { get; set; }
         public abstract class pin : PX.Data.BQL.BqlString.Field<pin> { }
         #endregion

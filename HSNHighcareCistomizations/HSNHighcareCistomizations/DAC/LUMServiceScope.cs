@@ -26,7 +26,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region PriceClassID
         [PXDBString(10, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Price Class ID")]
+        [PXUIField(DisplayName = "Item Price Class ID")]
         [PXSelector(typeof(INPriceClass.priceClassID), DescriptionField = typeof(INPriceClass.description))]
         public virtual string PriceClassID { get; set; }
         public abstract class priceClassID : PX.Data.BQL.BqlString.Field<priceClassID> { }

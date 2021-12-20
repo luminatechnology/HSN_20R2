@@ -13,7 +13,7 @@ namespace HSNHighcareCistomizations
         #region CPriceClassID
         [PXDBString(10, IsKey = true, IsUnicode = true, InputMask = "")]
         [PXSelector(typeof(PX.Objects.AR.ARPriceClass.priceClassID))]
-        [PXUIField(DisplayName = "Price Class ID")]
+        [PXUIField(DisplayName = "Customer Price Class ID")]
         public virtual string CPriceClassID { get; set; }
         public abstract class cPriceClassID : PX.Data.BQL.BqlString.Field<cPriceClassID> { }
         #endregion

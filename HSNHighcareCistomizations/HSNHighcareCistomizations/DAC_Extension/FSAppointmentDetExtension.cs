@@ -16,31 +16,22 @@ namespace PX.Objects.FS
     {
         public static bool IsActive()
         {
-            return false;
-            //return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.GetExtension<LUMHSNSetupExtension>().EnableHighcareFunction ?? false);
+            return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.GetExtension<LUMHSNSetupExtension>().EnableHighcareFunction ?? false);
         }
 
         #region SMEquipmentID
         [PXDBInt]
         [PXUIField(DisplayName = "Target Equipment ID", FieldClass = FSSetup.EquipmentManagementFieldClass)]
         [PXUIEnabled(typeof(Where<Current<isTravelItem>, NotEqual<True>>))]
-        [PXSelector(typeof(SelectFrom<FSEquipment>
-                           .InnerJoin<FSSrvOrdType>.On<FSSrvOrdType.srvOrdType.IsEqual<FSAppointment.srvOrdType.FromCurrent>>
-                           .CrossJoin<FSSetup>.SingleTableOnly
-                           .Where<FSEquipment.requireMaintenance.IsEqual<True>
-                               .And<FSSetup.enableAllTargetEquipment.IsEqual<True>>
-                               .And<FSEquipment.ownerID.IsEqual<FSAppointment.customerID.FromCurrent>>>
-                           .SearchFor<FSEquipment.SMequipmentID>),
-                    typeof(FSEquipment.refNbr),
-                    typeof(FSEquipment.descr),
-                    typeof(FSEquipment.serialNumber),
-                    typeof(FSEquipment.ownerType),
-                    typeof(FSEquipment.ownerID),
-                    typeof(FSEquipment.locationType),
-                    typeof(FSEquipment.status),
-            SubstituteKey = typeof(FSEquipment.refNbr))]
+        [PXDefault(typeof(FSAppointment.mem_SMequipmentID), PersistingCheck = PXPersistingCheck.Nothing)]
+        [FSSelectorMaintenanceEquipment(typeof(FSServiceOrder.srvOrdType),
+                                        typeof(FSServiceOrder.billCustomerID),
+                                        typeof(FSServiceOrder.customerID),
+                                        typeof(FSServiceOrder.locationID),
+                                        typeof(FSServiceOrder.branchID),
+                                        typeof(FSServiceOrder.branchLocationID), Filterable = true)]
         [PXRestrictor(typeof(Where<FSEquipment.status, Equal<EPEquipmentStatus.EquipmentStatusActive>>),
-                       TX.Messages.EQUIPMENT_IS_INSTATUS, typeof(FSEquipment.status))]
+                        TX.Messages.EQUIPMENT_IS_INSTATUS, typeof(FSEquipment.status))]
         public virtual int? SMEquipmentID { get; set; }
         #endregion
     }
