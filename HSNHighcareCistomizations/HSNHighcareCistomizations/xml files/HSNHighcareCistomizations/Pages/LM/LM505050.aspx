@@ -11,7 +11,7 @@
     </px:PXDataSource>
 </asp:Content>
 <asp:Content ID="cont3" ContentPlaceHolderID="phG" runat="Server">
-    <px:PXGrid SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" SkinID="PrimaryInquire" AllowAutoHide="false">
+    <px:PXGrid SyncPosition="True" ID="grid" runat="server" DataSourceID="ds" Width="100%" Height="150px" SkinID="Details" AllowAutoHide="false">
         <Levels>
             <px:PXGridLevel DataMember="Transaction">
                 <Columns>
@@ -23,7 +23,7 @@
         <AutoSize Container="Window" Enabled="True" MinHeight="150" />
         <ActionBar>
         </ActionBar>
-        <Mode AllowUpload="True" />
+        <Mode AllowUpload="True" AllowAddNew="True" />
     </px:PXGrid>
 
 

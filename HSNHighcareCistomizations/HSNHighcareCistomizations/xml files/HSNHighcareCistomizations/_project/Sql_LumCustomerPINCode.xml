@@ -3,10 +3,13 @@
   <col name="CompanyID" type="Int" default="Zero" />
   <col name="BAccountID" type="Int" />
   <col name="PIN" type="NVarChar(100)" />
+  <col name="IsActive" type="Bit" nullable="true" />
   <col name="CPriceClassID" type="NVarChar(10)" />
   <col name="ScheduleNbr" type="NVarChar(15)" nullable="true" />
   <col name="StartDate" type="DateTime" />
   <col name="EndDate" type="DateTime" />
+  <col name="SOOrderNbr" type="NVarChar(15)" nullable="true" />
+  <col name="InvoiceNbr" type="NVarChar(15)" nullable="true" />
   <col name="NoteID" type="UniqueIdentifier" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />

@@ -26,7 +26,8 @@ namespace HSNHighcareCistomizations.Graph
 
         public PXCancel<LUMCustomerPINCode> Cancel;
         public PXProcessingJoin<LUMCustomerPINCode,
-                                InnerJoin<Customer, On<LUMCustomerPINCode.bAccountID, Equal<Customer.bAccountID>>>,
+                                InnerJoin<LUMPINCodeMapping, On<LUMCustomerPINCode.pin, Equal<LUMPINCodeMapping.pin>>,
+                                InnerJoin<Customer, On<LUMCustomerPINCode.bAccountID, Equal<Customer.bAccountID>>>>,
                                 Where<LUMCustomerPINCode.scheduleNbr.IsNull>> ProcessList;
 
         public PINCodeDeferredScheduleProc()
@@ -52,18 +53,27 @@ namespace HSNHighcareCistomizations.Graph
                         FinPeriod finPeriod = FinPeriodRepository.GetFinPeriodByDate(DateTime.Now, PXAccess.GetParentOrganizationID(PXAccess.GetBranchID()));
                         // Find PIN Code Serial Nbr.
                         var serialNbr = LUMPINCodeMapping.PK.Find(this, item.Pin)?.SerialNbr;
-                        if(string.IsNullOrEmpty(serialNbr))
+                        if (string.IsNullOrEmpty(serialNbr))
                             throw new PXException("can not find serial Nbr.");
                         // Find SOShipment by Serial Nbr.
                         var soshipLine = SelectFrom<SOShipLine>
-                                         .Where< SOShipLine.lotSerialNbr.IsEqual<P.AsString>>
+                                         .Where<SOShipLine.lotSerialNbr.IsEqual<P.AsString>>
                                          .View.Select(this, serialNbr).TopFirst;
-                        if(soshipLine ==null)
+                        if (soshipLine == null)
                             throw new PXException("can not find SOShipment!!");
                         // Find SOLine by SOShipment
-                        var soline = SOLine.PK.Find(this,soshipLine?.OrigOrderType,soshipLine?.OrigOrderNbr,soshipLine?.OrigLineNbr);
-                        if(soline == null)
+                        var soline = SOLine.PK.Find(this, soshipLine?.OrigOrderType, soshipLine?.OrigOrderNbr, soshipLine?.OrigLineNbr);
+                        if (soline == null)
                             throw new PXException("can not find SOLine!!");
+
+                        if (soline?.Qty != 1)
+                            throw new PXException("Qty must equal 1!!");
+                        // Find Invoice
+                        var invoice = SelectFrom<SOOrderShipment>
+                                      .Where<SOOrderShipment.orderType.IsEqual<P.AsString>
+                                        .And<SOOrderShipment.orderNbr.IsEqual<P.AsString>>
+                                        .And<SOOrderShipment.shipmentNbr.IsEqual<P.AsString>>>
+                                      .View.Select(this, soline.OrderType, soline.OrderNbr, soshipLine.ShipmentNbr).TopFirst;
 
                         var scope = SelectFrom<LUMServiceScopeHeader>
                                     .Where<LUMServiceScopeHeader.cPriceClassID.IsEqual<P.AsString>>
@@ -94,11 +104,14 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Save.Press();
                         graph.release.Press();
                         // setting CustomerPIN Code DeferralSchedule
-                        PXUpdate<Set<LUMCustomerPINCode.scheduleNbr, Required<LUMCustomerPINCode.scheduleNbr>>,
-                                LUMCustomerPINCode,
-                                Where<LUMCustomerPINCode.bAccountID, Equal<P.AsInt>,
-                                  And<LUMCustomerPINCode.pin, Equal<P.AsString>,
-                                  And<LUMCustomerPINCode.cPriceClassID, Equal<P.AsString>>>>>.Update(this, graph.Schedule.Current.ScheduleNbr, item.BAccountID, item.Pin, item.CPriceClassID);
+                        PXUpdate<Set<LUMCustomerPINCode.scheduleNbr, Required<LUMCustomerPINCode.scheduleNbr>,
+                                 Set<LUMCustomerPINCode.sOOrderNbr, Required<LUMCustomerPINCode.sOOrderNbr>,
+                                 Set<LUMCustomerPINCode.invoiceNbr, Required<LUMCustomerPINCode.invoiceNbr>>>>,
+                                 LUMCustomerPINCode,
+                                 Where<LUMCustomerPINCode.bAccountID, Equal<P.AsInt>,
+                                   And<LUMCustomerPINCode.pin, Equal<P.AsString>,
+                                   And<LUMCustomerPINCode.cPriceClassID, Equal<P.AsString>>>>>
+                        .Update(this, graph.Schedule.Current.ScheduleNbr, soline?.OrderNbr, invoice?.InvoiceNbr, item.BAccountID, item.Pin, item.CPriceClassID);
                         this.Actions.PressSave();
                     }
                     catch (Exception ex)

@@ -5,6 +5,8 @@
     <px:PXDataSource ID="ds" runat="server" Visible="True" UDFTypeField="CustomerClassID" EnableAttributes="true" Width="100%" TypeName="HSNHighcareCistomizations.Graph.CustomerPINCodeMaint" PrimaryView="Document">
         <CallbackCommands>
             <px:PXDSCallbackCommand Name="viewDefSchedule" Visible="false" DependOnGrid="grid"></px:PXDSCallbackCommand>
+            <px:PXDSCallbackCommand Name="viewSalesOrder" Visible="false" DependOnGrid="grid"></px:PXDSCallbackCommand>
+            <px:PXDSCallbackCommand Name="viewInvoice" Visible="false" DependOnGrid="grid"></px:PXDSCallbackCommand>
         </CallbackCommands>
     </px:PXDataSource>
 </asp:Content>
@@ -29,7 +31,9 @@
                     <px:PXGridColumn DataField="Pin" AllowNull="False" />
                     <px:PXGridColumn DataField="SerialNbr" AllowNull="False" />
                     <px:PXGridColumn DataField="CPriceClassID" AllowNull="False" />
-                    <px:PXGridColumn DataField="ScheduleNbr" AllowNull="False" LinkCommand="viewDefSchedule" />
+                    <px:PXGridColumn DataField="ScheduleNbr" LinkCommand="viewDefSchedule" />
+                    <px:PXGridColumn DataField="SOOrderNbr" LinkCommand="viewSalesOrder" />
+                    <px:PXGridColumn DataField="InvoiceNbr" LinkCommand="viewInvoice" />
                     <px:PXGridColumn DataField="StartDate" Width="200px" />
                     <px:PXGridColumn DataField="EndDate" Width="200px" />
                 </Columns>

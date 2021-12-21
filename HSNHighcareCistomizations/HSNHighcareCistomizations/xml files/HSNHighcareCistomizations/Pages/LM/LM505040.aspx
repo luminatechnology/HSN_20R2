@@ -18,6 +18,7 @@
                     <px:PXGridColumn DataField="Selected" Width="40" Type="CheckBox" TextAlign="Center" CommitChanges="True" AllowCheckAll="True"></px:PXGridColumn>
                     <px:PXGridColumn DataField="Customer__AcctCD" Width="200px" />
                     <px:PXGridColumn DataField="Pin" AllowNull="False" />
+                    <px:PXGridColumn DataField="LUMPINCodeMapping__SerialNbr" AllowNull="False" />
                     <px:PXGridColumn DataField="CPriceClassID" AllowNull="False" />
                     <px:PXGridColumn DataField="ScheduleNbr" AllowNull="False" />
                     <px:PXGridColumn DataField="StartDate" Width="200px" />

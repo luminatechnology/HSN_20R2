@@ -76,7 +76,8 @@ namespace PX.Objects.FS
                                     .And<LUMCustomerPINCode.bAccountID.IsEqual<P.AsInt>>>
                                   .View.Select(Base, currentPINCode, customerInfo.BAccountID)
                                   .RowCast<LUMCustomerPINCode>().ToList()
-                                  .Where(x => DateTime.Now.Date >= x.StartDate?.Date && DateTime.Now.Date <= x.EndDate?.Date).FirstOrDefault();
+                                  .Where(x => Base.Accessinfo.BusinessDate?.Date >= x.StartDate?.Date && Base.Accessinfo.BusinessDate?.Date <= x.EndDate?.Date && (x.IsActive ?? false)).FirstOrDefault();
+
                 if (pinCodeInfo == null)
                     return;
                 var servicescopeInfo = SelectFrom<LUMServiceScope>

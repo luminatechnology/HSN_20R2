@@ -13,7 +13,6 @@ namespace HSNHighcareCistomizations.Graph
     public class PINCodeMappingMaint : PXGraph<PINCodeMappingMaint>, PXImportAttribute.IPXPrepareItems
     {
         public PXSave<LUMPINCodeMapping> Save;
-        public PXDelete<LUMPINCodeMapping> Delete;
         public PXCancel<LUMPINCodeMapping> Cancel;
 
         [PXImport(typeof(LUMPINCodeMapping))]

@@ -13,6 +13,7 @@ using PX.Objects.DR;
 using PX.Data.BQL;
 using PX.Objects.IN;
 using System.Collections;
+using PX.Objects.SO;
 
 namespace HSNHighcareCistomizations.Graph
 {
@@ -45,13 +46,41 @@ namespace HSNHighcareCistomizations.Graph
             return adapter.Get();
         }
 
+        public PXAction<LUMCustomerPINCode> viewSalesOrder;
+        [PXButton]
+        [PXUIField(Visible = false)]
+        public virtual IEnumerable ViewSalesOrder(PXAdapter adapter)
+        {
+            var row = this.Transaction.Current;
+            var graph = PXGraph.CreateInstance<SOOrderEntry>();
+            graph.Document.Current = SelectFrom<SOOrder>
+                                     .Where<SOOrder.orderType.IsEqual<P.AsString>
+                                       .And<SOOrder.orderNbr.IsEqual<P.AsString>>>
+                                     .View.Select(this, "SO", row.SOOrderNbr);
+            PXRedirectHelper.TryRedirect(graph, PXRedirectHelper.WindowMode.NewWindow);
+            return adapter.Get();
+        }
+
+        public PXAction<LUMCustomerPINCode> viewInvoice;
+        [PXButton]
+        [PXUIField(Visible = false)]
+        public virtual IEnumerable ViewInvoice(PXAdapter adapter)
+        {
+            var row = this.Transaction.Current;
+            var graph = PXGraph.CreateInstance<SOInvoiceEntry>();
+            graph.Document.Current = SelectFrom<ARInvoice>
+                                     .Where<ARInvoice.docType.IsEqual<P.AsString>
+                                       .And<ARInvoice.refNbr.IsEqual<P.AsString>>>
+                                     .View.Select(this, "INV", row.InvoiceNbr);
+            PXRedirectHelper.TryRedirect(graph, PXRedirectHelper.WindowMode.NewWindow);
+            return adapter.Get();
+        }
+
+
         public virtual void _(Events.RowSelected<LUMCustomerPINCode> e)
         {
             if (e.Row != null)
-            {
-                this.Transaction.Cache.SetValueExt<LUMCustomerPINCode.isActive>(e.Row, DateTime.Now.Date >= e.Row.StartDate?.Date && DateTime.Now.Date <= e.Row.EndDate?.Date);
                 this.Transaction.Cache.SetValueExt<LUMCustomerPINCode.serialNbr>(e.Row, LUMPINCodeMapping.PK.Find(this, e.Row.Pin)?.SerialNbr);
-            }
         }
 
         public virtual void _(Events.RowPersisting<LUMCustomerPINCode> e)
@@ -61,6 +90,7 @@ namespace HSNHighcareCistomizations.Graph
                 row.BAccountID = this.Document.Current.BAccountID;
                 row.StartDate = DateTime.Now;
                 row.EndDate = DateTime.Now.AddYears(1).AddDays(-1);
+                row.IsActive = Accessinfo.BusinessDate?.Date >= row.StartDate?.Date && Accessinfo.BusinessDate?.Date <= row.EndDate?.Date;
             }
         }
     }
