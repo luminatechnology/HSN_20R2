@@ -92,8 +92,8 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Schedule.Cache.SetValueExt<DRSchedule.termEndDate>(draftDoc, item.EndDate);
                         // Create Components
                         var component = graph.Components.Insert((DRScheduleDetail)graph.Components.Cache.CreateInstance());
-                        graph.Components.Cache.SetValueExt<DRScheduleDetail.accountID>(component, itemInfo.SalesAcctID);
-                        graph.Components.Cache.SetValueExt<DRScheduleDetail.subID>(component, itemInfo.SalesSubID);
+                        graph.Components.Cache.SetValueExt<DRScheduleDetail.accountID>(component, itemInfo.DeferralAcctID);
+                        graph.Components.Cache.SetValueExt<DRScheduleDetail.subID>(component, itemInfo.DeferralSubID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.componentID>(component, scope.InventoryID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.defCode>(component, scope.DefCode);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, soline?.CuryLineAmt);
