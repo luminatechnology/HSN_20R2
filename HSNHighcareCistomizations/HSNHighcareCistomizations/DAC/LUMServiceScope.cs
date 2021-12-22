@@ -24,13 +24,12 @@ namespace HSNHighcareCistomizations.DAC
         public abstract class lineNbr : PX.Data.BQL.BqlInt.Field<lineNbr> { }
         #endregion
 
-        #region ItemClassID
-        [PXDBInt()]
-        [PXUIField(DisplayName = "Item Class ID")]
-        [PXDimensionSelector(INItemClass.Dimension, typeof(Search<INItemClass.itemClassID>), typeof(INItemClass.itemClassCD), DescriptionField = typeof(INItemClass.descr),
-            CacheGlobal = true)]
-        public virtual int? ItemClassID { get; set; }
-        public abstract class itemClassID : PX.Data.BQL.BqlInt.Field<itemClassID> { }
+        #region PriceClassID
+        [PXDBString(10, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "Item Price Class ID")]
+        [PXSelector(typeof(INPriceClass.priceClassID), DescriptionField = typeof(INPriceClass.description))]
+        public virtual string PriceClassID { get; set; }
+        public abstract class priceClassID : PX.Data.BQL.BqlString.Field<priceClassID> { }
         #endregion
 
         #region InventoryID

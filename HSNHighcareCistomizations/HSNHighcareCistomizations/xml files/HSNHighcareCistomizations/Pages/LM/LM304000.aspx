@@ -14,7 +14,6 @@
             <px:PXSelector ID="edScopeList" runat="server" DataField="CPriceClassID" FilterByAllFields="True" CommitChanges="True" />
             <px:PXSelector ID="edInventoryID" runat="server" DataField="InventoryID" FilterByAllFields="True" />
             <px:PXSelector ID="edDefCode" runat="server" DataField="DefCode" FilterByAllFields="True" />
-            <px:PXNumberEdit ID="edTotalAmt" runat="server" DataField="TotalAmt" />
         </Template>
     </px:PXFormView>
 </asp:Content>
@@ -24,7 +23,7 @@
             <px:PXGridLevel DataMember="ScopeList">
                 <Columns>
                     <px:PXGridColumn DataField="CPriceClassID" />
-                    <px:PXGridColumn DataField="ItemClassID" Width="200px" />
+                    <px:PXGridColumn DataField="PriceClassID" Width="200px" />
                     <px:PXGridColumn DataField="InventoryID" Width="200px" />
                     <px:PXGridColumn DataField="DiscountPrecent" Width="200px" />
                     <px:PXGridColumn DataField="LimitedCount" Width="200px" />

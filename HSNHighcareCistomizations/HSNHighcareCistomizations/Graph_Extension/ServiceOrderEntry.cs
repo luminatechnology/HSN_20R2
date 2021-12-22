@@ -64,35 +64,36 @@ namespace PX.Objects.FS
 
         public void GetHighcareDiscount(Events.FieldUpdated<FSSODet.SMequipmentID> e)
         {
-            var doc = Base.ServiceOrderRecords.Current; if (e.Row is FSSODet row && row != null && row.SMEquipmentID.HasValue && doc != null)
+            var doc = Base.ServiceOrderRecords.Current; 
+            if (e.Row is FSSODet row && row != null && row.SMEquipmentID.HasValue && doc != null)
             {
                 HighcareHelper helper = new HighcareHelper();
-                var itemClassInfo = helper.GetItemclass(row.InventoryID);
+                var itemInfo = InventoryItem.PK.Find(Base, row.InventoryID);
                 var customerInfo = Customer.PK.Find(Base, doc.CustomerID);
                 if (customerInfo.ClassID != "HIGHCARE")
                     return;
                 var currentPINCode = helper.GetEquipmentPINCode((int)e.NewValue);
                 if (string.IsNullOrEmpty(currentPINCode))
                     return;
-                var pinCodeInfo = SelectFrom<LumCustomerPINCode>
-                                  .Where<LumCustomerPINCode.pin.IsEqual<P.AsString>
-                                    .And<LumCustomerPINCode.bAccountID.IsEqual<P.AsInt>>>
+                var pinCodeInfo = SelectFrom<LUMCustomerPINCode>
+                                  .Where<LUMCustomerPINCode.pin.IsEqual<P.AsString>
+                                    .And<LUMCustomerPINCode.bAccountID.IsEqual<P.AsInt>>>
                                   .View.Select(Base, currentPINCode, customerInfo.BAccountID)
-                                  .RowCast<LumCustomerPINCode>().ToList()
-                                  .Where(x => DateTime.Now.Date >= x.StartDate?.Date && DateTime.Now.Date <= x.EndDate?.Date).FirstOrDefault();
+                                  .RowCast<LUMCustomerPINCode>().ToList()
+                                  .Where(x => Base.Accessinfo.BusinessDate?.Date >= x.StartDate?.Date && Base.Accessinfo.BusinessDate?.Date <= x.EndDate?.Date && (x.IsActive ?? false)).FirstOrDefault();
                 if (pinCodeInfo == null)
                     return;
                 var servicescopeInfo = SelectFrom<LUMServiceScope>
                                        .Where<LUMServiceScope.cPriceClassID.IsEqual<P.AsString>
-                                         .And<LUMServiceScope.itemClassID.IsEqual<P.AsInt>.Or<LUMServiceScope.inventoryID.IsEqual<P.AsInt>>>>
-                                       .View.Select(Base, pinCodeInfo.CPriceClassID, itemClassInfo?.ItemClassID, row.InventoryID)
+                                         .And<LUMServiceScope.priceClassID.IsEqual<P.AsString>.Or<LUMServiceScope.inventoryID.IsEqual<P.AsInt>>>>
+                                       .View.Select(Base, pinCodeInfo.CPriceClassID, itemInfo?.PriceClassID, row.InventoryID)
                                        .RowCast<LUMServiceScope>().FirstOrDefault();
                 if (servicescopeInfo == null)
                     return;
                 // Service History
                 var usedServiceCountHist = this.HighcareSrvHistory.Select()
                                        .RowCast<v_HighcareServiceHistory>()
-                                       .Where(x => (x?.ItemClassID == servicescopeInfo?.ItemClassID || x?.InventoryID == servicescopeInfo?.InventoryID) && x.Pincode == currentPINCode)
+                                       .Where(x => (x?.PriceClassID == servicescopeInfo?.PriceClassID || x?.InventoryID == servicescopeInfo?.InventoryID) && x.Pincode == currentPINCode)
                                        .Count();
                 // Detail Cache
                 var usedServiceCountCache = Base.ServiceOrderDetails

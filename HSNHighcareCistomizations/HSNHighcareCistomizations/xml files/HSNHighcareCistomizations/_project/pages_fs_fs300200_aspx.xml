@@ -107,14 +107,8 @@
                                                 </AddItem>
                                                 <AddItem>
                                                     <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="ScopeType" />
-                                                        <Prop Key="Type" Value="DropDownList" />
-                                                    </PXGridColumn>
-                                                </AddItem>
-                                                <AddItem>
-                                                    <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="ItemClassID" />
-                                                        <Prop Key="Width" Value="200px" />
+                                                        <Prop Key="DataField" Value="PriceClassID" />
+                                                        <Prop Key="Width" Value="120" />
                                                     </PXGridColumn>
                                                 </AddItem>
                                                 <AddItem>

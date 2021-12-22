@@ -79,18 +79,11 @@ namespace HSNHighcareCistomizations.DAC
         public abstract class stkItem : PX.Data.BQL.BqlBool.Field<stkItem> { }
         #endregion
 
-        #region ItemClassID
-        [PXDBInt()]
-        [PXUIField(DisplayName = "Item Class ID")]
-        public virtual int? ItemClassID { get; set; }
-        public abstract class itemClassID : PX.Data.BQL.BqlInt.Field<itemClassID> { }
-        #endregion
-
-        #region ItemClassCD
-        [PXDBString(30, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Item Class CD")]
-        public virtual string ItemClassCD { get; set; }
-        public abstract class itemClassCD : PX.Data.BQL.BqlString.Field<itemClassCD> { }
+        #region PriceClassID
+        [PXDBString()]
+        [PXUIField(DisplayName = "Price Class ID")]
+        public virtual string PriceClassID { get; set; }
+        public abstract class priceClassID : PX.Data.BQL.BqlString.Field<priceClassID> { }
         #endregion
 
         #region Uom
@@ -114,11 +107,11 @@ namespace HSNHighcareCistomizations.DAC
         public abstract class pincode : PX.Data.BQL.BqlString.Field<pincode> { }
         #endregion
 
-        #region PriceClassID
+        #region CustomerpriceClassID
         [PXDBString(10, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Price Class ID")]
-        public virtual string PriceClassID { get; set; }
-        public abstract class priceClassID : PX.Data.BQL.BqlString.Field<priceClassID> { }
+        [PXUIField(DisplayName = "Customer Price ClassID")]
+        public virtual string CustomerpriceClassID { get; set; }
+        public abstract class customerpriceClassID : PX.Data.BQL.BqlString.Field<customerpriceClassID> { }
         #endregion
 
         #region SMEquipmentID

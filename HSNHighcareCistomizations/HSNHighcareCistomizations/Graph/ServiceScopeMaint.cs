@@ -11,13 +11,13 @@ namespace HSNHighcareCistomizations.Graph
 {
     public class ServiceScopeMaint : PXGraph<ServiceScopeMaint>
     {
-        public PXSave<LumServiceScopeHeader> Save;
-        public PXCancel<LumServiceScopeHeader> Cancel;
+        public PXSave<LUMServiceScopeHeader> Save;
+        public PXCancel<LUMServiceScopeHeader> Cancel;
 
-        public SelectFrom<LumServiceScopeHeader>.View Document;
+        public SelectFrom<LUMServiceScopeHeader>.View Document;
 
         public SelectFrom<LUMServiceScope>
-               .Where<LUMServiceScope.cPriceClassID.IsEqual<LumServiceScopeHeader.cPriceClassID.FromCurrent>>
+               .Where<LUMServiceScope.cPriceClassID.IsEqual<LUMServiceScopeHeader.cPriceClassID.FromCurrent>>
                .View ScopeList;
 
         public virtual void _(Events.RowInserting<LUMServiceScope> e)

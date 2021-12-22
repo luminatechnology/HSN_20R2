@@ -1,10 +1,8 @@
-﻿<Sql TableName="LumServiceScopeHeader" TableSchemaXml="#CDATA">
-    <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMServiceScopeHeader">
+﻿<Sql TableName="LUMPINCodeMapping" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LUMPINCodeMapping">
   <col name="CompanyID" type="Int" default="Zero" />
-  <col name="CPriceClassID" type="NVarChar(10)" />
-  <col name="InventoryID" type="Int" nullable="true" />
-  <col name="DefCode" type="NVarChar(10)" />
-  <col name="TotalAmt" type="Decimal(10,4)" nullable="true" />
+  <col name="PIN" type="NVarChar(100)" />
+  <col name="SerialNbr" type="NVarChar(50)" />
   <col name="NoteID" type="UniqueIdentifier" nullable="true" />
   <col name="CreatedByID" type="UniqueIdentifier" />
   <col name="CreatedByScreenID" type="Char(8)" />
@@ -13,13 +11,13 @@
   <col name="LastModifiedByScreenID" type="Char(8)" />
   <col name="LastModifiedDateTime" type="DateTime" />
   <col name="tstamp" type="Timestamp" />
-  <index name="LumServiceScopeHeader_NoteID" unique="true">
+  <index name="LUMPINCodeMapping_NoteID" unique="true">
     <col name="NoteID" />
     <col name="CompanyID" />
   </index>
-  <index name="PK_LumServiceScopeHeader" clustered="true" primary="true" unique="true">
+  <index name="PK_LUMPINCodeMapping" clustered="true" primary="true" unique="true">
     <col name="CompanyID" />
-    <col name="CPriceClassID" />
+    <col name="PIN" />
   </index>
 </table>]]></CDATA>
 </Sql>

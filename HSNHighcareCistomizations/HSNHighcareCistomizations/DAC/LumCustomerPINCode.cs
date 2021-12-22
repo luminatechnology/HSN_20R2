@@ -12,13 +12,13 @@ using static PX.Data.PXAccess.BAccount;
 namespace HSNHighcareCistomizations.DAC
 {
     [Serializable]
-    [PXCacheName("LumCustomerPINCode")]
-    public class LumCustomerPINCode : IBqlTable
+    [PXCacheName("LUMCustomerPINCode")]
+    public class LUMCustomerPINCode : IBqlTable
     {
 
         public static class FK
         {
-            public class Customer : PX.Objects.AR.Customer.PK.ForeignKeyOf<LumCustomerPINCode>.By<bAccountID> { }
+            public class Customer : PX.Objects.AR.Customer.PK.ForeignKeyOf<LUMCustomerPINCode>.By<bAccountID> { }
         }
 
         #region Selected
@@ -37,16 +37,23 @@ namespace HSNHighcareCistomizations.DAC
 
         #region Pin
         [PXDBString(100, IsKey = true, IsUnicode = true, InputMask = "")]
-        [PXUIField(DisplayName = "Pin")]
+        [PXUIField(DisplayName = "Pin Code")]
         public virtual string Pin { get; set; }
         public abstract class pin : PX.Data.BQL.BqlString.Field<pin> { }
+        #endregion
+
+        #region SerialNbr
+        [PXString(50, IsUnicode = true, InputMask = "")]
+        [PXUIField(DisplayName = "HC Serial Nbr.", Enabled = false)]
+        public virtual string SerialNbr { get; set; }
+        public abstract class serialNbr : PX.Data.BQL.BqlString.Field<serialNbr> { }
         #endregion
 
         #region CPriceClassID
         [PXDefault]
         [PXDBString(10, IsUnicode = true)]
         [PXSelector(typeof(PX.Objects.AR.ARPriceClass.priceClassID))]
-        [PXUIField(DisplayName = "Price Class", Visibility = PXUIVisibility.Visible)]
+        [PXUIField(DisplayName = "Customer Price Class", Visibility = PXUIVisibility.Visible)]
         public virtual String CPriceClassID { get; set; }
         public abstract class cPriceClassID : PX.Data.BQL.BqlString.Field<cPriceClassID> { }
         #endregion
@@ -65,8 +72,8 @@ namespace HSNHighcareCistomizations.DAC
         #endregion
 
         #region IsActive
-        [PXBool]
-        [PXUIField(DisplayName = "Active", Enabled = false)]
+        [PXDBBool]
+        [PXUIField(DisplayName = "Active")]
         public virtual bool? IsActive { get; set; }
         public abstract class isActive : PX.Data.BQL.BqlBool.Field<isActive> { }
         #endregion
@@ -83,6 +90,20 @@ namespace HSNHighcareCistomizations.DAC
         [PXUIField(DisplayName = "End Date", Enabled = false)]
         public virtual DateTime? EndDate { get; set; }
         public abstract class endDate : PX.Data.BQL.BqlDateTime.Field<endDate> { }
+        #endregion
+
+        #region SOOrderNbr
+        [PXDBString(15, IsUnicode = true, InputMask = ">CCCCCCCCCCCCCCC")]
+        [PXUIField(DisplayName = "Sales Order Nbr.", Enabled = false)]
+        public virtual string SOOrderNbr { get; set; }
+        public abstract class sOOrderNbr : PX.Data.BQL.BqlString.Field<sOOrderNbr> { }
+        #endregion
+
+        #region InvoiceNbr
+        [PXDBString(15, IsUnicode = true, InputMask = ">CCCCCCCCCCCCCCC")]
+        [PXUIField(DisplayName = "Invoice Nbr.", Enabled = false)]
+        public virtual string InvoiceNbr { get; set; }
+        public abstract class invoiceNbr : PX.Data.BQL.BqlString.Field<invoiceNbr> { }
         #endregion
 
         #region Noteid
