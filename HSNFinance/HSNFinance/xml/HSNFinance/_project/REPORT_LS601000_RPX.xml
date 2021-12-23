@@ -1,5 +1,5 @@
 ﻿<Report Name="ls601000.rpx">
-    <Report version="20200826" Name="report1">
+    <Report Name="report1" version="20200826">
         <ExcelColumns>
             <item>9</item>
             <item>9</item>
@@ -22,12 +22,6 @@
             <FilterExp>
                 <DataField>GLHistoryByPeriod.AccountID</DataField>
                 <Value>@AccountCD</Value>
-            </FilterExp>
-            <FilterExp>
-                <Condition>Between</Condition>
-                <DataField>GLHistoryByPeriod.FinPeriodID</DataField>
-                <Value>@StartPeriod</Value>
-                <Value2>@EndPeriod</Value2>
             </FilterExp>
             <FilterExp>
                 <Condition>BelongsTo</Condition>
@@ -108,7 +102,6 @@
             </ReportParameter>
             <ReportParameter>
                 <ColumnSpan>2</ColumnSpan>
-                <DefaultValue>111100000</DefaultValue>
                 <Name>AccountCD</Name>
                 <Prompt>Account</Prompt>
                 <Required>True</Required>
@@ -1881,7 +1874,6 @@
                 <FullName>HSNFinance.DAC.LSLedgerSettlement</FullName>
             </ReportTable>
         </Tables>
-        <Version>20200826</Version>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
                 <ExcelMargin>
@@ -2116,7 +2108,7 @@
                         <Location>4px, 4px</Location>
                         <Size>244px, 16px</Size>
                         <StyleName>Report Name</StyleName>
-                        <Value>Journal Transactions for Account</Value>
+                        <Value>Settlement for Account</Value>
                     </TextBox>
                 </Items>
             </PageHeader>
@@ -2129,8 +2121,12 @@
                         <ValueExpr>= IIf([GLTran.Reclassified] = True, True, $AnyReclassified)</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
+                        <Name>IsVisible</Name>
+                        <ValueExpr>=[GLTran.AccountID] &lt;&gt; null And [GLHistoryByPeriod.FinPeriodID] &gt;= [@StartPeriod] And[GLHistoryByPeriod.FinPeriodID] &lt;= [@EndPeriod] And [GLTran.UOM] &lt;&gt; [@UOM]</ValueExpr>
+                    </ReportVariable>
+                    <ReportVariable>
                         <Name>BegBalance</Name>
-                        <ValueExpr>=$BegBalance +#010;IIf(CStr($PrevBranchID) + CStr($PrevSubID) + CStr($PrevFinPeriodID) &lt;&gt; CStr([GLHistoryByPeriod.BranchID]) + CStr([GLHistoryByPeriod.SubID]) + CStr([GLHistoryByPeriod.FinPeriodID]) #010;		                                                               And [GLHistoryByPeriod.FinPeriodID] = [@StartPeriod],#010;	IIf((([Account.Type] = 'I' Or [Account.Type] = 'E') And Payments.ArePeriodsInSameYear([GLHistoryByPeriod.FinPeriodID.Raw],[GLHistoryByPeriod.LastActivityPeriod.Raw])) #010;		Or ([Account.Type] = 'A' Or [Account.Type] = 'L'),				#010;		IIf([GLHistoryByPeriod.FinPeriodID] = [GLHistoryByPeriod.LastActivityPeriod], #010;			IsNull([HistoryLast.FinBegBalance] + [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.OrigCreditAmt], 0),#010;			IsNull([HistoryLast.FinYtdBalance] + [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.OrigCreditAmt], 0)#010;		),#010;		0#010;	)#010;	, 0#010;)#010;#010;/*$BegBalance +#010;IIF#010;(	CStr($PrevBranchID) + CStr($PrevSubID) + CStr($PrevFinPeriodID) &lt;&gt;#010;		CStr([GLHistoryByPeriod.BranchID]) + CStr([GLHistoryByPeriod.SubID]) + CStr([GLHistoryByPeriod.FinPeriodID]) #010;		And [GLHistoryByPeriod.FinPeriodID] = [@StartPeriod],#010;	IIF#010;	(	(([Account.Type] = 'I' Or [Account.Type] = 'E') And Payments.ArePeriodsInSameYear([GLHistoryByPeriod.FinPeriodID.Raw],[GLHistoryByPeriod.LastActivityPeriod.Raw])) #010;		Or ([Account.Type] = 'A' Or [Account.Type] = 'L'),				IIF#010;		(	[GLHistoryByPeriod.FinPeriodID] = [GLHistoryByPeriod.LastActivityPeriod], #010;			IsNull([HistoryLast.FinBegBalance], 0),#010;			IsNull([HistoryLast.FinYtdBalance], 0)#010;		),#010;		0#010;	)#010;	, 0#010;)*/</ValueExpr>
+                        <ValueExpr>=$BegBalance +#010;IIF#010;(	CStr($PrevBranchID) + CStr($PrevSubID) + CStr($PrevFinPeriodID) &lt;&gt;#010;		CStr([GLHistoryByPeriod.BranchID]) + CStr([GLHistoryByPeriod.SubID]) + CStr([GLHistoryByPeriod.FinPeriodID]) #010;		And [GLHistoryByPeriod.FinPeriodID] = [@StartPeriod],#010;	IIF#010;	(	(([Account.Type] = 'I' Or [Account.Type] = 'E') And Payments.ArePeriodsInSameYear([GLHistoryByPeriod.FinPeriodID.Raw],[GLHistoryByPeriod.LastActivityPeriod.Raw])) #010;		Or ([Account.Type] = 'A' Or [Account.Type] = 'L'),				IIF#010;		(	[GLHistoryByPeriod.FinPeriodID] = [GLHistoryByPeriod.LastActivityPeriod], #010;			IsNull([HistoryLast.FinBegBalance], 0),#010;			IsNull([HistoryLast.FinYtdBalance], 0)#010;		),#010;		0#010;	)#010;	, 0#010;)</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
                         <Name>BegCuryBalance</Name>
@@ -2150,7 +2146,7 @@
                     </ReportVariable>
                     <ReportVariable>
                         <Name>LineBalance</Name>
-                        <ProcessOrder>WhilePrint</ProcessOrder>
+                        <ProcessOrder>Always</ProcessOrder>
                         <ValueExpr>=$LineBalance #010;+$SignTurn #010;*IsNull(IIF((@IncludeReclassified = False) And ([GLTran.DebitAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;	    [GLTran.ReclassRemainingAmt], #010;            IIf([GLTran.UOM] = 'YY', #010;                [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], #010;                [GLTran.DebitAmt])), #010;            0) #010;-$SignTurn #010;*IsNull(IIF((@IncludeReclassified = False) And ([GLTran.CreditAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;            [GLTran.ReclassRemainingAmt], #010;            IIf([GLTran.UOM] = 'YY', #010;                [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt],#010;                [GLTran.CreditAmt])), #010;            0)</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
@@ -2158,8 +2154,18 @@
                         <ProcessOrder>WhilePrint</ProcessOrder>
                         <ValueExpr>=$LineCuryBalance + $SignTurn * IsNull(iif((@IncludeReclassified = False) And ([GLTran.CuryDebitAmt] &gt; 0 = True) And ([GLTran.CuryReclassRemainingAmt] &gt; 0 = True), [GLTran.CuryReclassRemainingAmt], IIf([GLTran.UOM] = 'YY', [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], [GLTran.CuryDebitAmt])), 0) - $SignTurn * IsNull(iif((@IncludeReclassified = False) And ([GLTran.CuryCreditAmt] &gt; 0 = True) And ([GLTran.CuryReclassRemainingAmt] &gt; 0 = True), [GLTran.CuryReclassRemainingAmt], IIf([GLTran.UOM] = 'YY', [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt], [GLTran.CuryCreditAmt])), 0)</ValueExpr>
                     </ReportVariable>
+                    <ReportVariable>
+                        <Name>SettlementCredit</Name>
+                        <ProcessOrder>Always</ProcessOrder>
+                        <ValueExpr>=IIf($IsVisible = false, [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt], 0) + $SettlementCredit</ValueExpr>
+                    </ReportVariable>
+                    <ReportVariable>
+                        <Name>SettlementDebit</Name>
+                        <ProcessOrder>Always</ProcessOrder>
+                        <ValueExpr>=IIf($IsVisible = false, [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], 0) + $SettlementDebit</ValueExpr>
+                    </ReportVariable>
                 </Variables>
-                <VisibleExpr>=[GLTran.AccountID] &lt;&gt; null And [GLTran.UOM] &lt;&gt; [@UOM]</VisibleExpr>
+                <VisibleExpr>=$IsVisible</VisibleExpr>
                 <Items>
                     <TextBox Name="textBox10">
                         <Excel>
@@ -2526,7 +2532,7 @@
                                 <Name>LineBalance</Name>
                                 <ProcessOrder>WhilePrint</ProcessOrder>
                                 <ResetGroup>Ledger_Account</ResetGroup>
-                                <ValueExpr>=IIF([@Module] = null, $SignBegBalance * $BegBalance, 0)#010;</ValueExpr>
+                                <ValueExpr>=IIF([@Module] = null, $SignBegBalance * $SettlementDebit - $SettlementCredit/*$BegBalance*/, 0)#010;</ValueExpr>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>LineCuryBalance</Name>
@@ -2537,6 +2543,36 @@
                         </Variables>
                         <VisibleExpr>= IIF( [@Module] = null,#010; IIF (#010;        ([Account.Type] = 'I' or [Account.Type] = 'E' ) and Not(Payments.ArePeriodsInSameYear(Prev([GLHistoryByPeriod.FinPeriodID.Raw]), [GLHistoryByPeriod.FinPeriodID.Raw]))#010;        or Prev([GLHistoryByPeriod.FinPeriodID]) = null#010;         , True, False)#010;, True)</VisibleExpr>
                         <Items>
+                            <TextBox Name="textBox21">
+                                <Excel>
+                                    <column>11</column>
+                                </Excel>
+                                <Format>=[GLTran.CuryDebitAmt.Format]</Format>
+                                <Location>716px, 0px</Location>
+                                <ProcessOrder>Always</ProcessOrder>
+                                <Size>100px, 16px</Size>
+                                <Style>
+                                    <TextAlign>Right</TextAlign>
+                                </Style>
+                                <StyleName>Heading 1</StyleName>
+                                <Value>=$SettlementDebit</Value>
+                                <Visible>False</Visible>
+                            </TextBox>
+                            <TextBox Name="textBox22">
+                                <Excel>
+                                    <column>11</column>
+                                </Excel>
+                                <Format>=[GLTran.CuryDebitAmt.Format]</Format>
+                                <Location>816px, 0px</Location>
+                                <ProcessOrder>Always</ProcessOrder>
+                                <Size>100px, 16px</Size>
+                                <Style>
+                                    <TextAlign>Right</TextAlign>
+                                </Style>
+                                <StyleName>Heading 1</StyleName>
+                                <Value>=$SettlementCredit</Value>
+                                <Visible>False</Visible>
+                            </TextBox>
                             <TextBox Name="textBox34">
                                 <Excel>
                                     <column>11</column>

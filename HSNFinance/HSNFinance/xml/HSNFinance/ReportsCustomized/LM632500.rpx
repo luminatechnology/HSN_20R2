@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report version="" Name="report1">
+<Report Name="report1">
   <ExcelColumns>
     <item>15</item>
     <item>15</item>
-    <item>20</item>
-    <item>20</item>
-    <item>41</item>
+    <item>12</item>
+    <item>50</item>
     <item>20</item>
     <item>20</item>
     <item>20</item>
@@ -40,18 +39,6 @@
       <Value>='01'+Right(@PeriodID,4)</Value>
     </FilterExp>
     <FilterExp>
-      <Condition>BelongsTo</Condition>
-      <DataField>GLHistoryByPeriod.BranchID</DataField>
-      <OpenBraces>1</OpenBraces>
-      <Operator>Or</Operator>
-      <Value>@OrgBAccountID</Value>
-    </FilterExp>
-    <FilterExp>
-      <CloseBraces>1</CloseBraces>
-      <Condition>IsNull</Condition>
-      <DataField>@OrgBAccountID</DataField>
-    </FilterExp>
-    <FilterExp>
       <DataField>GLHistoryByPeriod.LedgerID</DataField>
       <OpenBraces>1</OpenBraces>
       <Operator>Or</Operator>
@@ -78,6 +65,7 @@
       <Nullable>True</Nullable>
       <Prompt>Company/Branch</Prompt>
       <ViewName>=Report.GetFieldSchema('OrganizationBranchReportParameters.OrgBAccountID')</ViewName>
+      <Visible>False</Visible>
     </ReportParameter>
     <ReportParameter>
       <ColumnSpan>2</ColumnSpan>
@@ -970,25 +958,6 @@
       <Height>64px</Height>
       <StyleName>PageHeaderSection</StyleName>
       <Items>
-        <TextBox Name="textBox11">
-          <Excel>
-            <row>2</row>
-          </Excel>
-          <Location>4px, 20px</Location>
-          <Size>100px, 14px</Size>
-          <StyleName>Report Params</StyleName>
-          <Value>Company/Branch:</Value>
-        </TextBox>
-        <TextBox Name="textBox12">
-          <Excel>
-            <column>2</column>
-            <row>2</row>
-          </Excel>
-          <Location>104px, 20px</Location>
-          <Size>168px, 14px</Size>
-          <StyleName>Report Params</StyleName>
-          <Value>=[@OrgBAccountID]</Value>
-        </TextBox>
         <TextBox Name="textBox13">
           <Excel>
             <column>4</column>
@@ -1001,7 +970,7 @@
         </TextBox>
         <TextBox Name="textBox14">
           <Excel>
-            <column>8</column>
+            <column>7</column>
             <row>2</row>
           </Excel>
           <Location>880px, 20px</Location>
@@ -1011,7 +980,7 @@
         </TextBox>
         <TextBox Name="textBox15">
           <Excel>
-            <column>8</column>
+            <column>7</column>
           </Excel>
           <ExcelVisible>False</ExcelVisible>
           <Location>880px, 4px</Location>
@@ -1021,7 +990,7 @@
         </TextBox>
         <TextBox Name="textBox16">
           <Excel>
-            <column>8</column>
+            <column>7</column>
             <row>3</row>
           </Excel>
           <Location>880px, 36px</Location>
@@ -1031,7 +1000,7 @@
         </TextBox>
         <TextBox Name="textBox17">
           <Excel>
-            <column>9</column>
+            <column>8</column>
           </Excel>
           <ExcelVisible>False</ExcelVisible>
           <Location>920px, 4px</Location>
@@ -1045,7 +1014,7 @@
         <TextBox Name="textBox18">
           <CanGrow>True</CanGrow>
           <Excel>
-            <column>9</column>
+            <column>8</column>
             <row>3</row>
           </Excel>
           <Location>920px, 36px</Location>
@@ -1058,7 +1027,7 @@
         </TextBox>
         <TextBox Name="textBox19">
           <Excel>
-            <column>9</column>
+            <column>8</column>
             <row>2</row>
           </Excel>
           <Format>g</Format>
@@ -1082,18 +1051,19 @@
         </TextBox>
         <TextBox Name="textBox21">
           <Excel>
-            <column>5</column>
+            <column>2</column>
+            <row>2</row>
           </Excel>
-          <Location>104px, 36px</Location>
+          <Location>104px, 24px</Location>
           <Size>144px, 14px</Size>
           <StyleName>Report Params</StyleName>
           <Value>=[@LedgerID]</Value>
         </TextBox>
         <TextBox Name="textBox22">
           <Excel>
-            <column>4</column>
+            <row>2</row>
           </Excel>
-          <Location>4px, 36px</Location>
+          <Location>4px, 24px</Location>
           <Size>96px, 14px</Size>
           <StyleName>Report Params</StyleName>
           <Value>Ledger:</Value>
@@ -1119,7 +1089,7 @@
     </PageHeader>
     <Detail Name="detailSection1">
       <Height>16px</Height>
-      <VisibleExpr>=(IIF([@SuppressZeroBal]=True AND 	#010;	IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranBegBalance], [AHCurrent.FinBegBalance]), IsNull(IIf(@UseMasterCalendar=True, [AHLast.TranYtdBalance], [AHLast.FinYtdBalance]),0)) = 0 AND 	#010;	IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranPtdDebit], [AHCurrent.FinPtdDebit]),0)=0 AND #010;	IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranPtdCredit], [AHCurrent.FinPtdCredit]),0) = 0 AND #010;	IsNull(IIf(@UseMasterCalendar=True, [AHLast.TranYtdBalance], [AHLast.FinYtdBalance]),0) = 0 Or #010;	($Format = 0 And ([AHLast.AccountID] = [GLSetup.YtdNetIncAccountID])), #010;False, True))</VisibleExpr>
+      <VisibleExpr>=false/*(IIF([@SuppressZeroBal]=True AND 	#010;	IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranBegBalance], [AHCurrent.FinBegBalance]), IsNull(IIf(@UseMasterCalendar=True, [AHLast.TranYtdBalance], [AHLast.FinYtdBalance]),0)) = 0 AND 	#010;	IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranPtdDebit], [AHCurrent.FinPtdDebit]),0)=0 AND #010;	IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranPtdCredit], [AHCurrent.FinPtdCredit]),0) = 0 AND #010;	IsNull(IIf(@UseMasterCalendar=True, [AHLast.TranYtdBalance], [AHLast.FinYtdBalance]),0) = 0 Or #010;	($Format = 0 And ([AHLast.AccountID] = [GLSetup.YtdNetIncAccountID])), #010;False, True))*/</VisibleExpr>
       <Items>
         <TextBox Name="textBox10">
           <Location>4px, 0px</Location>
@@ -1190,7 +1160,7 @@
         </TextBox>
         <TextBox Name="textBox29">
           <Excel>
-            <column>9</column>
+            <column>8</column>
           </Excel>
           <Format>=[AHLast.FinYtdBalance.Format]</Format>
           <Location>916px, 0px</Location>
@@ -1237,7 +1207,7 @@
       <Items>
         <TextBox Name="textBox2">
           <Excel>
-            <column>9</column>
+            <column>8</column>
           </Excel>
           <Location>916px, 4px</Location>
           <Size>104px, 14px</Size>
@@ -1249,7 +1219,7 @@
         </TextBox>
         <TextBox Name="textBox24">
           <Excel>
-            <column>8</column>
+            <column>7</column>
           </Excel>
           <Location>812px, 4px</Location>
           <Size>104px, 14px</Size>
@@ -1261,7 +1231,7 @@
         </TextBox>
         <TextBox Name="textBox35">
           <Excel>
-            <column>7</column>
+            <column>6</column>
           </Excel>
           <Location>708px, 4px</Location>
           <Size>104px, 14px</Size>
@@ -1273,7 +1243,7 @@
         </TextBox>
         <TextBox Name="textBox36">
           <Excel>
-            <column>6</column>
+            <column>5</column>
           </Excel>
           <Location>604px, 4px</Location>
           <Size>104px, 14px</Size>
@@ -1285,54 +1255,36 @@
         </TextBox>
         <TextBox Name="textBox37">
           <Excel>
-            <column>5</column>
+            <column>4</column>
           </Excel>
-          <Location>380px, 4px</Location>
-          <Size>224px, 14px</Size>
+          <Location>304px, 4px</Location>
+          <Size>300px, 14px</Size>
           <StyleName>Heading 1</StyleName>
           <Value>Description</Value>
         </TextBox>
-        <TextBox Name="textBox38">
+        <TextBox Name="textBox4_cf1">
           <Excel>
             <column>2</column>
           </Excel>
-          <Location>92px, 4px</Location>
-          <Size>92px, 14px</Size>
-          <StyleName>Heading 1</StyleName>
-          <Value>Account</Value>
-          <VisibleExpr>=First([FeaturesSet.Branch]) = True</VisibleExpr>
-        </TextBox>
-        <TextBox Name="textBox4_cf1">
-          <Excel>
-            <column>3</column>
-          </Excel>
-          <Location>184px, 4px</Location>
+          <Location>114px, 4px</Location>
           <Size>110px, 14px</Size>
           <StyleName>Heading 1</StyleName>
           <Value>Subaccount</Value>
         </TextBox>
         <TextBox Name="textBox40">
           <Excel>
-            <column>4</column>
+            <column>3</column>
           </Excel>
-          <Location>296px, 4px</Location>
+          <Location>224px, 4px</Location>
           <Size>80px, 14px</Size>
           <StyleName>Heading 1</StyleName>
           <Value>Hyperion</Value>
         </TextBox>
-        <TextBox Name="textBox6">
-          <Location>4px, 4px</Location>
-          <Size>88px, 14px</Size>
-          <StyleName>Heading 1</StyleName>
-          <Value>Branch</Value>
-          <VisibleExpr>=First([FeaturesSet.Branch]) = True</VisibleExpr>
-        </TextBox>
         <TextBox Name="textBox8">
           <Location>4px, 4px</Location>
-          <Size>180px, 14px</Size>
+          <Size>110px, 14px</Size>
           <StyleName>Heading 1</StyleName>
           <Value>Account</Value>
-          <VisibleExpr>=First([FeaturesSet.Branch]) &lt;&gt; True</VisibleExpr>
         </TextBox>
       </Items>
     </PageHeader>
@@ -1370,14 +1322,14 @@
             <Line Name="line4">
               <Excel>
                 <column>5</column>
-                <width>5</width>
+                <width>4</width>
               </Excel>
               <Location>380px, 0px</Location>
               <Size>640px, 1px</Size>
             </Line>
             <TextBox Name="textBox41">
               <Excel>
-                <column>5</column>
+                <column>4</column>
               </Excel>
               <Location>380px, 4px</Location>
               <Size>224px, 14px</Size>
@@ -1391,7 +1343,7 @@
             </TextBox>
             <TextBox Name="textBox42">
               <Excel>
-                <column>8</column>
+                <column>7</column>
               </Excel>
               <Format>=[AHCurrent.FinPtdCredit.Format]</Format>
               <Location>812px, 4px</Location>
@@ -1407,7 +1359,7 @@
             </TextBox>
             <TextBox Name="textBox43">
               <Excel>
-                <column>6</column>
+                <column>5</column>
               </Excel>
               <Format>=[AHCurrent.FinBegBalance.Format]</Format>
               <Location>604px, 4px</Location>
@@ -1423,7 +1375,7 @@
             </TextBox>
             <TextBox Name="textBox44">
               <Excel>
-                <column>9</column>
+                <column>8</column>
               </Excel>
               <Format>=[AHLast.FinYtdBalance.Format]</Format>
               <Location>916px, 4px</Location>
@@ -1439,7 +1391,7 @@
             </TextBox>
             <TextBox Name="textBox45">
               <Excel>
-                <column>7</column>
+                <column>6</column>
               </Excel>
               <Format>=[AHCurrent.FinPtdDebit.Format]</Format>
               <Location>708px, 4px</Location>
@@ -1483,14 +1435,14 @@
             <Line Name="line2">
               <Excel>
                 <column>5</column>
-                <width>5</width>
+                <width>4</width>
               </Excel>
               <Location>380px, 1px</Location>
               <Size>640px, 1px</Size>
             </Line>
             <TextBox Name="textBox30">
               <Excel>
-                <column>5</column>
+                <column>4</column>
               </Excel>
               <Location>380px, 4px</Location>
               <Size>224px, 14px</Size>
@@ -1502,7 +1454,7 @@
             </TextBox>
             <TextBox Name="textBox31">
               <Excel>
-                <column>6</column>
+                <column>5</column>
               </Excel>
               <Format>=[AHCurrent.FinBegBalance.Format]</Format>
               <Location>604px, 4px</Location>
@@ -1515,7 +1467,7 @@
             </TextBox>
             <TextBox Name="textBox32">
               <Excel>
-                <column>7</column>
+                <column>6</column>
               </Excel>
               <Format>=[AHCurrent.FinPtdDebit.Format]</Format>
               <Location>708px, 4px</Location>
@@ -1528,7 +1480,7 @@
             </TextBox>
             <TextBox Name="textBox33">
               <Excel>
-                <column>8</column>
+                <column>7</column>
               </Excel>
               <Format>=[AHCurrent.FinPtdCredit.Format]</Format>
               <Location>812px, 4px</Location>
@@ -1541,7 +1493,7 @@
             </TextBox>
             <TextBox Name="textBox34">
               <Excel>
-                <column>9</column>
+                <column>8</column>
               </Excel>
               <Format>=[AHLast.FinYtdBalance.Format]</Format>
               <Location>916px, 4px</Location>
@@ -1578,6 +1530,117 @@
           <GridSize>8px, 8px</GridSize>
           <Height>0px</Height>
           <Visible>False</Visible>
+        </Footer>
+      </Footers>
+    </Group>
+    <Group Name="Acct&amp;Sub">
+      <Grouping>
+        <GroupExp>
+          <DataField>=[GLHistoryByPeriod.AccountID]</DataField>
+        </GroupExp>
+        <GroupExp>
+          <DataField>=[GLHistoryByPeriod.SubID]</DataField>
+        </GroupExp>
+      </Grouping>
+      <Headers>
+        <Header Name="groupHeaderSection4">
+          <GridSize>8px, 8px</GridSize>
+          <Height>0in</Height>
+          <Visible>False</Visible>
+        </Header>
+      </Headers>
+      <Footers>
+        <Footer Name="groupFooterSection4">
+          <GridSize>8px, 8px</GridSize>
+          <Height>16px</Height>
+          <Items>
+            <TextBox Name="textBox1">
+              <Excel>
+                <column>2</column>
+              </Excel>
+              <Location>114px, 0px</Location>
+              <Size>110px, 14px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[Sub.SubCD]</Value>
+            </TextBox>
+            <TextBox Name="textBox3">
+              <Excel>
+                <column>3</column>
+              </Excel>
+              <Location>224px, 0px</Location>
+              <Size>80px, 14px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[LUMHyperionAcctMapping.HyperionAcct]</Value>
+            </TextBox>
+            <TextBox Name="textBox46">
+              <Excel>
+                <column>8</column>
+              </Excel>
+              <Format>=[AHLast.FinYtdBalance.Format]</Format>
+              <Location>916px, 0px</Location>
+              <Size>104px, 14px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=Sum(IIF($Format=0 And ([Account.Type] = 'I' Or [Account.Type] = 'L'), -1, 1) * IsNull(IIf(@UseMasterCalendar=True, [AHLast.TranYtdBalance], [AHLast.FinYtdBalance]),0))</Value>
+            </TextBox>
+            <TextBox Name="textBox47">
+              <Excel>
+                <column>7</column>
+              </Excel>
+              <Format>=[AHCurrent.FinPtdCredit.Format]</Format>
+              <Location>812px, 0px</Location>
+              <Size>104px, 14px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=Sum(IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranPtdCredit], [AHCurrent.FinPtdCredit]),0))</Value>
+            </TextBox>
+            <TextBox Name="textBox48">
+              <Excel>
+                <column>6</column>
+              </Excel>
+              <Format>=[AHCurrent.FinPtdDebit.Format]</Format>
+              <Location>708px, 0px</Location>
+              <Size>104px, 14px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=Sum(IsNull(IIf(@UseMasterCalendar=True, [AHCurrent.TranPtdDebit], [AHCurrent.FinPtdDebit]),0))</Value>
+            </TextBox>
+            <TextBox Name="textBox49">
+              <Excel>
+                <column>5</column>
+              </Excel>
+              <Format>=[AHCurrent.FinBegBalance.Format]</Format>
+              <Location>604px, 0px</Location>
+              <Size>104px, 14px</Size>
+              <Style>
+                <TextAlign>Right</TextAlign>
+              </Style>
+              <StyleName>Normal</StyleName>
+              <Value>=Sum(IIF($Format=0 And ([Account.Type] = 'I' Or [Account.Type] = 'L'), #010;     -1, #010;     1) #010;*IsNull(IIf(@UseMasterCalendar=True, #010;            [AHCurrent.TranBegBalance],#010;            [AHCurrent.FinBegBalance]), #010;        IsNull(IIf(@UseMasterCalendar = True, #010;                   [AHLast.TranYtdBalance], #010;                   [AHLast.FinYtdBalance]),#010;        0)))</Value>
+            </TextBox>
+            <TextBox Name="textBox50">
+              <Excel>
+                <column>4</column>
+              </Excel>
+              <Location>304px, 0px</Location>
+              <Size>300px, 14px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[Account.Description]</Value>
+            </TextBox>
+            <TextBox Name="textBox51">
+              <Location>4px, 0px</Location>
+              <NavigateMethod>Server</NavigateMethod>
+              <Size>110px, 14px</Size>
+              <StyleName>Normal</StyleName>
+              <Value>=[GLHistoryByPeriod.AccountID]</Value>
+            </TextBox>
+          </Items>
         </Footer>
       </Footers>
     </Group>
