@@ -5,6 +5,7 @@
                 <Field name="CustomerClass" type="StringValue" />
                 <Field name="CustomerID" type="StringValue" />
                 <Field name="CustomerName" type="StringValue" />
+                <Field name="MainContact" type="MainContact" />
                 <Field name="PriceClass" type="StringValue" />
                 <Field name="PrimayContact" type="Contact" />
                 <Field name="Status" type="StringValue" />
@@ -35,6 +36,11 @@
                 </Mapping>
                 <Mapping field="Status">
                     <To object="BAccount" field="Status" />
+                </Mapping>
+                <Mapping field="MainContact">
+                    <Mapping field="Email">
+                        <To object="DefContact" field="EMail" />
+                    </Mapping>
                 </Mapping>
             </Mappings>
             <Actions>
@@ -299,7 +305,12 @@
                 </Mapping>
             </Mappings>
         </TopLevelEntity>
-        <TopLevelEntity name="HighcareServiceHistory" screen="GI650036">
+        <LinkedEntity name="MainContact">
+            <Fields>
+                <Field name="Email" type="StringValue" />
+            </Fields>
+        </LinkedEntity>
+        <TopLevelEntity name="HighcareServiceHistory" screen="GI770077">
             <Fields>
                 <Field name="CustomerID" type="StringValue" />
                 <Field name="HighcareServiceHistoryDetails" type="HighcareServiceHistoryDetail[]" />
@@ -309,9 +320,6 @@
                     <To object="Filter" field="CustomerID" />
                 </Mapping>
                 <Mapping field="HighcareServiceHistoryDetails">
-                    <Mapping field="PinCode">
-                        <To object="Results" field="t_pincode" />
-                    </Mapping>
                     <Mapping field="PriceClassID">
                         <To object="Results" field="t_priceClassID" />
                     </Mapping>
@@ -338,6 +346,9 @@
                     </Mapping>
                     <Mapping field="OrderDate">
                         <To object="Results" field="t_orderDate" />
+                    </Mapping>
+                    <Mapping field="PinCode">
+                        <To object="Results" field="t_pincode" />
                     </Mapping>
                 </Mapping>
             </Mappings>
