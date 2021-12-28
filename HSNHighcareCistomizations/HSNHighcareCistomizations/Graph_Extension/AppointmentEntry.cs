@@ -17,7 +17,8 @@ namespace PX.Objects.FS
     public class AppointmentEntryExt : PXGraphExtension<AppointmentEntry>
     {
         public SelectFrom<v_HighcareServiceHistory>
-               .Where<v_HighcareServiceHistory.aptRefNbr.IsNotEqual<FSAppointment.refNbr.FromCurrent>>
+               .Where<v_HighcareServiceHistory.aptRefNbr.IsNotEqual<FSAppointment.refNbr.FromCurrent>
+                 .And<v_HighcareServiceHistory.customerID.IsEqual<FSAppointment.customerID.FromCurrent>>>
                .View HighcareSrvHistory;
 
         public SelectFrom<LUMServiceScope>

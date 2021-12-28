@@ -21,7 +21,8 @@ namespace PX.Objects.FS
     {
 
         public SelectFrom<v_HighcareServiceHistory>
-               .Where<v_HighcareServiceHistory.soRefNbr.IsNotEqual<FSServiceOrder.refNbr.FromCurrent>>
+               .Where<v_HighcareServiceHistory.soRefNbr.IsNotEqual<FSServiceOrder.refNbr.FromCurrent>
+                 .And<v_HighcareServiceHistory.customerID.IsEqual<FSServiceOrder.customerID.FromCurrent>>>
                .View HighcareSrvHistory;
 
         public SelectFrom<LUMServiceScope>
