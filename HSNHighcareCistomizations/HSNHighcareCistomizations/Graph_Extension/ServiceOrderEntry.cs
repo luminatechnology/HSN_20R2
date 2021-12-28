@@ -66,6 +66,7 @@ namespace PX.Objects.FS
         public void GetHighcareDiscount(Events.FieldUpdated<FSSODet.SMequipmentID> e)
         {
             var doc = Base.ServiceOrderRecords.Current; 
+
             if (e.Row is FSSODet row && row != null && row.SMEquipmentID.HasValue && doc != null)
             {
                 HighcareHelper helper = new HighcareHelper();
@@ -113,6 +114,9 @@ namespace PX.Objects.FS
                         e.NewValue,
                         new PXSetPropertyException<FSSODet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.RowWarning));
             }
+            // 移除Equipment時 還原折扣
+            else if (e.NewValue == null)
+                Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(e.Row, (decimal)0);
         }
 
 

@@ -110,6 +110,9 @@ namespace PX.Objects.FS
                         e.NewValue,
                         new PXSetPropertyException<FSAppointmentDet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.RowWarning));
             }
+            // 移除Equipment時 還原折扣
+            else if (e.NewValue == null)
+                Base.AppointmentDetails.Cache.SetValueExt<FSAppointmentDet.discPct>(e.Row, (decimal)0);
         }
 
         #endregion
