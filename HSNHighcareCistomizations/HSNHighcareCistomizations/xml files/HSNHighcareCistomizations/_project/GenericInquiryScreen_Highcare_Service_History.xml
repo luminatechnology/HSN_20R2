@@ -162,7 +162,7 @@
                     <GITable Alias="cust" Name="PX.Objects.AR.Customer" />
                     <GIWhere LineNbr="1" IsActive="1" DataFieldName="cust.acctCD" Condition="E " IsExpression="0" Value1="[CustomerID]" Operation="A" />
                     <SiteMap linkname="toDesignById">
-                        <row Title="Highcare Service History" Url="~/GenericInquiry/GenericInquiry.aspx?id=4c2d09d9-f4d1-45d5-b008-d5001b82e3fd" ScreenID="GI650036" NodeID="89c632af-9109-42c2-a98b-a0b8fd4135c5" ParentID="00000000-0000-0000-0000-000000000000">
+                        <row Title="Highcare Service History" Url="~/GenericInquiry/GenericInquiry.aspx?id=4c2d09d9-f4d1-45d5-b008-d5001b82e3fd" ScreenID="GI770077" NodeID="89c632af-9109-42c2-a98b-a0b8fd4135c5" ParentID="00000000-0000-0000-0000-000000000000">
                             <MUIScreen IsPortal="0" WorkspaceID="00000000-0000-0000-0000-000000000000" Order="700" SubcategoryID="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" />
                         </row>
                     </SiteMap>

@@ -18,6 +18,7 @@
                                                     <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
                                                         <Prop Key="DataField" Value="IsActive" />
                                                         <Prop Key="Width" Value="60" />
+                                                        <Prop Key="Type" Value="CheckBox" />
                                                     </PXGridColumn>
                                                 </AddItem>
                                                 <AddItem>

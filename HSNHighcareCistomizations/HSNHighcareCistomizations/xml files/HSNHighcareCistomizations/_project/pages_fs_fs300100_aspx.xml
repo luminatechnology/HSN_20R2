@@ -102,14 +102,14 @@
                                             <Children Key="Columns">
                                                 <AddItem>
                                                     <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="CPriceClassID" />
+                                                        <Prop Key="DataField" Value="PriceClassID" />
                                                         <Prop Key="Width" Value="120" />
                                                     </PXGridColumn>
                                                 </AddItem>
                                                 <AddItem>
                                                     <PXGridColumn TypeFullName="PX.Web.UI.PXGridColumn">
-                                                        <Prop Key="DataField" Value="PriceClassID" />
-                                                        <Prop Key="Width" Value="120" />
+                                                        <Prop Key="DataField" Value="InventoryID" />
+                                                        <Prop Key="Width" Value="70" />
                                                     </PXGridColumn>
                                                 </AddItem>
                                                 <AddItem>

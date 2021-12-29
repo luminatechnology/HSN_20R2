@@ -17,7 +17,8 @@ namespace PX.Objects.FS
     public class AppointmentEntryExt : PXGraphExtension<AppointmentEntry>
     {
         public SelectFrom<v_HighcareServiceHistory>
-               .Where<v_HighcareServiceHistory.aptRefNbr.IsNotEqual<FSAppointment.refNbr.FromCurrent>>
+               .Where<v_HighcareServiceHistory.aptRefNbr.IsNotEqual<FSAppointment.refNbr.FromCurrent>
+                 .And<v_HighcareServiceHistory.customerID.IsEqual<FSAppointment.customerID.FromCurrent>>>
                .View HighcareSrvHistory;
 
         public SelectFrom<LUMServiceScope>
@@ -109,6 +110,9 @@ namespace PX.Objects.FS
                         e.NewValue,
                         new PXSetPropertyException<FSAppointmentDet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.RowWarning));
             }
+            // 移除Equipment時 還原折扣
+            else if (e.NewValue == null)
+                Base.AppointmentDetails.Cache.SetValueExt<FSAppointmentDet.discPct>(e.Row, (decimal)0);
         }
 
         #endregion
