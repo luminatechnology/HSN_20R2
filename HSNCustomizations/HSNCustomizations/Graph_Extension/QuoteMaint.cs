@@ -98,12 +98,17 @@ namespace PX.Objects.CR
 
             var row = e.Row;
 
+            if (row == null) { return; }
+
             TermsConditions.AllowSelect = HSNSetupView.Select().TopFirst?.EnableOpportunityEnhance ?? false;
 
             Base.printQuote.SetEnabled((row?.Status == CRQuoteStatusAttribute.Approved || row?.Status == CRQuoteStatusAttribute.Sent || row?.Status == CRQuoteStatusAttribute.Draft) && !string.IsNullOrEmpty(row?.OpportunityID));
 
             printQuoteMY.SetEnabled(Base.printQuote.GetEnabled());
             printQuoteMY2.SetEnabled(Base.printQuote.GetEnabled());
+
+            printQuoteMY.SetVisible(Base.Shipping_Address?.Current?.CountryID == "MY");
+            printQuoteMY2.SetVisible(Base.Shipping_Address?.Current?.CountryID == "MY");
         }
 
         protected void _(Events.FieldVerifying<LUMOpprTermCond.sortOrder> e)
