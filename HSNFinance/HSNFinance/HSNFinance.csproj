@@ -58,15 +58,21 @@
     <Compile Include="DAC\BatchKvExt.cs" />
     <Compile Include="DAC\LSLedgerSettlement.cs" />
     <Compile Include="DAC\LSSettlementAccount.cs" />
+    <Compile Include="DAC\LUMLAInterestExp.cs" />
     <Compile Include="DAC_Extensions\CATranExtensions.cs" />
     <Compile Include="DAC_Extensions\GLTranExtensions.cs" />
     <Compile Include="Graph_Extensions\APInvoiceEntry.cs" />
+    <Compile Include="Graph_Extensions\AssetMaint.cs" />
     <Compile Include="LSLedgerStlmtEntry.cs" />
     <Compile Include="LSLedgerStlmtInq.cs" />
     <Compile Include="LSStlmtAccountMaint.cs" />
     <Compile Include="DAC\LUMHyperionAcctMapping.cs" />
     <Compile Include="LUMHyperionAcctMapMaint.cs" />
     <Compile Include="DAC_Extensions\APRegisterExtensions.cs" />
+    <Compile Include="DAC\LUMLLSetup.cs" />
+    <Compile Include="DAC_Extensions\FADetailsExtensions.cs" />
+    <Compile Include="LUMLLSetupMaint.cs" />
+    <Compile Include="LUMCalcInterestExpProc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

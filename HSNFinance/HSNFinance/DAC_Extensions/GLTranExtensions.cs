@@ -1,6 +1,4 @@
-﻿using System;
-using PX.Data;
-using PX.Objects.CM;
+﻿using PX.Data;
 
 namespace PX.Objects.GL
 {
