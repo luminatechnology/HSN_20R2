@@ -8,7 +8,7 @@ using PX.Objects.FA;
 using PX.Objects.GL;
 using PX.Objects.GL.FinPeriods;
 using HSNFinance.DAC;
-
+    
 namespace HSNFinance
 {
     public class LUMCalcInterestExpProc : PXGraph<LUMCalcInterestExpProc>
@@ -40,14 +40,10 @@ namespace HSNFinance
         {
             BalanceFilter filter = Filter.Current;
 
-            PXSelectBase<FixedAsset> select = new PXSelectJoin<FixedAsset, LeftJoin<FADetails, On<FADetails.assetID, Equal<FixedAsset.assetID>>,
-                                                                                    LeftJoin<FABookBalance, On<FABookBalance.assetID, Equal<FixedAsset.assetID>>>>,
-                                                                            Where<FixedAsset.active, Equal<True>,
-                                                                                  And<FixedAsset.branchID, Equal<Optional<BalanceFilter.branchID>>>>>(this);
-                                                  //SelectFrom<FixedAsset>.LeftJoin<FADetails>.On<FADetails.assetID.IsEqual<FixedAsset.assetID>>
-                                                  //                                                        .LeftJoin<FABookBalance>.On<FABookBalance.assetID.IsEqual<FixedAsset.assetID>>
-                                                  //                                                        .Where<FixedAsset.active.IsEqual<True>
-                                                  //                                                               .And<FixedAsset.branchID.IsEqual<@P.AsInt>>>.View(this);
+            PXSelectBase<FixedAsset> select = new SelectFrom<FixedAsset>.LeftJoin<FADetails>.On<FADetails.assetID.IsEqual<FixedAsset.assetID>>
+                                                                        .LeftJoin<FABookBalance>.On<FABookBalance.assetID.IsEqual<FixedAsset.assetID>>
+                                                                        .Where<FixedAsset.active.IsEqual<True>
+                                                                               .And<FixedAsset.branchID.IsEqual<BalanceFilter.branchID.FromCurrent>>>.View(this);
             if (filter != null)
             {
                 if (filter.ClassID != null)
@@ -59,7 +55,7 @@ namespace HSNFinance
                     select.WhereAnd<Where<FABookBalance.bookID, Equal<Current<BalanceFilter.bookID>>>>();
                 }
 
-                foreach (PXResult<FixedAsset, FADetails, FABookBalance> result in select.Select(/*filter.BranchID, filter.ClassID, filter.BookID*/))
+                foreach (PXResult<FixedAsset, FADetails, FABookBalance> result in select.Select())
                 {
                     FixedAsset asset = result;
                     FADetails details = result;
@@ -75,28 +71,32 @@ namespace HSNFinance
                     LUMLAInterestExp intE = SelectFrom<LUMLAInterestExp>.Where<LUMLAInterestExp.assetID.IsEqual<@P.AsInt>.And<LUMLAInterestExp.bookID.IsEqual<@P.AsInt>>>
                                                                         .OrderBy<LUMLAInterestExp.termCount.Desc>.View.SelectSingleBound(this, null, temp.AssetID, temp.BookID);
 
-                    string lastEndMthPeriod = MasterFinPeriod.PK.Find(this, filter.PeriodID).StartDate.Value.AddDays(-1).ToString("yyyyMM");
+                    DateTime lastEndMth = MasterFinPeriod.PK.Find(this, filter.PeriodID).StartDate.Value.AddDays(-1);
+
+                    temp.LastTranDate  = MasterFinPeriod.PK.Find(this, intE.FinPeriodID).EndDate.Value.AddDays(-1);
+                    temp.LastTermCount = intE.TermCount;
+                    temp.DiffMonths    = Math.Abs(12 * (temp.LastTranDate.Value.Year - lastEndMth.Year) + temp.LastTranDate.Value.Month - lastEndMth.Month);
+                    temp.FinPeriodID   = lastEndMth.ToString("yyyyMM");
+
+                    if (temp.LastTranDate >= lastEndMth) { continue; }
 
                     if (intE == null)
                     {
-                        temp.FinPeriodID = lastEndMthPeriod;
                         temp.TermCount   = 1;
                         temp.BegBalance  = details.AcquisitionCost;
                     }
                     else
                     {
-                        if (intE.FinPeriodID == lastEndMthPeriod) { continue; }
-
-                        temp.FinPeriodID = intE.FinPeriodID;
-                        temp.TermCount   = intE.TermCount + 1;
+                        temp.TermCount   = intE.TermCount + temp.DiffMonths;
                         temp.BegBalance  = intE.EndBalance;
                     }
-
-                    temp.LeaseRentTerm = details.LeaseRentTerm;
-                    temp.MonthlyRent   = details.RentAmount / (details.LeaseRentTerm == 0m ? 1 : details.LeaseRentTerm);
-                    temp.InterestRate  = details.GetExtension<FADetailsExt>().UsrMthlyInterestRatePct * temp.BegBalance / 100;
-                    temp.EndBalance    = temp.BegBalance - temp.MonthlyRent + temp.InterestRate;
-                    temp.RefNbr        = asset.AssetCD;
+ 
+                    temp.LeaseRentTerm   = details.LeaseRentTerm;
+                    temp.MonthlyRent     = details.RentAmount / (details.LeaseRentTerm == 0m ? 1 : details.LeaseRentTerm);
+                    temp.MthlyIntRatePct = details.GetExtension<FADetailsExt>().UsrMthlyInterestRatePct;
+                    temp.InterestRate    = temp.MthlyIntRatePct * temp.BegBalance / 100;
+                    temp.EndBalance      = temp.BegBalance - temp.MonthlyRent + temp.InterestRate;
+                    temp.RefNbr          = asset.AssetCD;
 
                     // Make unbound DAC has data that can be selected manually.
                     InterestExp.Cache.Insert(temp);
@@ -144,105 +144,120 @@ namespace HSNFinance
 
             using (PXTransactionScope ts = new PXTransactionScope())
             {
-                JournalEntry je = CreateInstance<JournalEntry>();
+                LUMCalcInterestExpProc graph = CreateInstance<LUMCalcInterestExpProc>();
 
-                je.BatchModule.Cache.Insert(new Batch()
-                {
-                    Module      = BatchModule.GL,
-                    DateEntered = MasterFinPeriod.PK.Find(je, filter.PeriodID).StartDate.Value.AddDays(-1),
-                    Description = AssetMaint_Extension.InterestExp
-                });
-
-                LUMLLSetup setup = SelectFrom<LUMLLSetup>.View.SelectSingleBound(je, null);
+                LUMLLSetup setup = SelectFrom<LUMLLSetup>.View.SelectSingleBound(graph, null);
 
                 if (setup == null) { throw new PXException(LLSetupNotSet); }
 
+                JournalEntry je = CreateInstance<JournalEntry>();
+
+                List<object> listObj = new List<object>();
+
                 for (int i = 0; i < list.Count; i++)
                 {
-                    for (int j = 0; j < 2; j++)
+                    int count = 1;
+                    decimal? begBalance = list[i].BegBalance;
+                    do
                     {
-                        GLTran tran = new GLTran()
+                        decimal? interestRate = list[i].MthlyIntRatePct * begBalance / 100;
+
+                        je.BatchModule.Cache.Insert(new Batch()
                         {
-                            BranchID  = list[i].BranchID,
-                            AccountID = setup.InterestExpAcctID,
-                            SubID     = setup.InterestExpSubID,
-                            TranDesc  = string.Format(TranDescInterestExp, list[i].RefNbr)
-                        };
+                            Module = BatchModule.GL,
+                            DateEntered = MasterFinPeriod.PK.Find(je, filter.PeriodID).StartDate.Value.AddDays(-1),
+                            Description = AssetMaint_Extension.InterestExp
+                        });
 
-                        tran = (GLTran)je.GLTranModuleBatNbr.Cache.Insert(tran);
-
-                        decimal? amount = list[i].TermCount == list[i].LeaseRentTerm ? list[i].MonthlyRent - list[i].InterestRate : list[i].InterestRate;
-
-                        if (j == 0)
+                        for (int j = 0; j < 2; j++)
                         {
-                            tran.CuryDebitAmt = amount;
+                            GLTran tran = new GLTran()
+                            {
+                                BranchID  = list[i].BranchID,
+                                AccountID = setup.InterestExpAcctID,
+                                SubID     = setup.InterestExpSubID,
+                                TranDesc  = string.Format(TranDescInterestExp, list[i].RefNbr)
+                            };
+
+                            tran = (GLTran)je.GLTranModuleBatNbr.Cache.Insert(tran);
+
+                            decimal? amount = list[i].TermCount == list[i].LeaseRentTerm ? list[i].MonthlyRent - interestRate : interestRate;
+
+                            if (j == 0)
+                            {
+                                tran.CuryDebitAmt = amount;
+                            }
+                            else
+                            {
+                                tran.AccountID = setup.LeaseLiabAcctID;
+                                tran.SubID = setup.LeaseLiabSubID;
+                                tran.CuryCreditAmt = amount;
+                            }
+
+                            je.GLTranModuleBatNbr.Cache.Update(tran);
                         }
-                        else
-                        {
-                            tran.AccountID     = setup.LeaseLiabAcctID;
-                            tran.SubID         = setup.LeaseLiabSubID;
-                            tran.CuryCreditAmt = amount;
-                        }
 
-                        je.GLTranModuleBatNbr.Cache.Update(tran);
-                    }
-                }
+                        je.BatchModule.SetValueExt<Batch.hold>(je.BatchModule.Current, false);
 
-                je.BatchModule.SetValueExt<Batch.hold>(je.BatchModule.Current, false);
-                    
-                je.Save.Press();
+                        je.Save.Press();
 
-                je.release.Press();
+                        je.release.Press();
 
-                if (je.BatchModule.Current?.Released == true)
-                {
-                    CreateLAInterestExp(list, je.BatchModule.Current.BatchNbr);
+                        listObj.Add(je.BatchModule.Current.BatchNbr);
+                        listObj.Add(list[i].LastTranDate.Value.AddMonths(count).ToString("yyyyMM"));
+                        listObj.Add(begBalance);
+                        listObj.Add(interestRate);
+
+                        graph.CreateLAInterestExp(list[i], listObj);
+
+                        begBalance = begBalance - list[i].MonthlyRent + interestRate;
+
+                        count++;
+
+                    } while (count <= list[i].DiffMonths);
                 }
 
                 ts.Complete();
             }
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Unbound DAC and GLTran create records in the LUMLAInterestExp table in processing form.
         /// </summary>
-        /// <param name="list"></param>
-        /// <param name="dic"></param>
-        public static void CreateLAInterestExp(List<LUMLAInterestExpTemp> list, string batchNbr)
+        /// <param name="temp"></param>
+        /// <param name="batchNbr"></param>
+        /// <param name="period"></param>
+        /// <param name="interestRate"></param>
+        public void CreateLAInterestExp(LUMLAInterestExpTemp temp, List<object> listObj)
         {
             try
             {
-                LUMCalcInterestExpProc graph = CreateInstance<LUMCalcInterestExpProc>();
-
-                for (int i = 0; i < list.Count; i++)
+                LUMLAInterestExp row = (LUMLAInterestExp)LAInterestExp.Cache.Insert(new LUMLAInterestExp()
                 {
-                    GLTran tran = new GLTran();
+                    AssetID   = temp.AssetID,
+                    TermCount = ++temp.LastTermCount,
+                });
 
-                    LUMLAInterestExp row = (LUMLAInterestExp)graph.LAInterestExp.Cache.Insert(new LUMLAInterestExp()
-                    {
-                        AssetID = list[i].AssetID,
-                        TermCount = list[i].TermCount,
-                    });
+                row.BookID        = temp.BookID;
+                row.BranchID      = temp.BranchID;
+                row.FinPeriodID   = (string)listObj[1];
+                row.LeaseRentTerm = temp.LeaseRentTerm;
+                row.BegBalance    = (decimal?)listObj[2];
+                row.MonthlyRent   = temp.MonthlyRent;
+                row.InterestRate  = (decimal?)listObj[3];
+                row.EndBalance    = temp.BegBalance - temp.MonthlyRent + temp.InterestRate;
+                row.BatchNbr      = (string)listObj[0];
+                row.RefNbr        = temp.RefNbr;
 
-                    row.BookID        = list[i].BookID;
-                    row.BranchID      = list[i].BranchID;
-                    row.FinPeriodID   = list[i].FinPeriodID;
-                    row.LeaseRentTerm = list[i].LeaseRentTerm;
-                    row.BegBalance    = list[i].BegBalance;
-                    row.MonthlyRent   = list[i].MonthlyRent;
-                    row.InterestRate  = list[i].InterestRate;
-                    row.EndBalance    = list[i].EndBalance;
-                    row.BatchNbr      = batchNbr;
-                    row.RefNbr        = list[i].RefNbr;
+                LAInterestExp.Cache.Update(row);
 
-                    graph.LAInterestExp.Cache.Update(row);
-                }
-
-                graph.Actions.PressSave();
+                Actions.PressSave();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
         #endregion
@@ -261,6 +276,12 @@ namespace HSNFinance
         public abstract class selected : PX.Data.BQL.BqlBool.Field<selected> { }
         #endregion
 
+        #region BranchID
+        [Branch(BqlField = typeof(LUMLAInterestExp.branchID))]
+        public virtual int? BranchID { get; set; }
+        public abstract class branchID : PX.Data.BQL.BqlInt.Field<branchID> { }
+        #endregion
+
         #region AssetID
         [PXDBInt(IsKey = true, BqlField = typeof(LUMLAInterestExp.assetID))]
         [PXUIField(DisplayName = "Asset")]
@@ -273,16 +294,44 @@ namespace HSNFinance
 
         #region TermCount
         [PXDBInt(IsKey = true, BqlField = typeof(LUMLAInterestExp.termCount))]
-        [PXUIField(DisplayName = "Term Count")]
+        [PXUIField(DisplayName = "Term Count", Visible = false)]
         public virtual int? TermCount { get; set; }
         public abstract class termCount : PX.Data.BQL.BqlInt.Field<termCount> { }
         #endregion
 
         #region LeaseRentTerm
         [PXDBInt()]
-        [PXUIField(DisplayName = "Lease/Rent Term, months")]
+        [PXUIField(DisplayName = "Lease/Rent Term (Months)")]
         public virtual int? LeaseRentTerm { get; set;}
         public abstract class leaseRentTerm : PX.Data.BQL.BqlInt.Field<leaseRentTerm> { }
+        #endregion
+
+        #region DiffMonths
+        [PXDBInt()]
+        [PXUIField(DisplayName = "Difference Months", Visible = false)]
+        public virtual int? DiffMonths { get; set; }
+        public abstract class diffMonths : PX.Data.BQL.BqlInt.Field<diffMonths> { }
+        #endregion
+
+        #region LastTranDate
+        [PXDBDate()]
+        [PXUIField(DisplayName = "Last Tran. Date", Visible = false)]
+        public virtual DateTime? LastTranDate { get; set; }
+        public abstract class lastTranDate : PX.Data.BQL.BqlDateTime.Field<lastTranDate> { }
+        #endregion
+
+        #region LastTermCount
+        [PXDBInt()]
+        [PXUIField(DisplayName = "Last Term Count", Visible = false)]
+        public virtual int? LastTermCount { get; set; }
+        public abstract class lastTermCount : PX.Data.BQL.BqlInt.Field<lastTermCount> { }
+        #endregion
+
+        #region MthlyIntRatePct
+        [PXDBDecimal(4)]
+        [PXUIField(DisplayName = "Monthly Interest Rate %", Visible = false)]
+        public virtual decimal? MthlyIntRatePct { get; set; }
+        public abstract class mthlyIntRatePct : PX.Data.BQL.BqlDecimal.Field<mthlyIntRatePct> { }
         #endregion
 
         #region BookID
@@ -294,12 +343,6 @@ namespace HSNFinance
                     DescriptionField = typeof(FABook.description))]
         public virtual int? BookID { get; set; }
         public abstract class bookID : PX.Data.BQL.BqlInt.Field<bookID> { }
-        #endregion
-
-        #region BranchID
-        [Branch(BqlField = typeof(LUMLAInterestExp.branchID))]
-        public virtual int? BranchID { get; set; }
-        public abstract class branchID : PX.Data.BQL.BqlInt.Field<branchID> { }
         #endregion
 
         #region FinPeriodID
@@ -326,7 +369,7 @@ namespace HSNFinance
 
         #region BegBalance
         [PXDBDecimal(BqlField = typeof(LUMLAInterestExp.begBalance))]
-        [PXUIField(DisplayName = "Beggining Balance")]
+        [PXUIField(DisplayName = "Beginning Balance")]
         public virtual decimal? BegBalance { get; set; }
         public abstract class begBalance : PX.Data.BQL.BqlDecimal.Field<begBalance> { }
         #endregion
