@@ -158,6 +158,12 @@
                             <GIOn LineNbr="4" ParentField="LUMServiceScope.PriceClassID" Condition="E " ChildField="t.PriceClassID" CloseBrackets=")        " Operation="A" />
                             <GIOn LineNbr="3" OpenBrackets="(        " ParentField="LUMServiceScope.InventoryID" Condition="E " ChildField="t.InventoryID" Operation="O" />
                         </GIRelation>
+                        <GIResult LineNbr="10" SortOrder="10" IsActive="1" Field="inventoryID" Caption="Non Stock Item" IsVisible="1" DefaultNav="1" AggregateFunction="MAX" QuickFilter="0" FastFilter="1" RowID="cae423cb-0e83-4bb1-b62e-b579e43a1da4">
+                            <GIResultKvExt FieldName="CaptionEN" ValueText="Non Stock Item" />
+                        </GIResult>
+                        <GIResult LineNbr="9" SortOrder="9" IsActive="1" Field="priceClassID" Caption="Item Price Class" IsVisible="1" DefaultNav="1" AggregateFunction="MAX" QuickFilter="0" FastFilter="1" RowID="44d52685-0ac4-4a42-aeca-1979b3206b2b">
+                            <GIResultKvExt FieldName="CaptionEN" ValueText="Item Price Class" />
+                        </GIResult>
                         <GIResult LineNbr="7" SortOrder="7" IsActive="1" Field="=IIF(MAX([LUMServiceScope.LimitedCount]) = 0,'-',IIF(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]) &lt; 0 ,'0' , CSTR(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]))))" Caption="Entitled Count" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="72af522e-9afb-4a69-bede-149ce8457b15">
                             <GIResultKvExt FieldName="CaptionEN" ValueText="Entitled Count" />
                         </GIResult>
