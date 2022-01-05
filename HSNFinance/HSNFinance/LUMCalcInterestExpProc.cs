@@ -73,24 +73,24 @@ namespace HSNFinance
 
                     DateTime lastEndMth = MasterFinPeriod.PK.Find(this, filter.PeriodID).StartDate.Value.AddDays(-1);
 
-                    temp.LastTranDate  = MasterFinPeriod.PK.Find(this, intE.FinPeriodID).EndDate.Value.AddDays(-1);
-                    temp.LastTermCount = intE.TermCount;
-                    temp.DiffMonths    = Math.Abs(12 * (temp.LastTranDate.Value.Year - lastEndMth.Year) + temp.LastTranDate.Value.Month - lastEndMth.Month);
                     temp.FinPeriodID   = lastEndMth.ToString("yyyyMM");
+                    temp.LastTranDate  = MasterFinPeriod.PK.Find(this, intE?.FinPeriodID ?? filter.PeriodID).EndDate.Value.AddDays(-1);
+                    temp.DiffMonths    = Math.Abs(12 * (temp.LastTranDate.Value.Year - lastEndMth.Year) + temp.LastTranDate.Value.Month - lastEndMth.Month);
 
                     if (temp.LastTranDate >= lastEndMth) { continue; }
 
                     if (intE == null)
                     {
-                        temp.TermCount   = 1;
-                        temp.BegBalance  = details.AcquisitionCost;
+                        temp.LastTermCount = temp.TermCount = 1;
+                        temp.BegBalance    = details.AcquisitionCost;
                     }
                     else
                     {
-                        temp.TermCount   = intE.TermCount + temp.DiffMonths;
-                        temp.BegBalance  = intE.EndBalance;
+                        temp.TermCount     = intE.TermCount + temp.DiffMonths;
+                        temp.LastTermCount = intE.TermCount;
+                        temp.BegBalance    = intE.EndBalance;
                     }
- 
+
                     temp.LeaseRentTerm   = details.LeaseRentTerm;
                     temp.MonthlyRent     = details.RentAmount / (details.LeaseRentTerm == 0m ? 1 : details.LeaseRentTerm);
                     temp.MthlyIntRatePct = details.GetExtension<FADetailsExt>().UsrMthlyInterestRatePct;
@@ -108,16 +108,6 @@ namespace HSNFinance
         #endregion
 
         #region Event Handlers
-        //protected virtual void _(Events.RowSelected<BalanceFilter> e)
-        //{
-        //    BalanceFilter filter = e.Row;
-
-        //    InterestExp.SetProcessDelegate<LUMCalcInterestExpProc>(delegate (LUMCalcInterestExpProc graph, LUMLAInterestExpTemp list)
-        //    {
-        //        GenerateFATrans(list, filter);
-        //    });
-        //}
-
         protected virtual void _(Events.FieldDefaulting<BalanceFilter.classID> e)
         {
             // Because Cache Attached event with PXDefaultAttribute doesn't work properly.
