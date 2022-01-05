@@ -71,25 +71,26 @@ namespace HSNFinance
                     LUMLAInterestExp intE = SelectFrom<LUMLAInterestExp>.Where<LUMLAInterestExp.assetID.IsEqual<@P.AsInt>.And<LUMLAInterestExp.bookID.IsEqual<@P.AsInt>>>
                                                                         .OrderBy<LUMLAInterestExp.termCount.Desc>.View.SelectSingleBound(this, null, temp.AssetID, temp.BookID);
 
-                    DateTime lastEndMth = MasterFinPeriod.PK.Find(this, filter.PeriodID).StartDate.Value.AddDays(-1);
-
-                    temp.FinPeriodID   = lastEndMth.ToString("yyyyMM");
-                    temp.LastTranDate  = MasterFinPeriod.PK.Find(this, intE?.FinPeriodID ?? filter.PeriodID).EndDate.Value.AddDays(-1);
-                    temp.DiffMonths    = Math.Abs(12 * (temp.LastTranDate.Value.Year - lastEndMth.Year) + temp.LastTranDate.Value.Month - lastEndMth.Month);
-
-                    if (temp.LastTranDate >= lastEndMth) { continue; }
+                    DateTime curEndMth = MasterFinPeriod.PK.Find(this, filter.PeriodID).EndDate.Value.AddDays(-1);
 
                     if (intE == null)
                     {
-                        temp.LastTermCount = temp.TermCount = 1;
+                        temp.LastTranDate  = null;
+                        temp.DiffMonths    = temp.LastTermCount = temp.TermCount = 0;
                         temp.BegBalance    = details.AcquisitionCost;
+                        temp.FinPeriodID   = filter.PeriodID;
                     }
                     else
                     {
+                        temp.LastTranDate  = MasterFinPeriod.PK.Find(this, intE.FinPeriodID).EndDate.Value.AddDays(-1);
+                        temp.DiffMonths    = Math.Abs(12 * (temp.LastTranDate.Value.Year - curEndMth.Year) + temp.LastTranDate.Value.Month - curEndMth.Month);
                         temp.TermCount     = intE.TermCount + temp.DiffMonths;
                         temp.LastTermCount = intE.TermCount;
                         temp.BegBalance    = intE.EndBalance;
+                        temp.FinPeriodID   = temp.LastTranDate.Value.ToString("yyyyMM");
                     }
+
+                    if (temp.LastTranDate != null && temp.LastTranDate >= curEndMth) { continue; }
 
                     temp.LeaseRentTerm   = details.LeaseRentTerm;
                     temp.MonthlyRent     = details.RentAmount / (details.LeaseRentTerm == 0m ? 1 : details.LeaseRentTerm);
@@ -142,8 +143,6 @@ namespace HSNFinance
 
                 JournalEntry je = CreateInstance<JournalEntry>();
 
-                List<object> listObj = new List<object>();
-
                 for (int i = 0; i < list.Count; i++)
                 {
                     int count = 1;
@@ -154,8 +153,8 @@ namespace HSNFinance
 
                         je.BatchModule.Cache.Insert(new Batch()
                         {
-                            Module = BatchModule.GL,
-                            DateEntered = MasterFinPeriod.PK.Find(je, filter.PeriodID).StartDate.Value.AddDays(-1),
+                            Module      = BatchModule.GL,
+                            DateEntered = MasterFinPeriod.PK.Find(je, filter.PeriodID).EndDate.Value.AddDays(-1),
                             Description = AssetMaint_Extension.InterestExp
                         });
 
@@ -193,8 +192,12 @@ namespace HSNFinance
 
                         je.release.Press();
 
-                        listObj.Add(je.BatchModule.Current.BatchNbr);
-                        listObj.Add(list[i].LastTranDate.Value.AddMonths(count).ToString("yyyyMM"));
+                        Batch batch = je.BatchModule.Current;
+
+                        List<object> listObj = new List<object>();
+
+                        listObj.Add(batch.BatchNbr);
+                        listObj.Add(list[i].LastTranDate == null ? batch.TranPeriodID : list[i].LastTranDate.Value.AddMonths(count).ToString("yyyyMM"));
                         listObj.Add(begBalance);
                         listObj.Add(interestRate);
 
@@ -237,7 +240,7 @@ namespace HSNFinance
                 row.BegBalance    = (decimal?)listObj[2];
                 row.MonthlyRent   = temp.MonthlyRent;
                 row.InterestRate  = (decimal?)listObj[3];
-                row.EndBalance    = temp.BegBalance - temp.MonthlyRent + temp.InterestRate;
+                row.EndBalance    = row.BegBalance - row.MonthlyRent + row.InterestRate;
                 row.BatchNbr      = (string)listObj[0];
                 row.RefNbr        = temp.RefNbr;
 
@@ -266,12 +269,6 @@ namespace HSNFinance
         public abstract class selected : PX.Data.BQL.BqlBool.Field<selected> { }
         #endregion
 
-        #region BranchID
-        [Branch(BqlField = typeof(LUMLAInterestExp.branchID))]
-        public virtual int? BranchID { get; set; }
-        public abstract class branchID : PX.Data.BQL.BqlInt.Field<branchID> { }
-        #endregion
-
         #region AssetID
         [PXDBInt(IsKey = true, BqlField = typeof(LUMLAInterestExp.assetID))]
         [PXUIField(DisplayName = "Asset")]
@@ -287,6 +284,12 @@ namespace HSNFinance
         [PXUIField(DisplayName = "Term Count", Visible = false)]
         public virtual int? TermCount { get; set; }
         public abstract class termCount : PX.Data.BQL.BqlInt.Field<termCount> { }
+        #endregion
+
+        #region BranchID
+        [Branch(BqlField = typeof(LUMLAInterestExp.branchID))]
+        public virtual int? BranchID { get; set; }
+        public abstract class branchID : PX.Data.BQL.BqlInt.Field<branchID> { }
         #endregion
 
         #region LeaseRentTerm
@@ -337,6 +340,7 @@ namespace HSNFinance
 
         #region FinPeriodID
         [FABookPeriodID(BqlField = typeof(LUMLAInterestExp.finPeriodID))]
+        [PXUIField(DisplayName = "Prev. Period")]
         public virtual string FinPeriodID { get; set; }
         public abstract class finPeriodID : PX.Data.BQL.BqlString.Field<finPeriodID> { }
         #endregion
