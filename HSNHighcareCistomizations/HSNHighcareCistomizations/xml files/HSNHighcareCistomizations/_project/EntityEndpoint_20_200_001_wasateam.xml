@@ -313,6 +313,7 @@
         <TopLevelEntity name="HighcareServiceHistory" screen="GI770077">
             <Fields>
                 <Field name="CustomerID" type="StringValue" />
+                <Field name="HighcareClass" type="StringValue" />
                 <Field name="HighcareServiceHistoryDetails" type="HighcareServiceHistoryDetail[]" />
             </Fields>
             <Mappings>
@@ -320,51 +321,58 @@
                     <To object="Filter" field="CustomerID" />
                 </Mapping>
                 <Mapping field="HighcareServiceHistoryDetails">
-                    <Mapping field="PriceClassID">
-                        <To object="Results" field="t_priceClassID" />
+                    <Mapping field="CustomerID">
+                        <To object="Results" field="cust_acctCD" />
                     </Mapping>
-                    <Mapping field="EquipmentNbr">
-                        <To object="Results" field="equip_refNbr" />
+                    <Mapping field="NonStockItem">
+                        <To object="Results" field="LUMServiceScope_inventoryID" />
                     </Mapping>
-                    <Mapping field="ServiceOrderType">
-                        <To object="Results" field="t_srvOrdType" />
+                    <Mapping field="ItemPriceClass">
+                        <To object="Results" field="LUMServiceScope_priceClassID" />
                     </Mapping>
-                    <Mapping field="ServiceOrderNbr">
-                        <To object="Results" field="t_soRefNbr" />
-                    </Mapping>
-                    <Mapping field="AppointmentNbr">
-                        <To object="Results" field="t_aptRefNbr" />
-                    </Mapping>
-                    <Mapping field="InventoryID">
-                        <To object="Results" field="t_inventoryCD" />
-                    </Mapping>
-                    <Mapping field="Description">
-                        <To object="Results" field="t_inventoryID_description" />
-                    </Mapping>
-                    <Mapping field="UOM">
-                        <To object="Results" field="t_uom" />
-                    </Mapping>
-                    <Mapping field="OrderDate">
-                        <To object="Results" field="t_orderDate" />
+                    <Mapping field="HighcareClass">
+                        <To object="Results" field="LUMCustomerPINCode_cPriceClassID" />
                     </Mapping>
                     <Mapping field="PinCode">
-                        <To object="Results" field="t_pincode" />
+                        <To object="Results" field="LUMCustomerPINCode_pin" />
                     </Mapping>
+                    <Mapping field="PriceClassID">
+                        <To object="Results" field="LUMServiceScope_CPriceClassID" />
+                    </Mapping>
+                    <Mapping field="ServiceDescription">
+                        <To object="Results" field="LUMServiceScope_description" />
+                    </Mapping>
+                    <Mapping field="EntitledCount">
+                        <To object="Results" field="LUMServiceScope_Formula72af522e9afb4a69bede149ce8457b15" />
+                    </Mapping>
+                    <Mapping field="LimitedCount">
+                        <To object="Results" field="LUMServiceScope_limitedCount" />
+                    </Mapping>
+                    <Mapping field="UsedCount">
+                        <To object="Results" field="t_Count06ab5d620e774c3abcc3bb49d578d391" />
+                    </Mapping>
+                    <Mapping field="EndDate">
+                        <To object="Results" field="LUMCustomerPINCode_endDate" />
+                    </Mapping>
+                </Mapping>
+                <Mapping field="HighcareClass">
+                    <To object="Filter" field="HighcareClass" />
                 </Mapping>
             </Mappings>
         </TopLevelEntity>
         <Detail name="HighcareServiceHistoryDetail">
             <Fields>
-                <Field name="AppointmentNbr" type="StringValue" />
-                <Field name="Description" type="StringValue" />
-                <Field name="EquipmentNbr" type="StringValue" />
-                <Field name="InventoryID" type="StringValue" />
-                <Field name="OrderDate" type="DateTimeValue" />
+                <Field name="CustomerID" type="StringValue" />
+                <Field name="EndDate" type="DateTimeValue" />
+                <Field name="EntitledCount" type="StringValue" />
+                <Field name="HighcareClass" type="StringValue" />
+                <Field name="ItemPriceClass" type="StringValue" />
+                <Field name="LimitedCount" type="IntValue" />
+                <Field name="NonStockItem" type="StringValue" />
                 <Field name="PinCode" type="StringValue" />
                 <Field name="PriceClassID" type="StringValue" />
-                <Field name="ServiceOrderNbr" type="StringValue" />
-                <Field name="ServiceOrderType" type="StringValue" />
-                <Field name="UOM" type="StringValue" />
+                <Field name="ServiceDescription" type="StringValue" />
+                <Field name="UsedCount" type="IntValue" />
             </Fields>
         </Detail>
     </Endpoint>
