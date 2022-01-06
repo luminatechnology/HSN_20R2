@@ -108,7 +108,7 @@ namespace PX.Objects.FS
                     e.Cache.RaiseExceptionHandling<FSAppointmentDet.SMequipmentID>(
                         row,
                         e.NewValue,
-                        new PXSetPropertyException<FSAppointmentDet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.RowWarning));
+                        new PXSetPropertyException<FSAppointmentDet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.Warning));
             }
             // 移除Equipment時 還原折扣
             else if (e.NewValue == null)

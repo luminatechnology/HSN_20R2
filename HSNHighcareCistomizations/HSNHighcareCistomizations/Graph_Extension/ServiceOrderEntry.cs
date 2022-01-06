@@ -34,6 +34,11 @@ namespace PX.Objects.FS
         [PXHidden]
         public SelectFrom<LUMHSNSetup>.View hsnSetup;
 
+        public static bool IsActive()
+        {
+            return (SelectFrom<LUMHSNSetup>.View.Select(new PXGraph()).RowCast<LUMHSNSetup>().FirstOrDefault()?.GetExtension<LUMHSNSetupExtension>().EnableHighcareFunction ?? false);
+        }
+
         #region Override Method
         public override void Initialize()
         {
@@ -48,6 +53,30 @@ namespace PX.Objects.FS
             this.SrvScope.AllowDelete = this.SrvScope.AllowInsert = this.SrvScope.AllowUpdate = false;
             this.SrvScope.AllowSelect = hsnSetup.GetExtension<LUMHSNSetupExtension>()?.EnableHighcareFunction ?? false;
         }
+        #endregion
+
+        #region Delegate Method
+
+        /// <summary> Delegate Schedule Appointment </summary>
+        public delegate IEnumerable ScheduleAppointmentDelegate(PXAdapter adapter);
+        [PXOverride]
+        public IEnumerable ScheduleAppointment(PXAdapter adapter, ScheduleAppointmentDelegate baseMethod)
+        {
+            List<FSServiceOrder> list = adapter.Get<FSServiceOrder>().ToList();
+            try
+            {
+                baseMethod.Invoke(adapter);
+            }
+            catch (PXRedirectRequiredException ex)
+            {
+                var graph = (AppointmentEntry)ex.Graph;
+                var appDet = graph.AppointmentDetails.Select().RowCast<FSAppointmentDet>().ToList();
+                appDet.ForEach(x => { x.ManualDisc = x.DiscAmt.HasValue && x.DiscAmt != 0; });
+                throw new PXRedirectRequiredException(ex.Graph, null);
+            }
+            return list;
+        }
+
         #endregion
 
         #region Event
@@ -65,7 +94,7 @@ namespace PX.Objects.FS
 
         public void GetHighcareDiscount(Events.FieldUpdated<FSSODet.SMequipmentID> e)
         {
-            var doc = Base.ServiceOrderRecords.Current; 
+            var doc = Base.ServiceOrderRecords.Current;
 
             if (e.Row is FSSODet row && row != null && row.SMEquipmentID.HasValue && doc != null)
             {
@@ -112,14 +141,12 @@ namespace PX.Objects.FS
                     e.Cache.RaiseExceptionHandling<FSSODet.SMequipmentID>(
                         row,
                         e.NewValue,
-                        new PXSetPropertyException<FSSODet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.RowWarning));
+                        new PXSetPropertyException<FSSODet.SMequipmentID>("Limited count for this service has been reached", PXErrorLevel.Warning));
             }
             // 移除Equipment時 還原折扣
             else if (e.NewValue == null)
                 Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(e.Row, (decimal)0);
         }
-
-
 
         #endregion
     }
