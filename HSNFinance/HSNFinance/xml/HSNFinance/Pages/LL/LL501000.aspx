@@ -26,16 +26,16 @@
 			<px:PXGridLevel DataMember="InterestExp">
 			    <Columns>
 			        <px:PXGridColumn DataField="Selected" TextAlign="Center" Type="CheckBox" AllowCheckAll="True" CommitChanges="true" ></px:PXGridColumn>
-					<px:PXGridColumn DataField="BranchID" DisplayMode="Hint" ></px:PXGridColumn>
 					<px:PXGridColumn DataField="AssetID"></px:PXGridColumn>
+					<px:PXGridColumn DataField="TermCount"></px:PXGridColumn>
 					<px:PXGridColumn DataField="AssetID_description" Width="350" />
+					<px:PXGridColumn DataField="BranchID" DisplayMode="Hint" />
 					<px:PXGridColumn DataField="BookID"></px:PXGridColumn>
-					<px:PXGridColumn DataField="FinPeriodID" DisplayFormat="##-####" ></px:PXGridColumn>
+					<px:PXGridColumn DataField="FinPeriodID" DisplayFormat="##-####" />
 					<px:PXGridColumn DataField="BegBalance"></px:PXGridColumn>
 					<px:PXGridColumn DataField="MonthlyRent"></px:PXGridColumn>
 					<px:PXGridColumn DataField="InterestRate"></px:PXGridColumn>
 					<px:PXGridColumn DataField="EndBalance"></px:PXGridColumn></Columns>
-			
 				<RowTemplate>
 					<px:PXSelector runat="server" ID="CstPXSelector1" DataField="AssetID" AllowEdit="True"  ></px:PXSelector>
 					<px:PXSelector runat="server" ID="CstPXSelector2" DataField="BookID" AllowEdit="True" />

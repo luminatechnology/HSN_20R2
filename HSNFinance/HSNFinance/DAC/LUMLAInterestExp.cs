@@ -90,7 +90,7 @@ namespace HSNFinance.DAC
     
         #region BegBalance
         [PXDBDecimal()]
-        [PXUIField(DisplayName = "Beggining Balance")]
+        [PXUIField(DisplayName = "Beginning Balance")]
         public virtual decimal? BegBalance { get; set; }
         public abstract class begBalance : PX.Data.BQL.BqlDecimal.Field<begBalance> { }
         #endregion
@@ -104,7 +104,7 @@ namespace HSNFinance.DAC
     
         #region InterestRate
         [PXDBDecimal()]
-        [PXUIField(DisplayName = "Interest Rate")]
+        [PXUIField(DisplayName = "Interest Expense")]
         public virtual decimal? InterestRate { get; set; }
         public abstract class interestRate : PX.Data.BQL.BqlDecimal.Field<interestRate> { }
         #endregion
