@@ -122,10 +122,13 @@ namespace PX.Objects.FS
                 if (servicescopeInfo == null)
                     return;
                 // Service History
-                var usedServiceCountHist = this.HighcareSrvHistory.Select()
-                                       .RowCast<v_HighcareServiceHistory>()
-                                       .Where(x => (x?.PriceClassID == servicescopeInfo?.PriceClassID || x?.InventoryID == servicescopeInfo?.InventoryID) && x.Pincode == currentPINCode)
-                                       .Count();
+                var usedServiceCountHist = !string.IsNullOrEmpty(servicescopeInfo?.PriceClassID) ?
+                                        this.HighcareSrvHistory.Select()
+                                            .RowCast<v_HighcareServiceHistory>()
+                                            .Where(x => x?.PriceClassID == servicescopeInfo?.PriceClassID && x.Pincode == currentPINCode).Count() :
+                                        this.HighcareSrvHistory.Select()
+                                            .RowCast<v_HighcareServiceHistory>()
+                                            .Where(x => x?.InventoryID == servicescopeInfo?.InventoryID && x.Pincode == currentPINCode).Count();
                 // Detail Cache
                 var usedServiceCountCache = Base.ServiceOrderDetails
                                             .Select().RowCast<FSSODet>()
