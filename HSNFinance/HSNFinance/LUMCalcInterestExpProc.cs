@@ -75,23 +75,23 @@ namespace HSNFinance
 
                     if (intE == null)
                     {
-                        temp.LastTranDate  = null;
-                        temp.DiffMonths    = temp.LastTermCount = temp.TermCount = 0;
+                        temp.LastTranDate  = DateTime.Parse($"{details.DepreciateFromDate.Value.Year}/{details.DepreciateFromDate.Value.Month}/{DateTime.DaysInMonth(details.DepreciateFromDate.Value.Year, details.DepreciateFromDate.Value.Month)}");
+                        temp.LastTermCount = temp.TermCount = 0;
                         temp.BegBalance    = details.AcquisitionCost;
-                        temp.FinPeriodID   = filter.PeriodID;
+                        temp.FinPeriodID   = null;
                     }
                     else
                     {
                         temp.LastTranDate  = MasterFinPeriod.PK.Find(this, intE.FinPeriodID).EndDate.Value.AddDays(-1);
-                        temp.DiffMonths    = Math.Abs(12 * (temp.LastTranDate.Value.Year - curEndMth.Year) + temp.LastTranDate.Value.Month - curEndMth.Month);
                         temp.TermCount     = intE.TermCount + temp.DiffMonths;
                         temp.LastTermCount = intE.TermCount;
                         temp.BegBalance    = intE.EndBalance;
                         temp.FinPeriodID   = temp.LastTranDate.Value.ToString("yyyyMM");
                     }
 
-                    if (temp.LastTranDate != null && temp.LastTranDate >= curEndMth) { continue; }
+                    if (intE != null && temp.LastTranDate >= curEndMth) { continue; }
 
+                    temp.DiffMonths      = Math.Abs(12 * (temp.LastTranDate.Value.Year - curEndMth.Year) + temp.LastTranDate.Value.Month - curEndMth.Month);
                     temp.LeaseRentTerm   = details.LeaseRentTerm;
                     temp.MonthlyRent     = details.RentAmount / (details.LeaseRentTerm == 0m ? 1 : details.LeaseRentTerm);
                     temp.MthlyIntRatePct = details.GetExtension<FADetailsExt>().UsrMthlyInterestRatePct;
@@ -145,7 +145,7 @@ namespace HSNFinance
 
                 for (int i = 0; i < list.Count; i++)
                 {
-                    int count = 1;
+                    int      count      = string.IsNullOrEmpty(list[i].FinPeriodID) ? 0 : 1;
                     decimal? begBalance = list[i].BegBalance;
                     do
                     {
@@ -194,12 +194,13 @@ namespace HSNFinance
 
                         Batch batch = je.BatchModule.Current;
 
-                        List<object> listObj = new List<object>();
-
-                        listObj.Add(batch.BatchNbr);
-                        listObj.Add(list[i].LastTranDate == null ? batch.TranPeriodID : list[i].LastTranDate.Value.AddMonths(count).ToString("yyyyMM"));
-                        listObj.Add(begBalance);
-                        listObj.Add(interestRate);
+                        List<object> listObj = new List<object>
+                        {
+                            batch.BatchNbr,
+                            list[i].LastTranDate == null ? batch.TranPeriodID : list[i].LastTranDate.Value.AddMonths(count).ToString("yyyyMM"),
+                            begBalance,
+                            interestRate
+                        };
 
                         graph.CreateLAInterestExp(list[i], listObj);
 
