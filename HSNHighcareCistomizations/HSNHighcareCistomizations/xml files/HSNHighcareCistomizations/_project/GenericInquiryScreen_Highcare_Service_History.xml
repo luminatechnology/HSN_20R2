@@ -147,8 +147,8 @@
                     <GIGroupBy LineNbr="2" IsActive="1" DataFieldName="LUMCustomerPINCode.cPriceClassID" />
                     <GIGroupBy LineNbr="1" IsActive="1" DataFieldName="cust.bAccountID" />
                     <GITable Alias="t" Name="HSNHighcareCistomizations.DAC.v_HighcareServiceHistory">
-                        <GIResult LineNbr="5" SortOrder="5" IsActive="1" Field="lineNbr" Caption="UsedCount" IsVisible="1" DefaultNav="1" AggregateFunction="COUNT" QuickFilter="0" FastFilter="0" RowID="06ab5d62-0e77-4c3a-bcc3-bb49d578d391">
-                            <GIResultKvExt FieldName="CaptionEN" ValueText="UsedCount" />
+                        <GIResult LineNbr="5" SortOrder="5" IsActive="1" Field="lineNbr" Caption="Used Count" IsVisible="1" DefaultNav="1" AggregateFunction="COUNT" QuickFilter="0" FastFilter="0" RowID="06ab5d62-0e77-4c3a-bcc3-bb49d578d391">
+                            <GIResultKvExt FieldName="CaptionEN" ValueText="Used Count" />
                         </GIResult>
                     </GITable>
                     <GITable Alias="LUMServiceScope" Name="HSNHighcareCistomizations.DAC.LUMServiceScope">
@@ -164,8 +164,8 @@
                         <GIResult LineNbr="9" SortOrder="9" IsActive="1" Field="priceClassID" Caption="Item Price Class" IsVisible="1" DefaultNav="1" AggregateFunction="MAX" QuickFilter="0" FastFilter="1" RowID="44d52685-0ac4-4a42-aeca-1979b3206b2b">
                             <GIResultKvExt FieldName="CaptionEN" ValueText="Item Price Class" />
                         </GIResult>
-                        <GIResult LineNbr="7" SortOrder="7" IsActive="1" Field="=IIF(MAX([LUMServiceScope.LimitedCount]) = 0,'-',IIF(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]) &lt; 0 ,'0' , CSTR(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]))))" Caption="Entitled Count" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="72af522e-9afb-4a69-bede-149ce8457b15">
-                            <GIResultKvExt FieldName="CaptionEN" ValueText="Entitled Count" />
+                        <GIResult LineNbr="7" SortOrder="7" IsActive="1" Field="=IIF(MAX([LUMServiceScope.LimitedCount]) = 0,'-',IIF(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]) &lt; 0 ,'0' , CSTR(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]))))" Caption="Remaining Count" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="72af522e-9afb-4a69-bede-149ce8457b15">
+                            <GIResultKvExt FieldName="CaptionEN" ValueText="Remaining Count" />
                         </GIResult>
                         <GIResult LineNbr="6" SortOrder="6" IsActive="1" Field="limitedCount" Caption="Limited Count" IsVisible="1" DefaultNav="1" AggregateFunction="MAX" QuickFilter="0" FastFilter="1" RowID="fc11436b-e652-4ed8-a343-aa4f7782a466">
                             <GIResultKvExt FieldName="CaptionEN" ValueText="Limited Count" />
