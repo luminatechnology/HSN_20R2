@@ -1,0 +1,148 @@
+﻿<Sql TableName="Func_LumARAgedPeriod" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM
+		sys.objects
+	WHERE name = 'Func_LumARAgedPeriod' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP FUNCTION Func_LumARAgedPeriod
+GO
+CREATE FUNCTION Func_LumARAgedPeriod
+(   
+    @conditionPeriodID char(6),
+	@CompanyID int
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+    select
+		MAX(ARRegister.CompanyID) as 'CompanyID',
+		MAX(ARRegister.BranchID) as 'BranchID',
+		MAX(ARRegister.CustomerID) as 'CustomerID',
+		MAX(BAccount.AcctName) as 'AcctName',
+		MAX(ARRegister.RefNbr) as 'ARReRefNbr',
+		MAX(ARRegister.DocType) as 'ARReDocType', -- =PPM || CRM, *-1
+		MAX(ARRegister.Status) as 'ARReStatus',
+		MAX(Company.BaseCuryID) as 'BaseCuryID',
+		MAX(CurrencyInfo.CuryID) as 'CuryID',
+		CASE MAX(ARRegister.DocType) 
+			WHEN 'INV' THEN 
+			IIF(MAX(ARRegister.CuryInitDocBal) <> 0,
+				IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
+					MAX(ARRegister.InitDocBal) - IsNull(MAX(INVARRegisterToPayment.AdjAmt), 0),
+					ROUND((MAX(ARRegister.CuryInitDocBal) - IsNull(MAX(INVARRegisterToPayment.CuryAdjdAmt), 0)) * ROUND(MAX(CurrencyInfo.CuryRate), 2), 2)),
+				IIF(MAX(INVARRegisterToPayment.AdjDate) is null,
+					MAX(ARRegister.OrigDocAmt), 
+					IIF(DATEDIFF(DAY, MAX(INVARRegisterToPayment.AdjDate), DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @conditionPeriodID + '01')))) < 0,
+						MAX(ARRegister.OrigDocAmt),
+						IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
+							MAX(ARRegister.OrigDocAmt) - MAX(INVARRegisterToPayment.AdjAmt),
+							ROUND((MAX(ARRegister.CuryOrigDocAmt) - MAX(INVARRegisterToPayment.CuryAdjdAmt)) * ROUND(MAX(CurrencyInfo.CuryRate), 2), 2)))
+				)
+			)
+			WHEN 'CRM' THEN 
+				IIF(MAX(ClosedTranPeriodID) > @conditionPeriodID,
+					IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
+						MAX(ARRegister.OrigDocAmt) * -1,
+						MAX(ARRegister.CuryOrigDocAmt) * ROUND(MAX(CurrencyInfo.CuryRate), 2) * -1
+					),
+				MAX(ARRegister.DocBal) * -1
+				)
+			WHEN 'PMT' THEN
+				IIF(MAX(ARRegister.Status) <> 'V', --Voided
+					IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
+						(MAX(ARRegister.CuryOrigDocAmt) - IsNull(MAX(SumARAdjust.SumAdjAmt), 0)) * -1,
+						(MAX(ARRegister.CuryOrigDocAmt) - IsNull(MAX(SumARAdjust.SumAdjAmt), 0)) * ROUND(MAX(CurrencyInfo.CuryRate), 2) * -1),
+					MAX(ARRegister.DocBal) * -1
+				)
+			ELSE MAX(ARRegister.DocBal) * -1
+		END	
+		as 'ARReOrigDocAmtBasedOnDocType',
+		CONVERT(VARCHAR(6), MAX(ARRegister.DueDate), 112) as 'convertARReDueDate',
+		DATEDIFF(DAY, MAX(ARRegister.DueDate), DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @conditionPeriodID + '01')))) as 'DiffDays',
+		CONVERT(VARCHAR(6), MAX(ARRegister.DocDate), 112) as 'convertARReDocDate',
+		DATEDIFF(DAY, MAX(ARRegister.DocDate), DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @conditionPeriodID + '01')))) as 'DocDiffDays',
+		MAX(ARRegister.DocDate) as 'ARReDocDate',
+		MAX(ARRegister.FinPeriodID) as 'ARReFinPeriodID',
+		MAX(ARRegister.DueDate) as 'ARReDueDate',
+		IIF(MAX(ARRegister.DocType) = 'INV',
+			MAX(INVARRegisterToPayment.AdjDate),
+			MAX(ARPayment.AdjDate)) as 'ARPaymentAdjDate',
+		DATEDIFF(DAY, MAX(INVARRegisterToPayment.AdjDate), DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @conditionPeriodID + '01')))) as 'PaymentDiffDays',
+		MAX(INVARRegisterToPayment.AdjAmt) as 'PaymentAdjAmt',
+		MAX(INVARRegisterToPayment.CuryAdjdAmt) as 'PaymentCuryAdjdAmt',
+		MAX(ARPayment.AdjFinPeriodID) as 'ARPaymentAdjFinPeriodID',
+		MAX(ARRegister.DocBal) as 'ARReDocBal', 
+		MAX(ARRegister.CuryOrigDocAmt) as 'ARReCuryOrigDocAmt', 
+		MAX(ARRegister.OrigDocAmt) as 'ARReOrigDocAmt', 
+		MAX(ARAdjusted.AdjgTranPeriodID) as 'ARAdjusted_AdjgTranPeriodID',
+		MAX(ARAdjusted.AdjdDocType) as 'ARAdjusted_AdjdDocType',
+		MAX(ARAdjusted.AdjgDocType) as 'ARAdjusted_AdjgDocType',
+		MAX(LastAdjAmt.AdjAmt) as 'LastAdjAmt_AdjAmt',
+		MAX(ARAdjusting.AdjgTranPeriodID) as 'ARAdjusting_AdjgTranPeriodID',
+		MAX(ClosedTranPeriodID) as 'ClosedTranPeriodID',
+		MAX(LastAdjAmt.AdjgTranPeriodID) as 'LastAdjgTranPeriodID',
+		MAX(SumARAdjust.SumAdjAmt) as 'SumAdjAmt',
+		MAX(BAccount.ClassID) as 'BAcctClassID'
+		from ARRegister 
+		left join Company on Company.CompanyID = ARRegister.CompanyID
+		left join ARInvoice on ARInvoice.DocType = ARRegister.DocType and ARInvoice.RefNbr = ARRegister.RefNbr and ARInvoice.CompanyID = ARRegister.CompanyID
+		left join ARPayment on ARPayment.DocType = ARRegister.DocType and ARPayment.RefNbr = ARRegister.RefNbr and ARPayment.CompanyID = ARRegister.CompanyID
+		cross join APAROrd
+		left join ARAdjust as ARAdjusted on ARAdjusted.AdjdDocType = ARRegister.DocType and ARAdjusted.AdjdRefNbr = ARRegister.RefNbr and ARAdjusted.Released = ARRegister.Released and ord = 0 and ARAdjusted.CompanyID = ARRegister.CompanyID
+		left join ARAdjust as ARAdjusting on ARAdjusting.AdjgDocType = ARRegister.DocType and ARAdjusting.AdjgRefNbr = ARRegister.RefNbr and ARAdjusting.Released = ARRegister.Released and ord = 1 and ARAdjusting.CompanyID = ARRegister.CompanyID
+		left join BAccount on BAccount.BAccountID = ARRegister.CustomerID and BAccount.CompanyID = ARRegister.CompanyID
+		left join Customer on Customer.BAccountID = BAccount.BAccountID and Customer.CompanyID = ARRegister.CompanyID
+		left join CurrencyInfo on CurrencyInfo.CompanyID = ARRegister.CompanyID and CurrencyInfo.CuryInfoID = ARRegister.CuryInfoID
+		left join
+			(select MAX(CompanyID) as 'CompanyID', MAX(AdjgDocType) as 'AdjgDocType', MAX(AdjgRefNbr) as 'AdjgRefNbr', MAX(AdjdRefNbr) as 'AdjdRefNbr'
+			from ARAdjust group by CompanyID, AdjgRefNbr) 
+			as MAXARAdjust
+			on MAXARAdjust.AdjgDocType = ARRegister.DocType and MAXARAdjust.AdjgRefNbr = ARRegister.RefNbr and MAXARAdjust.CompanyID = ARRegister.CompanyID
+		left join
+		(select CompanyID, AdjgRefNbr, AdjgDocType, AdjdRefNbr, AdjAmt, AdjgTranPeriodID from ARAdjust)
+			as LastAdjAmt
+			on LastAdjAmt.AdjgDocType = ARRegister.DocType and LastAdjAmt.AdjgRefNbr = ARRegister.RefNbr and LastAdjAmt.CompanyID = ARRegister.CompanyID
+				and LastAdjAmt.AdjdRefNbr = MAXARAdjust.AdjdRefNbr
+		left join
+		(select
+				MAX(ARRegister.CompanyID) as 'CompanyID',
+				MAX(ARRegister.RefNbr) as 'RefNbr',
+				MAX(ARRegister.DocType) as 'DocType',
+				CONVERT(VARCHAR(6), MAX(ARRegister.DocDate), 112) as 'convertARReDocDate',
+				MAX(ARRegister.DocBal) as 'DocBal',
+				MAX(ARRegister.OrigDocAmt) as 'OrigDocAmt', 
+				SUM(ARAdjust.AdjAmt) as 'SumAdjAmt'
+			from ARRegister
+			left join ARAdjust on ARAdjust.AdjgDocType = ARRegister.DocType and ARAdjust.AdjgRefNbr = ARRegister.RefNbr and ARAdjust.Released = ARRegister.Released and ARAdjust.CompanyID = ARRegister.CompanyID
+				and AdjgTranPeriodID <= @conditionPeriodID --CONVERT(VARCHAR(6), ARRegister.DocDate, 112)
+			group by ARRegister.CompanyID, ARAdjust.AdjgRefNbr, ARAdjust.AdjgDocType)
+			as SumARAdjust
+			on SumARAdjust.CompanyID = ARRegister.CompanyID and SumARAdjust.RefNbr = ARRegister.RefNbr and SumARAdjust.DocType = ARRegister.DocType
+		left join
+		(select
+				ARRegister.CompanyID,
+				ARRegister.RefNbr,
+				ARRegister.DocType,
+				SUM(ARRegister.CuryInitDocBal) as 'CuryInitDocBal',
+				SUM(ARAdjust.AdjAmt) as 'AdjAmt',
+				SUM(ARAdjust.CuryAdjdAmt) as 'CuryAdjdAmt',
+				MAX(ARPayment.AdjDate) as 'AdjDate'
+			from ARRegister
+			left join ARAdjust on ARAdjust.CompanyID = ARRegister.CompanyID and ARAdjust.AdjdRefNbr = ARRegister.RefNbr and ARAdjust.AdjdDocType = ARRegister.DocType
+			left join ARPayment on ARPayment.CompanyID = ARRegister.CompanyID and ARPayment.RefNbr = ARAdjust.AdjgRefNbr and ARPayment.DocType = ARAdjust.AdjgDocType
+			left join ARRegister as APPayARRegister on APPayARRegister.CompanyID = ARRegister.CompanyID and APPayARRegister.RefNbr = ARPayment.RefNbr and APPayARRegister.DocType = ARPayment.DocType
+			where ARPayment.AdjDate <= DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @conditionPeriodID + '01'))) and APPayARRegister.Released = 1
+			group by ARRegister.CompanyID, ARRegister.RefNbr, ARRegister.DocType)
+			as INVARRegisterToPayment
+			on INVARRegisterToPayment.CompanyID = ARRegister.CompanyID and INVARRegisterToPayment.RefNbr = ARRegister.RefNbr and INVARRegisterToPayment.DocType = ARRegister.DocType
+		where ARRegister.Released = 1
+			and ARInvoice.InstallmentCntr is null
+			and ARRegister.CompanyID = @CompanyID
+			and (CustomerClassID <> 'INTERCO' or CustomerClassID is null) --exclude CustomerClassID = INTERCO
+	group by ARRegister.RefNbr, ARRegister.DocType, ARRegister.DocDate
+)
+GO]]></CDATA>
+</Sql>

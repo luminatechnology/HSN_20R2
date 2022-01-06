@@ -1,0 +1,74 @@
+﻿<Sql TableName="SP_GenerateLumARAgedPeriod" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM
+		sys.objects
+	WHERE name = 'SP_GenerateLumARAgedPeriod' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP PROCEDURE [dbo].[SP_GenerateLumARAgedPeriod]
+GO
+
+CREATE PROCEDURE [dbo].[SP_GenerateLumARAgedPeriod]
+	@ConditionPeriodID Char(6),
+	@CompanyID int,
+	@RepeatTimes int
+
+AS
+BEGIN
+	--Truncate table
+	Truncate Table [dbo].[LumARAgedPeriod]
+
+	DECLARE @PeriodID Char(6)
+	SET @PeriodID = @ConditionPeriodID
+	DECLARE @RepeatStart int
+	SET @RepeatStart = 1
+
+	WHILE(@RepeatStart <= @RepeatTimes)
+	BEGIN
+		INSERT INTO LumARAgedPeriod ([CompanyID], [ConditionPeriodID]) VALUES (@CompanyID, @PeriodID);
+
+		--Current
+		UPDATE LumARAgedPeriod SET
+			[Current] = (select SUM(ARReOrigDocAmtBasedOnDocType)
+						from Func_LumARAgedPeriod(@PeriodID, @CompanyID)
+						where (convertARReDueDate >= @PeriodID and DiffDays <= 0
+						and convertARReDocDate <= @PeriodID
+						or (ARReDocType <> 'INV' and ARReStatus <> 'C' and ARPaymentAdjDate <= DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @PeriodID + '01'))))
+						or (ARReDocType = 'CRM' and ARPaymentAdjDate <= DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @PeriodID + '01'))) and ARPaymentAdjFinPeriodID = @PeriodID)))
+		WHERE [CompanyID] = @CompanyID and [ConditionPeriodID] = @PeriodID and [LineNbr] = @RepeatStart
+		/*
+		or (ARReDocType <> 'INV' and ARReDocType <> 'CRM' and ARPaymentAdjDate <= DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @PeriodID + '01'))))
+		or (ARReDocType = 'CRM' and ARPaymentAdjDate <= DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @PeriodID + '01'))) and ARPaymentAdjFinPeriodID = 202106)
+		*/
+		--Others
+		UPDATE LumARAgedPeriod SET
+				--[OneMDays] 1 - 30 Days
+				[OneMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 0 and DiffDays <= 30), 0),
+				--[TwoMDays] 31 - 60 Days
+				[TwoMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 30 and DiffDays <= 60), 0),
+				--[ThreeMDays] 61 - 90 Days
+				[ThreeMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 60 and DiffDays <= 90), 0),
+				--[FourMDays] 91 - 120 Days
+				[FourMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 90 and DiffDays <= 120), 0),
+				--[FiveMDays] 121 - 150 Days
+				[FiveMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 120 and DiffDays <= 150), 0),
+				--[SixMDays] 151 - 180 Days
+				[SixMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 150 and DiffDays <= 180), 0),
+				--[SevenMDays] 181 - 210 Days
+				[SevenMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 180 and DiffDays <= 210), 0),
+				--[OverSevenMDays] Over 210 Days
+				[OverSevenMDays] = IsNull((select SUM(ARReOrigDocAmtBasedOnDocType) from Func_LumARAgedPeriod(@PeriodID, @CompanyID) where DiffDays > 210), 0)
+		WHERE [CompanyID] = @CompanyID and [ConditionPeriodID] = @PeriodID and [LineNbr] = @RepeatStart
+
+		--Total
+		UPDATE LumARAgedPeriod SET
+		[Total] = [Current] + [OneMDays] + [TwoMDays] + [ThreeMDays] + [FourMDays] + [FiveMDays] + [SixMDays] + [SevenMDays] + [OverSevenMDays]
+		WHERE [CompanyID] = @CompanyID and [ConditionPeriodID] = @PeriodID and [LineNbr] = @RepeatStart
+
+		SET @PeriodID = format(dateadd(month, -1, cast(concat(@PeriodID, '01') as date)), 'yyyyMM')
+		SET @RepeatStart = @RepeatStart + 1
+	END	
+END
+GO]]></CDATA>
+</Sql>

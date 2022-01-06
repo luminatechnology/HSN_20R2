@@ -279,7 +279,7 @@ namespace PX.Objects.AR
 
                     bool hasSummary = regisExt2.UsrSummaryPrint == true && !string.IsNullOrEmpty(regisExt2.UsrGUISummary);
 
-                    eSCPOS.SendTo(string.Format("{0}\n", hasSummary == false ? aRTran.TranDesc : regisExt2.UsrGUISummary));
+                    eSCPOS.SendTo(string.Format("{0}\n", hasSummary == false ? aRTran.TranDesc : CS.CSAttributeDetail.PK.Find(new PXGraph(), ARInvoiceEntry_Extension2.GUISummary, regisExt2.UsrGUISummary).Description));
 
                     qty = hasSummary == false ? string.Format("{0:N0}", aRTran.Qty) : "1";
 
@@ -296,7 +296,7 @@ namespace PX.Objects.AR
 
                     if (hasSummary == true)
                     {
-                        uPr = ePr = string.Format("{0:N2", register.CuryDocBal);
+                        uPr = ePr = string.Format("{0:N2}", register.CuryDocBal);
                     }
 
                     // One row has position of 30 bytes.

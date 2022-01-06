@@ -1,0 +1,17 @@
+﻿<Sql TableName="LumARAgedPeriod" TableSchemaXml="#CDATA">
+    <CDATA name="TableSchemaXml"><![CDATA[<table name="LumARAgedPeriod">
+  <col name="LineNbr" type="Int" identity="true" />
+  <col name="CompanyID" type="Int" default="Zero" />
+  <col name="ConditionPeriodID" type="Char(6)" nullable="true" />
+  <col name="Current" type="Decimal(19,6)" nullable="true" />
+  <col name="OneMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="TwoMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="ThreeMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="FourMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="FiveMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="SixMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="SevenMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="OverSevenMDays" type="Decimal(19,6)" nullable="true" />
+  <col name="Total" type="Decimal(19,6)" nullable="true" />
+</table>]]></CDATA>
+</Sql>
