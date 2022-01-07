@@ -80,10 +80,8 @@ RETURN
 		MAX(ARAdjusted.AdjgTranPeriodID) as 'ARAdjusted_AdjgTranPeriodID',
 		MAX(ARAdjusted.AdjdDocType) as 'ARAdjusted_AdjdDocType',
 		MAX(ARAdjusted.AdjgDocType) as 'ARAdjusted_AdjgDocType',
-		MAX(LastAdjAmt.AdjAmt) as 'LastAdjAmt_AdjAmt',
 		MAX(ARAdjusting.AdjgTranPeriodID) as 'ARAdjusting_AdjgTranPeriodID',
 		MAX(ClosedTranPeriodID) as 'ClosedTranPeriodID',
-		MAX(LastAdjAmt.AdjgTranPeriodID) as 'LastAdjgTranPeriodID',
 		MAX(SumARAdjust.SumAdjAmt) as 'SumAdjAmt',
 		MAX(BAccount.ClassID) as 'BAcctClassID'
 		from ARRegister 
@@ -96,16 +94,6 @@ RETURN
 		left join BAccount on BAccount.BAccountID = ARRegister.CustomerID and BAccount.CompanyID = ARRegister.CompanyID
 		left join Customer on Customer.BAccountID = BAccount.BAccountID and Customer.CompanyID = ARRegister.CompanyID
 		left join CurrencyInfo on CurrencyInfo.CompanyID = ARRegister.CompanyID and CurrencyInfo.CuryInfoID = ARRegister.CuryInfoID
-		left join
-			(select MAX(CompanyID) as 'CompanyID', MAX(AdjgDocType) as 'AdjgDocType', MAX(AdjgRefNbr) as 'AdjgRefNbr', MAX(AdjdRefNbr) as 'AdjdRefNbr'
-			from ARAdjust group by CompanyID, AdjgRefNbr) 
-			as MAXARAdjust
-			on MAXARAdjust.AdjgDocType = ARRegister.DocType and MAXARAdjust.AdjgRefNbr = ARRegister.RefNbr and MAXARAdjust.CompanyID = ARRegister.CompanyID
-		left join
-		(select CompanyID, AdjgRefNbr, AdjgDocType, AdjdRefNbr, AdjAmt, AdjgTranPeriodID from ARAdjust)
-			as LastAdjAmt
-			on LastAdjAmt.AdjgDocType = ARRegister.DocType and LastAdjAmt.AdjgRefNbr = ARRegister.RefNbr and LastAdjAmt.CompanyID = ARRegister.CompanyID
-				and LastAdjAmt.AdjdRefNbr = MAXARAdjust.AdjdRefNbr
 		left join
 		(select
 				MAX(ARRegister.CompanyID) as 'CompanyID',
