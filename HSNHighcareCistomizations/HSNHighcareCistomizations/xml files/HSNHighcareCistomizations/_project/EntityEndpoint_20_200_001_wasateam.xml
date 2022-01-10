@@ -140,7 +140,9 @@
         </TopLevelEntity>
         <LinkedEntity name="Manuf">
             <Fields>
+                <Field name="DisposalDate" type="DateTimeValue" />
                 <Field name="Manufacturer" type="StringValue" />
+                <Field name="RegisteredDate" type="DateTimeValue" />
             </Fields>
         </LinkedEntity>
         <LinkedEntity name="AttributeValue">
@@ -236,6 +238,12 @@
                 <Mapping field="General">
                     <Mapping field="Manufacturer">
                         <To object="EquipmentSelected: 3" field="ManufacturerID" />
+                    </Mapping>
+                    <Mapping field="RegisteredDate">
+                        <To object="EquipmentSelected" field="RegisteredDate" />
+                    </Mapping>
+                    <Mapping field="DisposalDate">
+                        <To object="EquipmentSelected: 2" field="DisposalDate" />
                     </Mapping>
                 </Mapping>
                 <Mapping field="Location">
