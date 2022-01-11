@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using PX.Data;
 using PX.Data.BQL;
 using PX.Data.BQL.Fluent;
+using PX.Objects.CM;
 using PX.Objects.FA;
 using PX.Objects.GL;
 using PX.Objects.GL.FinPeriods;
 using HSNFinance.DAC;
-    
+
 namespace HSNFinance
 {
     public class LUMCalcInterestExpProc : PXGraph<LUMCalcInterestExpProc>
@@ -362,29 +363,29 @@ namespace HSNFinance
         public abstract class refNbr : PX.Data.BQL.BqlString.Field<refNbr> { }
         #endregion
 
-        #region BegBalance
-        [PXDBDecimal(BqlField = typeof(LUMLAInterestExp.begBalance))]
+        #region 
+        [PXDBBaseCury(BqlField = typeof(LUMLAInterestExp.begBalance))]
         [PXUIField(DisplayName = "Beginning Balance")]
         public virtual decimal? BegBalance { get; set; }
         public abstract class begBalance : PX.Data.BQL.BqlDecimal.Field<begBalance> { }
         #endregion
 
         #region MonthlyRent
-        [PXDBDecimal(BqlField = typeof(LUMLAInterestExp.monthlyRent))]
+        [PXDBBaseCury(BqlField = typeof(LUMLAInterestExp.monthlyRent))]
         [PXUIField(DisplayName = "Monthly Rent")]
         public virtual decimal? MonthlyRent { get; set; }
         public abstract class monthlyRent : PX.Data.BQL.BqlDecimal.Field<monthlyRent> { }
         #endregion
 
         #region InterestRate
-        [PXDBDecimal(BqlField = typeof(LUMLAInterestExp.interestRate))]
+        [PXDBBaseCury(BqlField = typeof(LUMLAInterestExp.interestRate))]
         [PXUIField(DisplayName = "Interest Expense")]
         public virtual decimal? InterestRate { get; set; }
         public abstract class interestRate : PX.Data.BQL.BqlDecimal.Field<interestRate> { }
         #endregion
 
         #region EndBalance
-        [PXDBDecimal(BqlField = typeof(LUMLAInterestExp.endBalance))]
+        [PXDBBaseCury(BqlField = typeof(LUMLAInterestExp.endBalance))]
         [PXUIField(DisplayName = "Ending Balance")]
         public virtual decimal? EndBalance { get; set; }
         public abstract class endBalance : PX.Data.BQL.BqlDecimal.Field<endBalance> { }

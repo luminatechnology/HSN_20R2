@@ -1,6 +1,7 @@
 using System;
 using PX.Data;
 using PX.Data.ReferentialIntegrity.Attributes;
+using PX.Objects.CM;
 using PX.Objects.EP;
 using PX.Objects.FA;
 using PX.Objects.GL;
@@ -87,30 +88,30 @@ namespace HSNFinance.DAC
         public virtual string FinPeriodID { get; set; }
         public abstract class finPeriodID : PX.Data.BQL.BqlString.Field<finPeriodID> { }
         #endregion
-    
+
         #region BegBalance
-        [PXDBDecimal()]
+        [PXDBBaseCury]
         [PXUIField(DisplayName = "Beginning Balance")]
         public virtual decimal? BegBalance { get; set; }
         public abstract class begBalance : PX.Data.BQL.BqlDecimal.Field<begBalance> { }
         #endregion
-    
+
         #region MonthlyRent
-        [PXDBDecimal()]
+        [PXDBBaseCury]
         [PXUIField(DisplayName = "Monthly Rent")]
         public virtual decimal? MonthlyRent { get; set; }
         public abstract class monthlyRent : PX.Data.BQL.BqlDecimal.Field<monthlyRent> { }
         #endregion
-    
+
         #region InterestRate
-        [PXDBDecimal()]
+        [PXDBBaseCury]
         [PXUIField(DisplayName = "Interest Expense")]
         public virtual decimal? InterestRate { get; set; }
         public abstract class interestRate : PX.Data.BQL.BqlDecimal.Field<interestRate> { }
         #endregion
-    
+
         #region EndBalance
-        [PXDBDecimal()]
+        [PXDBBaseCury]
         [PXUIField(DisplayName = "Ending Balance")]
         public virtual decimal? EndBalance { get; set; }
         public abstract class endBalance : PX.Data.BQL.BqlDecimal.Field<endBalance> { }
