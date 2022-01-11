@@ -103,7 +103,11 @@ namespace PX.Objects.FS
                 var customerInfo = Customer.PK.Find(Base, doc.CustomerID);
                 if (customerInfo.ClassID != "HIGHCARE")
                     return;
-                var currentPINCode = helper.GetEquipmentPINCode((int)e.NewValue);
+                var _equipment = helper.GetEquipmentInfo((int)e.NewValue);
+                // 裝置有綁定 未啟用 不計算
+                if(_equipment.Status != EPEquipmentStatus.Active)
+                    return;
+                var currentPINCode = _equipment.GetExtension<FSEquipmentExtension>().UsrPINCode;
                 if (string.IsNullOrEmpty(currentPINCode))
                     return;
                 var pinCodeInfo = SelectFrom<LUMCustomerPINCode>
@@ -132,7 +136,7 @@ namespace PX.Objects.FS
                 // Detail Cache
                 var usedServiceCountCache = Base.ServiceOrderDetails
                                             .Select().RowCast<FSSODet>()
-                                            .Where(x => x != row && x?.InventoryID == row?.InventoryID && helper.GetEquipmentPINCode(x?.SMEquipmentID) == currentPINCode).Count();
+                                            .Where(x => x != row && x?.InventoryID == row?.InventoryID && helper.GetEquipmentInfo(x?.SMEquipmentID).GetExtension<FSEquipmentExtension>()?.UsrPINCode == currentPINCode).Count();
                 // 不限次數，直接給折扣
                 if (servicescopeInfo.LimitedCount == 0)
                     Base.ServiceOrderDetails.Cache.SetValueExt<FSSODet.discPct>(row, (servicescopeInfo?.DiscountPrecent ?? 0));

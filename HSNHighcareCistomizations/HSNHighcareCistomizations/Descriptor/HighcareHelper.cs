@@ -21,9 +21,9 @@ namespace HSNHighcareCistomizations.Descriptor
                    .View.Select(new PXGraph(), inventoryID).RowCast<INItemClass>().FirstOrDefault();
         }
 
-        public string GetEquipmentPINCode(int? equipmentID)
+        public FSEquipment GetEquipmentInfo(int? equipmentID)
         {
-            return FSEquipment.PK.Find(new PXGraph(), equipmentID).GetExtension<FSEquipmentExtension>()?.UsrPINCode;
+            return FSEquipment.PK.Find(new PXGraph(), equipmentID);
         }
     }
 }
