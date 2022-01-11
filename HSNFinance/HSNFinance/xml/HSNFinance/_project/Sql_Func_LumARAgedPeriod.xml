@@ -42,6 +42,20 @@ RETURN
 							ROUND((MAX(ARRegister.CuryOrigDocAmt) - MAX(INVARRegisterToPayment.CuryAdjdAmt)) * ROUND(MAX(CurrencyInfo.CuryRate), 2), 2)))
 				)
 			)
+			WHEN 'DRM' THEN -- as same as INV
+			IIF(MAX(ARRegister.CuryInitDocBal) <> 0,
+				IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
+					MAX(ARRegister.InitDocBal) - IsNull(MAX(INVARRegisterToPayment.AdjAmt), 0),
+					ROUND((MAX(ARRegister.CuryInitDocBal) - IsNull(MAX(INVARRegisterToPayment.CuryAdjdAmt), 0)) * ROUND(MAX(CurrencyInfo.CuryRate), 2), 2)),
+				IIF(MAX(INVARRegisterToPayment.AdjDate) is null,
+					MAX(ARRegister.OrigDocAmt), 
+					IIF(DATEDIFF(DAY, MAX(INVARRegisterToPayment.AdjDate), DateAdd(day, -1, DateAdd(month, 1 ,Convert(date, @conditionPeriodID + '01')))) < 0,
+						MAX(ARRegister.OrigDocAmt),
+						IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
+							MAX(ARRegister.OrigDocAmt) - MAX(INVARRegisterToPayment.AdjAmt),
+							ROUND((MAX(ARRegister.CuryOrigDocAmt) - MAX(INVARRegisterToPayment.CuryAdjdAmt)) * ROUND(MAX(CurrencyInfo.CuryRate), 2), 2)))
+				)
+			)
 			WHEN 'CRM' THEN 
 				IIF(MAX(ClosedTranPeriodID) > @conditionPeriodID,
 					IIF(MAX(Company.BaseCuryID) = MAX(CurrencyInfo.CuryID),
