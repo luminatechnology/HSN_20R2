@@ -9,11 +9,5 @@ namespace PX.Objects.FA
         public const string InterestExp = "Interest Expense";
 
         public PXSelectReadonly<LUMLAInterestExp, Where<LUMLAInterestExp.assetID, Equal<Current<FixedAsset.assetID>>>> LAInterestExp;
-
-        #region Cache Attached
-        [PXMergeAttributes(Method = MergeMethod.Merge)]
-        [PXDBDecimal(2)]
-        protected void _(Events.CacheAttached<FADetails.acquisitionCost> e) { }
-        #endregion
     }
 }
