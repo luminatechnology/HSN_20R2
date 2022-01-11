@@ -83,6 +83,7 @@
     <Compile Include="DAC\v_HighcareServiceHistory.cs" />
     <Compile Include="DAC\LumServiceScopeHeader.cs" />
     <Compile Include="DAC\LUMPINCodeMapping.cs" />
+    <Compile Include="LumWasateamEndpoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -25,7 +25,7 @@
         </layout>
         <data>
             <SiteMap>
-                <row Position="7870" Title="Lum AR Aged Period Sensitive" Url="~/Pages/LM/LM630540.aspx" ScreenID="LM630540" NodeID="475facc9-80de-4e3c-b93d-ccb69f2d1d13" ParentID="00000000-0000-0000-0000-000000000000">
+                <row Position="7870" Title="HSN AR Aged Period Sensitive" Url="~/Pages/LM/LM630540.aspx" ScreenID="LM630540" NodeID="475facc9-80de-4e3c-b93d-ccb69f2d1d13" ParentID="00000000-0000-0000-0000-000000000000">
                     <MUIScreen IsPortal="0" WorkspaceID="d5cbc4c3-5f8b-40da-80c9-49897f1f74b8" Order="130" SubcategoryID="98e86774-69e3-41ea-b94f-eb2c7a8426d4" />
                 </row>
             </SiteMap>

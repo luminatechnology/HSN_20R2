@@ -38,8 +38,8 @@ namespace PX.Objects.FS
                     typeof(FSEquipment.locationType),
                     typeof(FSEquipment.status),
             SubstituteKey = typeof(FSEquipment.refNbr))]
-        [PXRestrictor(typeof(Where<FSEquipment.status, Equal<EPEquipmentStatus.EquipmentStatusActive>>),
-                       TX.Messages.EQUIPMENT_IS_INSTATUS, typeof(FSEquipment.status))]
+        //[PXRestrictor(typeof(Where<FSEquipment.status, Equal<EPEquipmentStatus.EquipmentStatusActive>>),
+        //               TX.Messages.EQUIPMENT_IS_INSTATUS, typeof(FSEquipment.status))]
         public virtual int? SMEquipmentID { get; set; }
         #endregion
     }

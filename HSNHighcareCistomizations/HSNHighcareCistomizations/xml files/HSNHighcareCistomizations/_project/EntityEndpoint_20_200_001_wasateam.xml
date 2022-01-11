@@ -141,25 +141,13 @@
         <LinkedEntity name="Manuf">
             <Fields>
                 <Field name="Manufacturer" type="StringValue" />
-            </Fields>
-        </LinkedEntity>
-        <LinkedEntity name="AttributeValue">
-            <Fields>
-                <Field name="Active" type="BooleanValue" />
-                <Field name="AttributeID" type="StringValue" />
-                <Field name="ControlType" type="StringValue" />
-                <Field name="DefaultValue" type="StringValue" />
-                <Field name="Description" type="StringValue" />
-                <Field name="EntityClassID" type="StringValue" />
-                <Field name="Internal" type="BooleanValue" />
-                <Field name="Required" type="BooleanValue" />
-                <Field name="SortOrder" type="ShortValue" />
-                <Field name="Type" type="StringValue" />
+                <Field name="RegisteredDate" type="DateTimeValue" />
+                <Field name="SalesDate" type="DateTimeValue" />
             </Fields>
         </LinkedEntity>
         <TopLevelEntity name="FSEquipment" screen="FS205000">
             <Fields>
-                <Field name="Attributes" type="Attributes[]" />
+                <Field name="Attributes" type="AttributeValue[]" />
                 <Field name="CustomerCustomerID" type="StringValue" />
                 <Field name="CustomerOwnerID" type="StringValue" />
                 <Field name="Description" type="StringValue" />
@@ -178,20 +166,6 @@
                 <Field name="Vehicle" type="BooleanValue" />
             </Fields>
             <Mappings>
-                <Mapping field="Attributes">
-                    <Mapping field="Attribute">
-                        <To object="Answers" field="AttributeID" />
-                    </Mapping>
-                    <Mapping field="RefNoteID">
-                        <To object="Answers" field="RefNoteID" />
-                    </Mapping>
-                    <Mapping field="Required">
-                        <To object="Answers" field="isRequired" />
-                    </Mapping>
-                    <Mapping field="Value">
-                        <To object="Answers" field="Value" />
-                    </Mapping>
-                </Mapping>
                 <Mapping field="OwnerType">
                     <To object="EquipmentRecords" field="OwnerType" />
                 </Mapping>
@@ -218,6 +192,26 @@
                 <Mapping field="Vehicle">
                     <To object="EquipmentRecords" field="IsVehicle" />
                 </Mapping>
+                <Mapping field="Attributes">
+                    <Mapping field="AttributeID">
+                        <To object="Answers" field="AttributeID$value" />
+                    </Mapping>
+                    <Mapping field="Required">
+                        <To object="Answers" field="IsRequired" />
+                    </Mapping>
+                    <Mapping field="RefNoteID">
+                        <To object="Answers" field="RefNoteID" />
+                    </Mapping>
+                    <Mapping field="Value">
+                        <To object="Answers" field="Value$value" />
+                    </Mapping>
+                    <Mapping field="ValueDescription">
+                        <To object="Answers" field="Value" />
+                    </Mapping>
+                    <Mapping field="AttributeDescription">
+                        <To object="Answers" field="AttributeID_description" />
+                    </Mapping>
+                </Mapping>
                 <Mapping field="CustomerCustomerID">
                     <To object="EquipmentRecords" field="CustomerID" />
                 </Mapping>
@@ -237,71 +231,18 @@
                     <Mapping field="Manufacturer">
                         <To object="EquipmentSelected: 3" field="ManufacturerID" />
                     </Mapping>
+                    <Mapping field="RegisteredDate">
+                        <To object="EquipmentSelected" field="RegisteredDate" />
+                    </Mapping>
+                    <Mapping field="SalesDate">
+                        <To object="EquipmentSelected" field="SalesDate" />
+                    </Mapping>
                 </Mapping>
                 <Mapping field="Location">
                     <To object="EquipmentRecords" field="CustomerLocationID" />
                 </Mapping>
                 <Mapping field="LocationType">
                     <To object="EquipmentRecords" field="LocationType" />
-                </Mapping>
-            </Mappings>
-        </TopLevelEntity>
-        <Detail name="Attributes">
-            <Fields>
-                <Field name="Attribute" type="StringValue" />
-                <Field name="RefNoteID" type="GuidValue" />
-                <Field name="Required" type="BooleanValue" />
-                <Field name="Value" type="StringValue" />
-            </Fields>
-        </Detail>
-        <TopLevelEntity name="FSEquipmentTypes" screen="FS200800">
-            <Fields>
-                <Field name="Attributes" type="AttributeValue" />
-                <Field name="Description" type="StringValue" />
-                <Field name="EquipmentType" type="StringValue" />
-                <Field name="RequireBranchLocation" type="BooleanValue" />
-            </Fields>
-            <Mappings>
-                <Mapping field="Attributes">
-                    <Mapping field="AttributeID">
-                        <To object="Mapping" field="AttributeID" />
-                    </Mapping>
-                    <Mapping field="Description">
-                        <To object="Mapping" field="Description" />
-                    </Mapping>
-                    <Mapping field="EntityClassID">
-                        <To object="Mapping" field="EntityClassID" />
-                    </Mapping>
-                    <Mapping field="Internal">
-                        <To object="Mapping" field="CSAttribute__IsInternal" />
-                    </Mapping>
-                    <Mapping field="SortOrder">
-                        <To object="Mapping" field="SortOrder" />
-                    </Mapping>
-                    <Mapping field="Type">
-                        <To object="Mapping" field="EntityType" />
-                    </Mapping>
-                    <Mapping field="Required">
-                        <To object="Mapping" field="Required" />
-                    </Mapping>
-                    <Mapping field="Active">
-                        <To object="Mapping" field="IsActive" />
-                    </Mapping>
-                    <Mapping field="ControlType">
-                        <To object="Mapping" field="ControlType" />
-                    </Mapping>
-                    <Mapping field="DefaultValue">
-                        <To object="Mapping" field="DefaultValue" />
-                    </Mapping>
-                </Mapping>
-                <Mapping field="Description">
-                    <To object="EquipmentTypeRecords" field="Descr" />
-                </Mapping>
-                <Mapping field="EquipmentType">
-                    <To object="EquipmentTypeRecords" field="EquipmentTypeCD" />
-                </Mapping>
-                <Mapping field="RequireBranchLocation">
-                    <To object="EquipmentTypeRecords" field="RequireBranchLocation" />
                 </Mapping>
             </Mappings>
         </TopLevelEntity>
@@ -373,6 +314,16 @@
                 <Field name="RemainingCount" type="StringValue" />
                 <Field name="ServiceDescription" type="StringValue" />
                 <Field name="UsedCount" type="IntValue" />
+            </Fields>
+        </Detail>
+        <Detail name="AttributeValue">
+            <Fields>
+                <Field name="AttributeDescription" type="StringValue" />
+                <Field name="AttributeID" type="StringValue" />
+                <Field name="RefNoteID" type="GuidValue" />
+                <Field name="Required" type="BooleanValue" />
+                <Field name="Value" type="StringValue" />
+                <Field name="ValueDescription" type="StringValue" />
             </Fields>
         </Detail>
     </Endpoint>
