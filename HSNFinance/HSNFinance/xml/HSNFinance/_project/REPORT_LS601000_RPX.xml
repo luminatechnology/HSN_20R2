@@ -1,5 +1,5 @@
 ﻿<Report Name="ls601000.rpx">
-    <Report Name="report1" version="20200826">
+    <Report version="20200826" Name="report1">
         <ExcelColumns>
             <item>9</item>
             <item>9</item>
@@ -339,7 +339,7 @@
                 <ParentName>GLTran</ParentName>
             </ReportRelation>
         </Relations>
-        <SchemaUrl>http://localhost/HSN</SchemaUrl>
+        <SchemaUrl>https://uat-hsnerp.hsnservice.com/HSN_UAT/</SchemaUrl>
         <Sorting>
             <SortExp>
                 <DataField>GLHistoryByPeriod.BranchID</DataField>
@@ -1874,6 +1874,7 @@
                 <FullName>HSNFinance.DAC.LSLedgerSettlement</FullName>
             </ReportTable>
         </Tables>
+        <Version>20200826</Version>
         <Sections>
             <PageHeader Name="pageHeaderSection1">
                 <ExcelMargin>
@@ -2122,7 +2123,8 @@
                     </ReportVariable>
                     <ReportVariable>
                         <Name>IsVisible</Name>
-                        <ValueExpr>=[GLTran.AccountID] &lt;&gt; null And [GLHistoryByPeriod.FinPeriodID] &gt;= [@StartPeriod] And[GLHistoryByPeriod.FinPeriodID] &lt;= [@EndPeriod] And [GLTran.UOM] &lt;&gt; [@UOM]</ValueExpr>
+                        <ProcessOrder>Always</ProcessOrder>
+                        <ValueExpr>=[GLTran.AccountID] &lt;&gt; null #010;And [GLTran.UOM] &lt;&gt; [@UOM]#010;And [GLTran.TranDate] &gt;= CDate(Format('{0}/{1}/{2}', Right([@StartPeriod], 4), Left([@StartPeriod], 2), 1))#010;And [GLTran.TranDate] &lt;= DateAdd(DateAdd(CDate(Format('{0}/{1}/{2}', Right([@EndPeriod], 4), Left([@EndPeriod], 2), 1)), 'M', 1), 'd', -1)#010;</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
                         <Name>BegBalance</Name>
@@ -2532,7 +2534,7 @@
                                 <Name>LineBalance</Name>
                                 <ProcessOrder>WhilePrint</ProcessOrder>
                                 <ResetGroup>Ledger_Account</ResetGroup>
-                                <ValueExpr>=IIF([@Module] = null, $SignBegBalance * $SettlementDebit - $SettlementCredit/*$BegBalance*/, 0)#010;</ValueExpr>
+                                <ValueExpr>=IIF([@Module] = null, $SignBegBalance * $SettlementDebit - $SettlementCredit + $BegBalance, 0)#010;</ValueExpr>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>LineCuryBalance</Name>
@@ -2556,7 +2558,6 @@
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
                                 <Value>=$SettlementDebit</Value>
-                                <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox22">
                                 <Excel>
@@ -2571,7 +2572,6 @@
                                 </Style>
                                 <StyleName>Heading 1</StyleName>
                                 <Value>=$SettlementCredit</Value>
-                                <Visible>False</Visible>
                             </TextBox>
                             <TextBox Name="textBox34">
                                 <Excel>
