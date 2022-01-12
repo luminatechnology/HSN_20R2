@@ -267,7 +267,9 @@ namespace PX.Objects.AR
                 eSCPOS.Align(0);
                 
                 bool hasSummary = false;
+                decimal? unitPr = 0;
                 decimal? prcAmt = 0;
+                decimal? txbAmt = 0;
                 decimal? extAmt = 0;
                 decimal? netAmt = 0;
                 decimal? disAmt = 0;
@@ -315,7 +317,9 @@ namespace PX.Objects.AR
                         }
                     }
 
+                    unitPr += aRTran.UnitPrice;
                     prcAmt += aRTran.CuryUnitPrice;
+                    txbAmt += aRTran.CuryTaxableAmt;
                     extAmt += aRTran.CuryExtPrice;
                     disAmt += aRTran.CuryDiscAmt;
                     netAmt += aRTran.CuryTranAmt;
@@ -323,9 +327,19 @@ namespace PX.Objects.AR
 
                 if (hasSummary == true)
                 {
-                    string prc = string.Format("{0:N2}", decimal.Multiply(prcAmt.Value, (decimal)1.05));
-                    string ext = string.Format("{0:N2}", decimal.Multiply(extAmt.Value, (decimal)1.05));
-                   
+                    string prc, ext;
+
+                    if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                    {
+                        prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? prcAmt : txbAmt);
+                        ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? extAmt : txbAmt);
+                    }
+                    else
+                    {
+                        prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(prcAmt.Value, (decimal)1.05) : unitPr);
+                        ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(extAmt.Value, (decimal)1.05) : extAmt);
+                    }
+
                     rowLen = (30 - 3 - 1 - prc.Length - ext.Length) / 2;
 
                     eSCPOS.SendTo($"{CS.CSAttributeDetail.PK.Find(new PXGraph(), ARInvoiceEntry_Extension2.GUISummary, regisExt2.UsrGUISummary).Description}\n");
