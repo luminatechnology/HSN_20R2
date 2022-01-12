@@ -267,7 +267,6 @@ namespace PX.Objects.AR
                 eSCPOS.Align(0);
                 
                 bool hasSummary = false;
-                decimal? unitPr = 0;
                 decimal? prcAmt = 0;
                 decimal? txbAmt = 0;
                 decimal? extAmt = 0;
@@ -300,8 +299,9 @@ namespace PX.Objects.AR
                         }
                         else
                         {
-                            uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.UnitPrice.Value, (decimal)1.05) : aRTran.UnitPrice);
-                            ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05) : aRTran.CuryExtPrice);
+                            // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
+                            //uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.UnitPrice.Value, (decimal)1.05) : aRTran.UnitPrice);
+                            uPr = ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05) : aRTran.CuryExtPrice);
                         }
 
                         // One row has position of 30 bytes.
@@ -317,7 +317,6 @@ namespace PX.Objects.AR
                         }
                     }
 
-                    unitPr += aRTran.UnitPrice;
                     prcAmt += aRTran.CuryUnitPrice;
                     txbAmt += aRTran.CuryTaxableAmt;
                     extAmt += aRTran.CuryExtPrice;
@@ -336,8 +335,9 @@ namespace PX.Objects.AR
                     }
                     else
                     {
-                        prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(prcAmt.Value, (decimal)1.05) : unitPr);
-                        ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(extAmt.Value, (decimal)1.05) : extAmt);
+                        // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
+                        //prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(prcAmt.Value, (decimal)1.05) : unitPr);
+                       prc = ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(extAmt.Value, (decimal)1.05) : extAmt);
                     }
 
                     rowLen = (30 - 3 - 1 - prc.Length - ext.Length) / 2;
