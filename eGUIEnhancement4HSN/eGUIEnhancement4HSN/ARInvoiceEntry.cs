@@ -44,7 +44,7 @@ namespace PX.Objects.AR
             PXUIFieldAttribute.SetVisible<ARInvoiceExt.usrPaymMethodID>  (e.Cache, null, Base1.activateGUI);
 
             PXUIFieldAttribute.SetEnabled<ARRegisterExt2.usrGUITitle>(e.Cache, e.Row, !statusClosed && !string.IsNullOrEmpty(PXCacheEx.GetExtension<ARRegisterExt>(e.Row).UsrTaxNbr));
-            PXUIFieldAttribute.SetEnabled<ARRegisterExt2.usrGUISummary>(e.Cache, e.Row, e.Row?.GetExtension<ARRegisterExt2>().UsrSummaryPrint == true);
+            PXUIFieldAttribute.SetEnabled<ARRegisterExt2.usrGUISummary>(e.Cache, e.Row, !statusClosed && e.Row?.GetExtension<ARRegisterExt2>().UsrSummaryPrint == true);
         }
 
         protected void _(Events.RowPersisting<ARInvoice> e, PXRowPersisting baseHandler)

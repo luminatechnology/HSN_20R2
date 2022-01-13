@@ -265,56 +265,95 @@ namespace PX.Objects.AR
                 eSCPOS.SendTo(string.Format("發票號碼: {0}\n", header[4].Trim(new char[] { '-' })));
                 eSCPOS.SendTo("品名/數量   單價         金額\n");
                 eSCPOS.Align(0);
-
-                decimal netAmt = 0;
-                string qty, uPr, ePr, dAm;
+                
+                bool hasSummary = false;
+                decimal? prcAmt = 0;
+                decimal? txbAmt = 0;
+                decimal? extAmt = 0;
+                decimal? netAmt = 0;
+                decimal? disAmt = 0;
 
                 ARRegister     register  = new ARRegister();
                 ARRegisterExt2 regisExt2 = new ARRegisterExt2();
 
+                int rowLen;
                 foreach (ARTran aRTran in result)
                 {
-                    register  = ARRegister.PK.Find(new PXGraph(), aRTran.TranType, aRTran.RefNbr);
+                    register = ARRegister.PK.Find(new PXGraph(), aRTran.TranType, aRTran.RefNbr);
                     regisExt2 = register.GetExtension<ARRegisterExt2>();
 
-                    bool hasSummary = regisExt2.UsrSummaryPrint == true && !string.IsNullOrEmpty(regisExt2.UsrGUISummary);
+                    hasSummary = regisExt2.UsrSummaryPrint == true && !string.IsNullOrEmpty(regisExt2.UsrGUISummary);
 
-                    eSCPOS.SendTo(string.Format("{0}\n", hasSummary == false ? aRTran.TranDesc : CS.CSAttributeDetail.PK.Find(new PXGraph(), ARInvoiceEntry_Extension2.GUISummary, regisExt2.UsrGUISummary).Description));
+                    if (hasSummary == false)
+                    {
+                        string qty, uPr, ePr, dAm;
 
-                    qty = hasSummary == false ? string.Format("{0:N0}", aRTran.Qty) : "1";
+                        eSCPOS.SendTo(string.Format("{0}\n", aRTran.TranDesc));
+
+                        qty = string.Format("{0:N0}", aRTran.Qty);
+
+                        if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                        {
+                            uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.UnitPrice : aRTran.CuryTaxableAmt);
+                            ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.CuryExtPrice : aRTran.CuryTaxableAmt);
+                        }
+                        else
+                        {
+                            // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
+                            //uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.UnitPrice.Value, (decimal)1.05) : aRTran.UnitPrice);
+                            uPr = ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05) : aRTran.CuryExtPrice);
+                        }
+
+                        // One row has position of 30 bytes.
+                        rowLen = (30 - 3 - qty.Length - ePr.Length - uPr.Length) / 2;
+
+                        eSCPOS.SendTo(new string(' ', 3) + qty + new string(' ', rowLen) + uPr + new string(' ', rowLen) + ePr + '\n');
+
+                        if (aRTran.CuryDiscAmt != decimal.Zero)
+                        {
+                            dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
+
+                            eSCPOS.SendTo("折扣" + new string(' ', 30 - dAm.Length - 4) + dAm + '\n');
+                        }
+                    }
+
+                    prcAmt += aRTran.CuryUnitPrice;
+                    txbAmt += aRTran.CuryTaxableAmt;
+                    extAmt += aRTran.CuryExtPrice;
+                    disAmt += aRTran.CuryDiscAmt;
+                    netAmt += aRTran.CuryTranAmt;
+                }
+
+                if (hasSummary == true)
+                {
+                    string prc, ext;
 
                     if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
                     {
-                        uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.UnitPrice : aRTran.CuryTaxableAmt);
-                        ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.CuryExtPrice : aRTran.CuryTaxableAmt);
+                        prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? prcAmt : txbAmt);
+                        ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? extAmt : txbAmt);
                     }
                     else
                     {
-                        uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.UnitPrice.Value, (decimal)1.05) : aRTran.UnitPrice);
-                        ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05) : aRTran.CuryExtPrice);
+                        // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
+                        //prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(prcAmt.Value, (decimal)1.05) : unitPr);
+                       prc = ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(extAmt.Value, (decimal)1.05) : extAmt);
                     }
 
-                    if (hasSummary == true)
+                    rowLen = (30 - 3 - 1 - prc.Length - ext.Length) / 2;
+
+                    eSCPOS.SendTo($"{CS.CSAttributeDetail.PK.Find(new PXGraph(), ARInvoiceEntry_Extension2.GUISummary, regisExt2.UsrGUISummary).Description}\n");
+                    eSCPOS.SendTo($"{new string(' ', 3)}1{new string(' ', rowLen)}{prc}{new string(' ', rowLen)}{ext}\n");
+                    
+                    if (disAmt != decimal.Zero)
                     {
-                        uPr = ePr = string.Format("{0:N2}", register.CuryDocBal);
+                        string dis = string.Format("{0:N2}", decimal.Multiply(-disAmt.Value, (decimal)1.05));
+
+                        eSCPOS.SendTo($"折扣{new string(' ', 30 - dis.Length - 4)}{dis}\n");
                     }
-
-                    // One row has position of 30 bytes.
-                    int i = (30 - 3 - qty.Length - ePr.Length - uPr.Length) / 2;
-
-                    eSCPOS.SendTo(new string(' ', 3) + qty + new string(' ', i) + uPr + new string(' ', i) + ePr + '\n');
-
-                    netAmt += aRTran.CuryTranAmt.Value;
-
-                    dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
-
-                    if (!aRTran.CuryDiscAmt.Equals(decimal.Zero))
-                    {
-                        eSCPOS.SendTo("折扣" + new string(' ', 30 - dAm.Length - 4) + dAm + '\n');
-                    }                   
                 }
 
-                eSCPOS.SendTo(string.Format("共 {0} 項\n", result.Count));
+                eSCPOS.SendTo(string.Format("共 {0} 項\n", hasSummary == false ? result.Count : 1));
 
                 if (string.IsNullOrEmpty(header[9]) == false)
                 {
@@ -332,12 +371,12 @@ namespace PX.Objects.AR
                     }
 
                     eSCPOS.SendTo("銷售額:" + new string(' ', (30 - net.Length - 7)) + net + '\n');  // 7 -> 銷售額 is a traditional Chinese word has two bytes.
-                    eSCPOS.SendTo(string.Format("税  額:" + new string(' ', (30 - tax.Length - 7)) + tax + '\n'));
+                    eSCPOS.SendTo(string.Format("稅  額:" + new string(' ', (30 - tax.Length - 7)) + tax + '\n'));
                 }
 
                 string total = string.Format("{0:N0}", header[6]);
 
-                eSCPOS.SendTo("總  ­計:" + new string(' ', (30 - total.Length - 7)) + total + '\n');
+                eSCPOS.SendTo("總  計:" + new string(' ', (30 - total.Length - 7)) + total + '\n');
                 eSCPOS.SendTo(string.Format("課稅別:{0}\n", header[12]));
                 eSCPOS.SendTo(string.Format("備  註:{0}\n", header[13]));
 
