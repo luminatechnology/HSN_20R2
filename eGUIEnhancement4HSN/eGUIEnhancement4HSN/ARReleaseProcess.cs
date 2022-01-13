@@ -292,16 +292,34 @@ namespace PX.Objects.AR
 
                         qty = string.Format("{0:N0}", aRTran.Qty);
 
-                        if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                        // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
+                        // B2C
+                        if (string.IsNullOrEmpty(header[9]))
                         {
-                            uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.UnitPrice : aRTran.CuryTaxableAmt);
-                            ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? aRTran.CuryExtPrice : aRTran.CuryTaxableAmt);
+                            if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                            {
+                                uPr = ePr = string.Format("{0:N2}", aRTran.CuryExtPrice);
+                                dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
+                            }
+                            else
+                            {
+                                uPr = ePr = string.Format("{0:N2}", decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05));
+                                dAm = string.Format("{0:N2}", decimal.Multiply(-aRTran.CuryDiscAmt.Value, (decimal)1.05));
+                            }
                         }
+                        // B2B
                         else
                         {
-                            // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
-                            //uPr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.UnitPrice.Value, (decimal)1.05) : aRTran.UnitPrice);
-                            uPr = ePr = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05) : aRTran.CuryExtPrice);
+                            if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                            {
+                                uPr = ePr = string.Format("{0:N2}", decimal.Divide(aRTran.CuryExtPrice.Value, (decimal)1.05));
+                                dAm = string.Format("{0:N2}", decimal.Divide(-aRTran.CuryDiscAmt.Value, (decimal)1.05));
+                            }
+                            else
+                            {
+                                uPr = ePr = string.Format("{0:N2}", aRTran.CuryExtPrice);
+                                dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
+                            }
                         }
 
                         // One row has position of 30 bytes.
@@ -311,8 +329,6 @@ namespace PX.Objects.AR
 
                         if (aRTran.CuryDiscAmt != decimal.Zero)
                         {
-                            dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
-
                             eSCPOS.SendTo("折扣" + new string(' ', 30 - dAm.Length - 4) + dAm + '\n');
                         }
                     }
@@ -326,18 +342,35 @@ namespace PX.Objects.AR
 
                 if (hasSummary == true)
                 {
-                    string prc, ext;
+                    string prc, ext, dis;
 
-                    if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
-                    {
-                        prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? prcAmt : txbAmt);
-                        ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? extAmt : txbAmt);
+                    // B2C
+                    if (string.IsNullOrEmpty(header[9]))
+                    { 
+                        if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                        {
+                            prc = ext = string.Format("{0:N2}", extAmt);
+                            dis = string.Format("{0:N2}", -disAmt);
+                        }
+                        else
+                        {
+                            prc = ext = string.Format("{0:N2}", decimal.Multiply(extAmt.Value, (decimal)1.05));
+                            dis = string.Format("{0:N2}", decimal.Multiply(-disAmt.Value, (decimal)1.05));
+                        }
                     }
+                    // B2B
                     else
                     {
-                        // According to the suggestion of Joyce & YJ, make "unit price" equal to "extended price" when calculation including 5% tax.
-                        //prc = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(prcAmt.Value, (decimal)1.05) : unitPr);
-                       prc = ext = string.Format("{0:N2}", string.IsNullOrEmpty(header[9]) ? decimal.Multiply(extAmt.Value, (decimal)1.05) : extAmt);
+                        if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
+                        {
+                            prc = ext = string.Format("{0:N2}", decimal.Divide(extAmt.Value, (decimal)1.05));
+                            dis = string.Format("{0:N2}", decimal.Divide(-disAmt.Value, (decimal)1.05));
+                        }
+                        else
+                        {
+                            prc = ext = string.Format("{0:N2}", extAmt);
+                            dis = string.Format("{0:N2}", -disAmt);
+                        }
                     }
 
                     rowLen = (30 - 3 - 1 - prc.Length - ext.Length) / 2;
@@ -347,8 +380,6 @@ namespace PX.Objects.AR
                     
                     if (disAmt != decimal.Zero)
                     {
-                        string dis = string.Format("{0:N2}", decimal.Multiply(-disAmt.Value, (decimal)1.05));
-
                         eSCPOS.SendTo($"折扣{new string(' ', 30 - dis.Length - 4)}{dis}\n");
                     }
                 }
