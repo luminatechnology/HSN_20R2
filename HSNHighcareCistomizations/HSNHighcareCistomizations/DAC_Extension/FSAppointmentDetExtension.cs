@@ -37,6 +37,10 @@ namespace PX.Objects.FS
                     typeof(FSEquipment.ownerID),
                     typeof(FSEquipment.locationType),
                     typeof(FSEquipment.status),
+                    typeof(FSEquipment.branchID),
+                    typeof(FSEquipment.branchLocationID),
+                    typeof(FSEquipment.inventoryID),
+                    typeof(FSEquipment.color),
             SubstituteKey = typeof(FSEquipment.refNbr))]
         //[PXRestrictor(typeof(Where<FSEquipment.status, Equal<EPEquipmentStatus.EquipmentStatusActive>>),
         //               TX.Messages.EQUIPMENT_IS_INSTATUS, typeof(FSEquipment.status))]
