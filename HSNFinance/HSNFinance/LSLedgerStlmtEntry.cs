@@ -169,36 +169,48 @@ namespace HSNFinance
 
         protected void _(Events.FieldUpdated<GLTranExt.usrSetldDebitAmt> e)
         {
-            var row = e.Row as GLTran;
+            decimal? calcAmt = 0m;
 
-            decimal? rmngDebitAmt = PXCacheEx.GetExtension<GLTranExt>(row).UsrRmngDebitAmt;
+            foreach (GLTran tran in GLTranDebit.Cache.Updated)
+            {
+                if (tran.Selected == true)
+                {
+                    GLTranExt tranExt = tran.GetExtension<GLTranExt>();
 
-            ///<remarks> Because we need to update the unbound fields and check this field and then add verification in this event. </remarks>
-            if (e.NewValue != null && rmngDebitAmt != 0m && (decimal)e.NewValue > rmngDebitAmt)
-            {
-                throw new PXSetPropertyException<GLTranExt.usrSetldDebitAmt>(steldAmtExceedRmngAmt);
+                    ///<remarks> Because we need to update the unbound fields and check this field and then add verification in this event. </remarks>
+                    if (tran.CuryDebitAmt > 0m && (decimal)e.NewValue > tranExt.UsrRmngDebitAmt)
+                    {
+                        throw new PXSetPropertyException<GLTranExt.usrSetldDebitAmt>(steldAmtExceedRmngAmt);
+                    }
+
+                    calcAmt += (tranExt.UsrSetldDebitAmt - tranExt.UsrSetldCreditAmt);
+                }
             }
-            else
-            {
-                Filter.Current.BalanceAmt = rmngDebitAmt > (decimal)e.NewValue ? (decimal)e.NewValue : rmngDebitAmt;
-            }
+
+            Filter.Current.BalanceAmt = calcAmt;
         }
 
         protected void _(Events.FieldUpdated<GLTranExt.usrSetldCreditAmt> e)
         {
-            var row = e.Row as GLTran;
+            decimal? calcAmt = 0m;
 
-            decimal? rmngCreditAmt = PXCacheEx.GetExtension<GLTranExt>(row).UsrRmngCreditAmt;
+            foreach (GLTran tran in GLTranCredit.Cache.Updated)
+            {
+                if (tran.Selected == true)
+                {
+                    GLTranExt tranExt = tran.GetExtension<GLTranExt>();
 
-            ///<remarks> Because we need to update the unbound fields and check this field and then add verification in this event. </remarks>
-            if (e.NewValue != null && rmngCreditAmt != 0m && (decimal)e.NewValue > rmngCreditAmt)
-            {
-                throw new PXSetPropertyException<GLTranExt.usrSetldCreditAmt>(steldAmtExceedRmngAmt);
+                    ///<remarks> Because we need to update the unbound fields and check this field and then add verification in this event. </remarks>
+                    if (tran.CuryCreditAmt > 0m && (decimal)e.NewValue > tranExt.UsrRmngCreditAmt)
+                    {
+                        throw new PXSetPropertyException<GLTranExt.usrSetldDebitAmt>(steldAmtExceedRmngAmt);
+                    }
+
+                    calcAmt += (tranExt.UsrSetldDebitAmt - tranExt.UsrSetldCreditAmt);
+                }
             }
-            else
-            {
-                Filter.Current.BalanceAmt = rmngCreditAmt > (decimal)e.NewValue ? (decimal)e.NewValue : rmngCreditAmt;
-            }
+
+            Filter.Current.BalanceAmt = calcAmt;
         }
         #endregion
 
