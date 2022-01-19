@@ -33,6 +33,12 @@
                     <Mapping field="LastName">
                         <To object="PrimaryContactCurrent" field="LastName" />
                     </Mapping>
+                    <Mapping field="Phone1">
+                        <To object="PrimaryContactCurrent" field="Phone1" />
+                    </Mapping>
+                    <Mapping field="Phone1Type">
+                        <To object="PrimaryContactCurrent" field="Phone1Type" />
+                    </Mapping>
                 </Mapping>
                 <Mapping field="Status">
                     <To object="BAccount" field="Status" />
@@ -61,6 +67,8 @@
                 <Field name="DateOfBirth" type="DateTimeValue" />
                 <Field name="Email" type="StringValue" />
                 <Field name="LastName" type="StringValue" />
+                <Field name="Phone1" type="StringValue" />
+                <Field name="Phone1Type" type="StringValue" />
             </Fields>
             <Mappings>
                 <Mapping field="DateOfBirth">
@@ -71,6 +79,12 @@
                 </Mapping>
                 <Mapping field="LastName">
                     <To object="Contact" field="LastName" />
+                </Mapping>
+                <Mapping field="Phone1">
+                    <To object="ContactCurrent: 6" field="Phone1" />
+                </Mapping>
+                <Mapping field="Phone1Type">
+                    <To object="ContactCurrent: 6" field="Phone1Type" />
                 </Mapping>
             </Mappings>
         </TopLevelEntity>
