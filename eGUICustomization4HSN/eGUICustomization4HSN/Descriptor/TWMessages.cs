@@ -33,7 +33,7 @@ namespace eGUICustomization4HSN.Descriptor
         public const string RemainAmt      = "The Remaining Amount Isn't Enough to Settle.";
         public const string CRACIsNone     = "Please Select Credit Action When The VAT Out Code Is 33/34.";
         public const string RemindHeader   = "Reminder Header";
-        public const string ReminderMesg   = "The Invoice Amount Isn't Zero But The VAT Out Code Is Empty.";
+        public const string ReminderMesg   = "The VAT OUT Format Code Cannot Be Blank When The Tax Amount Is Greater Than 0.";
         public const string SeltCorrGUI    = "Please Select The Correct GUI Number To Print.";
     }
 }
