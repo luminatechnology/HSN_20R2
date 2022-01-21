@@ -154,8 +154,11 @@ namespace PX.Objects.AR
                 Base1.ViewGUITrans.Cache.Persisted(false);
                 Base1.skipPersist = true;
 
-                Base.ARDocument.Cache.SetValue<ARRegisterExt.usrGUINo>(doc, docExt.UsrGUINo);
-                Base.ARDocument.Cache.MarkUpdated(doc);
+                if (docExt.UsrCreditAction == TWNCreditAction.NO)
+                {
+                    Base.ARDocument.Cache.SetValue<ARRegisterExt.usrGUINo>(doc, docExt.UsrGUINo);
+                    Base.ARDocument.Cache.MarkUpdated(doc);
+                }
 
                 baseMethod();
             }
