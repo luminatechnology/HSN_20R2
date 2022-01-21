@@ -47,6 +47,12 @@
                     <Mapping field="Email">
                         <To object="DefContact" field="EMail" />
                     </Mapping>
+                    <Mapping field="Phone1">
+                        <To object="DefContact" field="Phone1" />
+                    </Mapping>
+                    <Mapping field="Phone1Type">
+                        <To object="DefContact" field="Phone1Type" />
+                    </Mapping>
                 </Mapping>
             </Mappings>
             <Actions>
@@ -263,6 +269,8 @@
         <LinkedEntity name="MainContact">
             <Fields>
                 <Field name="Email" type="StringValue" />
+                <Field name="Phone1" type="StringValue" />
+                <Field name="Phone1Type" type="StringValue" />
             </Fields>
         </LinkedEntity>
         <TopLevelEntity name="HighcareServiceHistory" screen="GI770077">
