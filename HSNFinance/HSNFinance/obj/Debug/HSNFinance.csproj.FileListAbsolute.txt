@@ -231,3 +231,10 @@ C:\Program Files\Acumatica ERP\HSN\App_Data\Projects\HSNFinance\HSNFinance\obj\D
 C:\Program Files\Acumatica ERP\HSN\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.csproj.CopyComplete
 C:\Program Files\Acumatica ERP\HSN\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.dll
 C:\Program Files\Acumatica ERP\HSN\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.pdb
+C:\Program Files\Acumatica ERP\HSN_Malaysia\Bin\HSNFinance.dll
+C:\Program Files\Acumatica ERP\HSN_Malaysia\Bin\HSNFinance.pdb
+C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.csprojAssemblyReference.cache
+C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.csproj.CoreCompileInputs.cache
+C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.csproj.CopyComplete
+C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.dll
+C:\Program Files\Acumatica ERP\HSN_Malaysia\App_Data\Projects\HSNFinance\HSNFinance\obj\Debug\HSNFinance.pdb

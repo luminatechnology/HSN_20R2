@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSNCustomizations", "HSNCus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSNHighcareCistomizations", "..\HSNHighcareCistomizations\HSNHighcareCistomizations\HSNHighcareCistomizations.csproj", "{C0028E71-6A85-446E-BEBB-CB27FA8C5E3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HSNFinance", "..\HSNFinance\HSNFinance\HSNFinance.csproj", "{2865C811-78DD-43B0-BD21-225F2DC1ED49}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{C0028E71-6A85-446E-BEBB-CB27FA8C5E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0028E71-6A85-446E-BEBB-CB27FA8C5E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0028E71-6A85-446E-BEBB-CB27FA8C5E3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2865C811-78DD-43B0-BD21-225F2DC1ED49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2865C811-78DD-43B0-BD21-225F2DC1ED49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2865C811-78DD-43B0-BD21-225F2DC1ED49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2865C811-78DD-43B0-BD21-225F2DC1ED49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
