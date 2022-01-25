@@ -104,7 +104,9 @@ namespace PX.Objects.FS
                 // Detail Cache
                 var usedServiceCountCache = Base.AppointmentDetails
                                             .Select().RowCast<FSAppointmentDet>()
-                                            .Where(x => x != row && x.InventoryID == row.InventoryID && helper.GetEquipmentInfo(x?.SMEquipmentID).GetExtension<FSEquipmentExtension>()?.UsrPINCode == currentPINCode).Count();
+                                            .Where(x => x != row && x.InventoryID == row.InventoryID && 
+                                                        helper.GetEquipmentInfo(x?.SMEquipmentID).GetExtension<FSEquipmentExtension>()?.UsrPINCode == currentPINCode &&
+                                                        helper.GetEquipmentInfo(x?.SMEquipmentID).Status == EPEquipmentStatus.Active).Count();
                 // 不限次數，直接給折扣
                 if (servicescopeInfo.LimitedCount == 0)
                     Base.AppointmentDetails.Cache.SetValueExt<FSAppointmentDet.discPct>(row, (servicescopeInfo?.DiscountPrecent ?? 0));
