@@ -1,7 +1,9 @@
 ﻿using HSNCustomizations.DAC;
 using HSNHighcareCistomizations.DAC;
+using HSNHighcareCistomizations.Descriptor;
 using PX.Data;
 using PX.Data.BQL.Fluent;
+using PX.Objects.AR;
 using PX.Objects.EP;
 using System;
 using System.Collections.Generic;
@@ -25,10 +27,12 @@ namespace PX.Objects.FS
         [PXUIEnabled(typeof(Where<Current<isTravelItem>, NotEqual<True>>))]
         [PXSelector(typeof(SelectFrom<FSEquipment>
                            .InnerJoin<FSSrvOrdType>.On<FSSrvOrdType.srvOrdType.IsEqual<FSAppointment.srvOrdType.FromCurrent>>
+                           .LeftJoin<Customer>.On<Customer.bAccountID.IsEqual<FSServiceOrder.customerID.FromCurrent>>
                            .CrossJoin<FSSetup>.SingleTableOnly
                            .Where<FSEquipment.requireMaintenance.IsEqual<True>
                                .And<FSSetup.enableAllTargetEquipment.IsEqual<True>>
-                               .And<FSEquipment.ownerID.IsEqual<FSAppointment.customerID.FromCurrent>>>
+                               .And<FSEquipment.ownerID.IsEqual<FSAppointment.customerID.FromCurrent>.And<Customer.customerClassID.IsEqual<HighcareClassAttr>>>
+                               .Or<Customer.customerClassID.IsNotEqual<HighcareClassAttr>>>
                            .SearchFor<FSEquipment.SMequipmentID>),
                     typeof(FSEquipment.refNbr),
                     typeof(FSEquipment.descr),

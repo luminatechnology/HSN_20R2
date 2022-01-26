@@ -26,4 +26,9 @@ namespace HSNHighcareCistomizations.Descriptor
             return FSEquipment.PK.Find(new PXGraph(), equipmentID);
         }
     }
+
+    public class HighcareClassAttr : PX.Data.BQL.BqlString.Constant<HighcareClassAttr>
+    {
+        public HighcareClassAttr() : base("HIGHCARE") { }
+    }
 }
