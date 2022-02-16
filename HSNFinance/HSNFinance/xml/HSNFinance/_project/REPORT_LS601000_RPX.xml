@@ -161,11 +161,6 @@
                 <Name>Zero</Name>
                 <Type>Float</Type>
             </ReportParameter>
-            <ReportParameter>
-                <DefaultValue>ZZ</DefaultValue>
-                <Name>UOM</Name>
-                <Visible>False</Visible>
-            </ReportParameter>
         </Parameters>
         <Relations>
             <ReportRelation>
@@ -1880,6 +1875,7 @@
                 <ExcelMargin>
                     <bottom>1</bottom>
                 </ExcelMargin>
+                <Expanded>False</Expanded>
                 <Height>64px</Height>
                 <StyleName>PageHeaderSection</StyleName>
                 <Items>
@@ -2127,8 +2123,12 @@
                         <ValueExpr>=[GLTran.AccountID] &lt;&gt; null #010;And [GLTran.TranDate] &gt;= $ParmStartDate#010;And [GLTran.TranDate] &lt;= $ParmEndDate</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
+                        <Name>RptUDF</Name>
+                        <ValueExpr>=IIf($IsVisible = true, ReportUDF.DisplayGLTran($ParmEndDate, [LSLedgerSettlement.SettlementNbr]), '')</ValueExpr>
+                    </ReportVariable>
+                    <ReportVariable>
                         <Name>BegBalance</Name>
-                        <ValueExpr>=$BegBalance +#010;IIF#010;(	CStr($PrevBranchID) + CStr($PrevSubID) + CStr($PrevFinPeriodID) &lt;&gt;#010;		CStr([GLHistoryByPeriod.BranchID]) + CStr([GLHistoryByPeriod.SubID]) + CStr([GLHistoryByPeriod.FinPeriodID]) #010;		And [GLHistoryByPeriod.FinPeriodID] = [@StartPeriod],#010;	IIF#010;	(	(([Account.Type] = 'I' Or [Account.Type] = 'E') And Payments.ArePeriodsInSameYear([GLHistoryByPeriod.FinPeriodID.Raw],[GLHistoryByPeriod.LastActivityPeriod.Raw])) #010;		Or ([Account.Type] = 'A' Or [Account.Type] = 'L'),				IIF#010;		(	[GLHistoryByPeriod.FinPeriodID] = [GLHistoryByPeriod.LastActivityPeriod], #010;			IsNull([HistoryLast.FinBegBalance], 0),#010;			IsNull([HistoryLast.FinYtdBalance], 0)#010;		),#010;		0#010;	)#010;	, 0#010;)</ValueExpr>
+                        <ValueExpr>=$BegBalance +#010;IIF(CStr($PrevBranchID) + CStr($PrevSubID) + CStr($PrevFinPeriodID) &lt;&gt; CStr([GLHistoryByPeriod.BranchID]) + CStr([GLHistoryByPeriod.SubID]) + CStr([GLHistoryByPeriod.FinPeriodID]) And [GLHistoryByPeriod.FinPeriodID] = [@StartPeriod],#010;    IIF((([Account.Type] = 'I' Or [Account.Type] = 'E') And Payments.ArePeriodsInSameYear([GLHistoryByPeriod.FinPeriodID.Raw],[GLHistoryByPeriod.LastActivityPeriod.Raw])) Or ([Account.Type] = 'A' Or [Account.Type] = 'L'),				#010;	 IIF([GLHistoryByPeriod.FinPeriodID] = [GLHistoryByPeriod.LastActivityPeriod], #010;	      IsNull([HistoryLast.FinBegBalance], 0),#010;	      IsNull([HistoryLast.FinYtdBalance], 0)#010;	 ),#010;	 0#010;     )#010;     , 0#010;)</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
                         <Name>BegCuryBalance</Name>
@@ -2149,7 +2149,7 @@
                     <ReportVariable>
                         <Name>LineBalance</Name>
                         <ProcessOrder>Always</ProcessOrder>
-                        <ValueExpr>=$LineBalance #010;+$SignTurn #010;*IsNull(IIF((@IncludeReclassified = False) And ([GLTran.DebitAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;	    [GLTran.ReclassRemainingAmt], #010;            IIf([GLTran.UOM] = 'YY' And ($TotalDebit - $TotalCredit = 0), #010;                [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], #010;                [GLTran.DebitAmt])), #010;            0) #010;-$SignTurn #010;*IsNull(IIF((@IncludeReclassified = False) And ([GLTran.CreditAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;            [GLTran.ReclassRemainingAmt], #010;            IIf([GLTran.UOM] = 'YY' And ($TotalDebit - $TotalCredit = 0), #010;                [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt],#010;                [GLTran.CreditAmt])), #010;            0)</ValueExpr>
+                        <ValueExpr>=$LineBalance #010;+$SignTurn #010;*IsNull(IIF((@IncludeReclassified = False) And ([GLTran.DebitAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;	    [GLTran.ReclassRemainingAmt], #010;            IIf([GLTran.UOM] = 'YY', #010;                [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], #010;                [GLTran.DebitAmt])), #010;            0) #010;-$SignTurn #010;*IsNull(IIF((@IncludeReclassified = False) And ([GLTran.CreditAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;            [GLTran.ReclassRemainingAmt], #010;            IIf([GLTran.UOM] = 'YY',#010;                [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt],#010;                [GLTran.CreditAmt])), #010;            0)</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
                         <Name>LineCuryBalance</Name>
@@ -2159,15 +2159,15 @@
                     <ReportVariable>
                         <Name>SettlementCredit</Name>
                         <ProcessOrder>Always</ProcessOrder>
-                        <ValueExpr>=IIf($ParmStartDate &gt;= [LSLedgerSettlement.TranDate],#010;     IIf($IsVisible = false And $TotalDebit - $TotalCredit &lt;&gt; 0,#010;         [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt], #010;         0),#010;    0)#010;+ $SettlementCredit</ValueExpr>
+                        <ValueExpr>=IIf($ParmStartDate &gt;= [LSLedgerSettlement.TranDate],#010;     IIf(ReportUDF.IncludeSettledAmt($ParmEndDate, [LSLedgerSettlement.SettlementNbr]) = True Or#010;         ReportUDF.DisplayGLTran($ParmEndDate, [LSLedgerSettlement.SettlementNbr]) = False,#010;         [LSLedgerSettlement.SettledCreditAmt], #010;         0),#010;     0)#010;+ $SettlementCredit</ValueExpr>
                     </ReportVariable>
                     <ReportVariable>
                         <Name>SettlementDebit</Name>
                         <ProcessOrder>Always</ProcessOrder>
-                        <ValueExpr>=IIf($ParmStartDate &gt;= [LSLedgerSettlement.TranDate],#010;     IIf($IsVisible = false And $TotalDebit - $TotalCredit &lt;&gt; 0,#010;         [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], #010;         0),#010;     0)#010;+ $SettlementDebit</ValueExpr>
+                        <ValueExpr>=IIf($ParmStartDate &gt;= [LSLedgerSettlement.TranDate],#010;     IIf(ReportUDF.IncludeSettledAmt($ParmEndDate, [LSLedgerSettlement.SettlementNbr]) = True  Or#010;         ReportUDF.DisplayGLTran($ParmEndDate, [LSLedgerSettlement.SettlementNbr]) = False,#010;         [LSLedgerSettlement.SettledDebitAmt], #010;         0),#010;     0)#010;+ $SettlementDebit</ValueExpr>
                     </ReportVariable>
                 </Variables>
-                <VisibleExpr>=IIf($TotalDebit - $TotalCredit &lt;&gt; 0 Or [LSLedgerSettlement.SettlementNbr] = NULL Or [GLTran.UOM] = 'YY', $IsVisible, False)</VisibleExpr>
+                <VisibleExpr>=$IsVisible And IIf([GLTran.UOM] &lt;&gt; 'YY', $RptUDF, True)</VisibleExpr>
                 <Items>
                     <TextBox Name="textBox10">
                         <Excel>
@@ -2228,7 +2228,7 @@
                             <TextAlign>Right</TextAlign>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf((@IncludeReclassified = False) And ([GLTran.DebitAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;     [GLTran.ReclassRemainingAmt], #010;     IIf([GLTran.UOM] = 'YY' And ($TotalDebit - $TotalCredit = 0),#010;         [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], #010;         [GLTran.DebitAmt]))</Value>
+                        <Value>=IIf((@IncludeReclassified = False) And ([GLTran.DebitAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True), #010;     [GLTran.ReclassRemainingAmt], #010;     IIf([GLTran.UOM] = 'YY',#010;         [LSLedgerSettlement.OrigDebitAmt] - [LSLedgerSettlement.SettledDebitAmt], #010;         [GLTran.DebitAmt]#010;        )#010;     )</Value>
                     </TextBox>
                     <TextBox Name="textBox36">
                         <Excel>
@@ -2240,7 +2240,7 @@
                             <TextAlign>Right</TextAlign>
                         </Style>
                         <StyleName>Normal</StyleName>
-                        <Value>=IIf((@IncludeReclassified = False) And ([GLTran.CreditAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True),      [GLTran.ReclassRemainingAmt], #010;     IIf([GLTran.UOM] = 'YY' And ($TotalDebit - $TotalCredit = 0), #010;         [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt], #010;         [GLTran.CreditAmt]))</Value>
+                        <Value>=IIf((@IncludeReclassified = False) And ([GLTran.CreditAmt] &gt; 0 = True) And ([GLTran.ReclassRemainingAmt] &gt; 0 = True),           #010;     [GLTran.ReclassRemainingAmt], #010;     IIf([GLTran.UOM] = 'YY', #010;         [LSLedgerSettlement.OrigCreditAmt] - [LSLedgerSettlement.SettledCreditAmt], #010;         [GLTran.CreditAmt]#010;        )#010;     )</Value>
                     </TextBox>
                     <TextBox Name="textBox37">
                         <Excel>
@@ -2392,9 +2392,11 @@
                 </Items>
             </Detail>
             <ReportHeader Name="BegLineBalance">
+                <Expanded>False</Expanded>
                 <Height>8px</Height>
             </ReportHeader>
             <PageHeader Name="pageHeaderSection2">
+                <Expanded>False</Expanded>
                 <Height>24px</Height>
                 <StyleName>ColumnsHeaderSection</StyleName>
                 <Items>
@@ -2506,6 +2508,7 @@
                 </Items>
             </PageHeader>
             <PageHeader Name="pageHeaderSection3">
+                <Expanded>False</Expanded>
                 <Height>4px</Height>
             </PageHeader>
         </Sections>
@@ -2538,7 +2541,7 @@
                                 <Name>LineBalance</Name>
                                 <ProcessOrder>WhilePrint</ProcessOrder>
                                 <ResetGroup>Ledger_Account</ResetGroup>
-                                <ValueExpr>=IIF([@Module] = null, $SignBegBalance * ($SettlementDebit - $SettlementCredit + $BegBalance), 0)#010;</ValueExpr>
+                                <ValueExpr>=IIf([@Module] = null, $SignBegBalance * ($BegBalance - $SettlementDebit + $SettlementCredit), 0)</ValueExpr>
                             </ReportVariable>
                             <ReportVariable>
                                 <Name>LineCuryBalance</Name>
@@ -2717,76 +2720,6 @@
                                 <Value>= $LineCuryBalance</Value>
                             </TextBox>
                         </Items>
-                    </Footer>
-                </Footers>
-            </Group>
-            <Group Name="Settlement">
-                <Grouping>
-                    <GroupExp>
-                        <DataField>=[LSLedgerSettlement.SettlementNbr]</DataField>
-                    </GroupExp>
-                </Grouping>
-                <Headers>
-                    <Header Name="groupHeaderSection3">
-                        <ExcelVisible>False</ExcelVisible>
-                        <GridSize>8px, 8px</GridSize>
-                        <Height>16px</Height>
-                        <KeepTogether>False</KeepTogether>
-                        <PrintEmpty>False</PrintEmpty>
-                        <Variables>
-                            <ReportVariable>
-                                <Name>TotalCredit</Name>
-                                <ValueExpr>=Sum(IIf([LSLedgerSettlement.TranDate] &lt;= $ParmEndDate, [LSLedgerSettlement.SettledCreditAmt], 0))</ValueExpr>
-                            </ReportVariable>
-                            <ReportVariable>
-                                <Name>TotalDebit</Name>
-                                <ValueExpr>=Sum(IIf([LSLedgerSettlement.TranDate] &lt;= $ParmEndDate, [LSLedgerSettlement.SettledDebitAmt], 0))</ValueExpr>
-                            </ReportVariable>
-                        </Variables>
-                        <Visible>False</Visible>
-                        <Items>
-                            <TextBox Name="textBox63">
-                                <CanGrow>True</CanGrow>
-                                <Excel>
-                                    <column>8</column>
-                                </Excel>
-                                <Location>456px, 0px</Location>
-                                <Size>224px, 16px</Size>
-                                <StyleName>Normal</StyleName>
-                                <Value>=[LSLedgerSettlement.SettlementNbr]</Value>
-                            </TextBox>
-                            <TextBox Name="textBox66">
-                                <Excel>
-                                    <column>9</column>
-                                </Excel>
-                                <Location>744px, 0px</Location>
-                                <Size>100px, 16px</Size>
-                                <Style>
-                                    <TextAlign>Right</TextAlign>
-                                </Style>
-                                <StyleName>Normal</StyleName>
-                                <Value>=$TotalDebit</Value>
-                            </TextBox>
-                            <TextBox Name="textBox67">
-                                <Excel>
-                                    <column>10</column>
-                                </Excel>
-                                <Location>872px, 0px</Location>
-                                <Size>100px, 16px</Size>
-                                <Style>
-                                    <TextAlign>Right</TextAlign>
-                                </Style>
-                                <StyleName>Normal</StyleName>
-                                <Value>=$TotalCredit</Value>
-                            </TextBox>
-                        </Items>
-                    </Header>
-                </Headers>
-                <Footers>
-                    <Footer Name="groupFooterSection3">
-                        <GridSize>8px, 8px</GridSize>
-                        <Height>0px</Height>
-                        <Visible>False</Visible>
                     </Footer>
                 </Footers>
             </Group>
