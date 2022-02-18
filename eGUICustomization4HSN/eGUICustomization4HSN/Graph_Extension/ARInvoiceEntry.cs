@@ -104,16 +104,16 @@ namespace PX.Objects.AR
                     regisExt.UsrVATOutCode = string.Empty;
                 }
 
-                if (!string.IsNullOrEmpty(regisExt.UsrGUINo) && 
-                    regisExt.UsrVATOutCode.IsIn(TWGUIFormatCode.vATOutCode31, TWGUIFormatCode.vATOutCode32, TWGUIFormatCode.vATOutCode35)
-                   )
-                {
+                //if (!string.IsNullOrEmpty(regisExt.UsrGUINo) && 
+                //    regisExt.UsrVATOutCode.IsIn(TWGUIFormatCode.vATOutCode31, TWGUIFormatCode.vATOutCode32, TWGUIFormatCode.vATOutCode35)
+                //   )
+                //{
                     //TWNGUIPreferences gUIPreferences = SelectFrom<TWNGUIPreferences>.View.Select(Base);
                     //string numberingSeq = regisExt.UsrVATOutCode.Equals(TWGUIFormatCode.vATOutCode32) ? gUIPreferences.GUI2CopiesNumbering : gUIPreferences.GUI3CopiesNumbering;
                     //AutoNumberAttribute.SetNumberingId<ARRegisterExt.usrGUINo>(e.Cache, numberingSeq);
 
-                    tWNGUIValidation.CheckGUINbrExisted(Base, regisExt.UsrGUINo, regisExt.UsrVATOutCode);
-                }
+                    //tWNGUIValidation.CheckGUINbrExisted(Base, regisExt.UsrGUINo, regisExt.UsrVATOutCode);
+                //}
 
                 if (e.Row.CuryDocBal != decimal.Zero && string.IsNullOrEmpty(regisExt.UsrVATOutCode) && e.Operation != PXDBOperation.Delete)
                 {
