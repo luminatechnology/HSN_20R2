@@ -57,17 +57,16 @@ namespace HSNHighcareCistomizations.Graph
                             throw new PXException("can not find serial Nbr.");
                         // Find SOShipment by Serial Nbr.
                         var soshipLine = SelectFrom<SOShipLine>
-                                         .Where<SOShipLine.lotSerialNbr.IsEqual<P.AsString>>
-                                         .View.Select(this, serialNbr).TopFirst;
+                                         .InnerJoin<SOShipLineSplit>.On<SOShipLine.shipmentNbr.IsEqual<SOShipLineSplit.shipmentNbr>
+                                                                    .And<SOShipLine.lineNbr.IsEqual<SOShipLineSplit.lineNbr>>>
+                                         .Where<SOShipLineSplit.lotSerialNbr.IsEqual<P.AsString>>
+                                         .View.Select(this, serialNbr).RowCast<SOShipLine>().FirstOrDefault();
                         if (soshipLine == null)
                             throw new PXException("can not find SOShipment!!");
                         // Find SOLine by SOShipment
                         var soline = SOLine.PK.Find(this, soshipLine?.OrigOrderType, soshipLine?.OrigOrderNbr, soshipLine?.OrigLineNbr);
                         if (soline == null)
                             throw new PXException("can not find SOLine!!");
-
-                        if (soline?.Qty != 1)
-                            throw new PXException("Qty must equal 1!!");
                         // Find Invoice
                         var invoice = SelectFrom<SOOrderShipment>
                                       .Where<SOOrderShipment.orderType.IsEqual<P.AsString>
@@ -96,7 +95,7 @@ namespace HSNHighcareCistomizations.Graph
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.subID>(component, itemInfo.DeferralSubID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.componentID>(component, scope.InventoryID);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.defCode>(component, scope.DefCode);
-                        graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, soline?.CuryLineAmt);
+                        graph.Components.Cache.SetValueExt<DRScheduleDetail.totalAmt>(component, soline?.CuryLineAmt / soline?.OrderQty);
                         graph.Components.Cache.SetValueExt<DRScheduleDetail.branchID>(component, PXAccess.GetBranchID());
                         component.FinPeriodID = finPeriod.FinPeriodID;
                         // Generate Transactions
