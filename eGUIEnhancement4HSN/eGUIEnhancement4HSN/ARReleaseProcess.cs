@@ -85,21 +85,25 @@ namespace PX.Objects.AR
                     CreatGUI:
                         if (docExt.UsrCreditAction.IsIn(TWNCreditAction.CN, TWNCreditAction.NO))
                         {
-                            TWNGUIPreferences gUIPreferences = SelectFrom<TWNGUIPreferences>.View.Select(Base);
+                            if (docExt.UsrCreditAction == TWNCreditAction.NO)
+                            {
+                                TWNGUIPreferences gUIPreferences = SelectFrom<TWNGUIPreferences>.View.Select(Base);
 
-                            string numberingSeq = (docExt.UsrVATOutCode == TWGUIFormatCode.vATOutCode32) ? gUIPreferences.GUI2CopiesNumbering : gUIPreferences.GUI3CopiesNumbering;
-
-                            docExt.UsrGUINo = ARGUINbrAutoNumAttribute.GetNextNumber(Base.ARDocument.Cache, doc, numberingSeq, doc.DocDate);
+                                docExt.UsrGUINo = ARGUINbrAutoNumAttribute.GetNextNumber(Base.ARDocument.Cache, 
+                                                                                         doc, 
+                                                                                         (docExt.UsrVATOutCode == TWGUIFormatCode.vATOutCode32) ? gUIPreferences.GUI2CopiesNumbering : gUIPreferences.GUI3CopiesNumbering, 
+                                                                                         doc.DocDate);
+                            }
 
                             rp.CreateGUITrans(new STWNGUITran()
                             {
                                 VATCode       = docExt.UsrVATOutCode,
                                 GUINbr        = docExt.UsrGUINo,
-                                GUIStatus     = doc.CuryOrigDocAmt.Equals(0m) ? TWNGUIStatus.Voided : TWNGUIStatus.Used,
+                                GUIStatus     = doc.CuryOrigDocAmt == 0m ? TWNGUIStatus.Voided : TWNGUIStatus.Used,
                                 BranchID      = branchID,
                                 GUIDirection  = TWNGUIDirection.Issue,
                                 GUIDate       = docExt.UsrGUIDate.Value.Date.Add(doc.CreatedDateTime.Value.TimeOfDay),
-                                GUITitle      = PXCacheEx.GetExtension<ARRegisterExt2>(Base.ARDocument.Current).UsrGUITitle,//customer.AcctName,
+                                GUITitle      = Base.ARDocument.Current?.GetExtension<ARRegisterExt2>().UsrGUITitle,//customer.AcctName,
                                 TaxZoneID     = Base.ARInvoice_DocType_RefNbr.Current.TaxZoneID,
                                 TaxCategoryID = taxCateID,
                                 TaxID         = xTran.TaxID,
@@ -149,16 +153,18 @@ namespace PX.Objects.AR
                             PXGraph.CreateInstance<eGUIInquiry2>().PrintReport(Base.ARTran_TranType_RefNbr.Select(doc.DocType, doc.RefNbr), rp.ViewGUITrans.Current, false);
                         }
                     }
-                }
-                // Triggering after save events.
-                Base1.ViewGUITrans.Cache.Persisted(false);
-                Base1.skipPersist = true;
 
-                if (docExt.UsrCreditAction == TWNCreditAction.NO)
-                {
-                    Base.ARDocument.Cache.SetValue<ARRegisterExt.usrGUINo>(doc, docExt.UsrGUINo);
-                    Base.ARDocument.Cache.MarkUpdated(doc);
+                    // Triggering after save events.
+                    Base1.ViewGUITrans.Cache.Persisted(false);
+                    
+                    if (docExt.UsrCreditAction == TWNCreditAction.NO)
+                    {
+                        Base.ARDocument.Cache.SetValue<ARRegisterExt.usrGUINo>(doc, docExt.UsrGUINo);
+                        Base.ARDocument.Cache.MarkUpdated(doc);
+                    }
                 }
+
+                Base1.skipPersist = true;
 
                 baseMethod();
             }
