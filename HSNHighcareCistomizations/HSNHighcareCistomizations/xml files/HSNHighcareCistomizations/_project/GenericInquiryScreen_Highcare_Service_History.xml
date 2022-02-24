@@ -167,7 +167,7 @@
                         <GIResult LineNbr="7" SortOrder="7" IsActive="1" Field="=IIF(MAX([LUMServiceScope.LimitedCount]) = 0,'-',IIF(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]) &lt; 0 ,'0' , CSTR(MAX([LUMServiceScope.LimitedCount]) - COUNT([t.InventoryID]))))" Caption="Remaining Count" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="72af522e-9afb-4a69-bede-149ce8457b15">
                             <GIResultKvExt FieldName="CaptionEN" ValueText="Remaining Count" />
                         </GIResult>
-                        <GIResult LineNbr="6" SortOrder="6" IsActive="1" Field="limitedCount" Caption="Limited Count" IsVisible="1" DefaultNav="1" AggregateFunction="MAX" QuickFilter="0" FastFilter="1" RowID="fc11436b-e652-4ed8-a343-aa4f7782a466">
+                        <GIResult LineNbr="6" SortOrder="6" IsActive="1" Field="=IIF([LUMServiceScope.LimitedCount] = 0, '-',CSTR([LUMServiceScope.LimitedCount]))" Caption="Limited Count" IsVisible="1" DefaultNav="1" AggregateFunction="MAX" QuickFilter="0" FastFilter="1" RowID="fc11436b-e652-4ed8-a343-aa4f7782a466">
                             <GIResultKvExt FieldName="CaptionEN" ValueText="Limited Count" />
                         </GIResult>
                         <GIResult LineNbr="2" SortOrder="3" IsActive="1" Field="description" Caption="Service Description" IsVisible="1" DefaultNav="1" QuickFilter="0" FastFilter="1" RowID="7b76a1f3-7e8d-485c-b3a8-e7d51df64849">

@@ -312,7 +312,7 @@
                         <To object="Results" field="LUMServiceScope_description" />
                     </Mapping>
                     <Mapping field="LimitedCount">
-                        <To object="Results" field="LUMServiceScope_limitedCount" />
+                        <To object="Results" field="LUMServiceScope_Formulafc11436be6524ed8a343aa4f7782a466" />
                     </Mapping>
                     <Mapping field="EndDate">
                         <To object="Results" field="LUMCustomerPINCode_endDate" />
@@ -329,7 +329,7 @@
                 <Field name="EndDate" type="DateTimeValue" />
                 <Field name="HighcareClass" type="StringValue" />
                 <Field name="ItemPriceClass" type="StringValue" />
-                <Field name="LimitedCount" type="IntValue" />
+                <Field name="LimitedCount" type="StringValue" />
                 <Field name="NonStockItem" type="StringValue" />
                 <Field name="PinCode" type="StringValue" />
                 <Field name="PriceClassID" type="StringValue" />
