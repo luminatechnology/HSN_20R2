@@ -1,0 +1,16 @@
+﻿<Sql TableName="SP_TruncateLumARAgedPeriod" CustomScript="#CDATA">
+    <CDATA name="CustomScript"><![CDATA[IF EXISTS
+(
+	SELECT *
+	FROM
+		sys.objects
+	WHERE name = 'SP_TruncateLumARAgedPeriod' AND SCHEMA_ID = SCHEMA_ID('dbo')
+)
+DROP PROCEDURE [dbo].[SP_TruncateLumARAgedPeriod]
+GO
+
+CREATE PROCEDURE [dbo].[SP_TruncateLumARAgedPeriod]
+AS
+Truncate Table [dbo].[LumARAgedPeriod]
+GO]]></CDATA>
+</Sql>
