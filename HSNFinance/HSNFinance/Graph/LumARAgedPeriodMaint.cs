@@ -20,39 +20,62 @@ namespace HSNFinance.Graph
             DetailsView.AllowInsert = DetailsView.AllowUpdate = DetailsView.AllowDelete = false;
         }
 
-        #region Delegate DataView
-        public IEnumerable detailsView()
+        public PXAction<LumARAgedPeriodFilter> Generate;
+
+        [PXButton]
+        [PXUIField(DisplayName = "Generate")]
+        protected virtual IEnumerable generate(PXAdapter adapter)
         {
-            List<object> result = new List<object>();
-            int repeatTime = 6;
             var periodID = ((LumARAgedPeriodFilter)this.Caches[typeof(LumARAgedPeriodFilter)].Current)?.FinPeriodID;
-            
             if (periodID != null)
+            {
+                PXLongOperation.StartOperation(this, delegate
+                {
+                    excuteSP();
+                });
+            }
+            else throw new Exception("Please enter Financial Period.");
+
+            return adapter.Get();
+        }
+
+        private void excuteSP()
+        {
+            var periodID = ((LumARAgedPeriodFilter)this.Caches[typeof(LumARAgedPeriodFilter)].Current)?.FinPeriodID;
+            int loopRepeatTime = 6;
+
+            //Truncate LumARAgedPeriod
+            var par = new List<PXSPParameter>();
+            PXDatabase.Execute("SP_TruncateLumARAgedPeriod", par.ToArray());
+
+            for (int i = 0; i < loopRepeatTime; i++)
             {
                 var pars = new List<PXSPParameter>();
                 PXSPParameter conditionPeriodID = new PXSPInParameter("@ConditionPeriodID", PXDbType.Char, periodID);
                 PXSPParameter companyID = new PXSPInParameter("@companyID", PXDbType.Int, PX.Data.Update.PXInstanceHelper.CurrentCompany);
-                PXSPParameter repeatTimes = new PXSPInParameter("@RepeatTimes", PXDbType.Int, repeatTime);
                 pars.Add(conditionPeriodID);
                 pars.Add(companyID);
-                pars.Add(repeatTimes);
-
+                
                 using (new PXConnectionScope())
                 {
                     using (PXTransactionScope ts = new PXTransactionScope())
                     {
-                        PXDatabase.Execute("SP_GenerateLumARAgedPeriod", pars.ToArray());
+                        PXDatabase.Execute("SP_GenerateLumARAgedPeriod_SingleRow", pars.ToArray());
                         ts.Complete();
                     }
                 }
-
-                PXView select = new PXView(this, true, DetailsView.View.BqlSelect);
-                int totalrow = 0;
-                int startrow = PXView.StartRow;
-                result = select.Select(PXView.Currents, PXView.Parameters, PXView.Searches, PXView.SortColumns, PXView.Descendings, PXView.Filters, ref startrow, PXView.MaximumRows, ref totalrow);
-                PXView.StartRow = 0;
-                return result;
+                periodID = DateTime.ParseExact(periodID + "01", "yyyyMMdd", null, System.Globalization.DateTimeStyles.AllowWhiteSpaces).AddMonths(-1).ToString("yyyyMM");
             }
+        }
+
+        #region Delegate DataView
+        public IEnumerable detailsView()
+        {
+            List<object> result = new List<object>();
+            var periodID = ((LumARAgedPeriodFilter)this.Caches[typeof(LumARAgedPeriodFilter)].Current)?.FinPeriodID;
+            var curLumARAgedPeriod = SelectFrom<LumARAgedPeriod>.OrderBy<Asc<LumARAgedPeriod.lineNbr>>.View.Select(this);
+
+            if (periodID != null && curLumARAgedPeriod != null && curLumARAgedPeriod.TopFirst?.ConditionPeriodID == periodID) return SelectFrom<LumARAgedPeriod>.OrderBy<Asc<LumARAgedPeriod.lineNbr>>.View.Select(this);
             return result;
         }
         #endregion
@@ -64,7 +87,7 @@ namespace HSNFinance.Graph
         {
             #region FinPeriodID
             [FinPeriodID()]
-            [PXUIField(DisplayName = "Finanical Period", Visibility = PXUIVisibility.SelectorVisible)]
+            [PXUIField(DisplayName = "Financial Period", Visibility = PXUIVisibility.SelectorVisible)]
             [PXSelector(typeof(Search<FinPeriod2.finPeriodID, Where<FinPeriod2.closed.IsEqual<False>.And<FinPeriod2.active.IsEqual<True>>>, OrderBy<Desc<FinPeriod2.finPeriodID>>>), typeof(FinPeriod2.finPeriodID))]
             public virtual string FinPeriodID { get; set; }
             public abstract class finPeriodID : PX.Data.BQL.BqlString.Field<finPeriodID> { }

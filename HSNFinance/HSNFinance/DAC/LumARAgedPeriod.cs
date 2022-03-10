@@ -8,7 +8,7 @@ namespace HSNFinance.DAC
     public class LumARAgedPeriod : IBqlTable
     {
         #region LineNbr
-        [PXDBIdentity]
+        [PXDBIdentity(IsKey = true)]
         public virtual int? LineNbr { get; set; }
         public abstract class lineNbr : PX.Data.BQL.BqlInt.Field<lineNbr> { }
         #endregion

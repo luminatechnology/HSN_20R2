@@ -8,7 +8,8 @@ namespace PX.Objects.AP
         #region UsrInvoiceDate
         [PXDBDate()]
         [PXUIField(DisplayName = "Invoice Date")]
-        [PXDefault()]
+        [PXDefault(PersistingCheck = PXPersistingCheck.Nothing)]
+        [PXUIRequired(typeof(Where<APRegister.docType, Equal<APDocType.invoice>, And<APRegister.released, NotEqual<True>>>))]
         public virtual DateTime? UsrInvoiceDate { get; set; }
         public abstract class usrInvoiceDate : PX.Data.BQL.BqlDateTime.Field<usrInvoiceDate> { }
         #endregion
