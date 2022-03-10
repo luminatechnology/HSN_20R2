@@ -36,6 +36,10 @@
                     <px:PXGridColumn DataField="InvoiceNbr" LinkCommand="viewInvoice" />
                     <px:PXGridColumn DataField="StartDate" Width="200px" />
                     <px:PXGridColumn DataField="EndDate" Width="200px" />
+                    <px:PXGridColumn DataField="CreatedByID" Width="200px" />
+                    <px:PXGridColumn DataField="CreatedDateTime" Width="200px" />
+                    <px:PXGridColumn DataField="LastModifiedByID" Width="200px" />
+                    <px:PXGridColumn DataField="LastModifiedDateTime" Width="200px" />
                 </Columns>
             </px:PXGridLevel>
         </Levels>

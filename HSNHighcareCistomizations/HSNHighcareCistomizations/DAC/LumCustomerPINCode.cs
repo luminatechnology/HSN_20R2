@@ -87,7 +87,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region EndDate
         [PXDBDate()]
-        [PXUIField(DisplayName = "End Date", Enabled = false)]
+        [PXUIField(DisplayName = "End Date")]
         public virtual DateTime? EndDate { get; set; }
         public abstract class endDate : PX.Data.BQL.BqlDateTime.Field<endDate> { }
         #endregion
@@ -126,6 +126,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region CreatedDateTime
         [PXDBCreatedDateTime()]
+        [PXUIField(Enabled = false)]
         public virtual DateTime? CreatedDateTime { get; set; }
         public abstract class createdDateTime : PX.Data.BQL.BqlDateTime.Field<createdDateTime> { }
         #endregion
@@ -144,6 +145,7 @@ namespace HSNHighcareCistomizations.DAC
 
         #region LastModifiedDateTime
         [PXDBLastModifiedDateTime()]
+        [PXUIField(Enabled = false)]
         public virtual DateTime? LastModifiedDateTime { get; set; }
         public abstract class lastModifiedDateTime : PX.Data.BQL.BqlDateTime.Field<lastModifiedDateTime> { }
         #endregion

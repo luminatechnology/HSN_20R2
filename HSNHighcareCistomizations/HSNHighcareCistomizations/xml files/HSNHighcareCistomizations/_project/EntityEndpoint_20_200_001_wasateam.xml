@@ -348,5 +348,58 @@
                 <Field name="ValueDescription" type="StringValue" />
             </Fields>
         </Detail>
+        <TopLevelEntity name="PINCodeActivationHistory" screen="GI770079">
+            <Fields>
+                <Field name="CustomerID" type="StringValue" />
+                <Field name="PinCode" type="StringValue" />
+                <Field name="PINCodeActivationHistoryDetails" type="PINCodeActivationHistoryDetail[]" />
+            </Fields>
+            <Mappings>
+                <Mapping field="CustomerID">
+                    <To object="Filter" field="Customer" />
+                </Mapping>
+                <Mapping field="PinCode">
+                    <To object="Filter" field="PinCode" />
+                </Mapping>
+                <Mapping field="PINCodeActivationHistoryDetails">
+                    <Mapping field="HCSerialNbr">
+                        <To object="Results" field="LUMPINCodeMapping_serialNbr" />
+                    </Mapping>
+                    <Mapping field="CustomerID">
+                        <To object="Results" field="Customer_acctCD" />
+                    </Mapping>
+                    <Mapping field="CustomerName">
+                        <To object="Results" field="Customer_acctName" />
+                    </Mapping>
+                    <Mapping field="PinCode">
+                        <To object="Results" field="LUMCustomerPINCode_pin" />
+                    </Mapping>
+                    <Mapping field="StartDate">
+                        <To object="Results" field="LUMCustomerPINCode_startDate" />
+                    </Mapping>
+                    <Mapping field="EndDate">
+                        <To object="Results" field="LUMCustomerPINCode_endDate" />
+                    </Mapping>
+                    <Mapping field="CustomerPriceClass">
+                        <To object="Results" field="LUMCustomerPINCode_cPriceClassID" />
+                    </Mapping>
+                    <Mapping field="Active">
+                        <To object="Results" field="LUMCustomerPINCode_isActive" />
+                    </Mapping>
+                </Mapping>
+            </Mappings>
+        </TopLevelEntity>
+        <Detail name="PINCodeActivationHistoryDetail">
+            <Fields>
+                <Field name="Active" type="BooleanValue" />
+                <Field name="CustomerID" type="StringValue" />
+                <Field name="CustomerName" type="StringValue" />
+                <Field name="CustomerPriceClass" type="StringValue" />
+                <Field name="EndDate" type="DateTimeValue" />
+                <Field name="HCSerialNbr" type="StringValue" />
+                <Field name="PinCode" type="StringValue" />
+                <Field name="StartDate" type="DateTimeValue" />
+            </Fields>
+        </Detail>
     </Endpoint>
 </EntityEndpoint>
