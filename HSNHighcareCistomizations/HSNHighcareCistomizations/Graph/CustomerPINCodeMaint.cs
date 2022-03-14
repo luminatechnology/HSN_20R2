@@ -85,7 +85,7 @@ namespace HSNHighcareCistomizations.Graph
 
         public virtual void _(Events.RowPersisting<LUMCustomerPINCode> e)
         {
-            if (e.Row is LUMCustomerPINCode row && row != null && this.Document.Current != null)
+            if (e.Row is LUMCustomerPINCode row && row != null && this.Document.Current != null && e.Operation == PXDBOperation.Insert)
             {
                 row.BAccountID = this.Document.Current.BAccountID;
                 row.StartDate = DateTime.Now;
