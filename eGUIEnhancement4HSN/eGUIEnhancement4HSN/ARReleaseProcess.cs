@@ -274,15 +274,16 @@ namespace PX.Objects.AR
                 eSCPOS.SendTo(string.Format("發票號碼: {0}\n", header[4].Trim(new char[] { '-' })));
                 eSCPOS.SendTo("品名/數量   單價         金額\n");
                 eSCPOS.Align(0);
-                
+
                 bool hasSummary = false;
-                decimal? prcAmt = 0;
-                decimal? txbAmt = 0;
+                //decimal? prcAmt = 0;
+                //decimal? txbAmt = 0;
                 decimal? extAmt = 0;
                 decimal? netAmt = 0;
                 decimal? disAmt = 0;
+                decimal fixedRate = (decimal)1.05;
 
-                ARRegister     register  = new ARRegister();
+                ARRegister register = new ARRegister();
                 ARRegisterExt2 regisExt2 = new ARRegisterExt2();
 
                 int rowLen;
@@ -307,13 +308,15 @@ namespace PX.Objects.AR
                         {
                             if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
                             {
-                                uPr = ePr = string.Format("{0:N2}", aRTran.CuryExtPrice);
+                                uPr = string.Format("{0:N2}", aRTran.CuryUnitPrice);
+                                ePr = string.Format("{0:N2}", aRTran.CuryExtPrice);
                                 dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
                             }
                             else
                             {
-                                uPr = ePr = string.Format("{0:N2}", decimal.Multiply(aRTran.CuryExtPrice.Value, (decimal)1.05));
-                                dAm = string.Format("{0:N2}", decimal.Multiply(-aRTran.CuryDiscAmt.Value, (decimal)1.05));
+                                uPr = string.Format("{0:N2}", decimal.Multiply(aRTran.CuryUnitPrice.Value, fixedRate));
+                                ePr = string.Format("{0:N2}", decimal.Multiply(aRTran.CuryExtPrice.Value, fixedRate));
+                                dAm = string.Format("{0:N2}", decimal.Multiply(-aRTran.CuryDiscAmt.Value, fixedRate));
                             }
                         }
                         // B2B
@@ -321,12 +324,14 @@ namespace PX.Objects.AR
                         {
                             if (register.TaxCalcMode == TX.TaxCalculationMode.Gross)
                             {
-                                uPr = ePr = string.Format("{0:N2}", decimal.Divide(aRTran.CuryExtPrice.Value, (decimal)1.05));
-                                dAm = string.Format("{0:N2}", decimal.Divide(-aRTran.CuryDiscAmt.Value, (decimal)1.05));
+                                uPr = string.Format("{0:N2}", decimal.Divide(aRTran.CuryUnitPrice.Value, fixedRate));
+                                ePr = string.Format("{0:N2}", decimal.Divide(aRTran.CuryExtPrice.Value, fixedRate));
+                                dAm = string.Format("{0:N2}", decimal.Divide(-aRTran.CuryDiscAmt.Value, fixedRate));
                             }
                             else
                             {
-                                uPr = ePr = string.Format("{0:N2}", aRTran.CuryExtPrice);
+                                uPr = string.Format("{0:N2}", aRTran.CuryUnitPrice);
+                                ePr = string.Format("{0:N2}", aRTran.CuryExtPrice);
                                 dAm = string.Format("{0:N2}", -aRTran.CuryDiscAmt);
                             }
                         }
@@ -342,8 +347,8 @@ namespace PX.Objects.AR
                         }
                     }
 
-                    prcAmt += aRTran.CuryUnitPrice;
-                    txbAmt += aRTran.CuryTaxableAmt;
+                    //prcAmt += aRTran.CuryUnitPrice;
+                    //txbAmt += aRTran.CuryTaxableAmt;
                     extAmt += aRTran.CuryExtPrice;
                     disAmt += aRTran.CuryDiscAmt;
                     netAmt += aRTran.CuryTranAmt;
